@@ -1,0 +1,24 @@
+in vristo-django
+
+first of all, we need to check
+
+1. "django-admin --version" command is running in your terminal.
+2. if the "1" command does not work, than try installing "virtual-enviorment",
+3. and than after installing "virtual-enviorment" and "django", try running "1" command
+
+you will get the django version, which will than let you know that django is installed properly.
+
+if you are using virtual-enviorment you have to use 
+"source venv/bin/activate" 
+so that your virtual-enviorment will be activated properly.
+
+to run the project you need to run this command in your terminal
+"python3 manage.py runserver"
+
+if the project is does not start running in your browser, then run below command
+
+and to use tailwind you need to install tailwind run this command in your terminal
+"python manage.py tailwind install"
+
+and to use tailwind you need to run this command in your terminal
+"python manage.py tailwind start"
