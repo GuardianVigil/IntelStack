@@ -1,0 +1,154 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="hashAnalysis">
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="{% url 'index' %}" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+            <span>Hash Analysis</span>
+        </li>
+    </ul>
+
+    <div class="pt-5">
+        <div class="panel">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Hash Analysis</h5>
+            </div>
+            
+            <div class="mb-5">
+                <form @submit.prevent="analyzeHash" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="hashValue">File Hash</label>
+                            <input id="hashValue" type="text" placeholder="Enter MD5, SHA-1, or SHA-256 hash" class="form-input" x-model="hashValue" />
+                        </div>
+                        <div class="sm:pt-7">
+                            <button type="submit" class="btn btn-primary">Analyze</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="loading" class="flex justify-center">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+            </div>
+
+            <div x-show="!loading && results" class="space-y-5">
+                <!-- Hash Information -->
+                <div>
+                    <h6 class="text-lg font-bold mb-2">File Information</h6>
+                    <div class="table-responsive">
+                        <table class="table-striped">
+                            <tbody>
+                                <tr>
+                                    <td class="font-semibold">Hash:</td>
+                                    <td x-text="results.hash"></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">File Type:</td>
+                                    <td x-text="results.fileType"></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">First Seen:</td>
+                                    <td x-text="results.firstSeen"></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold">Verdict:</td>
+                                    <td>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': results.verdict === 'Clean',
+                                            'badge-outline-warning': results.verdict === 'Suspicious',
+                                            'badge-outline-danger': results.verdict === 'Malicious'
+                                        }" x-text="results.verdict"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Detection Results -->
+                <div>
+                    <h6 class="text-lg font-bold mb-2">Detection Results</h6>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Engine</th>
+                                    <th>Result</th>
+                                    <th>Category</th>
+                                    <th>Updated</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="detection in results.detections" :key="detection.engine">
+                                    <tr>
+                                        <td x-text="detection.engine"></td>
+                                        <td>
+                                            <span class="badge" :class="{
+                                                'badge-outline-success': detection.result === 'Clean',
+                                                'badge-outline-warning': detection.result === 'Suspicious',
+                                                'badge-outline-danger': detection.result === 'Malicious'
+                                            }" x-text="detection.result"></span>
+                                        </td>
+                                        <td x-text="detection.category"></td>
+                                        <td x-text="detection.updated"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("hashAnalysis", () => ({
+            hashValue: "",
+            loading: false,
+            results: null,
+
+            async analyzeHash() {
+                this.loading = true;
+                // Simulated API call - replace with actual API integration
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Sample data - replace with actual API response
+                this.results = {
+                    hash: this.hashValue,
+                    fileType: "Windows Executable",
+                    firstSeen: "2025-02-01",
+                    verdict: "Suspicious",
+                    detections: [
+                        {
+                            engine: "Engine 1",
+                            result: "Clean",
+                            category: "None",
+                            updated: "2025-02-02"
+                        },
+                        {
+                            engine: "Engine 2",
+                            result: "Suspicious",
+                            category: "Potentially Unwanted",
+                            updated: "2025-02-02"
+                        },
+                        {
+                            engine: "Engine 3",
+                            result: "Malicious",
+                            category: "Trojan",
+                            updated: "2025-02-02"
+                        }
+                    ]
+                };
+                this.loading = false;
+            }
+        }));
+    });
+</script>
+{% endblock %}

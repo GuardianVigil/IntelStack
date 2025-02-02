@@ -1,0 +1,141 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="domainAnalysis">
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="{% url 'index' %}" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+            <span>Domain Reputation</span>
+        </li>
+    </ul>
+
+    <div class="pt-5">
+        <div class="panel">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Domain Reputation Analysis</h5>
+            </div>
+            
+            <div class="mb-5">
+                <form @submit.prevent="analyzeDomain" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="domain">Domain Name</label>
+                            <input id="domain" type="text" placeholder="Enter domain name" class="form-input" x-model="domain" />
+                        </div>
+                        <div class="sm:pt-7">
+                            <button type="submit" class="btn btn-primary">Analyze</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="loading" class="flex justify-center">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+            </div>
+
+            <div x-show="!loading && results" class="space-y-5">
+                <!-- Domain Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">Domain Information</h6>
+                        <div class="table-responsive">
+                            <table class="table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td class="font-semibold">Domain:</td>
+                                        <td x-text="results.domain"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Creation Date:</td>
+                                        <td x-text="results.creationDate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Registrar:</td>
+                                        <td x-text="results.registrar"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Status:</td>
+                                        <td>
+                                            <span class="badge" :class="{
+                                                'badge-outline-success': results.status === 'Clean',
+                                                'badge-outline-warning': results.status === 'Suspicious',
+                                                'badge-outline-danger': results.status === 'Malicious'
+                                            }" x-text="results.status"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">Risk Assessment</h6>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Phishing Risk</span>
+                                    <span x-text="results.risks.phishing + '%'"></span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-full rounded-full bg-danger" :style="'width: ' + results.risks.phishing + '%'"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Malware Risk</span>
+                                    <span x-text="results.risks.malware + '%'"></span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-full rounded-full bg-warning" :style="'width: ' + results.risks.malware + '%'"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span>Spam Risk</span>
+                                    <span x-text="results.risks.spam + '%'"></span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-full rounded-full bg-info" :style="'width: ' + results.risks.spam + '%'"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("domainAnalysis", () => ({
+            domain: "",
+            loading: false,
+            results: null,
+
+            async analyzeDomain() {
+                this.loading = true;
+                // Simulated API call - replace with actual API integration
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Sample data - replace with actual API response
+                this.results = {
+                    domain: this.domain,
+                    creationDate: "2024-01-01",
+                    registrar: "Example Registrar Inc.",
+                    status: "Suspicious",
+                    risks: {
+                        phishing: 65,
+                        malware: 45,
+                        spam: 30
+                    }
+                };
+                this.loading = false;
+            }
+        }));
+    });
+</script>
+{% endblock %}

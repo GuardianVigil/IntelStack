@@ -1,0 +1,140 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="urlAnalysis">
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="{% url 'index' %}" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+            <span>URL Scan</span>
+        </li>
+    </ul>
+
+    <div class="pt-5">
+        <div class="panel">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">URL Analysis</h5>
+            </div>
+            
+            <div class="mb-5">
+                <form @submit.prevent="analyzeUrl" class="space-y-5">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label for="url">URL</label>
+                            <input id="url" type="text" placeholder="Enter URL to scan" class="form-input" x-model="url" />
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary">Scan URL</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="loading" class="flex justify-center">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+            </div>
+
+            <div x-show="!loading && results" class="space-y-5">
+                <!-- URL Analysis Results -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">URL Information</h6>
+                        <div class="table-responsive">
+                            <table class="table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td class="font-semibold">URL:</td>
+                                        <td x-text="results.url"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Final URL:</td>
+                                        <td x-text="results.finalUrl"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">IP Address:</td>
+                                        <td x-text="results.ipAddress"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Server:</td>
+                                        <td x-text="results.server"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">Security Assessment</h6>
+                        <div class="space-y-4">
+                            <template x-for="(category, index) in results.categories" :key="index">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span x-text="category.name"></span>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': category.risk === 'Low',
+                                            'badge-outline-warning': category.risk === 'Medium',
+                                            'badge-outline-danger': category.risk === 'High'
+                                        }" x-text="category.risk"></span>
+                                    </div>
+                                    <p class="text-xs text-gray-500" x-text="category.description"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Screenshot -->
+                <div class="panel" x-show="results.screenshot">
+                    <h6 class="text-lg font-bold mb-2">Website Screenshot</h6>
+                    <img :src="results.screenshot" alt="Website Screenshot" class="w-full rounded-lg shadow-sm" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("urlAnalysis", () => ({
+            url: "",
+            loading: false,
+            results: null,
+
+            async analyzeUrl() {
+                this.loading = true;
+                // Simulated API call - replace with actual API integration
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Sample data - replace with actual API response
+                this.results = {
+                    url: this.url,
+                    finalUrl: this.url,
+                    ipAddress: "192.168.1.1",
+                    server: "nginx/1.18.0",
+                    categories: [
+                        {
+                            name: "Phishing",
+                            risk: "Low",
+                            description: "No phishing indicators detected"
+                        },
+                        {
+                            name: "Malware",
+                            risk: "Medium",
+                            description: "Suspicious JavaScript detected"
+                        },
+                        {
+                            name: "Reputation",
+                            risk: "High",
+                            description: "Domain recently registered"
+                        }
+                    ],
+                    screenshot: "https://via.placeholder.com/800x600"
+                };
+                this.loading = false;
+            }
+        }));
+    });
+</script>
+{% endblock %}

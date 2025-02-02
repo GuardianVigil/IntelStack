@@ -1,0 +1,268 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="virusTotal">
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="{% url 'index' %}" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+            <span>VirusTotal</span>
+        </li>
+    </ul>
+
+    <div class="pt-5">
+        <div class="panel">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">VirusTotal Feed</h5>
+            </div>
+
+            <!-- Search Section -->
+            <div class="mb-5">
+                <form @submit.prevent="search" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                        <div class="sm:col-span-3">
+                            <input type="text" placeholder="Search hash, domain, IP, or URL" class="form-input" x-model="searchQuery" />
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary w-full">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Recent Detections -->
+            <div class="mb-5">
+                <h6 class="text-lg font-bold mb-3">Recent Detections</h6>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>IOC</th>
+                                <th>Detection Ratio</th>
+                                <th>First Seen</th>
+                                <th>Last Seen</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="detection in recentDetections" :key="detection.id">
+                                <tr>
+                                    <td>
+                                        <span class="badge" :class="{
+                                            'badge-outline-info': detection.type === 'URL',
+                                            'badge-outline-primary': detection.type === 'Domain',
+                                            'badge-outline-warning': detection.type === 'IP',
+                                            'badge-outline-danger': detection.type === 'File'
+                                        }" x-text="detection.type"></span>
+                                    </td>
+                                    <td x-text="detection.ioc"></td>
+                                    <td>
+                                        <div class="flex items-center">
+                                            <div x-text="detection.detectionRatio" class="mr-2"></div>
+                                            <div class="w-20 h-2 bg-gray-200 rounded-full">
+                                                <div class="h-full rounded-full" 
+                                                    :class="{
+                                                        'bg-success': detection.riskLevel === 'Low',
+                                                        'bg-warning': detection.riskLevel === 'Medium',
+                                                        'bg-danger': detection.riskLevel === 'High'
+                                                    }"
+                                                    :style="'width: ' + (detection.detectionRatio.split('/')[0] / detection.detectionRatio.split('/')[1] * 100) + '%'">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td x-text="detection.firstSeen"></td>
+                                    <td x-text="detection.lastSeen"></td>
+                                    <td>
+                                        <button @click="viewDetails(detection)" class="btn btn-sm btn-outline-primary">View Details</button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="panel">
+                    <h6 class="text-lg font-bold mb-2">Detection Distribution</h6>
+                    <div class="space-y-2">
+                        <template x-for="(stat, type) in statistics.distribution" :key="type">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span x-text="type"></span>
+                                    <span x-text="stat + '%'"></span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-full rounded-full bg-primary" :style="'width: ' + stat + '%'"></div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h6 class="text-lg font-bold mb-2">Top Categories</h6>
+                    <div class="space-y-2">
+                        <template x-for="category in statistics.categories" :key="category.name">
+                            <div class="flex justify-between">
+                                <span x-text="category.name"></span>
+                                <span class="badge badge-outline-primary" x-text="category.count"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h6 class="text-lg font-bold mb-2">Detection Trend</h6>
+                    <div class="h-48" id="detectionTrend"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="fixed inset-0 bg-black/60 z-[999] hidden" :class="{ '!block': showModal }" x-cloak>
+        <div class="flex items-center justify-center min-h-screen px-4" @click.self="showModal = false">
+            <div class="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg">
+                <div class="flex items-center justify-between bg-[#fbfbfb] dark:bg-[#121c2c] px-5 py-3">
+                    <h5 class="font-bold text-lg">Detection Details</h5>
+                    <button type="button" @click="showModal = false" class="text-white-dark hover:text-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-5">
+                    <div x-show="selectedItem">
+                        <div class="space-y-4">
+                            <div>
+                                <h6 class="font-semibold mb-2">Basic Information</h6>
+                                <div class="table-responsive">
+                                    <table class="table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td class="font-semibold">Type:</td>
+                                                <td x-text="selectedItem?.type"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-semibold">IOC:</td>
+                                                <td x-text="selectedItem?.ioc"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="font-semibold">Detection Ratio:</td>
+                                                <td x-text="selectedItem?.detectionRatio"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="font-semibold mb-2">Engine Results</h6>
+                                <div class="table-responsive max-h-60 overflow-y-auto">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Engine</th>
+                                                <th>Result</th>
+                                                <th>Category</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="engine in selectedItem?.engineResults" :key="engine.name">
+                                                <tr>
+                                                    <td x-text="engine.name"></td>
+                                                    <td>
+                                                        <span class="badge" :class="{
+                                                            'badge-outline-success': engine.result === 'Clean',
+                                                            'badge-outline-warning': engine.result === 'Suspicious',
+                                                            'badge-outline-danger': engine.result === 'Malicious'
+                                                        }" x-text="engine.result"></span>
+                                                    </td>
+                                                    <td x-text="engine.category"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("virusTotal", () => ({
+            searchQuery: "",
+            showModal: false,
+            selectedItem: null,
+            recentDetections: [
+                {
+                    id: 1,
+                    type: "File",
+                    ioc: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                    detectionRatio: "45/75",
+                    riskLevel: "High",
+                    firstSeen: "2025-02-01",
+                    lastSeen: "2025-02-02",
+                    engineResults: [
+                        { name: "Engine 1", result: "Clean", category: "None" },
+                        { name: "Engine 2", result: "Malicious", category: "Trojan" },
+                        { name: "Engine 3", result: "Suspicious", category: "PUA" }
+                    ]
+                },
+                {
+                    id: 2,
+                    type: "URL",
+                    ioc: "http://example.com/malware",
+                    detectionRatio: "15/75",
+                    riskLevel: "Medium",
+                    firstSeen: "2025-02-01",
+                    lastSeen: "2025-02-02",
+                    engineResults: [
+                        { name: "Engine 1", result: "Clean", category: "None" },
+                        { name: "Engine 2", result: "Suspicious", category: "Phishing" }
+                    ]
+                }
+            ],
+            statistics: {
+                distribution: {
+                    "Malware": 45,
+                    "Phishing": 30,
+                    "PUA": 15,
+                    "Clean": 10
+                },
+                categories: [
+                    { name: "Trojan", count: 156 },
+                    { name: "Ransomware", count: 89 },
+                    { name: "Spyware", count: 67 },
+                    { name: "Adware", count: 45 }
+                ]
+            },
+
+            async search() {
+                // Implement search functionality
+                console.log("Searching for:", this.searchQuery);
+            },
+
+            viewDetails(item) {
+                this.selectedItem = item;
+                this.showModal = true;
+            },
+
+            init() {
+                // Initialize charts or other components if needed
+            }
+        }));
+    });
+</script>
+{% endblock %}

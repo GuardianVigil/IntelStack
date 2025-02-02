@@ -1,0 +1,201 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="emailAnalysis">
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="{% url 'index' %}" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+            <span>Email Investigation</span>
+        </li>
+    </ul>
+
+    <div class="pt-5">
+        <div class="panel">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Email Analysis</h5>
+            </div>
+            
+            <div class="mb-5">
+                <form @submit.prevent="analyzeEmail" class="space-y-5">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label for="emailContent">Email Headers or Content</label>
+                            <textarea id="emailContent" rows="10" placeholder="Paste email headers or content here" class="form-textarea" x-model="emailContent"></textarea>
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="btn btn-primary">Analyze</button>
+                            <button type="button" @click="clearForm" class="btn btn-outline-danger">Clear</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div x-show="loading" class="flex justify-center">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+            </div>
+
+            <div x-show="!loading && results" class="space-y-5">
+                <!-- Email Analysis Results -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">Header Analysis</h6>
+                        <div class="table-responsive">
+                            <table class="table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td class="font-semibold">From:</td>
+                                        <td x-text="results.from"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Return Path:</td>
+                                        <td x-text="results.returnPath"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">SPF:</td>
+                                        <td>
+                                            <span class="badge" :class="{
+                                                'badge-outline-success': results.spf === 'Pass',
+                                                'badge-outline-danger': results.spf === 'Fail'
+                                            }" x-text="results.spf"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">DKIM:</td>
+                                        <td>
+                                            <span class="badge" :class="{
+                                                'badge-outline-success': results.dkim === 'Pass',
+                                                'badge-outline-danger': results.dkim === 'Fail'
+                                            }" x-text="results.dkim"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h6 class="text-lg font-bold mb-2">Threat Assessment</h6>
+                        <div class="space-y-4">
+                            <template x-for="(threat, index) in results.threats" :key="index">
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span x-text="threat.type"></span>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': threat.severity === 'Low',
+                                            'badge-outline-warning': threat.severity === 'Medium',
+                                            'badge-outline-danger': threat.severity === 'High'
+                                        }" x-text="threat.severity"></span>
+                                    </div>
+                                    <p class="text-xs text-gray-500" x-text="threat.description"></p>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attachments and URLs -->
+                <div class="panel">
+                    <h6 class="text-lg font-bold mb-2">Detected IOCs</h6>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h6 class="font-semibold mb-2">URLs</h6>
+                            <ul class="list-disc list-inside space-y-1">
+                                <template x-for="(url, index) in results.urls" :key="index">
+                                    <li>
+                                        <span x-text="url.url"></span>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': url.status === 'Clean',
+                                            'badge-outline-warning': url.status === 'Suspicious',
+                                            'badge-outline-danger': url.status === 'Malicious'
+                                        }" x-text="url.status"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6 class="font-semibold mb-2">Attachments</h6>
+                            <ul class="list-disc list-inside space-y-1">
+                                <template x-for="(attachment, index) in results.attachments" :key="index">
+                                    <li>
+                                        <span x-text="attachment.name"></span>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': attachment.status === 'Clean',
+                                            'badge-outline-warning': attachment.status === 'Suspicious',
+                                            'badge-outline-danger': attachment.status === 'Malicious'
+                                        }" x-text="attachment.status"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("alpine:init", () => {
+        Alpine.data("emailAnalysis", () => ({
+            emailContent: "",
+            loading: false,
+            results: null,
+
+            clearForm() {
+                this.emailContent = "";
+                this.results = null;
+            },
+
+            async analyzeEmail() {
+                this.loading = true;
+                // Simulated API call - replace with actual API integration
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Sample data - replace with actual API response
+                this.results = {
+                    from: "sender@example.com",
+                    returnPath: "bounce@example.com",
+                    spf: "Pass",
+                    dkim: "Pass",
+                    threats: [
+                        {
+                            type: "Spoofing",
+                            severity: "Low",
+                            description: "No signs of email spoofing detected"
+                        },
+                        {
+                            type: "Phishing",
+                            severity: "Medium",
+                            description: "Suspicious link patterns detected"
+                        }
+                    ],
+                    urls: [
+                        {
+                            url: "http://example.com/path",
+                            status: "Clean"
+                        },
+                        {
+                            url: "http://suspicious.com/login",
+                            status: "Suspicious"
+                        }
+                    ],
+                    attachments: [
+                        {
+                            name: "document.pdf",
+                            status: "Clean"
+                        },
+                        {
+                            name: "invoice.exe",
+                            status: "Malicious"
+                        }
+                    ]
+                };
+                this.loading = false;
+            }
+        }));
+    });
+</script>
+{% endblock %}
