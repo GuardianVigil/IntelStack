@@ -1,4 +1,12 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.core.exceptions import ValidationError
+from django.conf import settings
+import json
+import requests
+from functools import wraps
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -8,6 +16,86 @@ from django.contrib import messages
 @login_required
 def index(request):
     return render(request, 'index.html')
+
+def api_configuration(request):
+    return render(request, 'settings/api_configuration.html')
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def save_api_key(request):
+    try:
+        data = json.loads(request.body)
+        platform = data.get('platform')
+        api_key = data.get('api_key')
+        
+        if not platform or not api_key:
+            return JsonResponse({'success': False, 'message': 'Platform and API key are required'})
+        
+        # Here you would typically save the API key securely
+        # For now, we'll just return success
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+
+@require_http_methods(['GET'])
+def load_api_keys(request):
+    try:
+        # Here you would typically load the saved API keys
+        # For now, return empty values
+        api_keys = {
+            'virustotal': '',
+            'crowdsec': '',
+            'greynoise': '',
+            'abuseipdb': '',
+            'hybrid_analysis': {
+                'api_key': '',
+                'api_secret': ''
+            },
+            'alienvault': '',
+            'pulsedive': '',
+            'filescan': '',
+            'urlscan': '',
+            'securitytrails': '',
+            'phishtank': '',
+            'malwarebazaar': '',
+            'threatfox': '',
+            'urlhaus': '',
+            'cisco_talos': '',
+            'threatminer': '',
+            'spamhaus': '',
+            'cleantalk': '',
+            'phishstats': ''
+        }
+        return JsonResponse({'success': True, 'api_keys': api_keys})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+
+@require_http_methods(['GET'])
+def test_api_key(request):
+    platform = request.GET.get('platform')
+    
+    if not platform:
+        return JsonResponse({'success': False, 'message': 'Platform is required'})
+    
+    # Here you would typically test the API key
+    # For now, return success
+    return JsonResponse({'success': True})
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def delete_api_key(request):
+    try:
+        data = json.loads(request.body)
+        platform = data.get('platform')
+        
+        if not platform:
+            return JsonResponse({'success': False, 'message': 'Platform is required'})
+        
+        # Here you would typically delete the API key
+        # For now, return success
+        return JsonResponse({'success': True})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
 
 def analytics(request):
     return render(request, 'analytics.html')
@@ -381,3 +469,67 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+# Threat Intelligence Views
+@login_required
+def ip_analysis(request):
+    return render(request, 'threat/ip_analysis.html')
+
+@login_required
+def hash_analysis(request):
+    return render(request, 'threat/hash_analysis.html')
+
+@login_required
+def domain_reputation(request):
+    return render(request, 'threat/domain_reputation.html')
+
+@login_required
+def url_scan(request):
+    return render(request, 'threat/url_scan.html')
+
+@login_required
+def email_investigation(request):
+    return render(request, 'threat/email_investigation.html')
+
+# Threat Feed Views
+@login_required
+def virustotal(request):
+    return render(request, 'feeds/virustotal.html')
+
+@login_required
+def abuseipdb(request):
+    return render(request, 'feeds/abuseipdb.html')
+
+@login_required
+def alienvault_otx(request):
+    return render(request, 'feeds/alienvault_otx.html')
+
+@login_required
+def ibm_xforce(request):
+    return render(request, 'feeds/ibm_xforce.html')
+
+# Report Views
+@login_required
+def investigation_history(request):
+    return render(request, 'reports/investigation_history.html')
+
+@login_required
+def threat_reports(request):
+    return render(request, 'reports/threat_reports.html')
+
+@login_required
+def export_findings(request):
+    return render(request, 'reports/export_findings.html')
+
+# Settings Views
+@login_required
+def api_configuration(request):
+    return render(request, 'settings/api_configuration.html')
+
+@login_required
+def user_profile(request):
+    return render(request, 'settings/user_profile.html')
+
+@login_required
+def security_settings(request):
+    return render(request, 'settings/security_settings.html')

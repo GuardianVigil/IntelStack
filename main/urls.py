@@ -118,4 +118,34 @@ urlpatterns = [
     path('dashboard/dragndrop', views.dragndrop, name='dragndrop'),
     path('dashboard/tables', views.tables, name='tables'), 
 
+    # Threat Intelligence URLs
+    path('dashboard/threat/ip-analysis/', views.ip_analysis, name='ip_analysis'),
+    path('dashboard/threat/hash-analysis/', views.hash_analysis, name='hash_analysis'),
+    path('dashboard/threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
+    path('dashboard/threat/url-scan/', views.url_scan, name='url_scan'),
+    path('dashboard/threat/email-investigation/', views.email_investigation, name='email_investigation'),
+    
+    # Settings URLs
+    path('dashboard/settings/api-configuration/', views.api_configuration, name='api_configuration'),
+    path('dashboard/settings/api-configuration/save/', views.save_api_key, name='save_api_key'),
+    path('dashboard/settings/api-configuration/load/', views.load_api_keys, name='load_api_keys'),
+    path('dashboard/settings/api-configuration/test/', views.test_api_key, name='test_api_key'),
+    path('dashboard/settings/api-configuration/delete/', views.delete_api_key, name='delete_api_key'),
+
+    # Threat Feed URLs
+    path('dashboard/feeds/virustotal/', views.virustotal, name='virustotal'),
+    path('dashboard/feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),
+    path('dashboard/feeds/alienvault-otx/', views.alienvault_otx, name='alienvault_otx'),
+    path('dashboard/feeds/ibm-xforce/', views.ibm_xforce, name='ibm_xforce'),
+    
+    # Report URLs
+    path('dashboard/reports/investigation-history/', views.investigation_history, name='investigation_history'),
+    path('dashboard/reports/threat-reports/', views.threat_reports, name='threat_reports'),
+    path('dashboard/reports/export-findings/', views.export_findings, name='export_findings'),
+    
+    # Settings URLs
+    path('dashboard/settings/api-configuration/', views.api_configuration, name='api_configuration'),
+    path('dashboard/settings/user-profile/', views.user_profile, name='user_profile'),
+    path('dashboard/settings/security-settings/', views.security_settings, name='security_settings'),
+    
 ]
