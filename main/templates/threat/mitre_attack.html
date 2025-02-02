@@ -1,0 +1,184 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pt-5">
+    <div class="mb-6 flex items-center justify-between">
+        <h5 class="text-lg font-semibold dark:text-white-light">MITRE ATT&CK Framework</h5>
+        <div class="flex gap-2">
+            <select class="form-select w-auto">
+                <option value="enterprise">Enterprise</option>
+                <option value="mobile">Mobile</option>
+                <option value="ics">ICS</option>
+            </select>
+            <button class="btn btn-primary" onclick="exportData()">Export Data</button>
+        </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="panel mb-5">
+        <div class="mb-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex flex-col">
+                    <label>Tactics</label>
+                    <select class="form-select" multiple>
+                        <option value="reconnaissance">Reconnaissance</option>
+                        <option value="resource-development">Resource Development</option>
+                        <option value="initial-access">Initial Access</option>
+                        <!-- Add more tactics -->
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>Techniques</label>
+                    <select class="form-select" multiple>
+                        <option value="t1595">Active Scanning</option>
+                        <option value="t1592">Gather Victim Host Information</option>
+                        <!-- Add more techniques -->
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>Groups</label>
+                    <select class="form-select" multiple>
+                        <option value="g0001">APT 1</option>
+                        <option value="g0002">APT 28</option>
+                        <!-- Add more groups -->
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>Search</label>
+                    <input type="text" class="form-input" placeholder="Search techniques, tactics, or groups...">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ATT&CK Matrix -->
+    <div class="panel mb-5">
+        <div class="mb-5">
+            <h6 class="text-lg font-semibold mb-3">Enterprise ATT&CK Matrix</h6>
+            <div class="overflow-x-auto">
+                <div class="min-w-[1500px]">
+                    <!-- Matrix Grid -->
+                    <div class="grid grid-cols-12 gap-2">
+                        <!-- Tactics Headers -->
+                        {% for tactic in tactics %}
+                        <div class="bg-primary p-3 text-white text-center font-semibold">
+                            {{ tactic.name }}
+                        </div>
+                        {% endfor %}
+
+                        <!-- Techniques Grid -->
+                        <div class="col-span-12 grid grid-cols-12 gap-2">
+                            {% for technique in techniques %}
+                            <div class="bg-[#eee] dark:bg-[#1b2e4b] p-2 text-center cursor-pointer hover:bg-primary-light hover:text-primary transition-all duration-300"
+                                 onclick="showTechniqueDetails('{{ technique.id }}')">
+                                <div class="text-xs font-semibold">{{ technique.id }}</div>
+                                <div class="text-sm">{{ technique.name }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Views -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Technique Details -->
+        <div class="panel">
+            <div class="mb-5">
+                <h6 class="text-lg font-semibold mb-3">Technique Details</h6>
+                <div id="techniqueDetails">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold">T1595: Active Scanning</h3>
+                            <p class="text-gray-500">Reconnaissance</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn btn-outline-primary">Documentation</button>
+                            <button class="btn btn-outline-danger">Detection Rules</button>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold">Description</h4>
+                            <p>Adversaries may execute active reconnaissance scans to gather information that can be used during targeting...</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Sub-techniques</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="badge bg-primary">T1595.001: Scanning IP Blocks</span>
+                                <span class="badge bg-primary">T1595.002: Vulnerability Scanning</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Mitigation</h4>
+                            <ul class="list-disc list-inside">
+                                <li>Network intrusion detection and prevention systems</li>
+                                <li>Restrict access to IP ranges</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Groups Using Technique -->
+        <div class="panel">
+            <div class="mb-5">
+                <h6 class="text-lg font-semibold mb-3">Associated Groups</h6>
+                <div class="space-y-4">
+                    {% for group in groups %}
+                    <div class="border dark:border-[#1b2e4b] p-4 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h4 class="font-semibold">{{ group.name }}</h4>
+                                <p class="text-xs text-gray-500">{{ group.aliases|join:", " }}</p>
+                            </div>
+                            <span class="badge bg-danger">High Risk</span>
+                        </div>
+                        <p class="text-sm">{{ group.description }}</p>
+                        <div class="mt-2">
+                            <span class="text-xs font-semibold">Associated Techniques:</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                {% for technique in group.techniques %}
+                                <span class="badge bg-primary-light text-primary">{{ technique }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Technique Details Modal -->
+<div class="modal fade" id="techniqueModal" tabindex="-1" role="dialog" aria-labelledby="techniqueModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="techniqueModalLabel">Technique Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Technique details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showTechniqueDetails(techniqueId) {
+        // Implementation for showing technique details
+    }
+
+    function exportData() {
+        // Implementation for exporting data
+    }
+</script>
+{% endblock %}

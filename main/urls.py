@@ -124,6 +124,16 @@ urlpatterns = [
     path('dashboard/threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('dashboard/threat/url-scan/', views.url_scan, name='url_scan'),
     path('dashboard/threat/email-investigation/', views.email_investigation, name='email_investigation'),
+    # Header Menu URLs
+    path('hunting/', views.hunting, name='hunting'),
+    path('threat-feed/', views.threat_feed, name='threat_feed'),
+    path('sandbox/', views.sandbox, name='sandbox'),
+    path('mitre-attack/', views.mitre, name='mitre'),
+
+    # Reports URLs
+    path('dashboard/reports/investigation-history/', views.investigation_history, name='investigation_history'),
+    path('dashboard/reports/threat-reports/', views.threat_reports, name='threat_reports'),
+    path('dashboard/reports/export-findings/', views.export_findings, name='export_findings'),
     
     # Settings URLs
     path('dashboard/settings/api-configuration/', views.api_configuration, name='api_configuration'),

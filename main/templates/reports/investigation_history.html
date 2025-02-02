@@ -1,0 +1,182 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pt-5">
+    <div class="mb-6 flex items-center justify-between">
+        <h5 class="text-lg font-semibold dark:text-white-light">Investigation History</h5>
+        <div class="flex gap-2">
+            <button class="btn btn-outline-primary" onclick="exportHistory()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export
+            </button>
+            <button class="btn btn-primary" onclick="clearHistory()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                </svg>
+                Clear History
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="panel mb-5">
+        <div class="mb-5">
+            <form class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div class="flex flex-col">
+                    <label>Date Range</label>
+                    <input type="date" class="form-input">
+                </div>
+                <div class="flex flex-col">
+                    <label>Investigation Type</label>
+                    <select class="form-select">
+                        <option value="all">All Types</option>
+                        <option value="ip">IP Analysis</option>
+                        <option value="domain">Domain Analysis</option>
+                        <option value="file">File Analysis</option>
+                        <option value="url">URL Analysis</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>Status</label>
+                    <select class="form-select">
+                        <option value="all">All Status</option>
+                        <option value="completed">Completed</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label>Search</label>
+                    <input type="text" class="form-input" placeholder="Search investigations...">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="panel">
+        <div class="table-responsive">
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Target</th>
+                        <th>Status</th>
+                        <th>Risk Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in history %}
+                    <tr>
+                        <td>
+                            <div class="flex flex-col">
+                                <span>{{ item.date }}</span>
+                                <span class="text-xs text-gray-500">{{ item.time }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge {% if item.type == 'ip' %}bg-info{% elif item.type == 'domain' %}bg-warning{% elif item.type == 'file' %}bg-danger{% else %}bg-success{% endif %}">
+                                {{ item.type }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex flex-col">
+                                <span class="font-semibold">{{ item.target }}</span>
+                                <span class="text-xs text-gray-500">{{ item.description }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge {% if item.status == 'completed' %}bg-success{% elif item.status == 'in_progress' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-2.5 mr-2">
+                                    <div class="h-2.5 rounded-full {% if item.risk_score >= 80 %}bg-danger{% elif item.risk_score >= 60 %}bg-warning{% else %}bg-success{% endif %}" style="width: {{ item.risk_score }}%"></div>
+                                </div>
+                                <span>{{ item.risk_score }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-outline-primary" onclick="viewDetails('{{ item.id }}')">
+                                    View
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('{{ item.id }}')">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-5">
+            <div class="flex items-center gap-2">
+                <select class="form-select w-20">
+                    <option>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span class="text-gray-600">entries per page</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="btn btn-outline-primary p-2">&lt;</button>
+                <button class="btn btn-primary p-2">1</button>
+                <button class="btn btn-outline-primary p-2">2</button>
+                <button class="btn btn-outline-primary p-2">3</button>
+                <button class="btn btn-outline-primary p-2">&gt;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Investigation Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Details content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function exportHistory() {
+        // Implementation for exporting history
+    }
+
+    function clearHistory() {
+        // Implementation for clearing history
+    }
+
+    function viewDetails(id) {
+        // Implementation for viewing details
+    }
+
+    function deleteItem(id) {
+        // Implementation for deleting item
+    }
+</script>
+{% endblock %}

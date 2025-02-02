@@ -1,0 +1,193 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pt-5">
+    <div class="mb-6 flex items-center justify-between">
+        <h5 class="text-lg font-semibold dark:text-white-light">Export Findings</h5>
+    </div>
+
+    <!-- Export Options -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Export Configuration -->
+        <div class="panel">
+            <div class="p-5">
+                <h6 class="text-lg font-semibold mb-5">Export Configuration</h6>
+                <form class="space-y-5">
+                    <div class="flex flex-col">
+                        <label>Data Range</label>
+                        <div class="flex gap-2">
+                            <input type="date" class="form-input" placeholder="Start Date">
+                            <input type="date" class="form-input" placeholder="End Date">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label>Data Types</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox" checked>
+                                <span class="text-sm ml-2">Investigation History</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox" checked>
+                                <span class="text-sm ml-2">Threat Reports</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">IOC Data</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">YARA Rules</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">Sandbox Analysis</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label>Export Format</label>
+                        <select class="form-select">
+                            <option value="pdf">PDF Report</option>
+                            <option value="json">JSON</option>
+                            <option value="csv">CSV</option>
+                            <option value="xlsx">Excel (XLSX)</option>
+                            <option value="stix">STIX 2.1</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label>Report Template</label>
+                        <select class="form-select">
+                            <option value="detailed">Detailed Report</option>
+                            <option value="executive">Executive Summary</option>
+                            <option value="technical">Technical Report</option>
+                            <option value="custom">Custom Template</option>
+                        </select>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label>Additional Options</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">Include Screenshots</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">Include Graphs & Charts</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="form-checkbox">
+                                <span class="text-sm ml-2">Include Raw Data</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary w-full" onclick="generateExport()">
+                        Generate Export
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recent Exports -->
+        <div class="panel">
+            <div class="p-5">
+                <h6 class="text-lg font-semibold mb-5">Recent Exports</h6>
+                <div class="space-y-5">
+                    {% for export in exports %}
+                    <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="mr-4">
+                                {% if export.format == 'pdf' %}
+                                <svg class="w-10 h-10 text-danger" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                {% elif export.format == 'xlsx' %}
+                                <svg class="w-10 h-10 text-success" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                {% else %}
+                                <svg class="w-10 h-10 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h6 class="font-semibold">{{ export.name }}</h6>
+                                <div class="text-xs text-gray-500">
+                                    <span>{{ export.date }}</span>
+                                    <span class="mx-1">•</span>
+                                    <span>{{ export.size }}</span>
+                                    <span class="mx-1">•</span>
+                                    <span class="uppercase">{{ export.format }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button class="btn btn-sm btn-outline-primary" onclick="downloadExport('{{ export.id }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteExport('{{ export.id }}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Progress Modal -->
+<div class="modal fade" id="exportProgressModal" tabindex="-1" role="dialog" aria-labelledby="exportProgressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body p-5">
+                <div class="text-center">
+                    <div class="animate-spin inline-block w-10 h-10 border-4 border-primary border-l-transparent rounded-full mb-4"></div>
+                    <h5 class="font-semibold mb-2">Generating Export</h5>
+                    <p class="text-gray-500" id="exportStatus">Processing data...</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                        <div class="bg-primary h-2.5 rounded-full" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function generateExport() {
+        const modal = new bootstrap.Modal(document.getElementById('exportProgressModal'));
+        modal.show();
+        // Implementation for generating export
+    }
+
+    function downloadExport(id) {
+        // Implementation for downloading export
+    }
+
+    function deleteExport(id) {
+        // Implementation for deleting export
+    }
+</script>
+{% endblock %}

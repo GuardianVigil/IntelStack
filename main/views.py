@@ -472,8 +472,223 @@ def logout_view(request):
 
 # Threat Intelligence Views
 @login_required
+def hunting(request):
+    context = {
+        'results': None  # Will be populated when a hunt is performed
+    }
+    return render(request, 'threat/hunting.html', context)
+
+@login_required
+def threat_feed(request):
+    context = {
+        'stats': {
+            'malware_count': 150,
+            'phishing_count': 75,
+            'apt_count': 12,
+            'vuln_count': 45
+        },
+        'feeds': [
+            {
+                'name': 'Emerging Threats',
+                'category': 'Malware',
+                'provider': 'ProofPoint',
+                'last_update': '2025-02-02',
+                'status': 'active',
+                'description': 'Malware and botnet C&C servers'
+            },
+            # Add more sample feeds
+        ]
+    }
+    return render(request, 'threat/feed.html', context)
+
+@login_required
+def sandbox(request):
+    context = {
+        'analyses': [
+            {
+                'id': '1',
+                'submission_time': '2025-02-02 10:00:00',
+                'type': 'file',
+                'name': 'suspicious.exe',
+                'md5': 'd41d8cd98f00b204e9800998ecf8427e',
+                'risk_score': 85,
+                'status': 'completed'
+            },
+            # Add more sample analyses
+        ]
+    }
+    return render(request, 'threat/sandbox.html', context)
+
+@login_required
+def mitre(request):
+    context = {
+        'tactics': [
+            {'name': 'Reconnaissance'},
+            {'name': 'Resource Development'},
+            {'name': 'Initial Access'},
+            # Add more tactics
+        ],
+        'techniques': [
+            {
+                'id': 'T1595',
+                'name': 'Active Scanning',
+                'tactic': 'Reconnaissance'
+            },
+            # Add more techniques
+        ],
+        'groups': [
+            {
+                'name': 'APT28',
+                'aliases': ['Fancy Bear', 'Sofacy'],
+                'description': 'Russian state-sponsored threat actor',
+                'techniques': ['T1595', 'T1592']
+            },
+            # Add more groups
+        ]
+    }
+    return render(request, 'threat/mitre_attack.html', context)
+
+@login_required
+@login_required
+def investigation_history(request):
+    context = {
+        'history': [
+            {
+                'id': '1',
+                'date': '2025-02-02',
+                'time': '14:30',
+                'type': 'ip',
+                'target': '192.168.1.1',
+                'description': 'Suspicious IP investigation',
+                'status': 'completed',
+                'risk_score': 85
+            },
+            # Add more sample history items
+        ]
+    }
+    return render(request, 'reports/investigation_history.html', context)
+
+@login_required
+def threat_reports(request):
+    context = {
+        'stats': {
+            'apt_reports': 12,
+            'malware_reports': 45,
+            'incident_reports': 8,
+            'vuln_reports': 23
+        },
+        'reports': [
+            {
+                'id': '1',
+                'title': 'APT29 Campaign Analysis',
+                'category': 'apt',
+                'summary': 'Detailed analysis of recent APT29 activities targeting critical infrastructure.',
+                'author': 'John Doe',
+                'author_avatar': 'path/to/avatar.jpg',
+                'date': '2025-02-02'
+            },
+            # Add more sample reports
+        ]
+    }
+    return render(request, 'reports/threat_reports.html', context)
+
+@login_required
+def export_findings(request):
+    context = {
+        'exports': [
+            {
+                'id': '1',
+                'name': 'Q1 2025 Threat Report',
+                'date': '2025-02-02',
+                'size': '2.5 MB',
+                'format': 'pdf'
+            },
+            # Add more sample exports
+        ]
+    }
+    return render(request, 'reports/export_findings.html', context)
+
+@login_required
 def ip_analysis(request):
-    return render(request, 'threat/ip_analysis.html')
+    context = {}
+    
+    if request.method == 'POST':
+        ip_address = request.POST.get('ip_address')
+        if ip_address:
+            try:
+                # Initialize results dictionary
+                context['ip_address'] = ip_address
+                context['results'] = {
+                    'virustotal': {
+                        'country': 'United States',
+                        'as_owner': 'AS15169 Google LLC',
+                        'network': '8.8.8.0/24',
+                        'reputation': 0,
+                        'last_analysis_stats': {
+                            'harmless': 80,
+                            'malicious': 0,
+                            'suspicious': 0,
+                            'undetected': 10,
+                            'timeout': 0
+                        },
+                        'last_analysis_results': {
+                            'Kaspersky': {
+                                'category': 'harmless',
+                                'result': 'clean',
+                                'update_date': '2025-02-02'
+                            },
+                            'McAfee': {
+                                'category': 'harmless',
+                                'result': 'clean',
+                                'update_date': '2025-02-02'
+                            }
+                        }
+                    },
+                    'categories': {
+                        'Malware': 0,
+                        'Phishing': 0,
+                        'Spam': 0,
+                        'Botnet': 0
+                    }
+                }
+                
+                # Calculate threat score
+                malicious_count = context['results']['virustotal']['last_analysis_stats']['malicious']
+                total_count = sum(context['results']['virustotal']['last_analysis_stats'].values())
+                
+                threat_score = (malicious_count / total_count * 100) if total_count > 0 else 0
+                
+                # Set threat level and class based on score
+                if threat_score >= 80:
+                    threat_level = 'Critical Risk'
+                    threat_class = 'bg-danger'
+                elif threat_score >= 60:
+                    threat_level = 'High Risk'
+                    threat_class = 'bg-warning'
+                elif threat_score >= 40:
+                    threat_level = 'Medium Risk'
+                    threat_class = 'bg-info'
+                else:
+                    threat_level = 'Low Risk'
+                    threat_class = 'bg-success'
+                
+                context.update({
+                    'final_score': threat_score,
+                    'threat_level': threat_level,
+                    'threat_class': threat_class,
+                    'confidence': 95,
+                    'provider_scores': {
+                        'virustotal': {'score': 0, 'weight': 40},
+                        'greynoise': {'score': 0, 'weight': 20},
+                        'abuseipdb': {'score': 0, 'weight': 20},
+                        'crowdsec': {'score': 0, 'weight': 20}
+                    }
+                })
+                
+            except Exception as e:
+                context['error_message'] = f"Error analyzing IP address: {str(e)}"
+    
+    return render(request, 'threat/ip_analysis.html', context)
 
 @login_required
 def hash_analysis(request):

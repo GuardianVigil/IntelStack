@@ -1,0 +1,166 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pt-5">
+    <div class="mb-6 flex items-center justify-between">
+        <h5 class="text-lg font-semibold dark:text-white-light">Threat Hunting</h5>
+    </div>
+
+    <!-- Search Panel -->
+    <div class="panel mb-5">
+        <div class="mb-5">
+            <h6 class="text-lg font-bold mb-3">Hunt Across Multiple Data Sources</h6>
+            <form action="{% url 'hunting' %}" method="post" class="space-y-5">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <label for="searchType">Search Type</label>
+                        <select id="searchType" name="search_type" class="form-select">
+                            <option value="ioc">Indicator of Compromise (IOC)</option>
+                            <option value="yara">YARA Rule</option>
+                            <option value="sigma">Sigma Rule</option>
+                            <option value="snort">Snort Rule</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="timeRange">Time Range</label>
+                        <select id="timeRange" name="time_range" class="form-select">
+                            <option value="1h">Last Hour</option>
+                            <option value="24h">Last 24 Hours</option>
+                            <option value="7d">Last 7 Days</option>
+                            <option value="30d">Last 30 Days</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="searchQuery">Search Query</label>
+                    <textarea id="searchQuery" name="query" rows="4" class="form-textarea" placeholder="Enter IOC, YARA rule, or other search patterns..."></textarea>
+                </div>
+
+                <div class="flex flex-wrap gap-4">
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        Hunt
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" onclick="saveHunt()">Save Hunt</button>
+                    <button type="button" class="btn btn-outline-info" onclick="loadHunt()">Load Saved Hunt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    {% if results %}
+    <div class="panel">
+        <div class="mb-5">
+            <div class="flex items-center justify-between">
+                <h6 class="text-lg font-bold">Hunt Results</h6>
+                <div class="flex gap-4">
+                    <button class="btn btn-outline-primary" onclick="exportResults()">Export Results</button>
+                    <button class="btn btn-outline-success" onclick="createCase()">Create Case</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Tabs -->
+        <div class="mb-5">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#matches">Matches</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#timeline">Timeline</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#stats">Statistics</a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-5">
+                <div class="tab-pane fade show active" id="matches">
+                    <div class="table-responsive">
+                        <table class="table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Source</th>
+                                    <th>Event Type</th>
+                                    <th>Severity</th>
+                                    <th>Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for match in results.matches %}
+                                <tr>
+                                    <td>{{ match.timestamp }}</td>
+                                    <td>{{ match.source }}</td>
+                                    <td>{{ match.event_type }}</td>
+                                    <td>
+                                        <span class="badge {% if match.severity == 'high' %}bg-danger{% elif match.severity == 'medium' %}bg-warning{% else %}bg-success{% endif %}">
+                                            {{ match.severity }}
+                                        </span>
+                                    </td>
+                                    <td>{{ match.details }}</td>
+                                    <td>
+                                        <div class="flex gap-2">
+                                            <button class="btn btn-sm btn-outline-primary">View</button>
+                                            <button class="btn btn-sm btn-outline-danger">Block</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="timeline">
+                    <!-- Timeline visualization will go here -->
+                    <div id="timeline-chart" class="min-h-[400px]"></div>
+                </div>
+
+                <div class="tab-pane fade" id="stats">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="panel">
+                            <h6 class="text-lg font-semibold mb-3">Event Distribution</h6>
+                            <div id="event-distribution-chart" class="min-h-[300px]"></div>
+                        </div>
+                        <div class="panel">
+                            <h6 class="text-lg font-semibold mb-3">Severity Distribution</h6>
+                            <div id="severity-distribution-chart" class="min-h-[300px]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function saveHunt() {
+        // Implementation for saving hunt configuration
+    }
+
+    function loadHunt() {
+        // Implementation for loading saved hunt configuration
+    }
+
+    function exportResults() {
+        // Implementation for exporting results
+    }
+
+    function createCase() {
+        // Implementation for creating a case from results
+    }
+</script>
+{% endblock %}
