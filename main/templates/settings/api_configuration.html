@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+{% csrf_token %}
 <div x-data="apiConfig">
     <ul class="flex space-x-2 rtl:space-x-reverse">
         <li>
@@ -44,8 +45,19 @@
                     <form @submit.prevent="saveApiKey('virustotal')">
                         <div class="mb-5">
                             <label for="virustotal_api_key">API Key</label>
-                            <input id="virustotal_api_key" type="password" placeholder="Enter your VirusTotal API key" 
-                                   class="form-input" x-model="keys.virustotal" />
+                            <div class="relative">
+                                <input id="virustotal_api_key" :type="showPassword.virustotal ? 'text' : 'password'" 
+                                       placeholder="Enter your VirusTotal API key" class="form-input pr-10" x-model="keys.virustotal" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.virustotal = !showPassword.virustotal">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.virustotal}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.virustotal}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -68,8 +80,19 @@
                     <form @submit.prevent="saveApiKey('abuseipdb')">
                         <div class="mb-5">
                             <label for="abuseipdb_api_key">API Key</label>
-                            <input id="abuseipdb_api_key" type="password" placeholder="Enter your AbuseIPDB API key" 
-                                   class="form-input" x-model="keys.abuseipdb" />
+                            <div class="relative">
+                                <input id="abuseipdb_api_key" :type="showPassword.abuseipdb ? 'text' : 'password'" 
+                                       placeholder="Enter your AbuseIPDB API key" class="form-input pr-10" x-model="keys.abuseipdb" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.abuseipdb = !showPassword.abuseipdb">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.abuseipdb}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.abuseipdb}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -92,8 +115,19 @@
                     <form @submit.prevent="saveApiKey('alienvault')">
                         <div class="mb-5">
                             <label for="alienvault_api_key">API Key</label>
-                            <input id="alienvault_api_key" type="password" placeholder="Enter your AlienVault OTX API key" 
-                                   class="form-input" x-model="keys.alienvault" />
+                            <div class="relative">
+                                <input id="alienvault_api_key" :type="showPassword.alienvault ? 'text' : 'password'" 
+                                       placeholder="Enter your AlienVault OTX API key" class="form-input pr-10" x-model="keys.alienvault" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.alienvault = !showPassword.alienvault">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.alienvault}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.alienvault}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -117,19 +151,41 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                             <div>
                                 <label for="ibm_xforce_api_key">API Key</label>
-                                <input id="ibm_xforce_api_key" type="password" placeholder="Enter your X-Force API key" 
-                                       class="form-input" x-model="keys.ibm_xforce.api_key" />
+                                <div class="relative">
+                                    <input id="ibm_xforce_api_key" :type="showPassword.ibm_xforce_key ? 'text' : 'password'" 
+                                           placeholder="Enter your X-Force API key" class="form-input pr-10" x-model="keys.ibm_xforce.api_key" />
+                                    <button type="button" class="absolute right-2 top-2.5" @click="showPassword.ibm_xforce_key = !showPassword.ibm_xforce_key">
+                                        <svg class="w-5 h-5" :class="{'hidden': !showPassword.ibm_xforce_key}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <svg class="w-5 h-5" :class="{'hidden': showPassword.ibm_xforce_key}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label for="ibm_xforce_api_password">API Password</label>
-                                <input id="ibm_xforce_api_password" type="password" placeholder="Enter your X-Force API password" 
-                                       class="form-input" x-model="keys.ibm_xforce.api_password" />
+                                <div class="relative">
+                                    <input id="ibm_xforce_api_password" :type="showPassword.ibm_xforce_password ? 'text' : 'password'" 
+                                           placeholder="Enter your X-Force API password" class="form-input pr-10" x-model="keys.ibm_xforce.api_password" />
+                                    <button type="button" class="absolute right-2 top-2.5" @click="showPassword.ibm_xforce_password = !showPassword.ibm_xforce_password">
+                                        <svg class="w-5 h-5" :class="{'hidden': !showPassword.ibm_xforce_password}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <svg class="w-5 h-5" :class="{'hidden': showPassword.ibm_xforce_password}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
                             <button type="button" @click="testApiKey('ibm_xforce')" class="btn btn-info">Test</button>
-                            <template x-if="keys.ibm_xforce.api_key">
+                            <template x-if="keys.ibm_xforce.api_key || keys.ibm_xforce.api_password">
                                 <button type="button" @click="deleteApiKey('ibm_xforce')" class="btn btn-danger">Delete</button>
                             </template>
                         </div>
@@ -147,8 +203,19 @@
                     <form @submit.prevent="saveApiKey('urlscan')">
                         <div class="mb-5">
                             <label for="urlscan_api_key">API Key</label>
-                            <input id="urlscan_api_key" type="password" placeholder="Enter your URLScan.io API key" 
-                                   class="form-input" x-model="keys.urlscan" />
+                            <div class="relative">
+                                <input id="urlscan_api_key" :type="showPassword.urlscan ? 'text' : 'password'" 
+                                       placeholder="Enter your URLScan.io API key" class="form-input pr-10" x-model="keys.urlscan" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.urlscan = !showPassword.urlscan">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.urlscan}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.urlscan}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -171,8 +238,19 @@
                     <form @submit.prevent="saveApiKey('securitytrails')">
                         <div class="mb-5">
                             <label for="securitytrails_api_key">API Key</label>
-                            <input id="securitytrails_api_key" type="password" placeholder="Enter your SecurityTrails API key" 
-                                   class="form-input" x-model="keys.securitytrails" />
+                            <div class="relative">
+                                <input id="securitytrails_api_key" :type="showPassword.securitytrails ? 'text' : 'password'" 
+                                       placeholder="Enter your SecurityTrails API key" class="form-input pr-10" x-model="keys.securitytrails" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.securitytrails = !showPassword.securitytrails">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.securitytrails}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.securitytrails}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -189,14 +267,25 @@
             <div class="panel">
                 <div class="flex items-center justify-between mb-5">
                     <h5 class="font-semibold text-lg dark:text-white-light">CrowdSec</h5>
-                    <a href="https://www.crowdsec.net/product/api" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                    <a href="https://app.crowdsec.net/settings/cti-api-keys" target="_blank" class="text-primary hover:underline">Get API Key</a>
                 </div>
                 <div class="mb-5">
                     <form @submit.prevent="saveApiKey('crowdsec')">
                         <div class="mb-5">
                             <label for="crowdsec_api_key">API Key</label>
-                            <input id="crowdsec_api_key" type="password" placeholder="Enter your CrowdSec API key" 
-                                class="form-input" x-model="keys.crowdsec" />
+                            <div class="relative">
+                                <input id="crowdsec_api_key" :type="showPassword.crowdsec ? 'text' : 'password'" 
+                                       placeholder="Enter your CrowdSec API key" class="form-input pr-10" x-model="keys.crowdsec" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.crowdsec = !showPassword.crowdsec">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.crowdsec}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.crowdsec}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -213,14 +302,25 @@
             <div class="panel">
                 <div class="flex items-center justify-between mb-5">
                     <h5 class="font-semibold text-lg dark:text-white-light">GreyNoise</h5>
-                    <a href="https://www.greynoise.io/plans" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                    <a href="https://viz.greynoise.io/account/api-key" target="_blank" class="text-primary hover:underline">Get API Key</a>
                 </div>
                 <div class="mb-5">
                     <form @submit.prevent="saveApiKey('greynoise')">
                         <div class="mb-5">
                             <label for="greynoise_api_key">API Key</label>
-                            <input id="greynoise_api_key" type="password" placeholder="Enter your GreyNoise API key" 
-                                class="form-input" x-model="keys.greynoise" />
+                            <div class="relative">
+                                <input id="greynoise_api_key" :type="showPassword.greynoise ? 'text' : 'password'" 
+                                       placeholder="Enter your GreyNoise API key" class="form-input pr-10" x-model="keys.greynoise" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.greynoise = !showPassword.greynoise">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.greynoise}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.greynoise}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -237,20 +337,42 @@
             <div class="panel">
                 <div class="flex items-center justify-between mb-5">
                     <h5 class="font-semibold text-lg dark:text-white-light">Hybrid Analysis</h5>
-                    <a href="https://www.hybrid-analysis.com/signup" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                    <a href="https://www.hybrid-analysis.com/my-account" target="_blank" class="text-primary hover:underline">Get API Key</a>
                 </div>
                 <div class="mb-5">
                     <form @submit.prevent="saveApiKey('hybrid_analysis')">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
                             <div>
                                 <label for="hybrid_analysis_api_key">API Key</label>
-                                <input id="hybrid_analysis_api_key" type="password" placeholder="Enter your Hybrid Analysis API key" 
-                                    class="form-input" x-model="keys.hybrid_analysis.api_key" />
+                                <div class="relative">
+                                    <input id="hybrid_analysis_api_key" :type="showPassword.hybrid_analysis_key ? 'text' : 'password'" 
+                                           placeholder="Enter your Hybrid Analysis API key" class="form-input pr-10" x-model="keys.hybrid_analysis.api_key" />
+                                    <button type="button" class="absolute right-2 top-2.5" @click="showPassword.hybrid_analysis_key = !showPassword.hybrid_analysis_key">
+                                        <svg class="w-5 h-5" :class="{'hidden': !showPassword.hybrid_analysis_key}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <svg class="w-5 h-5" :class="{'hidden': showPassword.hybrid_analysis_key}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label for="hybrid_analysis_api_secret">API Secret</label>
-                                <input id="hybrid_analysis_api_secret" type="password" placeholder="Enter your Hybrid Analysis API secret" 
-                                    class="form-input" x-model="keys.hybrid_analysis.api_secret" />
+                                <div class="relative">
+                                    <input id="hybrid_analysis_api_secret" :type="showPassword.hybrid_analysis_secret ? 'text' : 'password'" 
+                                           placeholder="Enter your Hybrid Analysis API secret" class="form-input pr-10" x-model="keys.hybrid_analysis.api_secret" />
+                                    <button type="button" class="absolute right-2 top-2.5" @click="showPassword.hybrid_analysis_secret = !showPassword.hybrid_analysis_secret">
+                                        <svg class="w-5 h-5" :class="{'hidden': !showPassword.hybrid_analysis_secret}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <svg class="w-5 h-5" :class="{'hidden': showPassword.hybrid_analysis_secret}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="flex gap-4">
@@ -274,8 +396,19 @@
                     <form @submit.prevent="saveApiKey('pulsedive')">
                         <div class="mb-5">
                             <label for="pulsedive_api_key">API Key</label>
-                            <input id="pulsedive_api_key" type="password" placeholder="Enter your Pulsedive API key" 
-                                class="form-input" x-model="keys.pulsedive" />
+                            <div class="relative">
+                                <input id="pulsedive_api_key" :type="showPassword.pulsedive ? 'text' : 'password'" 
+                                       placeholder="Enter your Pulsedive API key" class="form-input pr-10" x-model="keys.pulsedive" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.pulsedive = !showPassword.pulsedive">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.pulsedive}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.pulsedive}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -292,14 +425,25 @@
             <div class="panel">
                 <div class="flex items-center justify-between mb-5">
                     <h5 class="font-semibold text-lg dark:text-white-light">FileScan.io</h5>
-                    <a href="https://filescan.io/account" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                    <a href="https://www.filescan.io/users/profile" target="_blank" class="text-primary hover:underline">Get API Key</a>
                 </div>
                 <div class="mb-5">
                     <form @submit.prevent="saveApiKey('filescan')">
                         <div class="mb-5">
                             <label for="filescan_api_key">API Key</label>
-                            <input id="filescan_api_key" type="password" placeholder="Enter your FileScan.io API key" 
-                                class="form-input" x-model="keys.filescan" />
+                            <div class="relative">
+                                <input id="filescan_api_key" :type="showPassword.filescan ? 'text' : 'password'" 
+                                       placeholder="Enter your FileScan.io API key" class="form-input pr-10" x-model="keys.filescan" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.filescan = !showPassword.filescan">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.filescan}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.filescan}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -323,8 +467,19 @@
                     <form @submit.prevent="saveApiKey('phishtank')">
                         <div class="mb-5">
                             <label for="phishtank_api_key">API Key</label>
-                            <input id="phishtank_api_key" type="password" placeholder="Enter your PhishTank API key" 
-                                   class="form-input" x-model="keys.phishtank" />
+                            <div class="relative">
+                                <input id="phishtank_api_key" :type="showPassword.phishtank ? 'text' : 'password'" 
+                                       placeholder="Enter your PhishTank API key" class="form-input pr-10" x-model="keys.phishtank" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.phishtank = !showPassword.phishtank">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.phishtank}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.phishtank}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -347,8 +502,19 @@
                     <form @submit.prevent="saveApiKey('malwarebazaar')">
                         <div class="mb-5">
                             <label for="malwarebazaar_api_key">API Key</label>
-                            <input id="malwarebazaar_api_key" type="password" placeholder="Enter your MalwareBazaar API key" 
-                                   class="form-input" x-model="keys.malwarebazaar" />
+                            <div class="relative">
+                                <input id="malwarebazaar_api_key" :type="showPassword.malwarebazaar ? 'text' : 'password'" 
+                                       placeholder="Enter your MalwareBazaar API key" class="form-input pr-10" x-model="keys.malwarebazaar" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.malwarebazaar = !showPassword.malwarebazaar">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.malwarebazaar}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.malwarebazaar}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -371,8 +537,19 @@
                     <form @submit.prevent="saveApiKey('threatfox')">
                         <div class="mb-5">
                             <label for="threatfox_api_key">API Key</label>
-                            <input id="threatfox_api_key" type="password" placeholder="Enter your ThreatFox API key" 
-                                   class="form-input" x-model="keys.threatfox" />
+                            <div class="relative">
+                                <input id="threatfox_api_key" :type="showPassword.threatfox ? 'text' : 'password'" 
+                                       placeholder="Enter your ThreatFox API key" class="form-input pr-10" x-model="keys.threatfox" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.threatfox = !showPassword.threatfox">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.threatfox}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.threatfox}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -395,8 +572,19 @@
                     <form @submit.prevent="saveApiKey('urlhaus')">
                         <div class="mb-5">
                             <label for="urlhaus_api_key">API Key</label>
-                            <input id="urlhaus_api_key" type="password" placeholder="Enter your URLhaus API key" 
-                                   class="form-input" x-model="keys.urlhaus" />
+                            <div class="relative">
+                                <input id="urlhaus_api_key" :type="showPassword.urlhaus ? 'text' : 'password'" 
+                                       placeholder="Enter your URLhaus API key" class="form-input pr-10" x-model="keys.urlhaus" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.urlhaus = !showPassword.urlhaus">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.urlhaus}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.urlhaus}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -409,53 +597,9 @@
                 </div>
             </div>
             
-            <!-- Cisco Talos -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Cisco Talos</h5>
-                    <a href="https://talosintelligence.com/reputation_center" target="_blank" class="text-primary hover:underline">Get API Key</a>
-                </div>
-                <div class="mb-5">
-                    <form @submit.prevent="saveApiKey('cisco_talos')">
-                        <div class="mb-5">
-                            <label for="cisco_talos_api_key">API Key</label>
-                            <input id="cisco_talos_api_key" type="password" placeholder="Enter your Cisco Talos API key" 
-                                   class="form-input" x-model="keys.cisco_talos" />
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" @click="testApiKey('cisco_talos')" class="btn btn-info">Test</button>
-                            <template x-if="keys.cisco_talos">
-                                <button type="button" @click="deleteApiKey('cisco_talos')" class="btn btn-danger">Delete</button>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
             
-            <!-- ThreatMiner -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">ThreatMiner</h5>
-                    <a href="https://www.threatminer.org/api.php" target="_blank" class="text-primary hover:underline">Get API Key</a>
-                </div>
-                <div class="mb-5">
-                    <form @submit.prevent="saveApiKey('threatminer')">
-                        <div class="mb-5">
-                            <label for="threatminer_api_key">API Key</label>
-                            <input id="threatminer_api_key" type="password" placeholder="Enter your ThreatMiner API key" 
-                                   class="form-input" x-model="keys.threatminer" />
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" @click="testApiKey('threatminer')" class="btn btn-info">Test</button>
-                            <template x-if="keys.threatminer">
-                                <button type="button" @click="deleteApiKey('threatminer')" class="btn btn-danger">Delete</button>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
             
             <!-- SpamHaus -->
             <div class="panel">
@@ -467,8 +611,19 @@
                     <form @submit.prevent="saveApiKey('spamhaus')">
                         <div class="mb-5">
                             <label for="spamhaus_api_key">API Key</label>
-                            <input id="spamhaus_api_key" type="password" placeholder="Enter your SpamHaus API key" 
-                                   class="form-input" x-model="keys.spamhaus" />
+                            <div class="relative">
+                                <input id="spamhaus_api_key" :type="showPassword.spamhaus ? 'text' : 'password'" 
+                                       placeholder="Enter your SpamHaus API key" class="form-input pr-10" x-model="keys.spamhaus" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.spamhaus = !showPassword.spamhaus">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.spamhaus}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.spamhaus}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="flex gap-4">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -481,53 +636,9 @@
                 </div>
             </div>
             
-            <!-- CleanTalk -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">CleanTalk</h5>
-                    <a href="https://cleantalk.org/api" target="_blank" class="text-primary hover:underline">Get API Key</a>
-                </div>
-                <div class="mb-5">
-                    <form @submit.prevent="saveApiKey('cleantalk')">
-                        <div class="mb-5">
-                            <label for="cleantalk_api_key">API Key</label>
-                            <input id="cleantalk_api_key" type="password" placeholder="Enter your CleanTalk API key" 
-                                   class="form-input" x-model="keys.cleantalk" />
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" @click="testApiKey('cleantalk')" class="btn btn-info">Test</button>
-                            <template x-if="keys.cleantalk">
-                                <button type="button" @click="deleteApiKey('cleantalk')" class="btn btn-danger">Delete</button>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
             
-            <!-- PhishStats -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">PhishStats</h5>
-                    <a href="https://phishstats.info/api" target="_blank" class="text-primary hover:underline">Get API Key</a>
-                </div>
-                <div class="mb-5">
-                    <form @submit.prevent="saveApiKey('phishstats')">
-                        <div class="mb-5">
-                            <label for="phishstats_api_key">API Key</label>
-                            <input id="phishstats_api_key" type="password" placeholder="Enter your PhishStats API key" 
-                                   class="form-input" x-model="keys.phishstats" />
-                        </div>
-                        <div class="flex gap-4">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" @click="testApiKey('phishstats')" class="btn btn-info">Test</button>
-                            <template x-if="keys.phishstats">
-                                <button type="button" @click="deleteApiKey('phishstats')" class="btn btn-danger">Delete</button>
-                            </template>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
             
 
         </div>
@@ -537,6 +648,26 @@
 <script>
 document.addEventListener("alpine:init", () => {
     Alpine.data("apiConfig", () => ({
+        showPassword: {
+            virustotal: false,
+            abuseipdb: false,
+            alienvault: false,
+            ibm_xforce_key: false,
+            ibm_xforce_password: false,
+            urlscan: false,
+            securitytrails: false,
+            greynoise: false,
+            filescan: false,
+            malwarebazaar: false,
+            urlhaus: false,
+            phishtank: false,
+            threatfox: false,
+            spamhaus: false,
+            crowdsec: false,
+            hybrid_analysis_key: false,
+            hybrid_analysis_secret: false,
+            pulsedive: false
+        },
         keys: {
             virustotal: '',
             abuseipdb: '',
@@ -546,7 +677,20 @@ document.addEventListener("alpine:init", () => {
                 api_password: ''
             },
             urlscan: '',
-            securitytrails: ''
+            securitytrails: '',
+            greynoise: '',
+            filescan: '',
+            malwarebazaar: '',
+            urlhaus: '',
+            phishtank: '',
+            threatfox: '',
+            spamhaus: '',
+            crowdsec: '',
+            hybrid_analysis: {
+                api_key: '',
+                api_secret: ''
+            },
+            pulsedive: ''
         },
         notification: {
             show: false,
@@ -581,7 +725,9 @@ document.addEventListener("alpine:init", () => {
                     },
                     body: JSON.stringify({
                         platform: platform,
-                        api_key: platform === 'ibm_xforce' ? this.keys[platform] : this.keys[platform]
+                        api_key: platform === 'ibm_xforce' || platform === 'hybrid_analysis' ? this.keys[platform].api_key : this.keys[platform],
+                        api_secret: platform === 'ibm_xforce' ? this.keys[platform].api_password : 
+                                   platform === 'hybrid_analysis' ? this.keys[platform].api_secret : null
                     })
                 });
                 

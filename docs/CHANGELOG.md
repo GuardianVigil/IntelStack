@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Enhanced API key management
+  - Added show/hide functionality for all API key fields
+  - Improved handling of dual-key platforms (IBM X-Force, Hybrid Analysis)
+  - Added comprehensive API key configuration documentation
+
+### Fixed
+- Fixed IBM X-Force API key display issue in frontend
+- Fixed Hybrid Analysis API key and secret handling
+
+### Added
 - Modern UI for threat intelligence pages
   - Hunting page with advanced search capabilities
   - Threat Feed page with real-time updates

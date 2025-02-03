@@ -3,23 +3,26 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from django.conf import settings
-import json
-import requests
-from functools import wraps
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import APIKey
+import json
+import requests
+from functools import wraps
 
 # Create your views here.
 @login_required
 def index(request):
     return render(request, 'index.html')
 
+@login_required
 def api_configuration(request):
     return render(request, 'settings/api_configuration.html')
 
+@login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def save_api_key(request):
@@ -27,49 +30,62 @@ def save_api_key(request):
         data = json.loads(request.body)
         platform = data.get('platform')
         api_key = data.get('api_key')
+        api_secret = data.get('api_secret')  # For platforms that require two keys
         
         if not platform or not api_key:
             return JsonResponse({'success': False, 'message': 'Platform and API key are required'})
         
-        # Here you would typically save the API key securely
-        # For now, we'll just return success
-        return JsonResponse({'success': True})
-    except Exception as e:
+        # Create or update API key
+        api_key_obj, created = APIKey.objects.get_or_create(
+            user=request.user,
+            platform=platform,
+            defaults={
+                'api_key': api_key,
+                'api_secret': api_secret
+            }
+        )
+        
+        if not created:
+            api_key_obj.api_key = api_key
+            api_key_obj.api_secret = api_secret
+            api_key_obj.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'API key saved successfully',
+            'created': created
+        })
+    except ValidationError as e:
         return JsonResponse({'success': False, 'message': str(e)})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': 'An error occurred while saving the API key'})
 
+@login_required
 @require_http_methods(['GET'])
 def load_api_keys(request):
     try:
-        # Here you would typically load the saved API keys
-        # For now, return empty values
-        api_keys = {
-            'virustotal': '',
-            'crowdsec': '',
-            'greynoise': '',
-            'abuseipdb': '',
-            'hybrid_analysis': {
-                'api_key': '',
-                'api_secret': ''
-            },
-            'alienvault': '',
-            'pulsedive': '',
-            'filescan': '',
-            'urlscan': '',
-            'securitytrails': '',
-            'phishtank': '',
-            'malwarebazaar': '',
-            'threatfox': '',
-            'urlhaus': '',
-            'cisco_talos': '',
-            'threatminer': '',
-            'spamhaus': '',
-            'cleantalk': '',
-            'phishstats': ''
-        }
+        api_keys = {}
+        user_api_keys = APIKey.objects.filter(user=request.user, is_active=True)
+        
+        for key in user_api_keys:
+            if key.platform == 'hybrid_analysis':
+                api_keys[key.platform] = {
+                    'api_key': key.get_decrypted_api_key(),
+                    'api_secret': key.get_decrypted_api_secret()
+                }
+            elif key.platform == 'ibm_xforce':
+                api_keys[key.platform] = {
+                    'api_key': key.get_decrypted_api_key(),
+                    'api_password': key.get_decrypted_api_secret()
+                }
+            else:
+                api_keys[key.platform] = key.get_decrypted_api_key()
+        
         return JsonResponse({'success': True, 'api_keys': api_keys})
     except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})
+        return JsonResponse({'success': False, 'message': 'An error occurred while loading API keys'})
 
+@login_required
 @require_http_methods(['GET'])
 def test_api_key(request):
     platform = request.GET.get('platform')
@@ -77,10 +93,84 @@ def test_api_key(request):
     if not platform:
         return JsonResponse({'success': False, 'message': 'Platform is required'})
     
-    # Here you would typically test the API key
-    # For now, return success
-    return JsonResponse({'success': True})
+    try:
+        api_key = APIKey.objects.get(user=request.user, platform=platform, is_active=True)
+        key = api_key.get_decrypted_api_key()
+        secret = api_key.get_decrypted_api_secret() if platform == 'hybrid_analysis' else None
+        
+        # Test API key based on platform
+        if platform == 'virustotal':
+            response = requests.get(
+                'https://www.virustotal.com/vtapi/v2/url/report',
+                params={'apikey': key, 'resource': 'www.google.com'}
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+        
+        elif platform == 'abuseipdb':
+            headers = {'Key': key, 'Accept': 'application/json'}
+            response = requests.get(
+                'https://api.abuseipdb.com/api/v2/check',
+                headers=headers,
+                params={'ipAddress': '8.8.8.8'}
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+        
+        elif platform == 'greynoise':
+            headers = {'key': key, 'Accept': 'application/json'}
+            response = requests.get(
+                'https://api.greynoise.io/v3/community/8.8.8.8',
+                headers=headers
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+        
+        elif platform == 'urlscan':
+            headers = {'API-Key': key, 'Content-Type': 'application/json'}
+            response = requests.get(
+                'https://urlscan.io/user/quotas',
+                headers=headers
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+        
+        elif platform == 'hybrid_analysis':
+            headers = {
+                'api-key': key,
+                'user-agent': 'Falcon Sandbox',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            response = requests.get(
+                'https://www.hybrid-analysis.com/api/v2/key/current',
+                headers=headers
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+        
+        # Add more platform-specific API key tests here
+        
+        # Default response for platforms without specific test
+        return JsonResponse({'success': True, 'message': 'API key saved (validation not implemented)'})
+        
+    except APIKey.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'API key not found'})
+    except requests.exceptions.RequestException as e:
+        return JsonResponse({'success': False, 'message': 'Error testing API key: Network error'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': f'Error testing API key: {str(e)}'})
 
+@login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def delete_api_key(request):
@@ -91,11 +181,15 @@ def delete_api_key(request):
         if not platform:
             return JsonResponse({'success': False, 'message': 'Platform is required'})
         
-        # Here you would typically delete the API key
-        # For now, return success
-        return JsonResponse({'success': True})
+        # Delete API key
+        APIKey.objects.filter(user=request.user, platform=platform).delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'API key deleted successfully'
+        })
     except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})
+        return JsonResponse({'success': False, 'message': 'An error occurred while deleting the API key'})
 
 def analytics(request):
     return render(request, 'analytics.html')
