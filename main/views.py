@@ -9,14 +9,89 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import APIKey
+from .services.ip_analysis import IPAnalysisService
 import json
 import requests
 from functools import wraps
+import logging
+import asyncio
+import os
+import markdown
+from asgiref.sync import sync_to_async
+from django.db.models import Q
+from functools import wraps
+from django.http import JsonResponse
+from django.core.cache import cache
+
+# Create a logger
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 @login_required
 def index(request):
     return render(request, 'index.html')
+
+def docs_home(request):
+    return render(request, 'docs/knowledge-base.html', {
+        'sections': [
+            {
+                'title': 'Getting Started',
+                'icon': 'book-open',
+                'description': 'Learn the basics of using Stack',
+                'articles': [
+                    {'title': 'Introduction to Stack', 'url': '/docs/getting-started'},
+                    {'title': 'API Key Configuration', 'url': '/docs/api-keys'},
+                    {'title': 'Basic Usage', 'url': '/docs/basic-usage'},
+                ]
+            },
+            {
+                'title': 'Features & Integrations',
+                'icon': 'puzzle',
+                'description': 'Explore Stack features and integrations',
+                'articles': [
+                    {'title': 'Threat Intelligence', 'url': '/docs/threat-intelligence'},
+                    {'title': 'Sandbox Analysis', 'url': '/docs/sandbox'},
+                    {'title': 'MITRE ATT&CK', 'url': '/docs/mitre-attack'},
+                ]
+            },
+            {
+                'title': 'API Documentation',
+                'icon': 'code',
+                'description': 'Learn how to integrate with Stack API',
+                'articles': [
+                    {'title': 'API Overview', 'url': '/docs/api-overview'},
+                    {'title': 'Authentication', 'url': '/docs/api-auth'},
+                    {'title': 'Endpoints', 'url': '/docs/api-endpoints'},
+                ]
+            }
+        ]
+    })
+
+def docs_article(request, article_path):
+    # Map article paths to markdown files
+    article_map = {
+        'getting-started': 'user-guide/getting-started.md',
+        'api-keys': 'user-guide/api-key-configuration.md',
+        'api-overview': 'api/overview.md'
+    }
+    
+    if article_path not in article_map:
+        return render(request, 'docs/404.html')
+        
+    docs_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'docs')
+    md_file = os.path.join(docs_dir, article_map[article_path])
+    
+    try:
+        with open(md_file, 'r') as f:
+            content = f.read()
+            html_content = markdown.markdown(content)
+            return render(request, 'docs/article.html', {
+                'content': html_content,
+                'title': content.split('\n')[0].replace('# ', '')
+            })
+    except FileNotFoundError:
+        return render(request, 'docs/404.html')
+
 
 @login_required
 def api_configuration(request):
@@ -525,7 +600,7 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-            next_url = request.GET.get('next', 'index')
+            next_url = request.GET.get('next', '/')
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid username/email or password')
@@ -702,87 +777,79 @@ def export_findings(request):
     }
     return render(request, 'reports/export_findings.html', context)
 
+def async_view(f):
+    """Decorator to make a view function async-aware."""
+    @wraps(f)
+    def wrapped(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+    return wrapped
+
 @login_required
-def ip_analysis(request):
-    context = {}
-    
-    if request.method == 'POST':
-        ip_address = request.POST.get('ip_address')
-        if ip_address:
+@async_view
+async def ip_analysis(request):
+    """Handle IP analysis requests"""
+    try:
+        if request.method == 'POST':
+            ip_address = request.POST.get('ip_address')
+            if not ip_address:
+                return JsonResponse({'error': 'IP address is required'}, status=400)
+
+            # Initialize service with async context
+            service = IPAnalysisService()
+            
+            # Get cached result
+            cache_key = f'ip_analysis:{ip_address}'
+            cached_result = await sync_to_async(cache.get)(cache_key)
+            
+            if cached_result:
+                logger.info(f"Returning cached result for IP: {ip_address}")
+                return render(request, 'threat/ip_analysis.html', {
+                    'ip_address': ip_address,
+                    'results': cached_result['results'],
+                    'threat_score': cached_result['threat_score'],
+                    'threat_level': cached_result['threat_details']['level'],
+                    'threat_class': cached_result['threat_details']['class'],
+                    'confidence': cached_result['confidence'],
+                    'provider_scores': cached_result['provider_scores'],
+                    'categories': cached_result['categories']
+                })
+
+            # Analyze IP
             try:
-                # Initialize results dictionary
-                context['ip_address'] = ip_address
-                context['results'] = {
-                    'virustotal': {
-                        'country': 'United States',
-                        'as_owner': 'AS15169 Google LLC',
-                        'network': '8.8.8.0/24',
-                        'reputation': 0,
-                        'last_analysis_stats': {
-                            'harmless': 80,
-                            'malicious': 0,
-                            'suspicious': 0,
-                            'undetected': 10,
-                            'timeout': 0
-                        },
-                        'last_analysis_results': {
-                            'Kaspersky': {
-                                'category': 'harmless',
-                                'result': 'clean',
-                                'update_date': '2025-02-02'
-                            },
-                            'McAfee': {
-                                'category': 'harmless',
-                                'result': 'clean',
-                                'update_date': '2025-02-02'
-                            }
-                        }
-                    },
-                    'categories': {
-                        'Malware': 0,
-                        'Phishing': 0,
-                        'Spam': 0,
-                        'Botnet': 0
-                    }
-                }
+                result = await service.analyze_ip(ip_address)
                 
-                # Calculate threat score
-                malicious_count = context['results']['virustotal']['last_analysis_stats']['malicious']
-                total_count = sum(context['results']['virustotal']['last_analysis_stats'].values())
+                # Cache the result
+                await sync_to_async(cache.set)(
+                    cache_key, 
+                    result,
+                    timeout=3600  # 1 hour
+                )
                 
-                threat_score = (malicious_count / total_count * 100) if total_count > 0 else 0
-                
-                # Set threat level and class based on score
-                if threat_score >= 80:
-                    threat_level = 'Critical Risk'
-                    threat_class = 'bg-danger'
-                elif threat_score >= 60:
-                    threat_level = 'High Risk'
-                    threat_class = 'bg-warning'
-                elif threat_score >= 40:
-                    threat_level = 'Medium Risk'
-                    threat_class = 'bg-info'
-                else:
-                    threat_level = 'Low Risk'
-                    threat_class = 'bg-success'
-                
-                context.update({
-                    'final_score': threat_score,
-                    'threat_level': threat_level,
-                    'threat_class': threat_class,
-                    'confidence': 95,
-                    'provider_scores': {
-                        'virustotal': {'score': 0, 'weight': 40},
-                        'greynoise': {'score': 0, 'weight': 20},
-                        'abuseipdb': {'score': 0, 'weight': 20},
-                        'crowdsec': {'score': 0, 'weight': 20}
-                    }
+                return render(request, 'threat/ip_analysis.html', {
+                    'ip_address': ip_address,
+                    'results': result['results'],
+                    'threat_score': result['threat_score'],
+                    'threat_level': result['threat_details']['level'],
+                    'threat_class': result['threat_details']['class'],
+                    'confidence': result['confidence'],
+                    'provider_scores': result['provider_scores'],
+                    'categories': result['categories']
                 })
                 
             except Exception as e:
-                context['error_message'] = f"Error analyzing IP address: {str(e)}"
-    
-    return render(request, 'threat/ip_analysis.html', context)
+                logger.error(f"Error analyzing IP {ip_address}: {str(e)}", exc_info=True)
+                return render(request, 'threat/ip_analysis.html', {
+                    'error_message': f'Error analyzing IP address: {str(e)}'
+                })
+        
+        # GET request - render the form
+        return render(request, 'threat/ip_analysis.html', {})
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in ip_analysis view: {str(e)}", exc_info=True)
+        return render(request, 'threat/ip_analysis.html', {
+            'error_message': f'An unexpected error occurred: {str(e)}'
+        })
 
 @login_required
 def hash_analysis(request):

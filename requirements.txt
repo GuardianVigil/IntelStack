@@ -1,0 +1,22 @@
+# Redis and caching
+redis>=4.5.1
+django-redis>=5.2.0
+hiredis>=2.2.1
+
+# Async and threading
+aiohttp>=3.8.4
+asyncio>=3.4.3
+
+# Django and core dependencies
+Django>=4.2
+django-environ>=0.10.0
+python-dotenv>=1.0.0
+
+# Encryption and security
+cryptography>=40.0.2
+python-jose>=3.3.0
+
+# Other utilities
+requests>=2.28.2
+urllib3>=1.26.15
+python-dateutil>=2.8.2

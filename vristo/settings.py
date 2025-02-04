@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ahbmas_92k4q5r1#tsbxjo(e@8rkf__ejt@7#1opo*pqtx5k$('
 
 # Encryption key for API keys
-ENCRYPTION_KEY = b'prwS3Fnc6Tax0yNYDM4p1ABvEGhS4rKwK70ycdlOhbc='
+ENCRYPTION_KEY = b'prwS3Fnc6Tax0yNYDM4p1ABvEGhS4rKwK70ycdlOhbc='  # Change this in production and store securely
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -65,7 +66,10 @@ ROOT_URLCONF = 'vristo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'vristoDjango/templates'),
+            os.path.join(BASE_DIR, 'main/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,3 +139,91 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TAILWIND_APP_NAME = 'vristoDjango'
 TAILWIND_CSS_PATH = 'assets/css/styles.css'
+
+# Import Redis settings
+from main.settings.redis_settings import *
+
+# Cache configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': REDIS_POOL_TIMEOUT,
+            'SOCKET_TIMEOUT': REDIS_POOL_TIMEOUT,
+            'RETRY_ON_TIMEOUT': REDIS_POOL_RETRY_ON_TIMEOUT,
+            'MAX_CONNECTIONS': REDIS_POOL_MAX_CONNECTIONS,
+            'PASSWORD': REDIS_PASSWORD,
+            'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
+            'CONNECTION_POOL_CLASS': 'redis.connection.ConnectionPool',
+            'PARSER_CLASS': 'redis.connection.DefaultParser',
+            'IGNORE_EXCEPTIONS': True,
+        },
+        'KEY_PREFIX': REDIS_CACHE_PREFIX,
+        'TIMEOUT': REDIS_CACHE_DEFAULT_TIMEOUT,
+    }
+}
+
+# Use Redis cache as session backend
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+# Cache middleware settings
+CACHE_MIDDLEWARE_SECONDS = 3600
+CACHE_MIDDLEWARE_KEY_PREFIX = 'stack'
+
+# Base directory for logs
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'stack.log'),
+            'formatter': 'verbose',
+            'maxBytes': 10485760,  # 10MB
+            'backupCount': 5,
+            'encoding': 'utf8',
+        },
+    },
+    'loggers': {
+        '': {  # Root logger
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+        },
+        'main': {  # App logger
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'main.services': {  # Services logger
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}

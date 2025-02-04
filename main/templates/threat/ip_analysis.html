@@ -2,258 +2,139 @@
 {% load static %}
 
 {% block content %}
-<div class="pt-5">
-    <div class="mb-6 flex items-center justify-between">
-        <h5 class="text-lg font-semibold dark:text-white-light">IP Address Analysis</h5>
-        <div class="flex items-center gap-2">
-            {% if ip_address %}
-            <a href="{% url 'ip_analysis' %}" class="btn btn-outline-primary">New Search</a>
-            {% endif %}
-        </div>
+<div class="panel">
+    <div class="mb-5 flex items-center justify-between">
+        <h5 class="text-lg font-semibold dark:text-white-light">IP Analysis</h5>
     </div>
-
-    <!-- Search Form -->
-    <div class="panel mb-5">
-        <form action="{% url 'ip_analysis' %}" method="post" class="flex gap-4">
-            {% csrf_token %}
-            <input type="text" name="ip_address" class="form-input flex-1" placeholder="Enter IP address for threat intelligence analysis (e.g. 8.8.8.8)" value="{{ ip_address }}" required>
-            <button type="submit" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                Analyze
-            </button>
-        </form>
-    </div>
-
+    
+    <!-- Error Message -->
     {% if error_message %}
-    <div class="alert alert-danger mb-4">
-        <div class="flex items-center">
-            <svg class="w-5 h-5 text-danger ltr:mr-3 rtl:ml-3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
-                <path d="M12 7V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                <circle cx="12" cy="16" r="1" fill="currentColor"></circle>
-            </svg>
+    <div class="mb-4">
+        <div class="rounded-lg bg-danger/20 p-4 text-danger">
             {{ error_message }}
         </div>
     </div>
     {% endif %}
-
-    {% if ip_address %}
-    <!-- Results Section -->
+    
+    <!-- IP Analysis Form -->
+    <form method="post" class="mb-6">
+        {% csrf_token %}
+        <div class="mb-5">
+            <label for="ip_address">IP Address</label>
+            <input id="ip_address" name="ip_address" type="text" 
+                   placeholder="Enter IP address to analyze"
+                   class="form-input" 
+                   value="{{ ip_address|default:'' }}"
+                   required>
+        </div>
+        <button type="submit" class="btn btn-primary">Analyze IP</button>
+    </form>
+    
+    <!-- Analysis Results -->
+    {% if results %}
     <div class="mb-6">
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <!-- Threat Score -->
-            <div class="panel {{ threat_class }} dark:{{ threat_class }}">
-                <div class="flex flex-col p-5">
-                    <div class="text-white">
-                        <h5 class="text-lg font-semibold mb-1">Threat Score</h5>
-                        <div class="text-3xl font-bold">{{ final_score|floatformat:1 }}/100</div>
-                        <p class="mt-2">{{ threat_level }}</p>
-                    </div>
-                </div>
+        <div class="flex items-center justify-between mb-4">
+            <h6 class="text-lg font-semibold">Analysis Results for {{ ip_address }}</h6>
+            <span class="badge badge-outline-{{ threat_class }}">
+                {{ threat_level }} Risk
+            </span>
+        </div>
+        
+        <!-- Threat Score -->
+        <div class="mb-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm">Threat Score</span>
+                <span class="badge {% if threat_score >= 80 %}badge-danger{% elif threat_score >= 60 %}badge-warning{% elif threat_score >= 40 %}badge-info{% else %}badge-success{% endif %}">
+                    {{ threat_score|floatformat:1 }}
+                </span>
             </div>
-
-            <!-- Analysis Confidence -->
-            <div class="panel">
-                <div class="flex flex-col p-5">
-                    <h5 class="text-lg font-semibold mb-1">Confidence Level</h5>
-                    <div class="text-3xl font-bold">{{ confidence }}%</div>
-                    <p class="text-success mt-2">Analysis Reliability</p>
-                </div>
-            </div>
-
-            <!-- Location Info -->
-            <div class="panel">
-                <div class="flex flex-col p-5">
-                    <h5 class="text-lg font-semibold mb-1">Location</h5>
-                    <div class="text-3xl font-bold">{{ results.virustotal.country|default:"Unknown" }}</div>
-                    <p class="text-gray-500 mt-2">{{ results.virustotal.as_owner|default:"Unknown ASN" }}</p>
-                </div>
-            </div>
-
-            <!-- Detection Stats -->
-            <div class="panel">
-                <div class="flex flex-col p-5">
-                    <h5 class="text-lg font-semibold mb-1">Active Threats</h5>
-                    <div class="text-3xl font-bold">{{ results.virustotal.last_analysis_stats.malicious|default:"0" }}</div>
-                    <p class="text-danger mt-2">Detected by Security Vendors</p>
-                </div>
+            <div class="mt-2 h-2.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
+                <div class="h-2.5 rounded-full {% if threat_score >= 80 %}bg-danger{% elif threat_score >= 60 %}bg-warning{% elif threat_score >= 40 %}bg-info{% else %}bg-success{% endif %}"
+                     style="width: {{ threat_score }}%"></div>
             </div>
         </div>
-
-        <!-- Provider Scores -->
-        <div class="panel mb-5">
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">Provider Scores</h5>
+        
+        <!-- Confidence Score -->
+        <div class="mb-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm">Confidence</span>
+                <span class="badge {% if confidence >= 80 %}badge-success{% elif confidence >= 60 %}badge-info{% elif confidence >= 40 %}badge-warning{% else %}badge-danger{% endif %}">
+                    {{ confidence|floatformat:1 }}%
+                </span>
             </div>
-            <div class="grid gap-4">
-                {% for provider, data in provider_scores.items %}
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <h6 class="text-sm font-semibold">{{ provider|title }}</h6>
-                        <p class="text-xs text-gray-500">Weight: {{ data.weight }}%</p>
+            <div class="mt-2 h-2.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
+                <div class="h-2.5 rounded-full {% if confidence >= 80 %}bg-success{% elif confidence >= 60 %}bg-info{% elif confidence >= 40 %}bg-warning{% else %}bg-danger{% endif %}"
+                     style="width: {{ confidence }}%"></div>
+            </div>
+        </div>
+        
+        <!-- Categories -->
+        {% if categories %}
+        <div class="mb-4">
+            <h6 class="text-base font-semibold mb-2">Categories</h6>
+            <div class="flex flex-wrap gap-2">
+                {% for category in categories %}
+                <span class="badge badge-outline-info">{{ category }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Provider Scores -->
+        <div class="mb-4">
+            <h6 class="text-base font-semibold mb-2">Provider Scores</h6>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for provider, score in provider_scores.items %}
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-semibold">{{ provider|title }}</span>
+                        <span class="badge {% if score >= 80 %}badge-danger{% elif score >= 60 %}badge-warning{% elif score >= 40 %}badge-info{% else %}badge-success{% endif %}">
+                            {{ score|floatformat:1 }}
+                        </span>
                     </div>
-                    <div class="w-full bg-[#ebedf2] dark:bg-dark/40 rounded-full h-2.5">
-                        <div class="h-2.5 rounded-full transition-all duration-300 {% if data.score >= 80 %}bg-danger {% elif data.score >= 60 %}bg-warning {% elif data.score >= 40 %}bg-info {% else %}bg-success{% endif %}" style="width: {{ data.score }}%"></div>
+                    <div class="h-2 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
+                        <div class="h-2 rounded-full {% if score >= 80 %}bg-danger{% elif score >= 60 %}bg-warning{% elif score >= 40 %}bg-info{% else %}bg-success{% endif %}"
+                             style="width: {{ score }}%"></div>
                     </div>
-                    <p class="text-right text-xs mt-1">{{ data.score|floatformat:1 }}/100</p>
                 </div>
                 {% endfor %}
             </div>
         </div>
-
-        <!-- Detailed Analysis Tabs -->
-        <div class="panel">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#overview">Overview</a>
-                </li>
-                {% if results.virustotal %}
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#virustotal">VirusTotal</a>
-                </li>
-                {% endif %}
-                {% if results.greynoise %}
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#greynoise">GreyNoise</a>
-                </li>
-                {% endif %}
-                {% if results.abuseipdb %}
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#abuseipdb">AbuseIPDB</a>
-                </li>
-                {% endif %}
-                {% if results.crowdsec %}
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#crowdsec">CrowdSec</a>
-                </li>
-                {% endif %}
-            </ul>
-
-            <div class="tab-content">
-                <!-- Overview Tab -->
-                <div class="tab-pane fade show active" id="overview">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-                        <!-- Basic Information -->
-                        <div class="panel">
-                            <div class="flex items-center justify-between mb-5">
-                                <h5 class="font-semibold text-lg">Basic Information</h5>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table-striped">
-                                    <tr>
-                                        <th>Network</th>
-                                        <td>{{ results.virustotal.network|default:"N/A" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>ASN</th>
-                                        <td>{{ results.virustotal.as_owner|default:"N/A" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Country</th>
-                                        <td>{{ results.virustotal.country|default:"N/A" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Reputation</th>
-                                        <td>{{ results.virustotal.reputation|default:"N/A" }}</td>
-                                    </tr>
-                                </table>
-                            </div>
+        
+        <!-- Detailed Results -->
+        <div>
+            <h6 class="text-base font-semibold mb-2">Detailed Results</h6>
+            <div class="grid grid-cols-1 gap-4">
+                {% for platform, data in results.items %}
+                <div class="border rounded-lg p-4">
+                    <h6 class="font-semibold mb-2">{{ platform|title }}</h6>
+                    {% if data.error %}
+                    <div class="text-danger">{{ data.error }}</div>
+                    {% else %}
+                    <div class="grid grid-cols-2 gap-4">
+                        {% for key, value in data.items %}
+                        {% if key != 'error' %}
+                        <div>
+                            <span class="font-medium">{{ key|title }}:</span>
+                            <span>{{ value }}</span>
                         </div>
-
-                        <!-- Threat Categories -->
-                        <div class="panel">
-                            <div class="flex items-center justify-between mb-5">
-                                <h5 class="font-semibold text-lg">Threat Categories</h5>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table-striped">
-                                    {% for category, count in results.categories.items %}
-                                    <tr>
-                                        <th>{{ category }}</th>
-                                        <td>
-                                            <div class="flex items-center">
-                                                <span class="badge {% if count > 0 %}bg-danger{% else %}bg-success{% endif %} ltr:mr-2 rtl:ml-2">
-                                                    {{ count }}
-                                                </span>
-                                                {% if count > 0 %}
-                                                <span class="text-danger">Detected</span>
-                                                {% else %}
-                                                <span class="text-success">Clean</span>
-                                                {% endif %}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
-                        </div>
+                        {% endif %}
+                        {% endfor %}
                     </div>
+                    {% endif %}
                 </div>
-
-                <!-- VirusTotal Tab -->
-                {% if results.virustotal %}
-                <div class="tab-pane fade" id="virustotal">
-                    <div class="mt-4">
-                        <div class="panel">
-                            <div class="flex items-center justify-between mb-5">
-                                <h5 class="font-semibold text-lg">VirusTotal Analysis</h5>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Engine</th>
-                                            <th>Category</th>
-                                            <th>Result</th>
-                                            <th>Update Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for engine, result in results.virustotal.last_analysis_results.items %}
-                                        <tr>
-                                            <td>{{ engine }}</td>
-                                            <td>
-                                                <span class="badge {% if result.category == 'malicious' %}bg-danger{% else %}bg-success{% endif %}">
-                                                    {{ result.category }}
-                                                </span>
-                                            </td>
-                                            <td>{{ result.result }}</td>
-                                            <td>{{ result.update_date }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Add other provider tabs with similar structure -->
-                {% if results.greynoise %}
-                <div class="tab-pane fade" id="greynoise">
-                    <!-- GreyNoise content -->
-                </div>
-                {% endif %}
-
-                {% if results.abuseipdb %}
-                <div class="tab-pane fade" id="abuseipdb">
-                    <!-- AbuseIPDB content -->
-                </div>
-                {% endif %}
-
-                {% if results.crowdsec %}
-                <div class="tab-pane fade" id="crowdsec">
-                    <!-- CrowdSec content -->
-                </div>
-                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any client-side functionality here
+    });
+</script>
 {% endblock %}

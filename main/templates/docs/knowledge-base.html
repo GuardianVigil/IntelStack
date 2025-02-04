@@ -127,9 +127,10 @@
             </svg>
         </div>
         <div class="relative">
-            <div
-                class="flex flex-col items-center justify-center sm:-ms-32 sm:flex-row xl:-ms-60"
-            >
+            <div class="text-center">
+                <h1 class="mb-4 text-4xl font-bold text-white dark:text-gray-100">Stack Documentation</h1>
+                <p class="mb-8 text-lg text-white dark:text-gray-300">Everything you need to know about Stack - from setup to advanced features.</p>
+            </div>
                 <div
                     class="mb-2 flex gap-1 text-end text-base leading-5 sm:flex-col xl:text-xl"
                 >
@@ -202,13 +203,8 @@
             </div>
         </div>
     </div>
-    <div
-        class="mb-12 flex items-center rounded-b-md bg-[#DBE7FF] dark:bg-[#141F31]"
-    >
-        <ul
-            x-data="{activeTab: 'general'}"
-            class="mx-auto flex items-center gap-5 overflow-auto whitespace-nowrap px-3 py-4.5 xl:gap-8"
-        >
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <li
                 class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
                 :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'general'}"
@@ -381,13 +377,24 @@
     <h3 class="mb-8 text-center text-xl font-semibold md:text-2xl">
         Some common <span class="text-primary">questions</span>
     </h3>
-    <div class="mb-10 grid grid-cols-1 gap-10 md:grid-cols-2">
-        <div class="rounded-md bg-white dark:bg-black" x-data="{ active: 1 }">
-            <div
-                class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white"
-            >
-                General topics?
-            </div>
+    <div class="container mx-auto px-4 py-8">
+        {% for section in sections %}
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">{{ section.title }}</h2>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">{{ section.description }}</p>
+            
+            <ul class="space-y-3">
+                {% for article in section.articles %}
+                <li>
+                    <a href="{{ article.url }}" class="flex items-center text-primary hover:text-primary-dark">
+                        <span class="mr-2">→</span>
+                        {{ article.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
             <div
                 class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark"
             >

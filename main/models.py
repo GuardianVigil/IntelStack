@@ -16,7 +16,6 @@ class APIKey(models.Model):
         ('filescan', 'FileScan.io'),
         ('urlscan', 'URLScan.io'),
         ('securitytrails', 'SecurityTrails'),
-        ('phishtank', 'PhishTank'),
         ('malwarebazaar', 'MalwareBazaar'),
         ('threatfox', 'ThreatFox'),
         ('urlhaus', 'URLhaus'),
