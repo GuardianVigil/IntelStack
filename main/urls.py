@@ -146,6 +146,9 @@ urlpatterns = [
     path('docs/', views.docs_home, name='docs_home'),
     path('docs/<str:article_path>/', views.docs_article, name='docs_article'),
 
+    # API Endpoints
+    path('api/analyze-ip/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
+
     # Threat Feed URLs
     path('feeds/virustotal/', views.virustotal, name='virustotal'),
     path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),

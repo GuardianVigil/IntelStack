@@ -2,139 +2,249 @@
 {% load static %}
 
 {% block content %}
-<div class="panel">
-    <div class="mb-5 flex items-center justify-between">
-        <h5 class="text-lg font-semibold dark:text-white-light">IP Analysis</h5>
-    </div>
-    
-    <!-- Error Message -->
-    {% if error_message %}
-    <div class="mb-4">
-        <div class="rounded-lg bg-danger/20 p-4 text-danger">
-            {{ error_message }}
-        </div>
-    </div>
-    {% endif %}
-    
-    <!-- IP Analysis Form -->
-    <form method="post" class="mb-6">
-        {% csrf_token %}
-        <div class="mb-5">
-            <label for="ip_address">IP Address</label>
-            <input id="ip_address" name="ip_address" type="text" 
-                   placeholder="Enter IP address to analyze"
-                   class="form-input" 
-                   value="{{ ip_address|default:'' }}"
-                   required>
-        </div>
-        <button type="submit" class="btn btn-primary">Analyze IP</button>
-    </form>
-    
-    <!-- Analysis Results -->
-    {% if results %}
-    <div class="mb-6">
-        <div class="flex items-center justify-between mb-4">
-            <h6 class="text-lg font-semibold">Analysis Results for {{ ip_address }}</h6>
-            <span class="badge badge-outline-{{ threat_class }}">
-                {{ threat_level }} Risk
-            </span>
-        </div>
-        
-        <!-- Threat Score -->
-        <div class="mb-4">
-            <div class="flex items-center justify-between">
-                <span class="text-sm">Threat Score</span>
-                <span class="badge {% if threat_score >= 80 %}badge-danger{% elif threat_score >= 60 %}badge-warning{% elif threat_score >= 40 %}badge-info{% else %}badge-success{% endif %}">
-                    {{ threat_score|floatformat:1 }}
-                </span>
-            </div>
-            <div class="mt-2 h-2.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                <div class="h-2.5 rounded-full {% if threat_score >= 80 %}bg-danger{% elif threat_score >= 60 %}bg-warning{% elif threat_score >= 40 %}bg-info{% else %}bg-success{% endif %}"
-                     style="width: {{ threat_score }}%"></div>
-            </div>
-        </div>
-        
-        <!-- Confidence Score -->
-        <div class="mb-4">
-            <div class="flex items-center justify-between">
-                <span class="text-sm">Confidence</span>
-                <span class="badge {% if confidence >= 80 %}badge-success{% elif confidence >= 60 %}badge-info{% elif confidence >= 40 %}badge-warning{% else %}badge-danger{% endif %}">
-                    {{ confidence|floatformat:1 }}%
-                </span>
-            </div>
-            <div class="mt-2 h-2.5 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                <div class="h-2.5 rounded-full {% if confidence >= 80 %}bg-success{% elif confidence >= 60 %}bg-info{% elif confidence >= 40 %}bg-warning{% else %}bg-danger{% endif %}"
-                     style="width: {{ confidence }}%"></div>
-            </div>
-        </div>
-        
-        <!-- Categories -->
-        {% if categories %}
-        <div class="mb-4">
-            <h6 class="text-base font-semibold mb-2">Categories</h6>
-            <div class="flex flex-wrap gap-2">
-                {% for category in categories %}
-                <span class="badge badge-outline-info">{{ category }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        
-        <!-- Provider Scores -->
-        <div class="mb-4">
-            <h6 class="text-base font-semibold mb-2">Provider Scores</h6>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {% for provider, score in provider_scores.items %}
-                <div class="border rounded-lg p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-semibold">{{ provider|title }}</span>
-                        <span class="badge {% if score >= 80 %}badge-danger{% elif score >= 60 %}badge-warning{% elif score >= 40 %}badge-info{% else %}badge-success{% endif %}">
-                            {{ score|floatformat:1 }}
-                        </span>
-                    </div>
-                    <div class="h-2 w-full rounded-full bg-[#ebedf2] dark:bg-dark/40">
-                        <div class="h-2 rounded-full {% if score >= 80 %}bg-danger{% elif score >= 60 %}bg-warning{% elif score >= 40 %}bg-info{% else %}bg-success{% endif %}"
-                             style="width: {{ score }}%"></div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <!-- Detailed Results -->
-        <div>
-            <h6 class="text-base font-semibold mb-2">Detailed Results</h6>
-            <div class="grid grid-cols-1 gap-4">
-                {% for platform, data in results.items %}
-                <div class="border rounded-lg p-4">
-                    <h6 class="font-semibold mb-2">{{ platform|title }}</h6>
-                    {% if data.error %}
-                    <div class="text-danger">{{ data.error }}</div>
-                    {% else %}
-                    <div class="grid grid-cols-2 gap-4">
-                        {% for key, value in data.items %}
-                        {% if key != 'error' %}
-                        <div>
-                            <span class="font-medium">{{ key|title }}:</span>
-                            <span>{{ value }}</span>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
-</div>
-{% endblock %}
+<div class="container mx-auto p-6" x-data="ipAnalysis">
+    <h1 class="text-2xl font-bold mb-6 text-center">IP Threat Intelligence Analysis</h1>
 
-{% block scripts %}
+    <!-- Search Bar -->
+    <div class="mb-8">
+        <form @submit.prevent="analyzeIP" class="max-w-3xl mx-auto">
+            <div class="flex gap-4">
+                <input 
+                    type="text" 
+                    placeholder="Enter IP address (e.g., 8.8.8.8)" 
+                    class="form-input flex-1 py-2 px-4 border rounded-lg"
+                    x-model="ipAddress"
+                    :disabled="isLoading"
+                    required
+                />
+                <button 
+                    type="submit" 
+                    class="btn btn-primary px-8 py-2 rounded-lg bg-black text-white hover:bg-gray-800 disabled:opacity-50"
+                    :disabled="isLoading"
+                >
+                    <span x-show="!isLoading">Analyze</span>
+                    <div x-show="isLoading" class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Analyzing...</span>
+                    </div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Error Message -->
+    <div x-show="error" x-cloak class="mb-8">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline" x-text="error"></span>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div x-show="results && !error" x-cloak class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- WHOIS Information -->
+        <div class="panel p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-4">WHOIS Information</h2>
+            <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-gray-600">IP Address:</div>
+                    <div x-text="results.ip_address"></div>
+                    
+                    <div class="text-gray-600">Organization:</div>
+                    <div x-text="results.organization"></div>
+                    
+                    <div class="text-gray-600">Country:</div>
+                    <div x-text="results.country"></div>
+                    
+                    <div class="text-gray-600">ASN:</div>
+                    <div x-text="results.asn"></div>
+                    
+                    <div class="text-gray-600">Registrar:</div>
+                    <div x-text="results.registrar"></div>
+                    
+                    <div class="text-gray-600">Date Registered:</div>
+                    <div x-text="results.date_registered"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Scores -->
+        <div class="panel p-6 rounded-lg shadow-sm">
+            <h2 class="text-xl font-semibold mb-4">Threat Scores</h2>
+            <div class="mb-6">
+                <div class="text-center mb-4">
+                    <div class="text-4xl font-bold" :class="{
+                        'text-green-500': results.overall_score <= 3,
+                        'text-yellow-500': results.overall_score > 3 && results.overall_score <= 7,
+                        'text-red-500': results.overall_score > 7
+                    }" x-text="results.overall_score + '/10'"></div>
+                    <div class="text-gray-600">Overall Threat Score</div>
+                </div>
+                <div class="w-full h-48">
+                    <canvas id="threatScoreChart"></canvas>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-4">
+                    <template x-for="(score, platform) in {
+                        'VirusTotal': results.virustotal,
+                        'AbuseIPDB': results.abuseipdb,
+                        'CrowdSec': results.crowdsec,
+                        'GreyNoise': results.greynoise,
+                        'SecurityTrails': results.securitytrails
+                    }">
+                        <div class="text-gray-600" x-text="platform + ':'"></div>
+                        <div :class="{
+                            'text-green-500': score <= 3,
+                            'text-yellow-500': score > 3 && score <= 7,
+                            'text-red-500': score > 7
+                        }" x-text="score + '/10'"></div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div x-show="results && !error" x-cloak class="panel mt-6 p-6 rounded-lg shadow-sm">
+        <div class="mb-5 flex space-x-4">
+            <button 
+                class="px-4 py-2 rounded-lg transition-all duration-300"
+                :class="{'bg-black text-white': activeTab === 'virustotal', 'bg-gray-100': activeTab !== 'virustotal'}"
+                @click="switchTab('virustotal')"
+            >
+                VirusTotal
+            </button>
+            <button 
+                class="px-4 py-2 rounded-lg transition-all duration-300"
+                :class="{'bg-black text-white': activeTab === 'abuseipdb', 'bg-gray-100': activeTab !== 'abuseipdb'}"
+                @click="switchTab('abuseipdb')"
+            >
+                AbuseIPDB
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto whitespace-nowrap">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2 text-left">Key</th>
+                        <th class="px-4 py-2 text-left">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="(value, key) in activeTabData" :key="key">
+                        <tr class="border-t">
+                            <td class="px-4 py-2" x-text="key"></td>
+                            <td class="px-4 py-2" x-text="value"></td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Alpine.js Script -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add any client-side functionality here
-    });
+document.addEventListener('alpine:init', () => {
+    Alpine.data('ipAnalysis', () => ({
+        ipAddress: '',
+        results: null,
+        error: null,
+        isLoading: false,
+        activeTab: 'virustotal',
+        activeTabData: {},
+        chart: null,
+
+        async analyzeIP() {
+            this.isLoading = true;
+            this.error = null;
+            this.results = null;
+            
+            if (this.chart) {
+                this.chart.destroy();
+                this.chart = null;
+            }
+
+            try {
+                const response = await fetch(`/api/analyze-ip/${this.ipAddress}/`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to analyze IP address');
+                }
+                
+                this.results = await response.json();
+                this.switchTab('virustotal');
+                this.$nextTick(() => this.initializeCharts());
+            } catch (error) {
+                console.error('Error analyzing IP:', error);
+                this.error = error.message || 'An error occurred while analyzing the IP address';
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        switchTab(tab) {
+            this.activeTab = tab;
+            if (this.results && this.results[tab + '_data']) {
+                this.activeTabData = this.results[tab + '_data'];
+            } else {
+                this.activeTabData = {};
+            }
+        },
+
+        initializeCharts() {
+            const ctx = document.getElementById('threatScoreChart');
+            if (!ctx || !this.results) return;
+
+            const score = this.results.overall_score;
+            const color = score <= 3 ? '#22c55e' : score <= 7 ? '#eab308' : '#ef4444';
+
+            const data = {
+                labels: ['Threat Score'],
+                datasets: [{
+                    data: [score, 10 - score],
+                    backgroundColor: [color, '#e5e7eb'],
+                    borderWidth: 0
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    }
+                }
+            };
+
+            if (this.chart) {
+                this.chart.destroy();
+            }
+
+            this.chart = new Chart(ctx, config);
+        },
+
+        init() {
+            this.$watch('results', () => {
+                if (this.results) {
+                    this.$nextTick(() => this.initializeCharts());
+                }
+            });
+        }
+    }));
+});
 </script>
 {% endblock %}

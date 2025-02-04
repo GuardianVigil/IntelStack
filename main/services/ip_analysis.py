@@ -57,16 +57,25 @@ class IPAnalysisService:
             
             if platform == 'virustotal':
                 url = f'https://www.virustotal.com/vtapi/v2/ip-address/report?apikey={api_key}&ip={ip_address}'
-            elif platform == 'alienvault':
-                url = f'https://otx.alienvault.com/api/v1/indicators/IPv4/{ip_address}'
-                headers = {'X-OTX-API-KEY': api_key}
-            elif platform == 'ibmxforce':
-                url = f'https://api.xforce.ibmcloud.com/ipr/{ip_address}'
-                headers = {'Authorization': f'Basic {api_key}'}
+            elif platform == 'abuseipdb':
+                url = f'https://api.abuseipdb.com/api/v2/check?ipAddress={ip_address}'
+                headers = {'Key': api_key, 'Accept': 'application/json'}
+            elif platform == 'crowdsec':
+                url = f'https://api.crowdsec.net/v2/signals?ip={ip_address}'
+                headers = {'X-Api-Key': api_key}
+            elif platform == 'greynoise':
+                url = f'https://api.greynoise.io/v3/community/{ip_address}'
+                headers = {'key': api_key}
+            elif platform == 'securitytrails':
+                url = f'https://api.securitytrails.com/v1/ip/{ip_address}'
+                headers = {'APIKEY': api_key}
             else:
                 return {'error': f'Unsupported platform: {platform}'}
                 
             async with self.session.get(url, headers=headers) as response:
+                if response.status != 200:
+                    error_text = await response.text()
+                    return {'error': f'API Error: {error_text}'}
                 data = await response.json()
                 return self._process_platform_response(platform, data)
                 
@@ -76,27 +85,45 @@ class IPAnalysisService:
 
     def _process_platform_response(self, platform: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Process the response from a threat intelligence platform"""
-        if platform == 'virustotal':
-            return {
-                'score': data.get('positives', 0) * 10,  # Convert to 0-100 scale
-                'categories': [cat for cat, present in data.get('categories', {}).items() if present],
-                'results': data
-            }
-        elif platform == 'alienvault':
-            pulse_count = len(data.get('pulse_info', {}).get('pulses', []))
-            return {
-                'score': min(pulse_count * 20, 100),  # Convert to 0-100 scale
-                'categories': [p.get('name') for p in data.get('pulse_info', {}).get('pulses', [])],
-                'results': data
-            }
-        elif platform == 'ibmxforce':
-            score = data.get('score', 0)
-            return {
-                'score': score,
-                'categories': data.get('cats', []),
-                'results': data
-            }
-        return {'error': 'Unsupported platform'}
+        try:
+            if platform == 'virustotal':
+                return {
+                    'score': data.get('positives', 0) * 10,  # Convert to 0-100 scale
+                    'categories': [cat for cat, present in data.get('categories', {}).items() if present],
+                    'results': data
+                }
+            elif platform == 'abuseipdb':
+                abuse_score = data.get('data', {}).get('abuseConfidenceScore', 0)
+                return {
+                    'score': abuse_score,  # Already 0-100
+                    'categories': ['Abuse' if abuse_score > 50 else 'Clean'],
+                    'results': data.get('data', {})
+                }
+            elif platform == 'crowdsec':
+                signals = len(data.get('signals', []))
+                return {
+                    'score': min(signals * 20, 100),  # Convert to 0-100 scale
+                    'categories': ['Malicious' if signals > 0 else 'Clean'],
+                    'results': data
+                }
+            elif platform == 'greynoise':
+                is_malicious = data.get('classification') == 'malicious'
+                return {
+                    'score': 100 if is_malicious else 0,
+                    'categories': [data.get('classification', 'unknown')],
+                    'results': data
+                }
+            elif platform == 'securitytrails':
+                risk_score = data.get('risk_score', 0)
+                return {
+                    'score': risk_score,
+                    'categories': data.get('tags', []),
+                    'results': data
+                }
+            return {'error': 'Unsupported platform'}
+        except Exception as e:
+            logger.error(f"Error processing {platform} response: {str(e)}", exc_info=True)
+            return {'error': str(e)}
 
     async def analyze_ip(self, ip_address: str) -> Dict[str, Any]:
         """Analyze an IP address using multiple threat intelligence platforms"""
@@ -107,62 +134,56 @@ class IPAnalysisService:
         categories = set()
         active_providers = 0
 
-        # Initialize tasks for each provider
+        # List of all platforms to check
+        platforms = ['virustotal', 'abuseipdb', 'crowdsec', 'greynoise', 'securitytrails']
         tasks = []
         
-        # VirusTotal
-        vt_key = await self._get_api_key('virustotal')
-        if vt_key:
-            tasks.append(self._query_platform('virustotal', ip_address, vt_key))
+        # Initialize tasks for each provider
+        for platform in platforms:
+            api_key = await self._get_api_key(platform)
+            if api_key:
+                tasks.append((platform, self._query_platform(platform, ip_address, api_key)))
         
-        # AlienVault OTX
-        otx_key = await self._get_api_key('alienvault')
-        if otx_key:
-            tasks.append(self._query_platform('alienvault', ip_address, otx_key))
-        
-        # IBM X-Force
-        xforce_key = await self._get_api_key('ibmxforce')
-        if xforce_key:
-            tasks.append(self._query_platform('ibmxforce', ip_address, xforce_key))
-
         # Execute all tasks concurrently
         if tasks:
-            provider_results = await asyncio.gather(*tasks, return_exceptions=True)
-            
-            for platform, result in zip(['virustotal', 'alienvault', 'ibmxforce'], provider_results):
-                if isinstance(result, Exception):
-                    logger.error(f"Provider error: {str(result)}")
-                    results[platform] = {'error': str(result)}
-                    continue
+            for platform, task in tasks:
+                try:
+                    result = await task
+                    if isinstance(result, Exception):
+                        logger.error(f"Provider error: {str(result)}")
+                        results[platform] = {'error': str(result)}
+                        continue
+                        
+                    if not result:
+                        continue
                     
-                if not result:
-                    continue
-                
-                results[platform] = result
-                
-                if 'score' in result:
-                    provider_scores[platform] = result['score']
-                    threat_score += result['score']
-                    active_providers += 1
-                
-                if 'categories' in result:
-                    categories.update(result['categories'])
+                    results[platform] = result.get('results', {})
+                    
+                    if 'score' in result:
+                        provider_scores[platform] = result['score']
+                        threat_score += result['score']
+                        active_providers += 1
+                    
+                    if 'categories' in result:
+                        categories.update(result['categories'])
+                except Exception as e:
+                    logger.error(f"Error processing {platform} result: {str(e)}", exc_info=True)
+                    results[platform] = {'error': str(e)}
 
         # Calculate final scores
         if active_providers > 0:
             threat_score = threat_score / active_providers
-            confidence = min(100, (active_providers / 3) * 100)  # 3 is total number of providers
+            confidence = (active_providers / len(platforms)) * 100
         
-        # Determine threat level and class
         threat_details = self._get_threat_level(threat_score)
-
+        
         return {
             'results': results,
             'threat_score': threat_score,
             'confidence': confidence,
-            'threat_details': threat_details,
             'provider_scores': provider_scores,
-            'categories': list(categories)
+            'categories': list(categories),
+            'threat_details': threat_details
         }
 
     def _get_threat_level(self, score: float) -> Dict[str, str]:

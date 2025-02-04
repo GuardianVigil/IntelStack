@@ -640,3 +640,63 @@ INFO 2025-02-04 01:30:46,088 autoreload 41219 140228063031424 /home/Agile/code/S
 INFO 2025-02-04 01:30:46,561 autoreload 41532 139923115016320 Watching for file changes with StatReloader
 WARNING 2025-02-04 01:30:55,571 ip_analysis 41532 139922979686080 No API key configured for ibmxforce
 WARNING 2025-02-04 01:31:18,022 ip_analysis 41532 139922979686080 No API key configured for ibmxforce
+INFO 2025-02-04 01:38:14,324 autoreload 43406 135602964607104 Watching for file changes with StatReloader
+WARNING 2025-02-04 01:38:25,084 ip_analysis 43406 135602894800576 No API key configured for ibmxforce
+WARNING 2025-02-04 01:44:54,368 ip_analysis 43406 135602894800576 No API key configured for ibmxforce
+WARNING 2025-02-04 01:45:44,494 ip_analysis 43406 135602884314816 No API key configured for ibmxforce
+INFO 2025-02-04 02:36:09,795 autoreload 55427 131121033973888 Watching for file changes with StatReloader
+INFO 2025-02-04 02:38:42,101 autoreload 55985 139254194282624 Watching for file changes with StatReloader
+WARNING 2025-02-04 02:39:45,969 ip_analysis 55985 139254124512960 No API key configured for ibmxforce
+WARNING 2025-02-04 02:40:16,604 ip_analysis 55985 139254124512960 No API key configured for ibmxforce
+WARNING 2025-02-04 02:40:24,580 ip_analysis 55985 139254124512960 No API key configured for ibmxforce
+INFO 2025-02-04 22:17:40,028 autoreload 3607 130177604731008 Watching for file changes with StatReloader
+WARNING 2025-02-04 22:31:43,662 ip_analysis 3607 130177524827840 No API key configured for ibmxforce
+WARNING 2025-02-04 22:35:39,973 ip_analysis 3607 130177524827840 No API key configured for ibmxforce
+INFO 2025-02-04 22:47:56,250 autoreload 10184 130816399929472 Watching for file changes with StatReloader
+INFO 2025-02-04 22:50:16,359 autoreload 10713 125862561640576 Watching for file changes with StatReloader
+INFO 2025-02-04 22:59:43,787 autoreload 10713 125862561640576 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-04 22:59:44,201 autoreload 12650 129989985611904 Watching for file changes with StatReloader
+INFO 2025-02-04 23:00:08,949 autoreload 12650 129989985611904 /home/Agile/code/Stack/main/urls.py changed, reloading.
+INFO 2025-02-04 23:00:09,342 autoreload 12781 129493699444864 Watching for file changes with StatReloader
+INFO 2025-02-04 23:06:43,027 autoreload 14429 130630874419328 Watching for file changes with StatReloader
+INFO 2025-02-04 23:06:59,536 autoreload 14570 140257366265984 Watching for file changes with StatReloader
+ERROR 2025-02-04 23:07:13,918 views 14570 140257292977856 Error getting WHOIS info: module 'whois' has no attribute 'whois'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/views.py", line 834, in analyze_ip_api
+    whois_result = await sync_to_async(lambda: whois.whois(ip_address))()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/views.py", line 834, in <lambda>
+    whois_result = await sync_to_async(lambda: whois.whois(ip_address))()
+                                               ^^^^^^^^^^^
+AttributeError: module 'whois' has no attribute 'whois'
+ERROR 2025-02-04 23:07:27,120 views 14570 140257292977856 Error getting WHOIS info: module 'whois' has no attribute 'whois'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/views.py", line 834, in analyze_ip_api
+    whois_result = await sync_to_async(lambda: whois.whois(ip_address))()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/views.py", line 834, in <lambda>
+    whois_result = await sync_to_async(lambda: whois.whois(ip_address))()
+                                               ^^^^^^^^^^^
+AttributeError: module 'whois' has no attribute 'whois'
+INFO 2025-02-04 23:11:04,232 autoreload 14570 140257366265984 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-04 23:11:04,619 autoreload 15554 136425240412288 Watching for file changes with StatReloader
+INFO 2025-02-04 23:14:22,030 autoreload 16457 136160579838080 Watching for file changes with StatReloader
+INFO 2025-02-04 23:18:54,424 autoreload 17463 127043715055744 Watching for file changes with StatReloader

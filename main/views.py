@@ -22,6 +22,7 @@ from django.db.models import Q
 from functools import wraps
 from django.http import JsonResponse
 from django.core.cache import cache
+import ipaddress
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -814,6 +815,98 @@ async def ip_analysis(request):
         return render(request, 'threat/ip_analysis.html', {
             'error': str(e)
         })
+
+@login_required
+@async_view
+async def analyze_ip_api(request, ip_address):
+    """API endpoint to analyze an IP address."""
+    try:
+        # Validate IP address format
+        try:
+            ipaddress.ip_address(ip_address)
+        except ValueError:
+            return JsonResponse({'error': 'Invalid IP address format'}, status=400)
+
+        # Get threat intelligence data
+        async with IPAnalysisService(request.user) as service:
+            analysis_results = await service.analyze_ip(ip_address)
+            
+            if not analysis_results:
+                return JsonResponse({
+                    'error': 'No results from any threat intelligence platform'
+                }, status=404)
+
+            # Convert scores to 0-10 scale for consistency
+            provider_scores = analysis_results.get('provider_scores', {})
+            normalized_scores = {}
+            
+            for provider, score in provider_scores.items():
+                normalized_scores[provider] = round(score / 10, 1)
+            
+            # Calculate overall score (weighted average)
+            if normalized_scores:
+                overall_score = round(sum(normalized_scores.values()) / len(normalized_scores), 1)
+            else:
+                overall_score = 0
+
+            # Extract WHOIS information from AbuseIPDB or VirusTotal
+            whois_info = {
+                'ip_address': ip_address,
+                'organization': 'N/A',
+                'country': 'N/A',
+                'asn': 'N/A',
+                'registrar': 'N/A',
+                'date_registered': 'N/A'
+            }
+
+            results = analysis_results.get('results', {})
+            if 'abuseipdb' in results:
+                abuse_data = results['abuseipdb']
+                whois_info.update({
+                    'organization': abuse_data.get('isp', 'N/A'),
+                    'country': abuse_data.get('countryCode', 'N/A'),
+                    'asn': f"AS{abuse_data.get('asnNumber', 'N/A')}",
+                    'registrar': abuse_data.get('domain', 'N/A'),
+                    'date_registered': abuse_data.get('lastReportedAt', 'N/A')
+                })
+            elif 'virustotal' in results:
+                vt_data = results['virustotal']
+                whois_info.update({
+                    'organization': vt_data.get('as_owner', 'N/A'),
+                    'country': vt_data.get('country', 'N/A'),
+                    'asn': vt_data.get('asn', 'N/A'),
+                    'registrar': vt_data.get('network', 'N/A'),
+                    'date_registered': vt_data.get('whois_date', 'N/A')
+                })
+
+            # Prepare platform-specific data
+            platform_data = {}
+            for platform, results in analysis_results.get('results', {}).items():
+                if isinstance(results, dict):
+                    # Filter out sensitive or internal data
+                    filtered_results = {
+                        k: v for k, v in results.items() 
+                        if k not in ['response', 'raw', 'error'] and not k.startswith('_')
+                    }
+                    platform_data[f'{platform}_data'] = filtered_results
+
+            response_data = {
+                **whois_info,
+                'overall_score': overall_score,
+                'confidence': round(analysis_results.get('confidence', 0), 1),
+                'categories': analysis_results.get('categories', []),
+                'threat_details': analysis_results.get('threat_details', {}),
+                **normalized_scores,
+                **platform_data
+            }
+
+            return JsonResponse(response_data)
+
+    except Exception as e:
+        logger.error(f"Error analyzing IP {ip_address}: {str(e)}", exc_info=True)
+        return JsonResponse({
+            'error': 'An error occurred while analyzing the IP address'
+        }, status=500)
 
 @login_required
 def hash_analysis(request):
