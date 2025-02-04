@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from cryptography.fernet import Fernet
+from .services.encryption import encrypt_api_key, decrypt_api_key
 
 class APIKey(models.Model):
     PLATFORM_CHOICES = [
@@ -63,5 +64,42 @@ class APIKey(models.Model):
             f = Fernet(settings.ENCRYPTION_KEY)
             return f.decrypt(self.api_secret.encode()).decode()
         return None
+
+class ProviderSettings(models.Model):
+    """Model to store provider API keys and settings."""
+    
+    provider_name = models.CharField(max_length=50)
+    api_key = models.CharField(max_length=500)
+    is_enabled = models.BooleanField(default=True)
+    last_validated = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('provider_name',)
+        verbose_name = 'Provider Settings'
+        verbose_name_plural = 'Provider Settings'
+
+    def __str__(self):
+        return f"{self.provider_name} Settings"
+
+    def save(self, *args, **kwargs):
+        """Encrypt API key before saving."""
+        if not self.pk:  # Only encrypt on creation
+            self.api_key = encrypt_api_key(self.api_key)
+        super().save(*args, **kwargs)
+
+    def get_decrypted_api_key(self):
+        """Get the decrypted API key."""
+        return decrypt_api_key(self.api_key)
+
+    @classmethod
+    def get_api_key(cls, provider_name):
+        """Get API key for a provider."""
+        try:
+            provider = cls.objects.get(provider_name=provider_name, is_enabled=True)
+            return provider.get_decrypted_api_key()
+        except cls.DoesNotExist:
+            return None
 
 # Create your models here.

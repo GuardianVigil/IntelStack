@@ -140,6 +140,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TAILWIND_APP_NAME = 'vristoDjango'
 TAILWIND_CSS_PATH = 'assets/css/styles.css'
 
+# API Keys Configuration
+API_KEYS = {
+    'virustotal': 'YOUR_VIRUSTOTAL_API_KEY',
+    'alienvault': 'YOUR_ALIENVAULT_API_KEY',
+    'ibmxforce': 'YOUR_IBMXFORCE_API_KEY',
+    'abuseipdb': 'YOUR_ABUSEIPDB_API_KEY',
+    'greynoise': 'YOUR_GREYNOISE_API_KEY',
+    'crowdsec': 'YOUR_CROWDSEC_API_KEY'
+}
+
 # Import Redis settings
 from main.settings.redis_settings import *
 

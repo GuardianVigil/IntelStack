@@ -544,3 +544,99 @@ Traceback (most recent call last):
 AttributeError: 'Settings' object has no attribute 'API_KEYS'
 ERROR 2025-02-04 01:16:13,458 base_events 37092 140428476694656 Unclosed client session
 client_session: <aiohttp.client.ClientSession object at 0x7fb8096fc260>
+INFO 2025-02-04 01:21:01,331 autoreload 38978 139047083962496 Watching for file changes with StatReloader
+ERROR 2025-02-04 01:21:56,111 ip_analysis 38978 139046946866880 Error getting API key for virustotal: 'Settings' object has no attribute 'API_KEYS'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in _get_api_key
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in <lambda>
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                                                ^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/django/conf/__init__.py", line 83, in __getattr__
+    val = getattr(_wrapped, name)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Settings' object has no attribute 'API_KEYS'
+ERROR 2025-02-04 01:21:56,114 ip_analysis 38978 139046946866880 Error getting API key for alienvault: 'Settings' object has no attribute 'API_KEYS'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in _get_api_key
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in <lambda>
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                                                ^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/django/conf/__init__.py", line 83, in __getattr__
+    val = getattr(_wrapped, name)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Settings' object has no attribute 'API_KEYS'
+ERROR 2025-02-04 01:21:56,116 ip_analysis 38978 139046946866880 Error getting API key for ibmxforce: 'Settings' object has no attribute 'API_KEYS'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in _get_api_key
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 468, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/asgiref/sync.py", line 522, in thread_handler
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 36, in <lambda>
+    encrypted_key = await sync_to_async(lambda: settings.API_KEYS.get(platform))()
+                                                ^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/django/conf/__init__.py", line 83, in __getattr__
+    val = getattr(_wrapped, name)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Settings' object has no attribute 'API_KEYS'
+INFO 2025-02-04 01:22:35,677 autoreload 38978 139047083962496 /home/Agile/code/Stack/vristo/settings.py changed, reloading.
+ERROR 2025-02-04 01:22:35,706 base_events 38978 139047083962496 Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x7e76682bac30>
+INFO 2025-02-04 01:22:36,080 autoreload 39416 124954850791552 Watching for file changes with StatReloader
+INFO 2025-02-04 01:22:53,669 autoreload 39416 124954850791552 /home/Agile/code/Stack/main/services/ip_analysis.py changed, reloading.
+INFO 2025-02-04 01:22:54,178 autoreload 39516 123143546282112 Watching for file changes with StatReloader
+INFO 2025-02-04 01:23:06,054 views 39516 123143477790400 Returning cached result for IP: 93.127.57.211
+INFO 2025-02-04 01:25:26,035 autoreload 39516 123143546282112 /home/Agile/code/Stack/main/models.py changed, reloading.
+INFO 2025-02-04 01:25:26,417 autoreload 40129 125053771362432 Watching for file changes with StatReloader
+INFO 2025-02-04 01:25:52,095 autoreload 40129 125053771362432 /home/Agile/code/Stack/main/services/ip_analysis.py changed, reloading.
+INFO 2025-02-04 01:25:52,598 autoreload 40268 124708680134784 Watching for file changes with StatReloader
+INFO 2025-02-04 01:28:25,229 autoreload 40919 133089711128704 Watching for file changes with StatReloader
+ERROR 2025-02-04 01:28:33,732 ip_analysis 40919 133089642677952 Error getting API key for virustotal: 'APIKey' object has no attribute 'get_decrypted_key'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 44, in _get_api_key
+    decrypted_key = await sync_to_async(api_key.get_decrypted_key)()
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'APIKey' object has no attribute 'get_decrypted_key'. Did you mean: 'get_decrypted_api_key'?
+ERROR 2025-02-04 01:28:33,737 ip_analysis 40919 133089642677952 Error getting API key for alienvault: 'APIKey' object has no attribute 'get_decrypted_key'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/services/ip_analysis.py", line 44, in _get_api_key
+    decrypted_key = await sync_to_async(api_key.get_decrypted_key)()
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'APIKey' object has no attribute 'get_decrypted_key'. Did you mean: 'get_decrypted_api_key'?
+WARNING 2025-02-04 01:28:33,741 ip_analysis 40919 133089642677952 No API key configured for ibmxforce
+INFO 2025-02-04 01:29:36,333 autoreload 40919 133089711128704 /home/Agile/code/Stack/main/services/ip_analysis.py changed, reloading.
+INFO 2025-02-04 01:29:36,966 autoreload 41219 140228063031424 Watching for file changes with StatReloader
+WARNING 2025-02-04 01:29:45,149 ip_analysis 41219 140227926558400 No API key configured for ibmxforce
+INFO 2025-02-04 01:30:46,088 autoreload 41219 140228063031424 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-04 01:30:46,561 autoreload 41532 139923115016320 Watching for file changes with StatReloader
+WARNING 2025-02-04 01:30:55,571 ip_analysis 41532 139922979686080 No API key configured for ibmxforce
+WARNING 2025-02-04 01:31:18,022 ip_analysis 41532 139922979686080 No API key configured for ibmxforce

@@ -787,68 +787,32 @@ def async_view(f):
 @login_required
 @async_view
 async def ip_analysis(request):
-    """Handle IP analysis requests"""
+    """Analyze an IP address using multiple threat intelligence platforms."""
     try:
         if request.method == 'POST':
             ip_address = request.POST.get('ip_address')
             if not ip_address:
-                return JsonResponse({'error': 'IP address is required'}, status=400)
-
-            # Initialize service with async context
-            service = IPAnalysisService()
-            
-            # Get cached result
-            cache_key = f'ip_analysis:{ip_address}'
-            cached_result = await sync_to_async(cache.get)(cache_key)
-            
-            if cached_result:
-                logger.info(f"Returning cached result for IP: {ip_address}")
+                return render(request, 'threat/ip_analysis.html', {'error': 'IP address is required'})
+                
+            async with IPAnalysisService(request.user) as service:
+                results = await service.analyze_ip(ip_address)
                 return render(request, 'threat/ip_analysis.html', {
                     'ip_address': ip_address,
-                    'results': cached_result['results'],
-                    'threat_score': cached_result['threat_score'],
-                    'threat_level': cached_result['threat_details']['level'],
-                    'threat_class': cached_result['threat_details']['class'],
-                    'confidence': cached_result['confidence'],
-                    'provider_scores': cached_result['provider_scores'],
-                    'categories': cached_result['categories']
-                })
-
-            # Analyze IP
-            try:
-                result = await service.analyze_ip(ip_address)
-                
-                # Cache the result
-                await sync_to_async(cache.set)(
-                    cache_key, 
-                    result,
-                    timeout=3600  # 1 hour
-                )
-                
-                return render(request, 'threat/ip_analysis.html', {
-                    'ip_address': ip_address,
-                    'results': result['results'],
-                    'threat_score': result['threat_score'],
-                    'threat_level': result['threat_details']['level'],
-                    'threat_class': result['threat_details']['class'],
-                    'confidence': result['confidence'],
-                    'provider_scores': result['provider_scores'],
-                    'categories': result['categories']
+                    'results': results['results'],
+                    'threat_score': results['threat_score'],
+                    'threat_level': results['threat_details']['level'],
+                    'threat_class': results['threat_details']['class'],
+                    'confidence': results['confidence'],
+                    'provider_scores': results['provider_scores'],
+                    'categories': results['categories']
                 })
                 
-            except Exception as e:
-                logger.error(f"Error analyzing IP {ip_address}: {str(e)}", exc_info=True)
-                return render(request, 'threat/ip_analysis.html', {
-                    'error_message': f'Error analyzing IP address: {str(e)}'
-                })
-        
-        # GET request - render the form
-        return render(request, 'threat/ip_analysis.html', {})
+        return render(request, 'threat/ip_analysis.html')
         
     except Exception as e:
-        logger.error(f"Unexpected error in ip_analysis view: {str(e)}", exc_info=True)
+        logger.error(f"Error analyzing IP: {str(e)}", exc_info=True)
         return render(request, 'threat/ip_analysis.html', {
-            'error_message': f'An unexpected error occurred: {str(e)}'
+            'error': str(e)
         })
 
 @login_required
