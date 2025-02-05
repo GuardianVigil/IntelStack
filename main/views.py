@@ -881,14 +881,14 @@ async def analyze_ip_api(request, ip_address):
 
             # Prepare platform-specific data
             platform_data = {}
-            for platform, results in analysis_results.get('results', {}).items():
-                if isinstance(results, dict):
+            for platform, data in analysis_results.get('results', {}).items():
+                if isinstance(data, dict):
                     # Filter out sensitive or internal data
                     filtered_results = {
-                        k: v for k, v in results.items() 
+                        k: v for k, v in data.items() 
                         if k not in ['response', 'raw', 'error'] and not k.startswith('_')
                     }
-                    platform_data[f'{platform}_data'] = filtered_results
+                    platform_data[platform + '_data'] = filtered_results
 
             response_data = {
                 **whois_info,
