@@ -51,27 +51,24 @@ class IPAnalysisService:
             return self.api_keys[platform]
             
         try:
-            api_key = await sync_to_async(lambda: APIKey.objects.filter(
-                user=self.user,
-                platform=platform,
-                is_active=True
-            ).first())()
-            
-            if not api_key:
-                logger.warning(f"No API key configured for {platform}")
-                return None
-                
+            api_key = await sync_to_async(APIKey.objects.get)(user=self.user, platform=platform, is_active=True)
             decrypted_key = await sync_to_async(api_key.get_decrypted_api_key)()
             self.api_keys[platform] = decrypted_key
             return decrypted_key
+        except APIKey.DoesNotExist:
+            logger.warning(f"No API key found for {platform}")
+            return None
         except Exception as e:
-            logger.error(f"Error getting API key for {platform}: {str(e)}", exc_info=True)
+            logger.error(f"Error getting API key for {platform}: {str(e)}")
             return None
 
     async def _query_virustotal(self, ip_address: str, api_key: str) -> Dict[str, Any]:
         """Query VirusTotal API"""
         url = f"https://www.virustotal.com/api/v3/ip_addresses/{ip_address}"
-        headers = {"x-apikey": api_key}
+        headers = {
+            "accept": "application/json",
+            "x-apikey": api_key
+        }
         
         try:
             async with self.session.get(url, headers=headers) as response:
@@ -87,12 +84,13 @@ class IPAnalysisService:
         """Query AbuseIPDB API"""
         url = "https://api.abuseipdb.com/api/v2/check"
         headers = {
-            "Key": api_key,
-            "Accept": "application/json"
+            "Accept": "application/json",
+            "Key": api_key
         }
         params = {
-            "ipAddress": ip_address,
-            "maxAgeInDays": 30
+            "ipAddress": str(ip_address),  
+            "maxAgeInDays": "90",  
+            "verbose": "true"  
         }
         
         try:
@@ -123,18 +121,56 @@ class IPAnalysisService:
             logger.error(f"GreyNoise request error: {str(e)}")
             return {"error": str(e)}
 
-    async def _query_securitytrails(self, ip_address: str, api_key: str) -> Dict[str, Any]:
-        """Query SecurityTrails API"""
-        url = f"https://api.securitytrails.com/v1/ip/{ip_address}"
+    async def _query_crowdsec(self, ip_address: str, api_key: str) -> Dict[str, Any]:
+        """Query CrowdSec API"""
+        url = f"https://cti.api.crowdsec.net/v2/smoke/{ip_address}"  # Fixed API endpoint
         headers = {
-            "apikey": api_key,
+            "x-api-key": api_key,  # Fixed header name
             "Accept": "application/json"
         }
         
         try:
             async with self.session.get(url, headers=headers) as response:
                 if response.status == 200:
-                    return await response.json()
+                    data = await response.json()
+                    # Transform CrowdSec response to match our format
+                    return {
+                        "ip": ip_address,
+                        "score": data.get("scores", {}).get("overall", {}).get("score", 0),
+                        "decisions": data.get("decisions", []),
+                        "behaviors": data.get("behaviors", []),
+                        "classifications": data.get("classifications", []),
+                        "references": data.get("references", []),
+                        "history": data.get("history", {}),
+                        "background_noise": data.get("background_noise", False),
+                        "message": data.get("message", ""),
+                        "last_update": data.get("last_update", "")
+                    }
+                logger.error(f"CrowdSec API error: {response.status}")
+                return {"error": f"API error: {response.status}"}
+        except Exception as e:
+            logger.error(f"CrowdSec request error: {str(e)}")
+            return {"error": str(e)}
+
+    async def _query_securitytrails(self, ip_address: str, api_key: str) -> Dict[str, Any]:
+        """Query SecurityTrails API"""
+        url = f"https://api.securitytrails.com/v1/ips/nearby/{ip_address}"
+        headers = {
+            "accept": "application/json",
+            "APIKEY": api_key
+        }
+        
+        try:
+            async with self.session.get(url, headers=headers) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    # Transform SecurityTrails response to match our format
+                    return {
+                        "neighbors": data.get("blocks", []),
+                        "history": data.get("history", {}),
+                        "associated": data.get("associated", {}),
+                        "tags": data.get("tags", [])
+                    }
                 logger.error(f"SecurityTrails API error: {response.status}")
                 return {"error": f"API error: {response.status}"}
         except Exception as e:
@@ -157,81 +193,66 @@ class IPAnalysisService:
                 logger.warning(f"Error accessing cache: {str(e)}")
                 self.cache_enabled = False
 
-        platform_data = {}
-        platform_scores = {}
         tasks = []
         
-        # Query all platforms concurrently
-        platforms = {
-            'virustotal': self._query_virustotal,
-            'abuseipdb': self._query_abuseipdb,
-            'greynoise': self._query_greynoise,
-            'securitytrails': self._query_securitytrails
-        }
-        
-        # First check if we have any API keys configured
-        available_platforms = []
-        for platform in platforms.keys():
+        # Create tasks for each platform
+        for platform in ['virustotal', 'abuseipdb', 'greynoise', 'securitytrails', 'crowdsec']:
             api_key = await self._get_api_key(platform)
-            if api_key:
-                available_platforms.append(platform)
-                tasks.append(platforms[platform](ip_address, api_key))
-            else:
-                platform_data[platform] = {"error": "No API key configured"}
-                platform_scores[platform] = None
-
-        if not available_platforms:
-            logger.error("No API keys configured for any platform")
-            return {
-                'error': 'No API keys configured. Please configure at least one API key in Settings > API Configuration.',
-                'ip_address': ip_address,
-                'overall_score': None,
-                'threat_level': None,
-                'recommendation': "Unable to analyze IP. Please configure API keys first.",
-                'whois_info': None,
-                'platform_scores': platform_scores,
-                'platform_data': platform_data
-            }
-
-        if tasks:
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-            for platform, result in zip(available_platforms, results):
-                if isinstance(result, Exception):
-                    logger.error(f"Error querying {platform}: {str(result)}")
-                    platform_data[platform] = {"error": str(result)}
-                    platform_scores[platform] = None
-                else:
-                    platform_data[platform] = result
-                    try:
-                        platform_scores[platform] = calculate_platform_scores(result, platform=platform)
-                    except Exception as e:
-                        logger.error(f"Error calculating score for {platform}: {str(e)}")
-                        platform_scores[platform] = None
-
-        # Calculate overall threat score only if we have at least one valid result
-        valid_scores = {k: v for k, v in platform_scores.items() if v is not None}
-        if valid_scores:
-            overall_score = calculate_threat_score(valid_scores)
-            threat_details = get_threat_details(overall_score)
-            threat_level = threat_details['threat_level']
-            recommendation = threat_details['recommendation']
-        else:
-            logger.error("No valid scores from any platform")
-            overall_score = None
-            threat_level = None
-            recommendation = "Unable to calculate threat score. All platform queries failed."
+            if not api_key:
+                logger.warning(f"No API key found for {platform}")
+                continue
+                
+            query_func = getattr(self, f'_query_{platform}')
+            tasks.append(query_func(ip_address, api_key))
         
-        # Get WHOIS information from VirusTotal data if available
-        whois_info = extract_whois_info(platform_data.get('virustotal', {})) if 'virustotal' in platform_data else None
-
+        # Execute all queries concurrently
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Process results
+        platform_data = {}
+        platform_scores = {}
+        whois_info = None
+        
+        for platform, result in zip(['virustotal', 'abuseipdb', 'greynoise', 'securitytrails', 'crowdsec'], results):
+            if isinstance(result, Exception):
+                logger.error(f"{platform} query failed: {str(result)}")
+                continue
+                
+            if isinstance(result, dict) and not result.get('error'):
+                platform_data[platform] = result
+                score = calculate_platform_scores(result, platform)
+                if score is not None:
+                    platform_scores[platform] = score
+                    
+                # Extract WHOIS info from VirusTotal response
+                if platform == 'virustotal':
+                    whois_info = extract_whois_info(result)
+        
+        # Calculate overall threat score
+        valid_scores = [score for score in platform_scores.values() if score is not None]
+        overall_score = sum(valid_scores) / len(valid_scores) if valid_scores else None
+        
+        # Determine threat level based on overall score
+        threat_level = "Unknown"
+        if overall_score is not None:
+            if overall_score >= 80:
+                threat_level = "Critical"
+            elif overall_score >= 60:
+                threat_level = "High"
+            elif overall_score >= 40:
+                threat_level = "Medium"
+            elif overall_score >= 20:
+                threat_level = "Low"
+            else:
+                threat_level = "Safe"
+        
         result = {
-            'ip_address': ip_address,
-            'overall_score': overall_score,
-            'threat_level': threat_level,
-            'recommendation': recommendation,
-            'whois_info': whois_info,
-            'platform_scores': platform_scores,
-            'platform_data': platform_data
+            "ip_address": ip_address,
+            "overall_score": overall_score,
+            "threat_level": threat_level,
+            "platform_scores": platform_scores,
+            "platform_data": platform_data,
+            "whois_info": whois_info or {}
         }
 
         # Cache the result if caching is enabled and we have valid data

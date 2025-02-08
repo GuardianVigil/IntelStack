@@ -2135,3 +2135,72 @@ INFO 2025-02-08 02:01:14,416 autoreload 87865 137248881205376 Watching for file 
 INFO 2025-02-08 02:11:06,129 ip_analysis 87865 137248802604736 Cache is available
 ERROR 2025-02-08 02:11:06,209 ip_analysis 87865 137248802604736 SecurityTrails API error: 404
 INFO 2025-02-08 02:11:06,420 ip_analysis 87865 137248802604736 Cached result for 105.27.192.254
+INFO 2025-02-08 02:33:06,210 autoreload 87865 137248881205376 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 02:33:06,670 autoreload 94488 135937470038144 Watching for file changes with StatReloader
+INFO 2025-02-08 02:36:52,901 ip_analysis 94488 135937323435712 Cache is available
+ERROR 2025-02-08 02:36:52,906 views 94488 135937323435712 Error analyzing IP: 'APIKey' object has no attribute 'key'
+Traceback (most recent call last):
+  File "/home/Agile/code/Stack/main/views.py", line 792, in analyze_ip_api
+    results = await service.analyze_ip(ip_address)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py", line 188, in analyze_ip
+    api_key = await self._get_api_key(platform)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py", line 55, in _get_api_key
+    self.api_keys[platform] = api_key.key
+                              ^^^^^^^^^^^
+AttributeError: 'APIKey' object has no attribute 'key'
+ERROR 2025-02-08 02:36:52,908 log 94488 135937323435712 Internal Server Error: /threat/ip-analysis/analyze/14.161.17.210/
+INFO 2025-02-08 02:37:40,260 autoreload 94488 135937470038144 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 02:37:40,790 autoreload 95509 131263882752128 Watching for file changes with StatReloader
+INFO 2025-02-08 02:37:51,364 ip_analysis 95509 131263727929024 Cache is available
+ERROR 2025-02-08 02:37:51,384 ip_analysis 95509 131263727929024 AbuseIPDB request error: Invalid variable type: value should be str, int or float, got True of type <class 'bool'>
+ERROR 2025-02-08 02:37:51,674 ip_analysis 95509 131263727929024 CrowdSec request error: Cannot connect to host capi.crowdsec.net:443 ssl:default [Name or service not known]
+INFO 2025-02-08 02:37:53,092 ip_analysis 95509 131263727929024 Cached result for 14.161.17.210
+INFO 2025-02-08 02:38:35,254 ip_analysis 95509 131263727929024 Cache is available
+ERROR 2025-02-08 02:38:35,263 ip_analysis 95509 131263727929024 AbuseIPDB request error: Invalid variable type: value should be str, int or float, got True of type <class 'bool'>
+ERROR 2025-02-08 02:38:35,481 ip_analysis 95509 131263727929024 CrowdSec request error: Cannot connect to host capi.crowdsec.net:443 ssl:default [Name or service not known]
+INFO 2025-02-08 02:38:36,126 ip_analysis 95509 131263727929024 Cached result for 91.187.39.158
+INFO 2025-02-08 02:38:44,169 ip_analysis 95509 131263727929024 Cache is available
+INFO 2025-02-08 02:38:44,170 ip_analysis 95509 131263727929024 Found cached result for 91.187.39.158
+INFO 2025-02-08 02:40:58,640 autoreload 96390 124954078298240 Watching for file changes with StatReloader
+INFO 2025-02-08 02:41:17,574 ip_analysis 96390 124954012026560 Cache is available
+ERROR 2025-02-08 02:41:17,589 ip_analysis 96390 124954012026560 AbuseIPDB request error: Invalid variable type: value should be str, int or float, got True of type <class 'bool'>
+ERROR 2025-02-08 02:41:17,683 ip_analysis 96390 124954012026560 CrowdSec request error: Cannot connect to host capi.crowdsec.net:443 ssl:default [Name or service not known]
+INFO 2025-02-08 02:41:18,865 ip_analysis 96390 124954012026560 Cached result for 115.69.223.178
+INFO 2025-02-08 02:43:06,555 autoreload 96390 124954078298240 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 02:43:07,732 autoreload 96948 137137066659968 Watching for file changes with StatReloader
+INFO 2025-02-08 02:43:40,708 autoreload 96948 137137066659968 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 02:43:41,219 autoreload 97109 135137646407808 Watching for file changes with StatReloader
+INFO 2025-02-08 02:44:21,314 autoreload 97289 135621860544640 Watching for file changes with StatReloader
+INFO 2025-02-08 02:44:26,786 ip_analysis 97289 135621710448320 Cache is available
+ERROR 2025-02-08 02:44:27,059 ip_analysis 97289 135621710448320 CrowdSec API error: 403
+INFO 2025-02-08 02:44:27,635 ip_analysis 97289 135621710448320 Cached result for 132.148.167.243
+INFO 2025-02-08 02:46:50,473 autoreload 97289 135621860544640 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 02:46:51,061 autoreload 97980 139598491627648 Watching for file changes with StatReloader
+INFO 2025-02-08 02:47:02,695 autoreload 97980 139598491627648 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 02:47:03,200 autoreload 98059 123470698590336 Watching for file changes with StatReloader
+INFO 2025-02-08 02:47:48,603 ip_analysis 98059 123470631405248 Cache is available
+INFO 2025-02-08 02:47:48,605 ip_analysis 98059 123470631405248 Found cached result for 105.27.192.254
+INFO 2025-02-08 02:48:21,329 ip_analysis 98059 123470631405248 Cache is available
+INFO 2025-02-08 02:48:21,330 ip_analysis 98059 123470631405248 Found cached result for 14.161.17.210
+INFO 2025-02-08 02:48:51,781 ip_analysis 98059 123470631405248 Cache is available
+INFO 2025-02-08 02:48:52,856 ip_analysis 98059 123470631405248 Cached result for 186.224.32.6
+INFO 2025-02-08 02:53:13,822 ip_analysis 98059 123470631405248 Cache is available
+INFO 2025-02-08 02:53:15,716 ip_analysis 98059 123470631405248 Cached result for 2.57.121.138
+INFO 2025-02-08 02:54:44,900 ip_analysis 98059 123470631405248 Cache is available
+INFO 2025-02-08 02:54:46,776 ip_analysis 98059 123470631405248 Cached result for 170.130.55.170
+INFO 2025-02-08 02:56:56,102 autoreload 98059 123470698590336 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 02:56:56,644 autoreload 100336 124500435452032 Watching for file changes with StatReloader
+INFO 2025-02-08 02:57:26,419 autoreload 100336 124500435452032 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 02:57:27,069 autoreload 100478 137276398682240 Watching for file changes with StatReloader
+INFO 2025-02-08 02:59:01,301 ip_analysis 100478 137276331919040 Cache is available
+INFO 2025-02-08 02:59:02,432 ip_analysis 100478 137276331919040 Cached result for 213.14.233.149
+INFO 2025-02-08 03:00:14,380 ip_analysis 100478 137276331919040 Cache is available
+INFO 2025-02-08 03:00:14,383 ip_analysis 100478 137276331919040 Found cached result for 170.130.55.170
+INFO 2025-02-08 03:00:35,831 ip_analysis 100478 137276331919040 Cache is available
+INFO 2025-02-08 03:00:40,647 ip_analysis 100478 137276331919040 Cached result for 218.66.32.221
+INFO 2025-02-08 03:03:58,813 ip_analysis 100478 137276331919040 Cache is available
+INFO 2025-02-08 03:03:58,815 ip_analysis 100478 137276331919040 Found cached result for 218.66.32.221
+INFO 2025-02-08 03:05:39,908 ip_analysis 100478 137276331919040 Cache is available
+INFO 2025-02-08 03:05:39,909 ip_analysis 100478 137276331919040 Found cached result for 218.66.32.221
