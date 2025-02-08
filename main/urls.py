@@ -120,6 +120,7 @@ urlpatterns = [
 
     # Threat Intelligence URLs
     path('threat/ip-analysis/', views.ip_analysis, name='ip_analysis'),
+    path('threat/ip-analysis/analyze/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
     path('threat/hash-analysis/', views.hash_analysis, name='hash_analysis'),
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/url-scan/', views.url_scan, name='url_scan'),

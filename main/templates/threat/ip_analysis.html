@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="pt-5" x-data="ipAnalysis">
+    {% csrf_token %}
     <!-- Header -->
     <div class="mb-6 flex items-center justify-between">
         <h5 class="text-lg font-semibold dark:text-white-light">IP Threat Intelligence Analysis</h5>
@@ -14,6 +15,13 @@
                 </svg>
                 Analyze IP
             </button>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div x-show="error" x-cloak class="alert alert-danger mb-4">
+        <div class="flex items-center">
+            <span x-text="error"></span>
         </div>
     </div>
 
@@ -57,22 +65,16 @@
                 <div class="flex items-center p-5">
                     <div class="ltr:mr-5 rtl:ml-5">
                         <div class="w-11 h-11 rounded-lg flex items-center justify-center" :class="{
-                            'bg-success-light dark:bg-success': results.overall_score <= 3,
-                            'bg-warning-light dark:bg-warning': results.overall_score > 3 && results.overall_score <= 7,
-                            'bg-danger-light dark:bg-danger': results.overall_score > 7
+                            'bg-success-light dark:bg-success': results.overall_score < 30,
+                            'bg-warning-light dark:bg-warning': results.overall_score >= 30 && results.overall_score < 70,
+                            'bg-danger-light dark:bg-danger': results.overall_score >= 70
                         }">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6">
-                                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                            </svg>
+                            <span class="text-xl font-bold" x-text="results.overall_score ? Math.round(results.overall_score) + '/100' : 'N/A'"></span>
                         </div>
                     </div>
                     <div class="flex-1">
-                        <div class="text-3xl font-bold" :class="{
-                            'text-success': results.overall_score <= 3,
-                            'text-warning': results.overall_score > 3 && results.overall_score <= 7,
-                            'text-danger': results.overall_score > 7
-                        }" x-text="results.overall_score + '/10'"></div>
-                        <div class="text-[15px] font-semibold">Threat Score</div>
+                        <div class="text-lg font-semibold" x-text="results.threat_level || 'Unknown'"></div>
+                        <div class="text-[15px] font-semibold">Threat Level</div>
                     </div>
                 </div>
             </div>
@@ -87,7 +89,7 @@
                         </div>
                     </div>
                     <div class="flex-1">
-                        <div class="text-lg font-semibold" x-text="results.country"></div>
+                        <div class="text-lg font-semibold" x-text="results.whois_info?.country || 'Unknown'"></div>
                         <div class="text-[15px] font-semibold">Location</div>
                     </div>
                 </div>
@@ -104,7 +106,7 @@
                         </div>
                     </div>
                     <div class="flex-1">
-                        <div class="text-lg font-semibold" x-text="results.organization"></div>
+                        <div class="text-lg font-semibold" x-text="results.whois_info?.as_owner || 'Unknown'"></div>
                         <div class="text-[15px] font-semibold">Organization</div>
                     </div>
                 </div>
@@ -123,7 +125,7 @@
                         </div>
                     </div>
                     <div class="flex-1">
-                        <div class="text-lg font-semibold" x-text="results.asn"></div>
+                        <div class="text-lg font-semibold" x-text="results.whois_info?.asn || 'Unknown'"></div>
                         <div class="text-[15px] font-semibold">ASN</div>
                     </div>
                 </div>
@@ -145,23 +147,23 @@
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[14px] text-white-dark">Organization:</span>
-                            <span class="text-[15px] font-semibold" x-text="results.organization"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.whois_info?.as_owner || 'N/A'"></span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[14px] text-white-dark">Country:</span>
-                            <span class="text-[15px] font-semibold" x-text="results.country"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.whois_info?.country || 'N/A'"></span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[14px] text-white-dark">ASN:</span>
-                            <span class="text-[15px] font-semibold" x-text="results.asn"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.whois_info?.asn || 'N/A'"></span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[14px] text-white-dark">Registrar:</span>
-                            <span class="text-[15px] font-semibold" x-text="results.registrar"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.whois_info?.registrar || 'N/A'"></span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-[14px] text-white-dark">Date Registered:</span>
-                            <span class="text-[15px] font-semibold" x-text="results.date_registered"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.whois_info?.date_registered || 'N/A'"></span>
                         </div>
                     </div>
                 </div>
@@ -183,7 +185,7 @@
                                 </div>
                                 <span class="text-[15px] font-semibold">VirusTotal</span>
                             </div>
-                            <span class="text-[15px] font-semibold" x-text="results.virustotal + '/10'"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.platform_scores?.virustotal ? Math.round(results.platform_scores.virustotal) + '/100' : 'N/A'"></span>
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -194,7 +196,7 @@
                                 </div>
                                 <span class="text-[15px] font-semibold">AbuseIPDB</span>
                             </div>
-                            <span class="text-[15px] font-semibold" x-text="results.abuseipdb + '/10'"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.platform_scores?.abuseipdb ? Math.round(results.platform_scores.abuseipdb) + '/100' : 'N/A'"></span>
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -203,9 +205,9 @@
                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                     </svg>
                                 </div>
-                                <span class="text-[15px] font-semibold">CrowdSec</span>
+                                <span class="text-[15px] font-semibold">GreyNoise</span>
                             </div>
-                            <span class="text-[15px] font-semibold" x-text="results.crowdsec + '/10'"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.platform_scores?.greynoise ? Math.round(results.platform_scores.greynoise) + '/100' : 'N/A'"></span>
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
@@ -214,9 +216,9 @@
                                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                     </svg>
                                 </div>
-                                <span class="text-[15px] font-semibold">GreyNoise</span>
+                                <span class="text-[15px] font-semibold">SecurityTrails</span>
                             </div>
-                            <span class="text-[15px] font-semibold" x-text="results.greynoise + '/10'"></span>
+                            <span class="text-[15px] font-semibold" x-text="results.platform_scores?.securitytrails ? Math.round(results.platform_scores.securitytrails) + '/100' : 'N/A'"></span>
                         </div>
                     </div>
                 </div>
@@ -232,25 +234,32 @@
                 <div class="p-5">
                     <div class="mb-5 flex flex-wrap items-center">
                         <div class="flex items-center gap-2">
-                            <template x-for="platform in ['VirusTotal', 'AbuseIPDB', 'CrowdSec', 'GreyNoise']">
+                            <template x-for="platform in ['virustotal', 'abuseipdb', 'greynoise', 'securitytrails']">
                                 <button 
                                     class="btn"
-                                    :class="{ 'btn-primary': activeTab === platform.toLowerCase(), 'btn-outline-primary': activeTab !== platform.toLowerCase() }"
-                                    @click="activeTab = platform.toLowerCase()"
-                                    x-text="platform"
+                                    :class="{ 'btn-primary': activeTab === platform, 'btn-outline-primary': activeTab !== platform }"
+                                    @click="activeTab = platform"
+                                    x-text="platform.charAt(0).toUpperCase() + platform.slice(1)"
                                 ></button>
                             </template>
                         </div>
                     </div>
 
-                    <template x-for="platform in ['virustotal', 'abuseipdb', 'crowdsec', 'greynoise']">
+                    <template x-for="platform in ['virustotal', 'abuseipdb', 'greynoise', 'securitytrails']">
                         <div x-show="activeTab === platform" class="table-responsive">
                             <table class="table-striped">
                                 <tbody>
-                                    <template x-for="(value, key) in results[platform + '_data']" :key="key">
+                                    <template x-for="(value, key) in results.platform_data[platform]" :key="key">
                                         <tr>
                                             <td class="text-[14px] font-semibold" x-text="key"></td>
-                                            <td class="text-[13px]" x-text="value"></td>
+                                            <td class="text-[13px]">
+                                                <template x-if="typeof value === 'object'">
+                                                    <pre class="whitespace-pre-wrap" x-text="JSON.stringify(value, null, 2)"></pre>
+                                                </template>
+                                                <template x-if="typeof value !== 'object'">
+                                                    <span x-text="value"></span>
+                                                </template>
+                                            </td>
                                         </tr>
                                     </template>
                                 </tbody>
@@ -272,75 +281,36 @@ document.addEventListener('alpine:init', () => {
         results: null,
         activeTab: 'virustotal',
 
-        // Sample data for development
-        sampleData: {
-            ip_address: '8.8.8.8',
-            organization: 'Google LLC',
-            country: 'United States',
-            asn: 'AS15169',
-            registrar: 'ARIN',
-            date_registered: '2014-03-14',
-            overall_score: 2,
-            virustotal: 0,
-            abuseipdb: 0,
-            crowdsec: 5,
-            greynoise: 1,
-            securitytrails: 4,
-            virustotal_data: {
-                'Harmless': 85,
-                'Malicious': 0,
-                'Suspicious': 0
-            },
-            abuseipdb_data: {
-                'Total Reports': 0,
-                'Confidence Score': '0%',
-                'Last Reported': 'Never',
-                'Usage Type': 'Data Center/Web Hosting/Transit'
-            },
-            crowdsec_data: {
-                'Attack Types': 'None',
-                'Last Activity': 'N/A',
-                'First Seen': '2024-01-15',
-                'Background Noise': 'Low'
-            },
-            greynoise_data: {
-                'Classification': 'Benign',
-                'Last Seen': '2024-02-07',
-                'Intent': 'Business Service',
-                'Noise Level': 'Low'
-            }
-        },
-        
         async analyzeIP() {
             if (!this.ipAddress) {
+                console.log('No IP address entered');
                 return;
             }
             
+            console.log('Analyzing IP:', this.ipAddress);
             this.isLoading = true;
             this.error = null;
             
             try {
-                // For development, use sample data
-                this.results = this.sampleData;
-                
-                /* Uncomment for production
-                const response = await fetch(`/api/analyze_ip/${this.ipAddress}/`, {
+                console.log('Making API request to:', `/threat/ip-analysis/analyze/${this.ipAddress}/`);
+                const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                     }
                 });
                 
+                console.log('Response status:', response.status);
                 if (!response.ok) {
-                    throw new Error('Failed to analyze IP');
+                    throw new Error(`Failed to analyze IP: ${response.status} ${response.statusText}`);
                 }
                 
                 this.results = await response.json();
-                */
-                
+                console.log('Analysis results:', this.results);
             } catch (err) {
-                this.error = err.message;
                 console.error('Error analyzing IP:', err);
+                this.error = err.message;
             } finally {
                 this.isLoading = false;
             }

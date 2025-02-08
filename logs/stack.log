@@ -2088,3 +2088,50 @@ Traceback (most recent call last):
   File "/home/Agile/code/Stack/venv/lib/python3.12/site-packages/django/template/base.py", line 573, in invalid_block_tag
     raise self.error(
 django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 649: 'endblock'. Did you forget to register or load this tag?
+INFO 2025-02-08 01:34:49,329 autoreload 81120 137988481732736 Watching for file changes with StatReloader
+INFO 2025-02-08 01:42:46,722 autoreload 81120 137988481732736 /home/Agile/code/Stack/main/urls.py changed, reloading.
+INFO 2025-02-08 01:42:47,201 autoreload 83063 138227409109120 Watching for file changes with StatReloader
+INFO 2025-02-08 01:42:57,543 autoreload 83063 138227409109120 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-08 01:42:58,081 autoreload 83141 126193254203520 Watching for file changes with StatReloader
+INFO 2025-02-08 01:43:21,637 autoreload 83141 126193254203520 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-08 01:43:22,073 autoreload 83266 128343201984640 Watching for file changes with StatReloader
+INFO 2025-02-08 01:43:29,394 autoreload 83266 128343201984640 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-08 01:43:29,978 autoreload 83333 139358022803584 Watching for file changes with StatReloader
+INFO 2025-02-08 01:44:22,938 autoreload 83333 139358022803584 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 01:44:23,549 autoreload 83546 134463027957888 Watching for file changes with StatReloader
+INFO 2025-02-08 01:44:37,281 autoreload 83647 140112011067520 Watching for file changes with StatReloader
+INFO 2025-02-08 01:45:10,039 autoreload 83647 140112011067520 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 01:45:10,712 autoreload 83797 126158816747648 Watching for file changes with StatReloader
+INFO 2025-02-08 01:45:22,227 autoreload 83797 126158816747648 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 01:45:22,868 autoreload 83877 126697592045696 Watching for file changes with StatReloader
+INFO 2025-02-08 01:45:31,388 autoreload 83877 126697592045696 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 01:45:31,876 autoreload 83946 138993489858688 Watching for file changes with StatReloader
+INFO 2025-02-08 01:45:59,586 autoreload 83946 138993489858688 /home/Agile/code/Stack/main/services/ip_scan/threat_score.py changed, reloading.
+INFO 2025-02-08 01:46:00,082 autoreload 84059 134908030595200 Watching for file changes with StatReloader
+INFO 2025-02-08 01:46:26,752 autoreload 84059 134908030595200 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 01:46:27,208 autoreload 84191 136568201212032 Watching for file changes with StatReloader
+INFO 2025-02-08 01:51:23,981 autoreload 85410 130808324030592 Watching for file changes with StatReloader
+INFO 2025-02-08 01:51:25,392 autoreload 85410 130808324030592 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 01:51:25,912 autoreload 85434 137080823312512 Watching for file changes with StatReloader
+INFO 2025-02-08 01:51:46,637 autoreload 85434 137080823312512 /home/Agile/code/Stack/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-08 01:51:47,127 autoreload 85551 127292389728384 Watching for file changes with StatReloader
+INFO 2025-02-08 01:52:05,617 autoreload 85654 131319848726656 Watching for file changes with StatReloader
+INFO 2025-02-08 01:53:09,714 autoreload 85654 131319848726656 /home/Agile/code/Stack/main/views.py changed, reloading.
+INFO 2025-02-08 01:53:10,643 autoreload 85910 128769752858752 Watching for file changes with StatReloader
+INFO 2025-02-08 01:53:37,672 ip_analysis 85910 128769685718720 Cache is available
+ERROR 2025-02-08 01:53:37,744 ip_analysis 85910 128769685718720 SecurityTrails API error: 404
+INFO 2025-02-08 01:53:37,947 ip_analysis 85910 128769685718720 Cached result for 80.64.30.85
+INFO 2025-02-08 01:56:47,980 autoreload 85910 128769752858752 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 01:56:48,677 autoreload 86781 127242554028160 Watching for file changes with StatReloader
+INFO 2025-02-08 01:57:07,425 ip_analysis 86781 127242476717760 Cache is available
+INFO 2025-02-08 01:57:07,428 ip_analysis 86781 127242476717760 Found cached result for 80.64.30.85
+INFO 2025-02-08 01:58:06,501 ip_analysis 86781 127242476717760 Cache is available
+ERROR 2025-02-08 01:58:06,600 ip_analysis 86781 127242476717760 SecurityTrails API error: 404
+INFO 2025-02-08 01:58:06,728 ip_analysis 86781 127242476717760 Cached result for 122.171.20.211
+INFO 2025-02-08 02:00:58,919 autoreload 86781 127242554028160 /home/Agile/code/Stack/main/services/ip_scan/platforms_score.py changed, reloading.
+INFO 2025-02-08 02:00:59,374 autoreload 87766 127653091266688 Watching for file changes with StatReloader
+INFO 2025-02-08 02:01:13,925 autoreload 87766 127653091266688 /home/Agile/code/Stack/main/services/ip_scan/threat_score.py changed, reloading.
+INFO 2025-02-08 02:01:14,416 autoreload 87865 137248881205376 Watching for file changes with StatReloader
+INFO 2025-02-08 02:11:06,129 ip_analysis 87865 137248802604736 Cache is available
+ERROR 2025-02-08 02:11:06,209 ip_analysis 87865 137248802604736 SecurityTrails API error: 404
+INFO 2025-02-08 02:11:06,420 ip_analysis 87865 137248802604736 Cached result for 105.27.192.254
