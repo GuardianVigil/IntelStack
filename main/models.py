@@ -25,6 +25,9 @@ class APIKey(models.Model):
         ('spamhaus', 'SpamHaus'),
         ('cleantalk', 'CleanTalk'),
         ('phishstats', 'PhishStats'),
+        ('cloudmersive', 'Cloudmersive'),
+        ('metadefender', 'MetaDefender'),
+        ('ipinfo', 'IPInfo'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -12,6 +12,7 @@ Django>=4.2
 django-environ>=0.10.0
 python-dotenv>=1.0.0
 
+
 # Encryption and security
 cryptography>=40.0.2
 python-jose>=3.3.0

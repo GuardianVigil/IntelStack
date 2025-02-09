@@ -12,6 +12,9 @@ from functools import wraps
 import asyncio
 import ipaddress
 import logging
+import json
+import requests
+from .models import APIKey
 from .services.ip_scan.ip_analysis import IPAnalysisService
 
 logger = logging.getLogger(__name__)
@@ -222,8 +225,42 @@ def test_api_key(request):
                 return JsonResponse({'success': True, 'message': 'API key is valid'})
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid API key'})
-        
-        # Add more platform-specific API key tests here
+
+        elif platform == 'cloudmersive':
+            headers = {'Apikey': key}
+            response = requests.get(
+                'https://api.cloudmersive.com/virus/scan/website',
+                headers=headers,
+                params={'url': 'https://www.google.com'}
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+
+        elif platform == 'metadefender':
+            headers = {'apikey': key}
+            response = requests.get(
+                'https://api.metadefender.com/v4/status',
+                headers=headers
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+
+        elif platform == 'ipinfo':
+            response = requests.get(
+                f'https://ipinfo.io/8.8.8.8?token={key}'
+            )
+            if response.status_code == 200:
+                return JsonResponse({'success': True, 'message': 'API key is valid'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid API key'})
+
+        elif platform == 'threatminer':
+            # ThreatMiner doesn't require an API key
+            return JsonResponse({'success': True, 'message': 'No API key required for ThreatMiner'})
         
         # Default response for platforms without specific test
         return JsonResponse({'success': True, 'message': 'API key saved (validation not implemented)'})

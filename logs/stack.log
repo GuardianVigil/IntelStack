@@ -2263,3 +2263,37 @@ Traceback (most recent call last):
 NameError: name 'authenticate' is not defined
 INFO 2025-02-09 15:18:57,892 autoreload 10070 132074580000896 /home/Agile/code/stack/main/views.py changed, reloading.
 INFO 2025-02-09 15:18:58,302 autoreload 10423 129730078875776 Watching for file changes with StatReloader
+ERROR 2025-02-09 16:14:42,041 log 10423 129729887733440 Internal Server Error: /settings/api-configuration/test/
+Traceback (most recent call last):
+  File "/home/Agile/code/stack/main/views.py", line 162, in test_api_key
+    api_key = APIKey.objects.get(user=request.user, platform=platform, is_active=True)
+              ^^^^^^
+NameError: name 'APIKey' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/contrib/auth/decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/stack/main/views.py", line 231, in test_api_key
+    except APIKey.DoesNotExist:
+           ^^^^^^
+NameError: name 'APIKey' is not defined
+INFO 2025-02-09 16:17:03,610 autoreload 23338 136050424582272 Watching for file changes with StatReloader
+INFO 2025-02-09 16:23:14,149 autoreload 23338 136050424582272 /home/Agile/code/stack/main/models.py changed, reloading.
+INFO 2025-02-09 16:23:14,516 autoreload 25203 123301969670272 Watching for file changes with StatReloader
+INFO 2025-02-09 16:23:33,086 autoreload 25203 123301969670272 /home/Agile/code/stack/main/views.py changed, reloading.
+INFO 2025-02-09 16:23:33,474 autoreload 25311 134725958238336 Watching for file changes with StatReloader
+INFO 2025-02-09 16:32:21,869 ip_analysis 25311 134725796628160 Cache is available
+ERROR 2025-02-09 16:32:22,036 ip_analysis 25311 134725796628160 GreyNoise API error: 429
+INFO 2025-02-09 16:32:23,265 ip_analysis 25311 134725796628160 Cached result for 185.220.101.70

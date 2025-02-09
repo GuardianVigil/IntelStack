@@ -600,6 +600,123 @@
                 </div>
             </div>
             
+            <!-- Cloudmersive -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Cloudmersive</h5>
+                    <a href="https://account.cloudmersive.com/keys" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                </div>
+                <div class="mb-5">
+                    <form @submit.prevent="saveApiKey('cloudmersive')">
+                        <div class="mb-5">
+                            <label for="cloudmersive_api_key">API Key</label>
+                            <div class="relative">
+                                <input id="cloudmersive_api_key" :type="showPassword.cloudmersive ? 'text' : 'password'" 
+                                       placeholder="Enter your Cloudmersive API key" class="form-input pr-10" x-model="keys.cloudmersive" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.cloudmersive = !showPassword.cloudmersive">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.cloudmersive}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.cloudmersive}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" @click="testApiKey('cloudmersive')" class="btn btn-info">Test</button>
+                            <template x-if="keys.cloudmersive">
+                                <button type="button" @click="deleteApiKey('cloudmersive')" class="btn btn-danger">Delete</button>
+                            </template>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- MetaDefender -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">MetaDefender</h5>
+                    <a href="https://metadefender.opswat.com/account" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                </div>
+                <div class="mb-5">
+                    <form @submit.prevent="saveApiKey('metadefender')">
+                        <div class="mb-5">
+                            <label for="metadefender_api_key">API Key</label>
+                            <div class="relative">
+                                <input id="metadefender_api_key" :type="showPassword.metadefender ? 'text' : 'password'" 
+                                       placeholder="Enter your MetaDefender API key" class="form-input pr-10" x-model="keys.metadefender" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.metadefender = !showPassword.metadefender">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.metadefender}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.metadefender}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" @click="testApiKey('metadefender')" class="btn btn-info">Test</button>
+                            <template x-if="keys.metadefender">
+                                <button type="button" @click="deleteApiKey('metadefender')" class="btn btn-danger">Delete</button>
+                            </template>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- IPInfo -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">IPInfo</h5>
+                    <a href="https://ipinfo.io/account/token" target="_blank" class="text-primary hover:underline">Get API Key</a>
+                </div>
+                <div class="mb-5">
+                    <form @submit.prevent="saveApiKey('ipinfo')">
+                        <div class="mb-5">
+                            <label for="ipinfo_api_key">API Token</label>
+                            <div class="relative">
+                                <input id="ipinfo_api_key" :type="showPassword.ipinfo ? 'text' : 'password'" 
+                                       placeholder="Enter your IPInfo API token" class="form-input pr-10" x-model="keys.ipinfo" />
+                                <button type="button" class="absolute right-2 top-2.5" @click="showPassword.ipinfo = !showPassword.ipinfo">
+                                    <svg class="w-5 h-5" :class="{'hidden': !showPassword.ipinfo}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    <svg class="w-5 h-5" :class="{'hidden': showPassword.ipinfo}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="button" @click="testApiKey('ipinfo')" class="btn btn-info">Test</button>
+                            <template x-if="keys.ipinfo">
+                                <button type="button" @click="deleteApiKey('ipinfo')" class="btn btn-danger">Delete</button>
+                            </template>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- ThreatMiner -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">ThreatMiner</h5>
+                    <span class="text-success">No API Key Required</span>
+                </div>
+                <div class="mb-5">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded">
+                        <p class="text-gray-600 dark:text-gray-400">ThreatMiner does not require an API key. You can use this service directly without any authentication.</p>
+                    </div>
+                </div>
+            </div>
 
             
 
@@ -629,7 +746,11 @@ document.addEventListener("alpine:init", () => {
             crowdsec: false,
             hybrid_analysis_key: false,
             hybrid_analysis_secret: false,
-            pulsedive: false
+            pulsedive: false,
+            cloudmersive: false,
+            metadefender: false,
+            ipinfo: false,
+            threatminer: false
         },
         keys: {
             virustotal: '',
@@ -652,7 +773,11 @@ document.addEventListener("alpine:init", () => {
                 api_key: '',
                 api_secret: ''
             },
-            pulsedive: ''
+            pulsedive: '',
+            cloudmersive: '',
+            metadefender: '',
+            ipinfo: '',
+            threatminer: ''
         },
         notification: {
             show: false,
