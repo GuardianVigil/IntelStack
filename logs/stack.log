@@ -2204,3 +2204,62 @@ INFO 2025-02-08 03:03:58,813 ip_analysis 100478 137276331919040 Cache is availab
 INFO 2025-02-08 03:03:58,815 ip_analysis 100478 137276331919040 Found cached result for 218.66.32.221
 INFO 2025-02-08 03:05:39,908 ip_analysis 100478 137276331919040 Cache is available
 INFO 2025-02-08 03:05:39,909 ip_analysis 100478 137276331919040 Found cached result for 218.66.32.221
+INFO 2025-02-09 15:06:15,344 autoreload 6184 136542664020096 Watching for file changes with StatReloader
+INFO 2025-02-09 15:12:24,927 autoreload 8054 133334062248064 Watching for file changes with StatReloader
+INFO 2025-02-09 15:13:03,175 autoreload 8329 127649231863936 Watching for file changes with StatReloader
+INFO 2025-02-09 15:13:39,982 autoreload 8586 123148650492032 Watching for file changes with StatReloader
+INFO 2025-02-09 15:15:09,909 autoreload 9126 137930664984704 Watching for file changes with StatReloader
+ERROR 2025-02-09 15:15:32,235 log 9126 137930502833856 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/stack/main/views.py", line 576, in login_view
+    user = authenticate(request, username=login_identifier, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+INFO 2025-02-09 15:16:39,453 autoreload 9593 133246551380096 Watching for file changes with StatReloader
+ERROR 2025-02-09 15:16:55,245 log 9593 133246484481728 Internal Server Error: /register/
+Traceback (most recent call last):
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/stack/main/views.py", line 611, in register_view
+    if User.objects.filter(username=username).exists():
+       ^^^^
+NameError: name 'User' is not defined
+INFO 2025-02-09 15:17:08,595 autoreload 9807 138986260873344 Watching for file changes with StatReloader
+ERROR 2025-02-09 15:17:18,755 log 9807 138986194470592 Internal Server Error: /register/
+Traceback (most recent call last):
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/stack/main/views.py", line 611, in register_view
+    if User.objects.filter(username=username).exists():
+       ^^^^
+NameError: name 'User' is not defined
+INFO 2025-02-09 15:17:57,406 autoreload 9807 138986260873344 /home/Agile/code/stack/main/views.py changed, reloading.
+INFO 2025-02-09 15:17:57,801 autoreload 10070 132074580000896 Watching for file changes with StatReloader
+ERROR 2025-02-09 15:18:30,847 log 10070 132074512058048 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Agile/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/stack/main/views.py", line 578, in login_view
+    user = authenticate(request, username=login_identifier, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+INFO 2025-02-09 15:18:57,892 autoreload 10070 132074580000896 /home/Agile/code/stack/main/views.py changed, reloading.
+INFO 2025-02-09 15:18:58,302 autoreload 10423 129730078875776 Watching for file changes with StatReloader

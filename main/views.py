@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, logout
 from functools import wraps
 import asyncio
 import ipaddress
