@@ -11,6 +11,7 @@ from .utils.data_aggregation import (
     aggregate_activity,
     aggregate_malware_info
 )
+from .utils.data_formatter import DataFormatter
 
 @login_required
 @require_http_methods(["GET"])
@@ -33,44 +34,20 @@ async def analyze_ip(request, ip_address):
     """
     try:
         async with IPAnalysisService(request.user) as service:
-            results = await service.analyze_ip(ip_address)
+            raw_results = await service.analyze_ip(ip_address)
             
-            # Get summary data
-            summary = results.get('summary', {})
-            threat_score = summary.get('threat_score', 0)
-            confidence = summary.get('confidence', 0)
-            platform_scores = summary.get('platform_scores', {})
-            risk_level = summary.get('risk_level', {}).get('level', 'Unknown')
+            # Format the platform data
+            formatted_data = DataFormatter.process_platform_data(raw_results.get('platform_data', {}))
             
-            # Get network and WHOIS data
-            network = results.get('network', {})
-            whois = results.get('whois', {})
-            
-            # Get platform data
-            platform_data = results.get('platform_data', {})
-            
-            # Aggregate data
-            threats = aggregate_threats(platform_data)
-            activities = aggregate_activity(platform_data)
-            malware = aggregate_malware_info(platform_data)
-            
-            context = {
-                'ip_address': ip_address,
-                'threat_score': threat_score,
-                'confidence': confidence,
-                'risk_level': risk_level,
-                'platform_scores': platform_scores,
-                'network': network,
-                'whois': whois,
-                'threats': threats,
-                'activities': activities,
-                'malware': malware,
-                'platform_data': platform_data
+            # Prepare the response
+            response_data = {
+                'summary': raw_results.get('summary', {}),
+                'platform_data': formatted_data
             }
             
-            return render(request, 'threat/ip_analysis/detailed_view.html', context)
-            
+            return JsonResponse(response_data)
     except Exception as e:
+        logger.error(f"Error analyzing IP {ip_address}: {str(e)}")
         return JsonResponse({
             'error': str(e)
         }, status=500)

@@ -1,14 +1,11 @@
 // JavaScript for handling IP analysis functionality
 document.getElementById('analyze_button').addEventListener('click', function() {
     const ipAddress = document.getElementById('ip_address').value;
-    // Show loading state
     document.getElementById('loading_indicator').style.display = 'block';
     
-    // Call the backend API to analyze the IP address
     fetch(`/threat/ip-analysis/analyze/${ipAddress}/`)
         .then(response => response.json())
         .then(data => {
-            // Hide loading state
             document.getElementById('loading_indicator').style.display = 'none';
             
             // Update summary information
@@ -60,10 +57,11 @@ function updateWhoisInfo(whoisData) {
         'country': 'Country',
         'organization': 'Organization',
         'asn': 'ASN',
-        'timezone': 'Timezone'
+        'timezone': 'Timezone',
+        'postal': 'Postal Code'
     };
     
-    Object.entries(fields).forEach(([key, label]) => {
+    for (const [key, label] of Object.entries(fields)) {
         if (whoisData[key]) {
             table.innerHTML += `
                 <tr>
@@ -72,7 +70,7 @@ function updateWhoisInfo(whoisData) {
                 </tr>
             `;
         }
-    });
+    }
     
     table.innerHTML += '</tbody>';
     whoisContainer.appendChild(table);
@@ -83,6 +81,7 @@ function updatePlatformResults(platformData) {
     platformContainer.innerHTML = '';
     
     Object.entries(platformData).forEach(([platform, data]) => {
+        // Skip if no data or error
         if (!data || data.error) return;
         
         const platformDiv = document.createElement('div');
@@ -91,77 +90,109 @@ function updatePlatformResults(platformData) {
         // Platform header
         platformDiv.innerHTML = `<h3 class="platform-title">${platform.toUpperCase()}</h3>`;
         
-        // Platform content
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'platform-content';
-        
-        // Create content based on platform type
-        if (platform === 'pulsedive') {
-            contentDiv.appendChild(createPulsediveContent(data));
-        } else {
-            contentDiv.appendChild(createGenericPlatformContent(data));
+        // Handle both array and object formats
+        if (Array.isArray(data)) {
+            // Handle array of sections
+            data.forEach(section => {
+                platformDiv.appendChild(createSectionElement(section));
+            });
+        } else if (typeof data === 'object') {
+            // Handle single object format (like IPInfo)
+            const table = document.createElement('table');
+            table.className = 'table table-striped';
+            table.innerHTML = '<tbody>';
+            
+            Object.entries(data).forEach(([key, value]) => {
+                if (value && typeof value !== 'object') {
+                    table.innerHTML += `
+                        <tr>
+                            <td>${key.replace('_', ' ').toUpperCase()}</td>
+                            <td>${value}</td>
+                        </tr>
+                    `;
+                }
+            });
+            
+            table.innerHTML += '</tbody>';
+            platformDiv.appendChild(table);
         }
         
-        platformDiv.appendChild(contentDiv);
         platformContainer.appendChild(platformDiv);
     });
 }
 
-function createPulsediveContent(data) {
-    const container = document.createElement('div');
+function createSectionElement(section) {
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'mb-3';
     
-    // Risk Level
-    container.innerHTML = `<div class="risk-level">Risk Level: ${data.risk_level}</div>`;
-    
-    // Threats
-    if (data.threats && data.threats.length > 0) {
-        const threatsTable = document.createElement('table');
-        threatsTable.className = 'table table-striped mt-3';
-        threatsTable.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Threat</th>
-                    <th>Category</th>
-                    <th>Risk</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${data.threats.map(threat => `
-                    <tr>
-                        <td>${threat.name}</td>
-                        <td>${threat.category}</td>
-                        <td>${threat.risk}</td>
-                    </tr>
-                `).join('')}
-            </tbody>
-        `;
-        container.appendChild(threatsTable);
+    // Add section name if available
+    if (section.name) {
+        sectionDiv.innerHTML = `<h4 class="section-title">${section.name}</h4>`;
     }
     
-    return container;
+    // Handle different section types
+    if (section.type === 'table') {
+        sectionDiv.appendChild(createTableElement(section));
+    } else if (section.type === 'datatable') {
+        sectionDiv.appendChild(createDataTableElement(section));
+    } else if (section.type === 'single') {
+        sectionDiv.innerHTML += `<p>${section.value}</p>`;
+    }
+    
+    return sectionDiv;
 }
 
-function createGenericPlatformContent(data) {
-    const container = document.createElement('div');
+function createTableElement(section) {
     const table = document.createElement('table');
     table.className = 'table table-striped';
     
-    let tableHTML = '<tbody>';
-    Object.entries(data).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && !Array.isArray(value) && typeof value !== 'object') {
-            tableHTML += `
-                <tr>
-                    <td>${key}</td>
-                    <td>${value}</td>
-                </tr>
-            `;
-        }
+    let tableHTML = '<thead><tr>';
+    section.headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
     });
+    tableHTML += '</tr></thead><tbody>';
+    
+    section.rows.forEach(row => {
+        tableHTML += '<tr>';
+        row.forEach(cell => {
+            tableHTML += `<td>${cell}</td>`;
+        });
+        tableHTML += '</tr>';
+    });
+    
+    tableHTML += '</tbody>';
+    table.innerHTML = tableHTML;
+    return table;
+}
+
+function createDataTableElement(section) {
+    const table = document.createElement('table');
+    table.className = 'table table-striped datatable';
+    
+    let tableHTML = '<thead><tr>';
+    section.headers.forEach(header => {
+        tableHTML += `<th>${header}</th>`;
+    });
+    tableHTML += '</tr></thead><tbody>';
+    
+    section.rows.forEach(row => {
+        tableHTML += '<tr>';
+        row.forEach(cell => {
+            tableHTML += `<td>${cell}</td>`;
+        });
+        tableHTML += '</tr>';
+    });
+    
     tableHTML += '</tbody>';
     table.innerHTML = tableHTML;
     
-    container.appendChild(table);
-    return container;
+    // Initialize as DataTable
+    $(table).DataTable({
+        pageLength: 10,
+        responsive: true
+    });
+    
+    return table;
 }
 
 function updateErrorDisplay(errors) {
