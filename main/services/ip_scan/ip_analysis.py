@@ -22,6 +22,7 @@ from .platforms.pulsedive import PulsediveScanner
 from .platforms.alienvault import AlienVaultScanner
 
 from .utils.platform_scoring import calculate_platform_scores
+from .utils.data_formatter import DataFormatter
 
 logger = logging.getLogger(__name__)
 
@@ -130,6 +131,9 @@ class IPAnalysisService:
                 score = calculate_platform_scores(data, platform)
                 if score is not None:
                     platform_scores[platform] = score
+
+        # Format the platform data for display
+        platform_data = DataFormatter.process_platform_data(platform_data)
 
         # Prepare final results
         final_results = {

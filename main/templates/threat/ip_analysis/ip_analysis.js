@@ -1,5 +1,4 @@
 // JavaScript for handling IP analysis functionality
-
 document.getElementById('analyze_button').addEventListener('click', function() {
     const ipAddress = document.getElementById('ip_address').value;
     // Show loading state
@@ -12,112 +11,176 @@ document.getElementById('analyze_button').addEventListener('click', function() {
             // Hide loading state
             document.getElementById('loading_indicator').style.display = 'none';
             
-            // Update the UI with the results from summary
-            document.getElementById('threat_score').innerText = data.summary.threat_score || 'N/A';
-            document.getElementById('confidence_score').innerText = data.summary.confidence || 'N/A';
-            document.getElementById('risk_level').innerText = data.summary.risk_level || 'Unknown';
+            // Update summary information
+            updateSummaryInfo(data.summary);
             
-            // Update WHOIS info if available
-            const whoisInfo = data.platform_data.ipinfo || {};
-            document.getElementById('whois_info').innerHTML = '';
-            const whoisTable = document.createElement('table');
-            whoisTable.className = 'whois-info-table';
-            whoisTable.innerHTML = `<thead><tr><th>Key</th><th>Value</th></tr></thead><tbody>`;
+            // Update WHOIS information
+            updateWhoisInfo(data.platform_data.ipinfo);
             
-            // Map of user-friendly names for WHOIS fields
-            const fieldNames = {
-                'ip': 'IP Address',
-                'hostname': 'Hostname',
-                'city': 'City',
-                'region': 'Region',
-                'country': 'Country',
-                'org': 'Organization',
-                'asn': 'ASN',
-                'timezone': 'Timezone'
-            };
+            // Update platform results
+            updatePlatformResults(data.platform_data);
             
-            Object.entries(whoisInfo).forEach(([key, value]) => {
-                if (fieldNames[key] && value) {
-                    whoisTable.innerHTML += `<tr><td>${fieldNames[key]}</td><td>${value}</td></tr>`;
-                }
-            });
-            
-            whoisTable.innerHTML += `</tbody>`;
-            document.getElementById('whois_info').appendChild(whoisTable);
-            
-            // Update platform scores
-            updatePlatformScores(data.platform_data);
-            
-            // Update threat score gauge
-            updateThreatGauge(data.summary.threat_score);
-            
-            // Update risk level badge
-            updateRiskBadge(data.summary.risk_level);
-            
-            // Initialize map if coordinates are available from IPInfo
-            const ipinfoData = data.platform_data.ipinfo || {};
-            if (ipinfoData.latitude && ipinfoData.longitude) {
-                initMap(ipinfoData.latitude, ipinfoData.longitude);
+            // Initialize map if coordinates are available
+            const ipinfo = data.platform_data.ipinfo || {};
+            if (ipinfo.latitude && ipinfo.longitude) {
+                initMap(ipinfo.latitude, ipinfo.longitude);
             }
-            
-            // Initialize platform score charts
-            initPlatformCharts(data.summary.platform_scores);
-            
-            // Initialize all charts
-            initializeCharts(data);
             
             // Show any errors
-            const errorsDiv = document.getElementById('scan_errors');
-            if (data.summary.errors && Object.keys(data.summary.errors).length > 0) {
-                errorsDiv.innerHTML = '<h4>Scan Errors:</h4>';
-                Object.entries(data.summary.errors).forEach(([platform, error]) => {
-                    errorsDiv.innerHTML += `<p><strong>${platform}:</strong> ${error}</p>`;
-                });
-                errorsDiv.style.display = 'block';
-            } else {
-                errorsDiv.style.display = 'none';
-            }
+            updateErrorDisplay(data.summary.errors);
         })
         .catch(error => {
-            // Hide loading state and show error
-            document.getElementById('loading_indicator').style.display = 'none';
-            document.getElementById('scan_errors').innerHTML = `<p>Error analyzing IP: ${error.message}</p>`;
-            document.getElementById('scan_errors').style.display = 'block';
+            handleError(error);
         });
 });
 
-function updatePlatformScores(platformData) {
-    const platformScoresDiv = document.getElementById('platform_scores');
-    platformScoresDiv.innerHTML = '';
+function updateSummaryInfo(summary) {
+    document.getElementById('threat_score').innerText = summary.threat_score || 'N/A';
+    document.getElementById('confidence_score').innerText = summary.confidence || 'N/A';
+    document.getElementById('risk_level').innerText = summary.risk_level || 'Unknown';
+    updateRiskBadge(summary.risk_level);
+    updateThreatGauge(summary.threat_score);
+}
+
+function updateWhoisInfo(whoisData) {
+    if (!whoisData) return;
     
-    Object.entries(platformData).forEach(([platform, data]) => {
-        if (data && typeof data === 'object' && !data.error) {
-            const scoreDiv = document.createElement('div');
-            scoreDiv.className = 'platform-score-container';
-            
-            // Create header with platform name
-            const header = document.createElement('h4');
-            header.innerText = platform.charAt(0).toUpperCase() + platform.slice(1);
-            scoreDiv.appendChild(header);
-            
-            // Create table for platform data
-            const table = document.createElement('table');
-            table.className = 'table table-striped table-responsive';
-            table.innerHTML = `<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>`;
-            
-            // Add relevant fields based on platform
-            Object.entries(data).forEach(([key, value]) => {
-                // Skip null/undefined values and complex objects
-                if (value != null && typeof value !== 'object') {
-                    table.innerHTML += `<tr><td>${key}</td><td>${value}</td></tr>`;
-                }
-            });
-            
-            table.innerHTML += `</tbody>`;
-            scoreDiv.appendChild(table);
-            platformScoresDiv.appendChild(scoreDiv);
+    const whoisContainer = document.getElementById('whois_info');
+    whoisContainer.innerHTML = '';
+    
+    const table = document.createElement('table');
+    table.className = 'whois-info-table';
+    table.innerHTML = '<thead><tr><th>Field</th><th>Value</th></tr></thead><tbody>';
+    
+    const fields = {
+        'ip': 'IP Address',
+        'hostname': 'Hostname',
+        'city': 'City',
+        'region': 'Region',
+        'country': 'Country',
+        'organization': 'Organization',
+        'asn': 'ASN',
+        'timezone': 'Timezone'
+    };
+    
+    Object.entries(fields).forEach(([key, label]) => {
+        if (whoisData[key]) {
+            table.innerHTML += `
+                <tr>
+                    <td>${label}</td>
+                    <td>${whoisData[key]}</td>
+                </tr>
+            `;
         }
     });
+    
+    table.innerHTML += '</tbody>';
+    whoisContainer.appendChild(table);
+}
+
+function updatePlatformResults(platformData) {
+    const platformContainer = document.getElementById('platform_scores');
+    platformContainer.innerHTML = '';
+    
+    Object.entries(platformData).forEach(([platform, data]) => {
+        if (!data || data.error) return;
+        
+        const platformDiv = document.createElement('div');
+        platformDiv.className = 'platform-section mb-4';
+        
+        // Platform header
+        platformDiv.innerHTML = `<h3 class="platform-title">${platform.toUpperCase()}</h3>`;
+        
+        // Platform content
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'platform-content';
+        
+        // Create content based on platform type
+        if (platform === 'pulsedive') {
+            contentDiv.appendChild(createPulsediveContent(data));
+        } else {
+            contentDiv.appendChild(createGenericPlatformContent(data));
+        }
+        
+        platformDiv.appendChild(contentDiv);
+        platformContainer.appendChild(platformDiv);
+    });
+}
+
+function createPulsediveContent(data) {
+    const container = document.createElement('div');
+    
+    // Risk Level
+    container.innerHTML = `<div class="risk-level">Risk Level: ${data.risk_level}</div>`;
+    
+    // Threats
+    if (data.threats && data.threats.length > 0) {
+        const threatsTable = document.createElement('table');
+        threatsTable.className = 'table table-striped mt-3';
+        threatsTable.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Threat</th>
+                    <th>Category</th>
+                    <th>Risk</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${data.threats.map(threat => `
+                    <tr>
+                        <td>${threat.name}</td>
+                        <td>${threat.category}</td>
+                        <td>${threat.risk}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+        container.appendChild(threatsTable);
+    }
+    
+    return container;
+}
+
+function createGenericPlatformContent(data) {
+    const container = document.createElement('div');
+    const table = document.createElement('table');
+    table.className = 'table table-striped';
+    
+    let tableHTML = '<tbody>';
+    Object.entries(data).forEach(([key, value]) => {
+        if (value !== null && value !== undefined && !Array.isArray(value) && typeof value !== 'object') {
+            tableHTML += `
+                <tr>
+                    <td>${key}</td>
+                    <td>${value}</td>
+                </tr>
+            `;
+        }
+    });
+    tableHTML += '</tbody>';
+    table.innerHTML = tableHTML;
+    
+    container.appendChild(table);
+    return container;
+}
+
+function updateErrorDisplay(errors) {
+    const errorsDiv = document.getElementById('scan_errors');
+    if (errors && Object.keys(errors).length > 0) {
+        errorsDiv.innerHTML = '<h4>Scan Errors:</h4>';
+        Object.entries(errors).forEach(([platform, error]) => {
+            errorsDiv.innerHTML += `<p><strong>${platform}:</strong> ${error}</p>`;
+        });
+        errorsDiv.style.display = 'block';
+    } else {
+        errorsDiv.style.display = 'none';
+    }
+}
+
+function handleError(error) {
+    document.getElementById('loading_indicator').style.display = 'none';
+    document.getElementById('scan_errors').innerHTML = `<p>Error analyzing IP: ${error.message}</p>`;
+    document.getElementById('scan_errors').style.display = 'block';
 }
 
 // IP Analysis JavaScript
@@ -482,54 +545,91 @@ function exportEnhancedData() {
 // Update all visualizations when new data is received
 document.addEventListener('alpine:init', () => {
     Alpine.data('ipAnalysis', () => ({
-        // ...existing Alpine.js data...
-        
-        async analyzeIP() {
-            if (!this.ipAddress) {
-                this.error = 'Please enter an IP address';
-                return;
+        ipAddress: '',
+        results: null,
+        loading: false,
+        error: null,
+
+        initTable(table) {
+            if (!table.pageSize) {
+                table.pageSize = 10;
+                table.currentPage = 1;
+                table.searchTerm = '';
+                table.sortBy = null;
+                table.sortDesc = false;
+
+                Object.defineProperty(table, 'filteredRows', {
+                    get() {
+                        let filtered = [...this.rows];
+                        
+                        // Apply search
+                        if (this.searchTerm) {
+                            const searchLower = this.searchTerm.toLowerCase();
+                            filtered = filtered.filter(row => 
+                                row.some(cell => 
+                                    String(cell).toLowerCase().includes(searchLower)
+                                )
+                            );
+                        }
+                        
+                        // Apply sort
+                        if (this.sortBy !== null) {
+                            filtered.sort((a, b) => {
+                                const aVal = String(a[this.sortBy]).toLowerCase();
+                                const bVal = String(b[this.sortBy]).toLowerCase();
+                                return this.sortDesc 
+                                    ? bVal.localeCompare(aVal)
+                                    : aVal.localeCompare(bVal);
+                            });
+                        }
+                        
+                        return filtered;
+                    }
+                });
+
+                Object.defineProperty(table, 'paginatedRows', {
+                    get() {
+                        const start = (this.currentPage - 1) * this.pageSize;
+                        return this.filteredRows.slice(start, start + this.pageSize);
+                    }
+                });
             }
+            return table;
+        },
+
+        async analyzeIP() {
+            if (!this.ipAddress) return;
             
-            this.isLoading = true;
+            this.loading = true;
             this.error = null;
             
             try {
-                const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                    }
-                });
-                
+                const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`);
                 if (!response.ok) {
-                    throw new Error(`Failed to analyze IP: ${response.status} ${response.statusText}`);
+                    throw new Error('Failed to analyze IP');
                 }
                 
-                this.results = await response.json();
+                const data = await response.json();
+                this.results = data;
                 
-                // Store data in window for export functionality
-                window.networkInfo = this.results.enhanced_analysis.network_info;
-                window.sslCertificates = this.results.enhanced_analysis.ssl_certificates;
-                window.dnsHistory = this.results.enhanced_analysis.dns_history;
-                window.infrastructure = this.results.enhanced_analysis.infrastructure;
-                window.activeServices = this.results.enhanced_analysis.active_services;
-                window.mitreMapping = this.results.enhanced_analysis.mitre_mapping;
-                window.relatedIocs = this.results.enhanced_analysis.related_iocs;
-                window.historicalReputation = this.results.enhanced_analysis.historical_reputation;
-                
-                // Initialize all charts and visualizations
-                initializeCharts(this.results);
-                
-                // Update other UI components
-                updateActiveServices(this.results.enhanced_analysis.active_services);
-                this.activeTab = 'overview';
+                // Initialize datatables for any table with type 'datatable'
+                if (this.results && this.results.platform_data) {
+                    Object.values(this.results.platform_data).forEach(platform => {
+                        if (Array.isArray(platform)) {
+                            platform.forEach(table => {
+                                if (table.type === 'datatable') {
+                                    this.initTable(table);
+                                }
+                            });
+                        }
+                    });
+                }
                 
             } catch (err) {
-                console.error('Error analyzing IP:', err);
                 this.error = err.message;
+                console.error('Error analyzing IP:', err);
             } finally {
-                this.isLoading = false;
+                this.loading = false;
             }
         }
     }));
