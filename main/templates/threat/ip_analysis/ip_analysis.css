@@ -65,3 +65,248 @@
 .table-responsive {
     overflow-x: auto;
 }
+
+/* IP Analysis Styles */
+
+.threat-score-gauge {
+    position: relative;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.platform-score-card {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.platform-score-card h6 {
+    margin-bottom: 10px;
+}
+
+.platform-score-card .progress {
+    height: 10px;
+    margin-bottom: 5px;
+}
+
+.badge-high {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.badge-medium {
+    background-color: #ffc107;
+    color: black;
+}
+
+.badge-low {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Risk Level Badges */
+.badge {
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    border-radius: 0.25rem;
+}
+
+.badge-critical {
+    background-color: #dc3545;
+    color: white;
+}
+
+.badge-safe {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+/* Activity Accordion */
+.accordion .card-header {
+    padding: 0;
+}
+
+.accordion .btn-link {
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    color: #333;
+    padding: 0.75rem 1.25rem;
+}
+
+.accordion .btn-link:hover {
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+
+/* Platform Data */
+pre code {
+    display: block;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Tables */
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.075);
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .threat-score-gauge {
+        margin-bottom: 2rem;
+    }
+    
+    .platform-score-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* IP Analysis specific styles */
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    margin-bottom: 1rem;
+    min-height: 200px;
+}
+
+/* Timeline styles */
+.timeline-container {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-point {
+    position: relative;
+    padding: 10px;
+    border-left: 2px solid #e0e6ed;
+}
+
+.timeline-point::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #3b82f6;
+}
+
+/* Service cards */
+.service-card {
+    border: 1px solid #e0e6ed;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* MITRE ATT&CK heatmap */
+.mitre-heatmap {
+    position: relative;
+    overflow-x: auto;
+}
+
+.mitre-cell {
+    transition: all 0.2s ease;
+}
+
+.mitre-cell:hover {
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+/* DNS history chart */
+.dns-history-chart {
+    min-height: 300px;
+}
+
+/* Reputation timeline */
+.reputation-timeline {
+    height: 200px;
+}
+
+/* Loading states */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive table styles */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .service-card {
+        border-color: #1b2e4b;
+        background-color: #1e293b;
+    }
+    
+    .timeline-point {
+        border-left-color: #1b2e4b;
+    }
+    
+    .loading-overlay {
+        background: rgba(30, 41, 59, 0.8);
+    }
+}

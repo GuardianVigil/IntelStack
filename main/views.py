@@ -1,3 +1,4 @@
+"""Views for the stack project"""
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -14,10 +15,20 @@ import ipaddress
 import logging
 import json
 import requests
+from asgiref.sync import async_to_sync
 from .models import APIKey
 from .services.ip_scan.ip_analysis import IPAnalysisService
 
 logger = logging.getLogger(__name__)
+
+def async_view(view):
+    """
+    Decorator to make a view function async-aware.
+    """
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        return async_to_sync(view)(*args, **kwargs)
+    return wrapped
 
 # Create your views here.
 @login_required
@@ -135,19 +146,26 @@ def load_api_keys(request):
         api_keys = {}
         user_api_keys = APIKey.objects.filter(user=request.user, is_active=True)
         
+        def mask_key(key):
+            if not key:
+                return ""
+            if len(key) <= 8:
+                return "*" * len(key)
+            return key[:4] + "*" * (len(key) - 8) + key[-4:]
+        
         for key in user_api_keys:
             if key.platform == 'hybrid_analysis':
                 api_keys[key.platform] = {
-                    'api_key': key.get_decrypted_api_key(),
-                    'api_secret': key.get_decrypted_api_secret()
+                    'api_key': mask_key(key.get_decrypted_api_key()),
+                    'api_secret': mask_key(key.get_decrypted_api_secret())
                 }
             elif key.platform == 'ibm_xforce':
                 api_keys[key.platform] = {
-                    'api_key': key.get_decrypted_api_key(),
-                    'api_password': key.get_decrypted_api_secret()
+                    'api_key': mask_key(key.get_decrypted_api_key()),
+                    'api_password': mask_key(key.get_decrypted_api_secret())
                 }
             else:
-                api_keys[key.platform] = key.get_decrypted_api_key()
+                api_keys[key.platform] = mask_key(key.get_decrypted_api_key())
         
         return JsonResponse({'success': True, 'api_keys': api_keys})
     except Exception as e:
@@ -804,17 +822,10 @@ def export_findings(request):
     }
     return render(request, 'reports/export_findings.html', context)
 
-def async_view(f):
-    """Decorator to make a view function async-aware."""
-    @wraps(f)
-    def wrapped(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-    return wrapped
-
 @login_required
 def ip_analysis(request):
     """Render the IP analysis page."""
-    return render(request, 'threat/ip_analysis.html')
+    return render(request, 'threat/ip_analysis/ip_analysis.html')  # Updated template path
 
 @login_required
 @async_view
@@ -828,12 +839,12 @@ async def analyze_ip_api(request, ip_address):
             return JsonResponse({'error': 'Invalid IP address format'}, status=400)
 
         # Get threat intelligence data
-        async with IPAnalysisService(request.user) as service:
+        async with IPAnalysisService() as service:  # Removed request.user parameter
             results = await service.analyze_ip(ip_address)
             
             if not results:
                 return JsonResponse({
-                    'error': 'No results from any threat intelligence platform'
+                    'error': 'No results from any threat intelligence platforms'
                 }, status=404)
 
             return JsonResponse(results)

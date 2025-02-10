@@ -8,16 +8,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Enhanced API key management in Django admin interface
+  - Added preview functionality for API keys
+  - Improved encryption handling
+  - Added metadata display (created/updated timestamps)
 - Enhanced API key management
   - Added show/hide functionality for all API key fields
   - Improved handling of dual-key platforms (IBM X-Force, Hybrid Analysis)
   - Added comprehensive API key configuration documentation
 
 ### Fixed
+- Fixed CrowdSec integration
+  - Updated to use CTI API key format
+  - Improved scoring algorithm using official scores
+  - Enhanced error handling and logging
+  - Added support for behaviors and attack details
+- Fixed IPInfo integration
+  - Made privacy module optional
+  - Improved error handling for subscription limitations
+  - Enhanced response logging
 - Fixed IBM X-Force API key display issue in frontend
 - Fixed Hybrid Analysis API key and secret handling
 
 ### Added
+- Comprehensive threat intelligence documentation
+  - Added platform-specific API details
+  - Documented scoring algorithms
+  - Added implementation details and best practices
 - Modern UI for threat intelligence pages
   - Hunting page with advanced search capabilities
   - Threat Feed page with real-time updates

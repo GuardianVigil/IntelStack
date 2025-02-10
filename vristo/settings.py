@@ -12,19 +12,29 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from cryptography.fernet import Fernet
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Generate encryption key if not exists
+key_path = os.path.join(BASE_DIR, 'encryption.key')
+if os.path.exists(key_path):
+    with open(key_path, 'rb') as key_file:
+        ENCRYPTION_KEY = key_file.read()
+else:
+    ENCRYPTION_KEY = Fernet.generate_key()
+    with open(key_path, 'wb') as key_file:
+        key_file.write(ENCRYPTION_KEY)
+
+if isinstance(ENCRYPTION_KEY, str):
+    ENCRYPTION_KEY = ENCRYPTION_KEY.encode()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ahbmas_92k4q5r1#tsbxjo(e@8rkf__ejt@7#1opo*pqtx5k$('
-
-# Encryption key for API keys
-ENCRYPTION_KEY = b'prwS3Fnc6Tax0yNYDM4p1ABvEGhS4rKwK70ycdlOhbc='  # Change this in production and store securely
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -139,16 +149,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# API Keys Configuration
-API_KEYS = {
-    'virustotal': 'YOUR_VIRUSTOTAL_API_KEY',
-    'alienvault': 'YOUR_ALIENVAULT_API_KEY',
-    'ibmxforce': 'YOUR_IBMXFORCE_API_KEY',
-    'abuseipdb': 'YOUR_ABUSEIPDB_API_KEY',
-    'greynoise': 'YOUR_GREYNOISE_API_KEY',
-    'crowdsec': 'YOUR_CROWDSEC_API_KEY'
-}
 
 # Import Redis settings
 from main.settings.redis_settings import *

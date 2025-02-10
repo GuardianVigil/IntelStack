@@ -32,11 +32,12 @@ class APIKey(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     platform = models.CharField(max_length=50, choices=PLATFORM_CHOICES)
-    api_key = models.TextField()
-    api_secret = models.TextField(null=True, blank=True)  # For platforms that require two keys
+    encrypted_api_key = models.BinaryField(null=True)  # Changed from api_key to encrypted_api_key
+    encrypted_api_secret = models.BinaryField(null=True, blank=True)  # Changed from api_secret to encrypted_api_secret
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    key = models.TextField(null=True)  # Added for backward compatibility
 
     class Meta:
         unique_together = ['user', 'platform']
@@ -46,27 +47,44 @@ class APIKey(models.Model):
     def __str__(self):
         return f'{self.get_platform_display()} API Key for {self.user.username}'
 
+    @property
+    def api_key(self) -> str:
+        """Get the decrypted API key."""
+        if self.key:  # For backward compatibility
+            return self.key
+        if not self.encrypted_api_key:
+            return None
+        return decrypt_api_key(self.encrypted_api_key)
+
+    @api_key.setter
+    def api_key(self, value: str):
+        """Set and encrypt the API key."""
+        if not value:
+            self.encrypted_api_key = None
+            return
+        self.encrypted_api_key = encrypt_api_key(value)
+
+    @property
+    def api_secret(self) -> str:
+        """Get the decrypted API secret."""
+        if not self.encrypted_api_secret:
+            return None
+        return decrypt_api_key(self.encrypted_api_secret)
+
+    @api_secret.setter
+    def api_secret(self, value: str):
+        """Set and encrypt the API secret."""
+        if not value:
+            self.encrypted_api_secret = None
+            return
+        self.encrypted_api_secret = encrypt_api_key(value)
+
     def save(self, *args, **kwargs):
-        if not hasattr(settings, 'ENCRYPTION_KEY'):
-            raise ValidationError('ENCRYPTION_KEY must be set in settings')
-
-        # Encrypt API keys before saving
-        f = Fernet(settings.ENCRYPTION_KEY)
-        self.api_key = f.encrypt(self.api_key.encode()).decode()
-        if self.api_secret:
-            self.api_secret = f.encrypt(self.api_secret.encode()).decode()
-
+        # For backward compatibility, copy key to encrypted_api_key if exists
+        if self.key and not self.encrypted_api_key:
+            self.api_key = self.key
+            self.key = None
         super().save(*args, **kwargs)
-
-    def get_decrypted_api_key(self):
-        f = Fernet(settings.ENCRYPTION_KEY)
-        return f.decrypt(self.api_key.encode()).decode()
-
-    def get_decrypted_api_secret(self):
-        if self.api_secret:
-            f = Fernet(settings.ENCRYPTION_KEY)
-            return f.decrypt(self.api_secret.encode()).decode()
-        return None
 
 class ProviderSettings(models.Model):
     """Model to store provider API keys and settings."""
