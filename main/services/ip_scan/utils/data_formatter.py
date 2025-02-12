@@ -636,7 +636,79 @@ class DataFormatter:
                 formatted_data[platform] = DataFormatter._format_securitytrails_data(data)
 
             elif platform == 'metadefender':
-                formatted_data[platform] = DataFormatter._format_metadefender_data(data)
+                if isinstance(data, dict):
+                    formatted_data[platform] = []
+
+                    # Basic Information
+                    if 'lookup_results' in data:
+                        lookup = data['lookup_results']
+                        formatted_data[platform].append({
+                            'name': 'Scan Summary',
+                            'type': 'table',
+                            'headers': ['Property', 'Value'],
+                            'rows': [
+                                ['IP Address', data.get('address', 'N/A')],
+                                ['Start Time', DataFormatter.format_timestamp(lookup.get('start_time', ''))],
+                                ['Detected By', str(lookup.get('detected_by', 'N/A'))]
+                            ]
+                        })
+
+                    # Geo Information
+                    if 'geo_info' in data:
+                        geo = data['geo_info']
+                        geo_rows = []
+                        
+                        if 'country' in geo and isinstance(geo['country'], dict):
+                            geo_rows.append(['Country', geo['country'].get('name', 'N/A')])
+                        
+                        if 'city' in geo and isinstance(geo['city'], dict):
+                            geo_rows.append(['City', geo['city'].get('name', 'N/A')])
+                        
+                        if 'subdivisions' in geo and isinstance(geo['subdivisions'], list) and geo['subdivisions']:
+                            geo_rows.append(['Region', geo['subdivisions'][0].get('name', 'N/A')])
+                        
+                        if 'location' in geo and isinstance(geo['location'], dict):
+                            geo_rows.append(['Latitude', str(geo['location'].get('latitude', 'N/A'))])
+                            geo_rows.append(['Longitude', str(geo['location'].get('longitude', 'N/A'))])
+
+                        if geo_rows:
+                            formatted_data[platform].append({
+                                'name': 'Geographic Information',
+                                'type': 'table',
+                                'headers': ['Property', 'Value'],
+                                'rows': geo_rows
+                            })
+
+                    # Sources Information
+                    if 'lookup_results' in data and 'sources' in data['lookup_results']:
+                        sources = data['lookup_results']['sources']
+                        source_rows = []
+                        
+                        status_map = {
+                            0: 'Unknown',
+                            1: 'Clean',
+                            2: 'Suspicious',
+                            3: 'Malicious',
+                            4: 'Error',
+                            5: 'Not Found'
+                        }
+                        
+                        for source in sources:
+                            status = status_map.get(source.get('status', 0), 'Unknown')
+                            source_rows.append([
+                                source.get('provider', 'N/A'),
+                                status,
+                                source.get('assessment', 'N/A') or 'No Assessment',
+                                DataFormatter.format_timestamp(source.get('update_time', ''))
+                            ])
+
+                        if source_rows:
+                            formatted_data[platform].append({
+                                'name': 'Source Analysis',
+                                'type': 'datatable',
+                                'headers': ['Provider', 'Status', 'Assessment', 'Last Updated'],
+                                'rows': source_rows
+                            })
 
             elif platform == 'alienvault':
                 formatted_data[platform] = DataFormatter._format_alienvault_data(data)
