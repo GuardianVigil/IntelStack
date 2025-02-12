@@ -481,18 +481,121 @@ class DataFormatter:
 
             elif platform == 'crowdsec':
                 if isinstance(data, dict):
-                    formatted_data[platform].append({
-                        'name': 'CrowdSec Information',
+                    # Basic Information
+                    basic_info = {
+                        'Reputation': data.get('reputation', 'N/A'),
+                        'Confidence': data.get('confidence', 'N/A'),
+                        'Background Noise': data.get('background_noise', 'N/A'),
+                        'AS Name': data.get('as_name', 'N/A'),
+                        'AS Number': data.get('as_num', 'N/A'),
+                        'Reverse DNS': data.get('reverse_dns', 'N/A'),
+                    }
+                    formatted_data[platform] = [{
+                        'name': 'Basic Information',
                         'type': 'table',
                         'headers': ['Property', 'Value'],
-                        'rows': [
-                            ['Score', data.get('score', 'N/A')],
-                            ['Frequency', data.get('frequency', 'N/A')],
-                            ['Background Noise', str(data.get('background_noise', 'N/A'))],
-                            ['Last Activity', DataFormatter.format_timestamp(data.get('last_activity', ''))],
-                            ['Classifications', ', '.join(data.get('classifications', []))]
-                        ]
-                    })
+                        'rows': [[k, v] for k, v in basic_info.items()]
+                    }]
+
+                    # Location Information
+                    if 'location' in data and isinstance(data['location'], dict):
+                        location = data['location']
+                        formatted_data[platform].append({
+                            'name': 'Location Information',
+                            'type': 'table',
+                            'headers': ['Property', 'Value'],
+                            'rows': [
+                                ['Country', location.get('country', 'N/A')],
+                                ['City', location.get('city', 'N/A')],
+                                ['Latitude', str(location.get('latitude', 'N/A'))],
+                                ['Longitude', str(location.get('longitude', 'N/A'))]
+                            ]
+                        })
+
+                    # History Information
+                    if 'history' in data and isinstance(data['history'], dict):
+                        history = data['history']
+                        formatted_data[platform].append({
+                            'name': 'History',
+                            'type': 'table',
+                            'headers': ['Property', 'Value'],
+                            'rows': [
+                                ['First Seen', DataFormatter.format_timestamp(history.get('first_seen', ''))],
+                                ['Last Seen', DataFormatter.format_timestamp(history.get('last_seen', ''))],
+                                ['Days Active', f"{history.get('days_age', 'N/A')} days"]
+                            ]
+                        })
+
+                    # Behaviors
+                    if 'behaviors' in data and isinstance(data['behaviors'], list):
+                        behaviors = data['behaviors']
+                        formatted_data[platform].append({
+                            'name': 'Observed Behaviors',
+                            'type': 'datatable',
+                            'headers': ['Name', 'Label', 'Description'],
+                            'rows': [[b.get('name', 'N/A'), b.get('label', 'N/A'), b.get('description', 'N/A')] for b in behaviors]
+                        })
+
+                    # Attack Details
+                    if 'attack_details' in data and isinstance(data['attack_details'], list):
+                        attack_details = data['attack_details']
+                        formatted_data[platform].append({
+                            'name': 'Attack Details',
+                            'type': 'datatable',
+                            'headers': ['Name', 'Label', 'Description'],
+                            'rows': [[a.get('name', 'N/A'), a.get('label', 'N/A'), a.get('description', 'N/A')] for a in attack_details]
+                        })
+
+                    # CVEs
+                    if 'cves' in data and isinstance(data['cves'], list) and data['cves']:
+                        formatted_data[platform].append({
+                            'name': 'CVEs',
+                            'type': 'table',
+                            'headers': ['CVE'],
+                            'rows': [[cve] for cve in data['cves']]
+                        })
+
+                    # Target Countries
+                    if 'target_countries' in data and isinstance(data['target_countries'], dict):
+                        target_countries = data['target_countries']
+                        formatted_data[platform].append({
+                            'name': 'Target Countries',
+                            'type': 'table',
+                            'headers': ['Country', 'Attack Count'],
+                            'rows': [[country, str(count)] for country, count in target_countries.items()]
+                        })
+
+                    # MITRE Techniques
+                    if 'mitre_techniques' in data and isinstance(data['mitre_techniques'], list):
+                        mitre = data['mitre_techniques']
+                        formatted_data[platform].append({
+                            'name': 'MITRE ATT&CK Techniques',
+                            'type': 'datatable',
+                            'headers': ['ID', 'Name', 'Description'],
+                            'rows': [[m.get('name', 'N/A'), m.get('label', 'N/A'), m.get('description', 'N/A')] for m in mitre]
+                        })
+
+                    # Scores
+                    if 'scores' in data and isinstance(data['scores'], dict):
+                        scores = data['scores']
+                        score_rows = []
+                        for period, metrics in scores.items():
+                            if isinstance(metrics, dict):
+                                score_rows.extend([
+                                    [f"{period.replace('_', ' ').title()} - Aggressiveness", metrics.get('aggressiveness', 'N/A')],
+                                    [f"{period.replace('_', ' ').title()} - Threat", metrics.get('threat', 'N/A')],
+                                    [f"{period.replace('_', ' ').title()} - Trust", metrics.get('trust', 'N/A')],
+                                    [f"{period.replace('_', ' ').title()} - Anomaly", metrics.get('anomaly', 'N/A')],
+                                    [f"{period.replace('_', ' ').title()} - Total", metrics.get('total', 'N/A')]
+                                ])
+                        
+                        if score_rows:
+                            formatted_data[platform].append({
+                                'name': 'Threat Scores',
+                                'type': 'table',
+                                'headers': ['Metric', 'Score'],
+                                'rows': score_rows
+                            })
 
             elif platform == 'ipinfo':
                 if isinstance(data, dict):

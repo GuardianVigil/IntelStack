@@ -166,7 +166,7 @@
         </div>
 
         <!-- Platform Results -->
-        <div class="panel mb-5" x-data="{ activeTab: activeTab }">
+        <div class="panel mb-5">
             <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
                 <h5 class="font-bold text-lg flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@
             <!-- Platform Content -->
             <div class="p-5">
                 <template x-for="(platformData, platform) in results.platform_data" :key="platform">
-                    <div x-show="activeTab === platform">
+                    <div x-show.transition.in.opacity.duration.200ms="activeTab === platform">
                         <template x-if="!platformData || platformData.length === 0">
                             <div class="text-gray-500 dark:text-gray-400 text-center py-4">
                                 No data available for this platform
@@ -300,12 +300,14 @@ document.addEventListener('alpine:init', () => {
         isLoading: false,
         error: null,
         results: null,
-        activeTab: null,
+        activeTab: 'virustotal',  
 
         init() {
             this.$watch('results', (value) => {
                 if (value && value.platform_data) {
-                    this.activeTab = Object.keys(value.platform_data)[0] || null;
+                    this.activeTab = value.platform_data.hasOwnProperty('virustotal') 
+                        ? 'virustotal' 
+                        : Object.keys(value.platform_data)[0] || null;
                 }
             });
         },
@@ -319,6 +321,7 @@ document.addEventListener('alpine:init', () => {
             this.isLoading = true;
             this.error = null;
             this.results = null;
+            this.activeTab = 'virustotal';  
 
             try {
                 const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`);
@@ -329,9 +332,10 @@ document.addEventListener('alpine:init', () => {
                 const data = await response.json();
                 this.results = data;
                 
-                // Initialize the first platform tab
                 if (data.platform_data) {
-                    this.activeTab = Object.keys(data.platform_data)[0] || null;
+                    this.activeTab = data.platform_data.hasOwnProperty('virustotal')
+                        ? 'virustotal'
+                        : Object.keys(data.platform_data)[0] || null;
                 }
             } catch (err) {
                 this.error = err.message || 'An error occurred while analyzing the IP';
