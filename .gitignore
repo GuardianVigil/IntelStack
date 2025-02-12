@@ -29,4 +29,4 @@ db.sqlite3
 media/
 static/
 local_settings.py
-stack.log
+logs/

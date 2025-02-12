@@ -754,18 +754,89 @@ class DataFormatter:
         return sections
 
     @staticmethod
-    def _format_alienvault_data(data: Dict) -> List[Dict]:
-        sections = []
+    def _format_alienvault_data(data):
+        formatted_data = []
+        
+        # General Information
         if 'general' in data:
             general = data['general']
-            sections.append({
+            basic_info = [
+                ['IP Address', general.get('indicator', 'N/A')],
+                ['Type', general.get('type_title', 'N/A')],
+                ['Reputation Score', str(general.get('reputation', 'N/A'))],
+                ['ASN', general.get('asn', 'N/A')],
+                ['WHOIS', general.get('whois', 'N/A')]
+            ]
+            formatted_data.append({
                 'name': 'General Information',
                 'type': 'table',
                 'headers': ['Property', 'Value'],
-                'rows': [
-                    ['Reputation', str(general.get('reputation', 'N/A'))],
-                    ['Type', str(general.get('type_title', 'N/A'))],
-                    ['WHOIS', str(general.get('whois', 'N/A'))]
-                ]
+                'rows': basic_info
             })
-        return sections
+
+            # Pulse Information
+            if 'pulse_info' in general:
+                pulse = general['pulse_info']
+                pulse_rows = [
+                    ['Total Pulses', str(pulse.get('count', 0))],
+                    ['References', str(len(pulse.get('references', [])))],
+                ]
+                
+                # Add malware families
+                malware_families = set()
+                for p in pulse.get('pulses', []):
+                    for mf in p.get('malware_families', []):
+                        if isinstance(mf, dict):
+                            malware_families.add(mf.get('display_name', ''))
+                if malware_families:
+                    pulse_rows.append(['Malware Families', ', '.join(sorted(malware_families))])
+
+                # Add attack techniques
+                attack_ids = set()
+                for p in pulse.get('pulses', []):
+                    for attack in p.get('attack_ids', []):
+                        if isinstance(attack, dict):
+                            attack_ids.add(attack.get('display_name', ''))
+                if attack_ids:
+                    pulse_rows.append(['Attack Techniques', ', '.join(sorted(attack_ids))])
+
+                # Add targeted countries and industries
+                targeted_countries = set()
+                industries = set()
+                for p in pulse.get('pulses', []):
+                    targeted_countries.update(p.get('targeted_countries', []))
+                    industries.update(p.get('industries', []))
+                
+                if targeted_countries:
+                    pulse_rows.append(['Targeted Countries', ', '.join(sorted(targeted_countries))])
+                if industries:
+                    pulse_rows.append(['Industries', ', '.join(sorted(industries))])
+
+                formatted_data.append({
+                    'name': 'Threat Intelligence',
+                    'type': 'table',
+                    'headers': ['Property', 'Value'],
+                    'rows': pulse_rows
+                })
+
+        # Geographic Information
+        if 'geo' in data:
+            geo = data['geo']
+            geo_rows = [
+                ['Country', f"{geo.get('country_name', 'N/A')} ({geo.get('country_code', 'N/A')})"],
+                ['City', geo.get('city', 'N/A')],
+                ['Region', geo.get('region', 'N/A')],
+                ['Subdivision', geo.get('subdivision', 'N/A')],
+                ['Postal Code', geo.get('postal_code', 'N/A')],
+                ['Latitude', str(geo.get('latitude', 'N/A'))],
+                ['Longitude', str(geo.get('longitude', 'N/A'))],
+                ['Accuracy Radius', f"{str(geo.get('accuracy_radius', 'N/A'))} meters"]
+            ]
+            formatted_data.append({
+                'name': 'Geographic Information',
+                'type': 'table',
+                'headers': ['Property', 'Value'],
+                'rows': geo_rows
+            })
+
+        return formatted_data
