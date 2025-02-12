@@ -154,7 +154,7 @@
                                     <template x-for="row in table.rows" :key="row[0]">
                                         <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
                                             <td class="py-3 px-4 font-semibold capitalize" x-text="row[0]"></td>
-                                            <td class="py-3 px-4" x-text="row[1] || 'N/A'"></td>
+                                            <td class="py-3 px-4" x-text="formatValue(row[1])"></td>
                                         </tr>
                                     </template>
                                 </tbody>
@@ -166,7 +166,7 @@
         </div>
 
         <!-- Platform Results -->
-        <div class="panel mb-5" x-data="{ activeTab: Object.keys(results.platform_data)[0] }">
+        <div class="panel mb-5" x-data="{ activeTab: activeTab }">
             <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
                 <h5 class="font-bold text-lg flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,17 +207,17 @@
                         
                         <template x-if="platformData && platformData.length > 0">
                             <div class="space-y-6">
-                                <template x-for="(table, index) in platformData" :key="index">
+                                <template x-for="(section, index) in platformData" :key="index">
                                     <div class="bg-white dark:bg-[#1b2e4b] rounded-lg shadow-sm p-4">
-                                        <h3 class="text-lg font-semibold mb-3 text-primary" x-text="table.name"></h3>
+                                        <h3 class="text-lg font-semibold mb-3 text-primary" x-text="section.name"></h3>
                                         
-                                        <!-- Table Type Display -->
-                                        <template x-if="table.type === 'table'">
+                                        <!-- Table Display -->
+                                        <template x-if="section.type === 'table'">
                                             <div class="overflow-x-auto">
                                                 <table class="table-auto w-full">
                                                     <thead>
                                                         <tr>
-                                                            <template x-for="header in table.headers" :key="header">
+                                                            <template x-for="header in section.headers" :key="header">
                                                                 <th class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] p-4 text-left">
                                                                     <span x-text="header"></span>
                                                                 </th>
@@ -225,10 +225,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <template x-for="(row, rowIndex) in table.rows" :key="rowIndex">
+                                                        <template x-for="(row, rowIndex) in section.rows" :key="rowIndex">
                                                             <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
                                                                 <template x-for="(cell, cellIndex) in row" :key="cellIndex">
-                                                                    <td class="py-3 px-4" x-text="cell || 'N/A'"></td>
+                                                                    <td class="py-3 px-4" x-text="formatValue(cell)"></td>
                                                                 </template>
                                                             </tr>
                                                         </template>
@@ -237,13 +237,13 @@
                                             </div>
                                         </template>
                                         
-                                        <!-- DataTable Type Display -->
-                                        <template x-if="table.type === 'datatable'">
+                                        <!-- DataTable Display -->
+                                        <template x-if="section.type === 'datatable'">
                                             <div class="overflow-x-auto">
                                                 <table class="table-auto w-full">
                                                     <thead>
                                                         <tr>
-                                                            <template x-for="header in table.headers" :key="header">
+                                                            <template x-for="header in section.headers" :key="header">
                                                                 <th class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] p-4 text-left">
                                                                     <span x-text="header"></span>
                                                                 </th>
@@ -251,10 +251,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <template x-for="(row, rowIndex) in table.rows" :key="rowIndex">
+                                                        <template x-for="(row, rowIndex) in section.rows" :key="rowIndex">
                                                             <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
                                                                 <template x-for="(cell, cellIndex) in row" :key="cellIndex">
-                                                                    <td class="py-3 px-4" x-text="cell || 'N/A'"></td>
+                                                                    <td class="py-3 px-4" x-text="formatValue(cell)"></td>
                                                                 </template>
                                                             </tr>
                                                         </template>
@@ -300,6 +300,15 @@ document.addEventListener('alpine:init', () => {
         isLoading: false,
         error: null,
         results: null,
+        activeTab: null,
+
+        init() {
+            this.$watch('results', (value) => {
+                if (value && value.platform_data) {
+                    this.activeTab = Object.keys(value.platform_data)[0] || null;
+                }
+            });
+        },
 
         async analyzeIP() {
             if (!this.ipAddress) {
@@ -313,18 +322,29 @@ document.addEventListener('alpine:init', () => {
 
             try {
                 const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`);
-                const data = await response.json();
-                
                 if (!response.ok) {
-                    throw new Error(data.error || 'Failed to analyze IP');
+                    throw new Error('Failed to analyze IP');
                 }
 
+                const data = await response.json();
                 this.results = data;
+                
+                // Initialize the first platform tab
+                if (data.platform_data) {
+                    this.activeTab = Object.keys(data.platform_data)[0] || null;
+                }
             } catch (err) {
-                this.error = err.message;
+                this.error = err.message || 'An error occurred while analyzing the IP';
             } finally {
                 this.isLoading = false;
             }
+        },
+
+        formatValue(value) {
+            if (value === null || value === undefined) return 'N/A';
+            if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+            if (Array.isArray(value)) return value.join(', ');
+            return value;
         }
     }));
 });
