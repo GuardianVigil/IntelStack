@@ -855,7 +855,7 @@ async def analyze_ip_api(request, ip_address):
 
 @login_required
 def hash_analysis(request):
-    return render(request, 'threat/hash_analysis.html')
+    return render(request, 'threat/hash_analysis/hash_analysis.html')
 
 @login_required
 def domain_reputation(request):

@@ -1,0 +1,313 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pt-5" x-data="hashAnalysis">
+    {% csrf_token %}
+    <!-- Header -->
+    <div class="mb-6">
+        <h5 class="text-2xl font-bold dark:text-white-light flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            Hash Threat Intelligence Analysis
+        </h5>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">Analyze file hashes across multiple threat intelligence platforms</p>
+    </div>
+
+    <!-- Error Message -->
+    <div x-show="error" x-cloak class="alert alert-danger mb-4 flex items-center">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <span x-text="error"></span>
+    </div>
+
+    <!-- Search Panel -->
+    <div class="panel mb-5 border-l-4 border-primary">
+        <div class="flex items-center p-5">
+            <div class="relative flex-1">
+                <input 
+                    type="text" 
+                    class="form-input ltr:pl-10 rtl:pr-10 py-3 focus:ring-2 focus:ring-primary/20"
+                    x-model="hashValue"
+                    @keyup.enter="analyzeHash"
+                    placeholder="Enter MD5, SHA-1, or SHA-256 hash"
+                >
+                <span class="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 dark:text-white-dark">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </span>
+            </div>
+            <button type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4 px-6 py-3" @click="analyzeHash" :disabled="loading">
+                <template x-if="!loading">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 ltr:mr-2 rtl:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Analyze
+                    </div>
+                </template>
+                <template x-if="loading">
+                    <div class="flex items-center">
+                        <svg class="animate-spin ltr:mr-2 rtl:ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Analyzing...
+                    </div>
+                </template>
+            </button>
+        </div>
+    </div>
+
+    <div x-show="results" x-cloak>
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+            <!-- Detection Stats -->
+            <div class="panel bg-gradient-to-r from-primary/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-primary/20">
+                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-primary font-semibold">Detection Rate</p>
+                            <h5 class="text-2xl font-bold" x-text="results.detectionRate + '%'"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- First Seen -->
+            <div class="panel bg-gradient-to-r from-warning/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-warning/20">
+                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-warning font-semibold">First Seen</p>
+                            <h5 class="text-2xl font-bold" x-text="results.firstSeen"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verdict -->
+            <div class="panel bg-gradient-to-r from-success/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-success/20">
+                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-success font-semibold">Verdict</p>
+                            <h5 class="text-2xl font-bold">
+                                <span class="badge" :class="{
+                                    'badge-outline-success': results.verdict === 'Clean',
+                                    'badge-outline-warning': results.verdict === 'Suspicious',
+                                    'badge-outline-danger': results.verdict === 'Malicious'
+                                }" x-text="results.verdict"></span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Information -->
+        <div class="panel mb-5">
+            <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                <h5 class="font-bold text-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    File Information
+                </h5>
+            </div>
+            <div class="p-5">
+                <div class="table-responsive">
+                    <table class="table-striped">
+                        <tbody>
+                            <tr>
+                                <td class="font-semibold">Hash:</td>
+                                <td x-text="results.hash"></td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">File Type:</td>
+                                <td x-text="results.fileType"></td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Size:</td>
+                                <td x-text="results.fileSize"></td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">Magic:</td>
+                                <td x-text="results.magic"></td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold">MIME Type:</td>
+                                <td x-text="results.mimeType"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detection Results -->
+        <div class="panel mb-5">
+            <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                <h5 class="font-bold text-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
+                    Detection Results
+                </h5>
+            </div>
+            <div class="p-5">
+                <div class="table-responsive">
+                    <table class="table-hover">
+                        <thead>
+                            <tr>
+                                <th>Engine</th>
+                                <th>Result</th>
+                                <th>Category</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="detection in results.detections" :key="detection.engine">
+                                <tr>
+                                    <td x-text="detection.engine"></td>
+                                    <td>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': detection.result === 'Clean',
+                                            'badge-outline-warning': detection.result === 'Suspicious',
+                                            'badge-outline-danger': detection.result === 'Malicious'
+                                        }" x-text="detection.result"></span>
+                                    </td>
+                                    <td x-text="detection.category"></td>
+                                    <td x-text="detection.updated"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Errors -->
+        <div x-show="results.errors && results.errors.length > 0" x-cloak class="panel mb-5 border-l-4 border-danger">
+            <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                <h5 class="font-bold text-lg flex items-center text-danger">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Scan Errors
+                </h5>
+            </div>
+            <div class="p-5">
+                <ul class="list-disc list-inside space-y-2">
+                    <template x-for="error in results.errors" :key="error.platform">
+                        <li>
+                            <span class="font-semibold" x-text="formatPlatformName(error.platform)"></span>:
+                            <span x-text="error.error"></span>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('hashAnalysis', () => ({
+        hashValue: '',
+        loading: false,
+        error: null,
+        results: null,
+
+        async analyzeHash() {
+            if (!this.hashValue) {
+                this.error = 'Please enter a hash value';
+                return;
+            }
+
+            this.loading = true;
+            this.error = null;
+            this.results = null;
+
+            try {
+                const response = await fetch('/api/analyze-hash/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({
+                        hash: this.hashValue
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // Sample data - replace with actual API response
+                this.results = {
+                    hash: this.hashValue,
+                    fileType: "Windows Executable",
+                    fileSize: "2.4 MB",
+                    magic: "PE32+ executable for MS Windows (GUI) Mono/.Net assembly",
+                    mimeType: "application/x-dosexec",
+                    firstSeen: "2025-02-01",
+                    verdict: "Suspicious",
+                    detectionRate: 65,
+                    detections: [
+                        {
+                            engine: "Engine 1",
+                            result: "Clean",
+                            category: "None",
+                            updated: "2025-02-02"
+                        },
+                        {
+                            engine: "Engine 2",
+                            result: "Suspicious",
+                            category: "Potentially Unwanted",
+                            updated: "2025-02-02"
+                        },
+                        {
+                            engine: "Engine 3",
+                            result: "Malicious",
+                            category: "Trojan",
+                            updated: "2025-02-02"
+                        }
+                    ],
+                    errors: []
+                };
+            } catch (err) {
+                this.error = 'Failed to analyze hash: ' + err.message;
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        formatPlatformName(platform) {
+            return platform.split('_').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+    }));
+});
+</script>
+{% endblock %}
