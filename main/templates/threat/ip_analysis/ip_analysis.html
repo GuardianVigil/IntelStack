@@ -146,20 +146,22 @@
                 </h5>
             </div>
             <div class="p-5">
-                <template x-if="results.platform_data?.ipinfo">
-                    <div class="overflow-x-auto">
-                        <table class="table-auto w-full">
-                            <tbody>
-                                <template x-for="(value, key) in results.platform_data.ipinfo" :key="key">
-                                    <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
-                                        <td class="py-3 px-4 font-semibold capitalize" x-text="key.replace(/_/g, ' ')"></td>
-                                        <td class="py-3 px-4" x-text="value || 'N/A'"></td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </template>
+                <table class="table-auto w-full">
+                    <tbody>
+                        <template x-for="table in results.platform_data.ipinfo" :key="table.name">
+                            <template x-if="table.type === 'table'">
+                                <tbody>
+                                    <template x-for="row in table.rows" :key="row[0]">
+                                        <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
+                                            <td class="py-3 px-4 font-semibold capitalize" x-text="row[0]"></td>
+                                            <td class="py-3 px-4" x-text="row[1] || 'N/A'"></td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -203,33 +205,30 @@
                             </div>
                         </template>
                         
-                        <template x-if="platformData && Array.isArray(platformData)">
+                        <template x-if="platformData && platformData.length > 0">
                             <div class="space-y-6">
                                 <template x-for="(table, index) in platformData" :key="index">
                                     <div class="bg-white dark:bg-[#1b2e4b] rounded-lg shadow-sm p-4">
                                         <h3 class="text-lg font-semibold mb-3 text-primary" x-text="table.name"></h3>
                                         
-                                        <!-- Single Value -->
-                                        <template x-if="table.type === 'single'">
-                                            <div class="text-gray-700 dark:text-gray-300" x-text="table.value"></div>
-                                        </template>
-
-                                        <!-- Table -->
+                                        <!-- Table Type Display -->
                                         <template x-if="table.type === 'table'">
                                             <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                                <table class="table-auto w-full">
+                                                    <thead>
                                                         <tr>
-                                                            <template x-for="(header, headerIndex) in table.headers" :key="headerIndex">
-                                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" x-text="header"></th>
+                                                            <template x-for="header in table.headers" :key="header">
+                                                                <th class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] p-4 text-left">
+                                                                    <span x-text="header"></span>
+                                                                </th>
                                                             </template>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                                    <tbody>
                                                         <template x-for="(row, rowIndex) in table.rows" :key="rowIndex">
-                                                            <tr>
+                                                            <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
                                                                 <template x-for="(cell, cellIndex) in row" :key="cellIndex">
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300" x-text="cell"></td>
+                                                                    <td class="py-3 px-4" x-text="cell || 'N/A'"></td>
                                                                 </template>
                                                             </tr>
                                                         </template>
@@ -237,23 +236,25 @@
                                                 </table>
                                             </div>
                                         </template>
-
-                                        <!-- DataTable -->
+                                        
+                                        <!-- DataTable Type Display -->
                                         <template x-if="table.type === 'datatable'">
                                             <div class="overflow-x-auto">
-                                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                                <table class="table-auto w-full">
+                                                    <thead>
                                                         <tr>
-                                                            <template x-for="(header, headerIndex) in table.headers" :key="headerIndex">
-                                                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider" x-text="header"></th>
+                                                            <template x-for="header in table.headers" :key="header">
+                                                                <th class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] p-4 text-left">
+                                                                    <span x-text="header"></span>
+                                                                </th>
                                                             </template>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                                    <tbody>
                                                         <template x-for="(row, rowIndex) in table.rows" :key="rowIndex">
-                                                            <tr>
+                                                            <tr class="border-b border-[#e0e6ed] dark:border-[#1b2e4b] hover:bg-[#eee]/50 dark:hover:bg-[#eee]/10">
                                                                 <template x-for="(cell, cellIndex) in row" :key="cellIndex">
-                                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300" x-text="cell"></td>
+                                                                    <td class="py-3 px-4" x-text="cell || 'N/A'"></td>
                                                                 </template>
                                                             </tr>
                                                         </template>

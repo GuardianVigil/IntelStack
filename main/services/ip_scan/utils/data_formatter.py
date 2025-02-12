@@ -367,101 +367,65 @@ class DataFormatter:
         return tables
 
     @staticmethod
-    def process_platform_data(platform_data: Dict[str, Any]) -> Dict[str, Any]:
+    def process_platform_data(platform_data: Dict[str, Any]) -> Dict[str, List[Dict]]:
         """Format platform data for frontend display"""
         formatted_data = {}
         
         for platform, data in platform_data.items():
-            if not data or isinstance(data, str):  # Skip empty or error string responses
+            if not data:
                 continue
 
-            if platform == 'ipinfo':
-                # Format WHOIS/IPInfo data
-                formatted_data[platform] = {
-                    'ip': data.get('ip'),
-                    'hostname': data.get('hostname'),
-                    'city': data.get('city'),
-                    'region': data.get('region'),
-                    'country': data.get('country'),
-                    'postal': data.get('postal'),
-                    'timezone': data.get('timezone'),
-                    'loc': data.get('loc'),
-                    'org': data.get('org')
-                }
-                if 'org' in data:
-                    # Split ASN and organization name if present
-                    org_parts = data['org'].split(' ', 1) if data['org'] else ['', '']
-                    formatted_data[platform]['asn'] = org_parts[0]
-                    formatted_data[platform]['organization'] = org_parts[1] if len(org_parts) > 1 else ''
-                
-                # Handle location data
-                if 'loc' in data and data['loc']:
-                    try:
-                        lat, lon = data['loc'].split(',')
-                        formatted_data[platform]['latitude'] = float(lat)
-                        formatted_data[platform]['longitude'] = float(lon)
-                    except (ValueError, TypeError):
-                        formatted_data[platform]['latitude'] = None
-                        formatted_data[platform]['longitude'] = None
-
-            elif platform == 'virustotal':
-                if 'data' in data and 'attributes' in data['data']:
-                    attrs = data['data']['attributes']
-                    formatted_data[platform] = []
-                    
-                    # Analysis Stats
-                    if 'last_analysis_stats' in attrs:
-                        formatted_data[platform].append({
-                            'name': 'Analysis Statistics',
-                            'type': 'table',
-                            'headers': ['Category', 'Count'],
-                            'rows': [[k.title(), str(v)] for k, v in attrs['last_analysis_stats'].items()]
-                        })
-
-            elif platform == 'pulsedive':
-                if isinstance(data, dict):
-                    formatted_data[platform] = []
-                    
+            formatted_data[platform] = []
+            
+            if platform == 'virustotal':
+                if isinstance(data, dict) and 'data' in data:
+                    vt_data = data['data']
                     # Basic Info
-                    basic_info = {
-                        'Risk Level': data.get('risk', 'N/A'),
-                        'Added': data.get('stamp_added', 'N/A'),
-                        'Updated': data.get('stamp_updated', 'N/A'),
-                        'Last Seen': data.get('stamp_seen', 'N/A')
-                    }
-                    formatted_data[platform].append({
-                        'name': 'Basic Information',
-                        'type': 'table',
-                        'headers': ['Property', 'Value'],
-                        'rows': [[k, v] for k, v in basic_info.items()]
-                    })
-                    
-                    # Threats
-                    if 'threats' in data and data['threats']:
+                    if 'attributes' in vt_data:
+                        attrs = vt_data['attributes']
+                        basic_info = {
+                            'Last Analysis Date': DataFormatter.format_timestamp(attrs.get('last_analysis_date', '')),
+                            'Times Submitted': attrs.get('times_submitted', 'N/A'),
+                            'Total Votes': f"Harmless: {attrs.get('total_votes', {}).get('harmless', 0)}, Malicious: {attrs.get('total_votes', {}).get('malicious', 0)}",
+                            'Regional Internet Registry': attrs.get('regional_internet_registry', 'N/A'),
+                            'Network': attrs.get('network', 'N/A')
+                        }
                         formatted_data[platform].append({
-                            'name': 'Threats',
+                            'name': 'Basic Information',
                             'type': 'table',
-                            'headers': ['Name', 'Category', 'Risk'],
-                            'rows': [[
-                                threat.get('name', 'N/A'),
-                                threat.get('category', 'N/A'),
-                                threat.get('risk', 'N/A')
-                            ] for threat in data['threats']]
+                            'headers': ['Property', 'Value'],
+                            'rows': [[k, v] for k, v in basic_info.items()]
                         })
+                        
+                        # Analysis Results
+                        if 'last_analysis_results' in attrs:
+                            results = []
+                            for engine, result in attrs['last_analysis_results'].items():
+                                results.append([
+                                    engine,
+                                    result.get('category', 'N/A'),
+                                    result.get('result', 'N/A'),
+                                    result.get('method', 'N/A')
+                                ])
+                            formatted_data[platform].append({
+                                'name': 'Analysis Results',
+                                'type': 'datatable',
+                                'headers': ['Engine', 'Category', 'Result', 'Method'],
+                                'rows': results
+                            })
 
             elif platform == 'abuseipdb':
                 if isinstance(data, dict) and 'data' in data:
                     abuse_data = data['data']
-                    formatted_data[platform] = []
-                    
                     # General Info
                     general_info = {
                         'Abuse Confidence': f"{abuse_data.get('abuseConfidenceScore', 0)}%",
                         'Total Reports': abuse_data.get('totalReports', 'N/A'),
-                        'Last Reported': abuse_data.get('lastReportedAt', 'N/A'),
+                        'Last Reported': DataFormatter.format_timestamp(abuse_data.get('lastReportedAt', '')),
                         'ISP': abuse_data.get('isp', 'N/A'),
                         'Usage Type': abuse_data.get('usageType', 'N/A'),
                         'Domain': abuse_data.get('domain', 'N/A'),
+                        'Country': abuse_data.get('countryName', 'N/A'),
                         'Is Tor': 'Yes' if abuse_data.get('isTor', False) else 'No'
                     }
                     formatted_data[platform].append({
@@ -470,9 +434,119 @@ class DataFormatter:
                         'headers': ['Property', 'Value'],
                         'rows': [[k, v] for k, v in general_info.items()]
                     })
+                    
+                    # Reports
+                    if 'reports' in abuse_data:
+                        reports = []
+                        for report in abuse_data['reports']:
+                            reports.append([
+                                DataFormatter.format_timestamp(report.get('reportedAt', '')),
+                                DataFormatter.format_categories(report.get('categories', [])),
+                                report.get('comment', 'N/A'),
+                                report.get('reporterCountryName', 'N/A')
+                            ])
+                        formatted_data[platform].append({
+                            'name': 'Recent Reports',
+                            'type': 'datatable',
+                            'headers': ['Reported At', 'Categories', 'Comment', 'Reporter Country'],
+                            'rows': reports
+                        })
 
-            # Add more platform-specific formatting as needed
-            
+            elif platform == 'greynoise':
+                if isinstance(data, dict):
+                    # Basic Info
+                    basic_info = {
+                        'Classification': data.get('classification', 'N/A'),
+                        'Last Seen': DataFormatter.format_timestamp(data.get('last_seen', '')),
+                        'Intent': data.get('intent', 'N/A'),
+                        'First Seen': DataFormatter.format_timestamp(data.get('first_seen', '')),
+                        'IP': data.get('ip', 'N/A'),
+                        'Organization': data.get('organization', 'N/A')
+                    }
+                    formatted_data[platform].append({
+                        'name': 'GreyNoise Information',
+                        'type': 'table',
+                        'headers': ['Property', 'Value'],
+                        'rows': [[k, v] for k, v in basic_info.items()]
+                    })
+                    
+                    # Tags and Metadata
+                    if 'tags' in data:
+                        formatted_data[platform].append({
+                            'name': 'Tags',
+                            'type': 'table',
+                            'headers': ['Tags'],
+                            'rows': [[', '.join(data['tags'])]]
+                        })
+
+            elif platform == 'crowdsec':
+                if isinstance(data, dict):
+                    formatted_data[platform].append({
+                        'name': 'CrowdSec Information',
+                        'type': 'table',
+                        'headers': ['Property', 'Value'],
+                        'rows': [
+                            ['Score', data.get('score', 'N/A')],
+                            ['Frequency', data.get('frequency', 'N/A')],
+                            ['Background Noise', str(data.get('background_noise', 'N/A'))],
+                            ['Last Activity', DataFormatter.format_timestamp(data.get('last_activity', ''))],
+                            ['Classifications', ', '.join(data.get('classifications', []))]
+                        ]
+                    })
+
+            elif platform == 'ipinfo':
+                if isinstance(data, dict):
+                    # Format WHOIS data into a table
+                    whois_info = []
+                    if data.get('ip'):
+                        whois_info.append(['IP Address', data['ip']])
+                    if data.get('hostname'):
+                        whois_info.append(['Hostname', data['hostname']])
+                    if data.get('city'):
+                        whois_info.append(['City', data['city']])
+                    if data.get('region'):
+                        whois_info.append(['Region', data['region']])
+                    if data.get('country'):
+                        whois_info.append(['Country', data['country']])
+                    if data.get('loc'):
+                        whois_info.append(['Location', data['loc']])
+                    if data.get('org'):
+                        org_parts = data['org'].split(' ', 1)
+                        if len(org_parts) > 1:
+                            whois_info.append(['ASN', org_parts[0]])
+                            whois_info.append(['Organization', org_parts[1]])
+                        else:
+                            whois_info.append(['Organization', data['org']])
+                    if data.get('postal'):
+                        whois_info.append(['Postal Code', data['postal']])
+                    if data.get('timezone'):
+                        whois_info.append(['Timezone', data['timezone']])
+                    
+                    formatted_data[platform] = [{
+                        'name': 'WHOIS Information',
+                        'type': 'table',
+                        'headers': ['Property', 'Value'],
+                        'rows': whois_info
+                    }]
+
+            elif platform == 'securitytrails':
+                formatted_data[platform] = DataFormatter._format_securitytrails_data(data)
+
+            elif platform == 'metadefender':
+                formatted_data[platform] = DataFormatter._format_metadefender_data(data)
+
+            elif platform == 'alienvault':
+                formatted_data[platform] = DataFormatter._format_alienvault_data(data)
+
+            # If platform data couldn't be formatted, display raw data in a simple table
+            if not formatted_data[platform]:
+                formatted_data[platform] = [{
+                    'name': f'{platform.title()} Raw Data',
+                    'type': 'table',
+                    'headers': ['Property', 'Value'],
+                    'rows': [[k, str(v)] for k, v in data.items() if not isinstance(v, (dict, list))]
+                }]
+
         return formatted_data
 
     @staticmethod

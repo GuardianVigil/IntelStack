@@ -384,14 +384,23 @@ class IPAnalysisService:
             # Calculate combined threat score
             threat_score_data = calculate_combined_score(platform_scores)
             threat_score = threat_score_data.get('overall_score', 0)
-
+            
+            # Calculate confidence score and risk level
+            confidence_score = self._calculate_confidence(platform_scores)
+            risk_level = IPAnalysisService._get_risk_level(platform_scores)  # Note: using class name because it's a static method
+            
+            # Format platform data for frontend display
+            formatted_platform_data = DataFormatter.process_platform_data(platform_results)
+            
             # Format the final response
             response = {
                 "ip_address": ip_address,
                 "timestamp": datetime.utcnow().isoformat(),
-                "platform_data": platform_results,
+                "platform_data": formatted_platform_data,
                 "summary": {
                     "threat_score": threat_score,
+                    "confidence": confidence_score,
+                    "risk_level": risk_level,
                     "platform_scores": platform_scores,
                     "total_platforms": len(self.scanners),
                     "successful_platforms": len(platform_results),

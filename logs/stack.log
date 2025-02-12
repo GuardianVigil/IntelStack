@@ -4535,3 +4535,199 @@ INFO 2025-02-10 14:56:44,184 ipinfo 6349 124784279029440 IPInfo basic info respo
 WARNING 2025-02-10 14:56:44,688 base_scanner 6349 124784279029440 crowdsec resource not found: https://cti.api.crowdsec.net/v2/smoke/49.85.127.99
 INFO 2025-02-10 14:56:44,689 crowdsec 6349 124784279029440 CrowdSec raw response: {'error': 'Resource not found', 'details': {'message': 'IP address information not found'}}
 ERROR 2025-02-10 14:57:48,070 base_scanner 6349 124784279029440 alienvault unexpected error: 
+INFO 2025-02-12 21:56:01,977 autoreload 76096 136960476754048 Watching for file changes with StatReloader
+INFO 2025-02-12 21:56:12,397 autoreload 76234 138196780933248 Watching for file changes with StatReloader
+ERROR 2025-02-12 21:56:15,105 log 76234 138196711114432 Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: auth_user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/decorators.py", line 57, in _view_wrapper
+    test_pass = test_func(request.user)
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/decorators.py", line 80, in <lambda>
+    lambda u: u.is_authenticated,
+              ^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/utils/functional.py", line 251, in inner
+    self._setup()
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/utils/functional.py", line 404, in _setup
+    self._wrapped = self._setupfunc()
+                    ^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/middleware.py", line 37, in <lambda>
+    request.user = SimpleLazyObject(lambda: get_user(request))
+                                            ^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/middleware.py", line 17, in get_user
+    request._cached_user = auth.get_user(request)
+                           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/__init__.py", line 216, in get_user
+    user = backend.get_user(user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 157, in get_user
+    user = UserModel._default_manager.get(pk=user_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/query.py", line 645, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/query.py", line 382, in __len__
+    self._fetch_all()
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/Agile/code/Vristo/venv/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: auth_user
+INFO 2025-02-12 21:56:37,124 autoreload 76489 138977573703808 Watching for file changes with StatReloader
+INFO 2025-02-12 21:58:47,643 autoreload 77608 139076386771072 Watching for file changes with StatReloader
+INFO 2025-02-12 22:01:25,767 autoreload 79195 139929066500224 Watching for file changes with StatReloader
+INFO 2025-02-12 22:04:08,500 autoreload 80290 135273424855168 Watching for file changes with StatReloader
+INFO 2025-02-12 22:08:58,146 ip_analysis 80290 135273281226432 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-02-12 22:08:58,147 ip_analysis 80290 135273281226432 Retrieved key for platform abuseipdb: success (preview: c904***)
+INFO 2025-02-12 22:08:58,147 ip_analysis 80290 135273281226432 Retrieved key for platform alienvault: success (preview: 74a4***)
+INFO 2025-02-12 22:08:58,147 ip_analysis 80290 135273281226432 Retrieved key for platform ibm_xforce: success (preview: d291***)
+INFO 2025-02-12 22:08:58,147 ip_analysis 80290 135273281226432 Retrieved key for platform urlscan: success (preview: f91b***)
+INFO 2025-02-12 22:08:58,148 ip_analysis 80290 135273281226432 Retrieved key for platform securitytrails: success (preview: 9eID***)
+INFO 2025-02-12 22:08:58,148 ip_analysis 80290 135273281226432 Retrieved key for platform crowdsec: success (preview: QXRr***)
+INFO 2025-02-12 22:08:58,148 ip_analysis 80290 135273281226432 Retrieved key for platform greynoise: success (preview: byFS***)
+INFO 2025-02-12 22:08:58,148 ip_analysis 80290 135273281226432 Retrieved key for platform hybrid_analysis: success (preview: vfhd***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform pulsedive: success (preview: 5458***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform filescan: success (preview: K5HA***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform malwarebazaar: success (preview: 66ec***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform threatfox: success (preview: 66ec***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform urlhaus: success (preview: 66ec***)
+INFO 2025-02-12 22:08:58,149 ip_analysis 80290 135273281226432 Retrieved key for platform spamhaus: success (preview: M2tY***)
+INFO 2025-02-12 22:08:58,150 ip_analysis 80290 135273281226432 Retrieved key for platform cloudmersive: success (preview: 3193***)
+INFO 2025-02-12 22:08:58,150 ip_analysis 80290 135273281226432 Retrieved key for platform metadefender: success (preview: 9387***)
+INFO 2025-02-12 22:08:58,150 ip_analysis 80290 135273281226432 Retrieved key for platform ipinfo: success (preview: e94d***)
+INFO 2025-02-12 22:08:58,153 crowdsec 80290 135273270740672 CrowdSec request - URL: https://cti.api.crowdsec.net/v2/smoke/98.175.165.229, Key Preview: QXRr***
+INFO 2025-02-12 22:08:58,154 ipinfo 80290 135273270740672 IPInfo request - URL: https://ipinfo.io/98.175.165.229/json?token=<hidden>, Key Preview: e94d***
+INFO 2025-02-12 22:08:58,211 ipinfo 80290 135273270740672 IPInfo basic info response: {'ip': '98.175.165.229', 'hostname': 'wsip-98-175-165-229.dc.dc.cox.net', 'city': 'Fairfax', 'region': 'Virginia', 'country': 'US', 'loc': '38.8462,-77.3064', 'org': 'AS22773 Cox Communications Inc.', 'postal': '22038', 'timezone': 'America/New_York'}
+WARNING 2025-02-12 22:08:58,359 base_scanner 80290 135273270740672 greynoise rate limit hit
+WARNING 2025-02-12 22:08:58,359 greynoise 80290 135273270740672 GreyNoise rate limit hit, disabling further requests
+WARNING 2025-02-12 22:08:58,584 base_scanner 80290 135273270740672 securitytrails rate limit hit
+INFO 2025-02-12 22:08:58,788 crowdsec 80290 135273270740672 CrowdSec raw response: {'ip': '98.175.165.229', 'reputation': 'malicious', 'ip_range': '98.175.128.0/18', 'background_noise': 'high', 'confidence': 'high', 'background_noise_score': 10, 'ip_range_score': 5, 'as_name': 'ASN-CXA-ALL-CCI-22773-RDC', 'as_num': 22773, 'ip_range_24': '98.175.165.0/24', 'ip_range_24_reputation': 'suspicious', 'ip_range_24_score': 3, 'location': {'country': 'US', 'city': 'Chantilly', 'latitude': 38.8879, 'longitude': -77.4448}, 'reverse_dns': 'wsip-98-175-165-229.dc.dc.cox.net', 'behaviors': [{'name': 'ssh:bruteforce', 'label': 'SSH Bruteforce', 'description': 'IP has been reported for performing brute force on ssh services.', 'references': []}, {'name': 'vcs:bruteforce', 'label': 'VCS Bruteforce', 'description': 'IP has been reported trying to bruteforce VCS services', 'references': []}], 'history': {'first_seen': '2024-12-24T02:30:00+00:00', 'last_seen': '2025-02-12T00:30:00+00:00', 'full_age': 51, 'days_age': 50}, 'classifications': {'false_positives': [], 'classifications': [{'name': 'community-blocklist', 'label': 'CrowdSec Community Blocklist', 'description': 'IP belongs to the CrowdSec Community Blocklist'}]}, 'attack_details': [{'name': 'crowdsecurity/ssh-slow-bf', 'label': 'SSH Slow Bruteforce', 'description': 'Detect slow ssh bruteforce', 'references': []}, {'name': 'crowdsecurity/ssh-bf', 'label': 'SSH Bruteforce', 'description': 'Detect ssh bruteforce', 'references': []}, {'name': 'crowdsecurity/ssh-slow-bf_user-enum', 'label': 'SSH Slow User Enumeration', 'description': 'Detect slow ssh user enum bruteforce', 'references': []}, {'name': 'crowdsecurity/configserver-lfd-bf', 'label': 'SSH Bruteforce', 'description': 'Detects SSH bruteforce attempts blocked by ConfigServer.', 'references': []}, {'name': 'LePresidente/gitea-bf', 'label': 'Gitea Bruteforce', 'description': 'Detect gitea bruteforce', 'references': []}, {'name': 'crowdsecurity/ssh-bf_user-enum', 'label': 'SSH User Enumeration', 'description': 'Detect ssh user enum bruteforce', 'references': []}], 'target_countries': {'DE': 35, 'US': 22, 'FR': 13, 'RU': 11, 'NL': 4, 'AU': 3, 'CA': 2, 'FI': 2, 'SG': 2, 'GB': 2}, 'mitre_techniques': [{'name': 'T1110', 'label': 'Brute Force', 'description': 'Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.', 'references': []}, {'name': 'T1589', 'label': 'Gather Victim Identity Information', 'description': "Adversaries may gather information about the victim's identity that can be used during targeting.", 'references': []}], 'cves': [], 'scores': {'overall': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}, 'last_day': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}, 'last_week': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}, 'last_month': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}}, 'references': [{'name': 'list:crowdsec_intelligence_blocklist', 'label': 'CrowdSec Intelligence Blocklist', 'description': "CrowdSec's main blocklist, containing the most aggressive IPs identified as attacking our network. It is a core anti-bot, mass attack list you should subscribe to in priority.", 'references': []}, {'name': 'list:crowdsec_bruteforce', 'label': 'Bruteforce Attackers', 'description': 'Contains IPs that have been mainly reported for performing Bruteforce. Proactively block these IPs to prevent bruteforce attempts on your systems and establish an overall safer perimeter.', 'references': []}, {'name': 'list:crowdsec_mssp_blocklist', 'label': 'MSSP Attackers', 'description': 'Contains IPs identified as frequent attackers of MSSPs. Proactively blocking these IPs enhances threat mitigation capabilities, allowing MSSPs to stay ahead of potential security breaches.', 'references': []}, {'name': 'list:crowdsec_high_background_noise', 'label': 'High Background Noise', 'description': 'Contains IPs considered internet background noise, identified as malicious or potential threats. Blocking these IPs can reduce further your alert volume and save infrastructure resources.', 'references': []}, {'name': 'list:firehol_greensnow', 'label': 'Firehol greensnow.co list', 'description': 'GreenSnow is a team harvesting a large number of IPs from different computers located around the world. GreenSnow is comparable with SpamHaus.org for attacks of any kind except for spam. Their list is updated automatically and you can withdraw at any time your IP address if it has been listed. Attacks / bruteforce that are monitored are: Scan Port, FTP, POP3, mod_security, IMAP, SMTP, SSH, cPanel, etc.', 'references': ['https://iplists.firehol.org/?ipset=greensnow']}]}
+ERROR 2025-02-12 22:09:30,393 base_scanner 80290 135273270740672 alienvault unexpected error: 
+INFO 2025-02-12 22:17:08,066 autoreload 80290 135273424855168 /home/Agile/code/Vristo/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-12 22:17:08,448 autoreload 85141 133433964314752 Watching for file changes with StatReloader
+INFO 2025-02-12 22:17:26,337 ip_analysis 85141 133433827264192 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-02-12 22:17:26,337 ip_analysis 85141 133433827264192 Retrieved key for platform abuseipdb: success (preview: c904***)
+INFO 2025-02-12 22:17:26,338 ip_analysis 85141 133433827264192 Retrieved key for platform alienvault: success (preview: 74a4***)
+INFO 2025-02-12 22:17:26,338 ip_analysis 85141 133433827264192 Retrieved key for platform ibm_xforce: success (preview: d291***)
+INFO 2025-02-12 22:17:26,338 ip_analysis 85141 133433827264192 Retrieved key for platform urlscan: success (preview: f91b***)
+INFO 2025-02-12 22:17:26,338 ip_analysis 85141 133433827264192 Retrieved key for platform securitytrails: success (preview: 9eID***)
+INFO 2025-02-12 22:17:26,339 ip_analysis 85141 133433827264192 Retrieved key for platform crowdsec: success (preview: QXRr***)
+INFO 2025-02-12 22:17:26,339 ip_analysis 85141 133433827264192 Retrieved key for platform greynoise: success (preview: byFS***)
+INFO 2025-02-12 22:17:26,339 ip_analysis 85141 133433827264192 Retrieved key for platform hybrid_analysis: success (preview: vfhd***)
+INFO 2025-02-12 22:17:26,339 ip_analysis 85141 133433827264192 Retrieved key for platform pulsedive: success (preview: 5458***)
+INFO 2025-02-12 22:17:26,340 ip_analysis 85141 133433827264192 Retrieved key for platform filescan: success (preview: K5HA***)
+INFO 2025-02-12 22:17:26,340 ip_analysis 85141 133433827264192 Retrieved key for platform malwarebazaar: success (preview: 66ec***)
+INFO 2025-02-12 22:17:26,340 ip_analysis 85141 133433827264192 Retrieved key for platform threatfox: success (preview: 66ec***)
+INFO 2025-02-12 22:17:26,340 ip_analysis 85141 133433827264192 Retrieved key for platform urlhaus: success (preview: 66ec***)
+INFO 2025-02-12 22:17:26,341 ip_analysis 85141 133433827264192 Retrieved key for platform spamhaus: success (preview: M2tY***)
+INFO 2025-02-12 22:17:26,341 ip_analysis 85141 133433827264192 Retrieved key for platform cloudmersive: success (preview: 3193***)
+INFO 2025-02-12 22:17:26,341 ip_analysis 85141 133433827264192 Retrieved key for platform metadefender: success (preview: 9387***)
+INFO 2025-02-12 22:17:26,341 ip_analysis 85141 133433827264192 Retrieved key for platform ipinfo: success (preview: e94d***)
+INFO 2025-02-12 22:17:26,344 crowdsec 85141 133433806292672 CrowdSec request - URL: https://cti.api.crowdsec.net/v2/smoke/74.73.241.225, Key Preview: QXRr***
+INFO 2025-02-12 22:17:26,345 ipinfo 85141 133433806292672 IPInfo request - URL: https://ipinfo.io/74.73.241.225/json?token=<hidden>, Key Preview: e94d***
+INFO 2025-02-12 22:17:26,433 ipinfo 85141 133433806292672 IPInfo basic info response: {'ip': '74.73.241.225', 'hostname': 'syn-074-073-241-225.res.spectrum.com', 'city': 'Borough Park', 'region': 'New York', 'country': 'US', 'loc': '40.6794,-74.0014', 'org': 'AS12271 Charter Communications Inc', 'postal': '11231', 'timezone': 'America/New_York'}
+WARNING 2025-02-12 22:17:26,484 base_scanner 85141 133433806292672 greynoise rate limit hit
+WARNING 2025-02-12 22:17:26,484 greynoise 85141 133433806292672 GreyNoise rate limit hit, disabling further requests
+WARNING 2025-02-12 22:17:26,485 base_scanner 85141 133433806292672 securitytrails rate limit hit
+INFO 2025-02-12 22:17:26,954 crowdsec 85141 133433806292672 CrowdSec raw response: {'ip': '74.73.241.225', 'reputation': 'malicious', 'ip_range': '74.72.0.0/15', 'background_noise': 'high', 'confidence': 'high', 'background_noise_score': 10, 'ip_range_score': 5, 'as_name': 'TWC-12271-NYC', 'as_num': 12271, 'ip_range_24': '74.73.241.0/24', 'ip_range_24_reputation': 'suspicious', 'ip_range_24_score': 3, 'location': {'country': 'US', 'city': 'Brooklyn', 'latitude': 40.7009, 'longitude': -73.9461}, 'reverse_dns': 'syn-074-073-241-225.res.spectrum.com', 'behaviors': [{'name': 'ssh:bruteforce', 'label': 'SSH Bruteforce', 'description': 'IP has been reported for performing brute force on ssh services.', 'references': []}, {'name': 'vcs:bruteforce', 'label': 'VCS Bruteforce', 'description': 'IP has been reported trying to bruteforce VCS services', 'references': []}, {'name': 'tcp:scan', 'label': 'TCP Scan', 'description': 'IP has been reported for performing TCP port scanning.', 'references': []}], 'history': {'first_seen': '2024-12-24T23:15:00+00:00', 'last_seen': '2025-02-11T22:30:00+00:00', 'full_age': 50, 'days_age': 49}, 'classifications': {'false_positives': [], 'classifications': [{'name': 'community-blocklist', 'label': 'CrowdSec Community Blocklist', 'description': 'IP belongs to the CrowdSec Community Blocklist'}]}, 'attack_details': [{'name': 'crowdsecurity/ssh-slow-bf_user-enum', 'label': 'SSH Slow User Enumeration', 'description': 'Detect slow ssh user enum bruteforce', 'references': []}, {'name': 'crowdsecurity/endlessh-bf', 'label': 'Endlessh Bruteforce', 'description': 'Detect SSH bruteforce caught by Endlessh', 'references': []}, {'name': 'crowdsecurity/ssh-bf_user-enum', 'label': 'SSH User Enumeration', 'description': 'Detect ssh user enum bruteforce', 'references': []}, {'name': 'LePresidente/gitea-bf', 'label': 'Gitea Bruteforce', 'description': 'Detect gitea bruteforce', 'references': []}, {'name': 'crowdsecurity/configserver-lfd-bf', 'label': 'SSH Bruteforce', 'description': 'Detects SSH bruteforce attempts blocked by ConfigServer.', 'references': []}, {'name': 'crowdsecurity/ssh-bf', 'label': 'SSH Bruteforce', 'description': 'Detect ssh bruteforce', 'references': []}, {'name': 'crowdsecurity/ssh-slow-bf', 'label': 'SSH Slow Bruteforce', 'description': 'Detect slow ssh bruteforce', 'references': []}, {'name': 'crowdsecurity/iptables-scan-multi_ports', 'label': 'TCP Port Scan', 'description': 'Detect aggressive portscans', 'references': []}], 'target_countries': {'DE': 36, 'US': 19, 'FR': 14, 'RU': 11, 'NL': 4, 'FI': 2, 'AU': 2, 'CA': 2, 'GB': 2, 'SG': 1}, 'mitre_techniques': [{'name': 'T1589', 'label': 'Gather Victim Identity Information', 'description': "Adversaries may gather information about the victim's identity that can be used during targeting.", 'references': []}, {'name': 'T1110', 'label': 'Brute Force', 'description': 'Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.', 'references': []}, {'name': 'T1595', 'label': 'Active Scanning', 'description': 'Adversaries may execute active reconnaissance scans to gather information that can be used during targeting.', 'references': []}, {'name': 'T1018', 'label': 'Remote System Discovery', 'description': 'Adversaries may attempt to get a listing of other systems by IP address, hostname, or other logical identifier on a network that may be used for Lateral Movement from the current system.', 'references': []}, {'name': 'T1046', 'label': 'Network Service Discovery', 'description': 'Adversaries may attempt to get a listing of services running on remote hosts and local network infrastructure devices, including those that may be vulnerable to remote software exploitation.', 'references': []}], 'cves': [], 'scores': {'overall': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}, 'last_day': {'aggressiveness': 4, 'threat': 4, 'trust': 4, 'anomaly': 0, 'total': 4}, 'last_week': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}, 'last_month': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 0, 'total': 5}}, 'references': [{'name': 'list:crowdsec_bruteforce', 'label': 'Bruteforce Attackers', 'description': 'Contains IPs that have been mainly reported for performing Bruteforce. Proactively block these IPs to prevent bruteforce attempts on your systems and establish an overall safer perimeter.', 'references': []}, {'name': 'list:crowdsec_intelligence_blocklist', 'label': 'CrowdSec Intelligence Blocklist', 'description': "CrowdSec's main blocklist, containing the most aggressive IPs identified as attacking our network. It is a core anti-bot, mass attack list you should subscribe to in priority.", 'references': []}, {'name': 'list:crowdsec_mssp_blocklist', 'label': 'MSSP Attackers', 'description': 'Contains IPs identified as frequent attackers of MSSPs. Proactively blocking these IPs enhances threat mitigation capabilities, allowing MSSPs to stay ahead of potential security breaches.', 'references': []}, {'name': 'list:crowdsec_high_background_noise', 'label': 'High Background Noise', 'description': 'Contains IPs considered internet background noise, identified as malicious or potential threats. Blocking these IPs can reduce further your alert volume and save infrastructure resources.', 'references': []}, {'name': 'list:crowdsec_ecommerce_or_retail_blocklist', 'label': 'Retail and Ecommerce Attackers', 'description': 'Contains IPs frequently attacking the retail or ecommerce sector. Block these IPs to reduce security alerts, establish a safer perimeter, and minimize downtime to better serve your customers.', 'references': []}, {'name': 'list:otx-georgs-honeypot', 'label': "OTX Georg's Honeypot List", 'description': 'OTX AlienVault (georgs honeypot) pulse. This list contains bad IPs that attacked exposed services on honeypots.', 'references': ['https://otx.alienvault.com/pulse/606d75c11c08ff94089a9430']}]}
+INFO 2025-02-12 22:24:37,814 autoreload 85141 133433964314752 /home/Agile/code/Vristo/main/services/ip_scan/ip_analysis.py changed, reloading.
+INFO 2025-02-12 22:24:38,985 autoreload 87601 130345615847552 Watching for file changes with StatReloader
+INFO 2025-02-12 22:25:08,233 autoreload 87601 130345615847552 /home/Agile/code/Vristo/main/services/ip_scan/utils/data_formatter.py changed, reloading.
+INFO 2025-02-12 22:25:08,647 autoreload 87817 136428828762240 Watching for file changes with StatReloader
+INFO 2025-02-12 22:26:47,403 ip_analysis 87817 136428692440768 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-02-12 22:26:47,403 ip_analysis 87817 136428692440768 Retrieved key for platform abuseipdb: success (preview: c904***)
+INFO 2025-02-12 22:26:47,404 ip_analysis 87817 136428692440768 Retrieved key for platform alienvault: success (preview: 74a4***)
+INFO 2025-02-12 22:26:47,404 ip_analysis 87817 136428692440768 Retrieved key for platform ibm_xforce: success (preview: d291***)
+INFO 2025-02-12 22:26:47,404 ip_analysis 87817 136428692440768 Retrieved key for platform urlscan: success (preview: f91b***)
+INFO 2025-02-12 22:26:47,405 ip_analysis 87817 136428692440768 Retrieved key for platform securitytrails: success (preview: 9eID***)
+INFO 2025-02-12 22:26:47,405 ip_analysis 87817 136428692440768 Retrieved key for platform crowdsec: success (preview: QXRr***)
+INFO 2025-02-12 22:26:47,405 ip_analysis 87817 136428692440768 Retrieved key for platform greynoise: success (preview: byFS***)
+INFO 2025-02-12 22:26:47,406 ip_analysis 87817 136428692440768 Retrieved key for platform hybrid_analysis: success (preview: vfhd***)
+INFO 2025-02-12 22:26:47,406 ip_analysis 87817 136428692440768 Retrieved key for platform pulsedive: success (preview: 5458***)
+INFO 2025-02-12 22:26:47,406 ip_analysis 87817 136428692440768 Retrieved key for platform filescan: success (preview: K5HA***)
+INFO 2025-02-12 22:26:47,406 ip_analysis 87817 136428692440768 Retrieved key for platform malwarebazaar: success (preview: 66ec***)
+INFO 2025-02-12 22:26:47,407 ip_analysis 87817 136428692440768 Retrieved key for platform threatfox: success (preview: 66ec***)
+INFO 2025-02-12 22:26:47,407 ip_analysis 87817 136428692440768 Retrieved key for platform urlhaus: success (preview: 66ec***)
+INFO 2025-02-12 22:26:47,407 ip_analysis 87817 136428692440768 Retrieved key for platform spamhaus: success (preview: M2tY***)
+INFO 2025-02-12 22:26:47,408 ip_analysis 87817 136428692440768 Retrieved key for platform cloudmersive: success (preview: 3193***)
+INFO 2025-02-12 22:26:47,408 ip_analysis 87817 136428692440768 Retrieved key for platform metadefender: success (preview: 9387***)
+INFO 2025-02-12 22:26:47,408 ip_analysis 87817 136428692440768 Retrieved key for platform ipinfo: success (preview: e94d***)
+INFO 2025-02-12 22:26:47,412 crowdsec 87817 136428671469248 CrowdSec request - URL: https://cti.api.crowdsec.net/v2/smoke/185.220.101.70, Key Preview: QXRr***
+INFO 2025-02-12 22:26:47,414 ipinfo 87817 136428671469248 IPInfo request - URL: https://ipinfo.io/185.220.101.70/json?token=<hidden>, Key Preview: e94d***
+WARNING 2025-02-12 22:26:47,441 base_scanner 87817 136428671469248 greynoise rate limit hit
+WARNING 2025-02-12 22:26:47,442 greynoise 87817 136428671469248 GreyNoise rate limit hit, disabling further requests
+INFO 2025-02-12 22:26:47,487 ipinfo 87817 136428671469248 IPInfo basic info response: {'ip': '185.220.101.70', 'hostname': 'tor-exit-70.cccs.de', 'city': 'Berlin', 'region': 'Berlin', 'country': 'DE', 'loc': '52.5244,13.4105', 'org': 'AS60729 Stiftung Erneuerbare Freiheit', 'postal': '10119', 'timezone': 'Europe/Berlin'}
+WARNING 2025-02-12 22:26:47,572 base_scanner 87817 136428671469248 securitytrails rate limit hit
+INFO 2025-02-12 22:26:47,893 crowdsec 87817 136428671469248 CrowdSec raw response: {'ip': '185.220.101.70', 'reputation': 'malicious', 'ip_range': '185.220.101.0/24', 'background_noise': 'high', 'confidence': 'high', 'background_noise_score': 10, 'ip_range_score': 5, 'as_name': 'Stiftung Erneuerbare Freiheit', 'as_num': 60729, 'ip_range_24': '185.220.101.0/24', 'ip_range_24_reputation': 'malicious', 'ip_range_24_score': 5, 'location': {'country': 'DE', 'city': 'Brandenburg', 'latitude': 52.6171, 'longitude': 13.1207}, 'reverse_dns': 'tor-exit-70.cccs.de', 'behaviors': [{'name': 'http:scan', 'label': 'HTTP Scan', 'description': 'IP has been reported for performing actions related to HTTP vulnerability scanning and discovery.', 'references': []}, {'name': 'http:exploit', 'label': 'HTTP Exploit', 'description': 'IP has been reported for attempting to exploit a vulnerability in a web application.', 'references': []}, {'name': 'http:dos', 'label': 'HTTP DoS', 'description': 'IP has been reported trying to perform denial of service attacks.', 'references': []}, {'name': 'http:bruteforce', 'label': 'HTTP Bruteforce', 'description': 'IP has been reported for performing a HTTP brute force attack (either generic HTTP probing or applicative related brute force).', 'references': []}, {'name': 'http:spam', 'label': 'Web form spam', 'description': 'IP has been reported trying to perform spam via web forms/forums.', 'references': []}, {'name': 'http:crawl', 'label': 'HTTP Crawl', 'description': 'IP has been reported for performing aggressive crawling of web applications.', 'references': []}], 'history': {'first_seen': '2022-01-17T00:00:00+00:00', 'last_seen': '2025-02-12T18:45:00+00:00', 'full_age': 1124, 'days_age': 1123}, 'classifications': {'false_positives': [], 'classifications': [{'name': 'profile:spoofed_user_agent', 'label': 'Spoofed User Agent', 'description': 'IP uses rapidly changing user agents.', 'references': []}, {'name': 'proxy:tor', 'label': 'TOR exit node', 'description': 'IP is being flagged as a TOR exit node.', 'references': []}, {'name': 'crowdsec:ai_vpn_proxy', 'label': 'VPN or Proxy', 'description': 'IP is identified as a VPN or a Proxy by CrowdSec AI Detection Algorithm.', 'references': []}, {'name': 'community-blocklist', 'label': 'CrowdSec Community Blocklist', 'description': 'IP belongs to the CrowdSec Community Blocklist'}]}, 'attack_details': [{'name': 'crowdsecurity/http-probing', 'label': 'HTTP Probing', 'description': 'Detect site scanning/probing from a single ip', 'references': []}, {'name': 'crowdsecurity/CVE-2022-35914', 'label': 'GLPI CVE-2022-35914', 'description': 'Detect CVE-2022-35914 exploits', 'references': []}, {'name': 'crowdsecurity/nginx-req-limit-exceeded', 'label': 'Nginx request limit exceeded', 'description': "Detects IPs which violate nginx's user set request limit.", 'references': []}, {'name': 'crowdsecurity/generic-env', 'label': '.env file Scanner', 'description': "Detect unauthorized access to '.env' file", 'references': []}, {'name': 'LePresidente/http-generic-403-bf', 'label': 'HTTP Bruteforce', 'description': 'Detect generic 403 Forbidden (Authorization) error brute force', 'references': []}, {'name': 'crowdsecurity/wordpress_wpconfig_scan', 'label': 'Wordpress wpconfig scan', 'description': 'Detect WordPress wpconfig scan', 'references': []}, {'name': 'crowdsecurity/http-bf-wordpress_bf_xmlrpc', 'label': 'WP XMLRPC bruteforce', 'description': 'Detect WordPress bruteforce on XML-RPC endpoint', 'references': []}, {'name': 'crowdsecurity/http-bad-user-agent', 'label': 'Bad User Agent', 'description': 'Detect usage of bad User Agent', 'references': []}, {'name': 'crowdsecurity/http-path-traversal-probing', 'label': 'HTTP Path Traversal Exploit', 'description': 'Detect path traversal attempt', 'references': []}, {'name': 'crowdsecurity/http-xss-probbing', 'label': 'XSS Attempt', 'description': 'A scenario that detects XSS probing with minimal false positives', 'references': []}, {'name': 'LePresidente/http-generic-401-bf', 'label': 'HTTP Bruteforce', 'description': 'Detect generic 401 Authorization error brute force', 'references': []}, {'name': 'crowdsecurity/http-wordpress_wpconfig', 'label': 'Access to WordPress wp-config.php', 'description': 'Detect WordPress probing: variations around wp-config.php by wpscan', 'references': []}, {'name': 'crowdsecurity/apache_log4j2_cve-2021-44228', 'label': 'Log4j CVE-2021-44228', 'description': 'Detect cve-2021-44228 exploitation attemps', 'references': []}, {'name': 'crowdsecurity/http-sensitive-files', 'label': 'Access to sensitive files over HTTP', 'description': 'Detect attempt to access to sensitive files (.log, .db ..) or folders (.git)', 'references': []}], 'target_countries': {'US': 36, 'DE': 18, 'FR': 11, 'NL': 7, 'RU': 6, 'PL': 4, 'JP': 4, 'GB': 4, 'CA': 3, 'CH': 2}, 'mitre_techniques': [{'name': 'T1595', 'label': 'Active Scanning', 'description': 'Adversaries may execute active reconnaissance scans to gather information that can be used during targeting.', 'references': []}, {'name': 'T1190', 'label': 'Exploit Public-Facing Application', 'description': 'Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network.', 'references': []}, {'name': 'T1498', 'label': 'Network Denial of Service', 'description': 'Adversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users.', 'references': []}, {'name': 'T1110', 'label': 'Brute Force', 'description': 'Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.', 'references': []}, {'name': 'T1589', 'label': 'Gather Victim Identity Information', 'description': "Adversaries may gather information about the victim's identity that can be used during targeting.", 'references': []}], 'cves': ['CVE-2022-35914', 'CVE-2021-44228'], 'scores': {'overall': {'aggressiveness': 5, 'threat': 1, 'trust': 5, 'anomaly': 1, 'total': 4}, 'last_day': {'aggressiveness': 5, 'threat': 2, 'trust': 5, 'anomaly': 1, 'total': 4}, 'last_week': {'aggressiveness': 5, 'threat': 1, 'trust': 5, 'anomaly': 1, 'total': 4}, 'last_month': {'aggressiveness': 5, 'threat': 1, 'trust': 5, 'anomaly': 1, 'total': 4}}, 'references': [{'name': 'list:crowdsec_intelligence_blocklist', 'label': 'CrowdSec Intelligence Blocklist', 'description': "CrowdSec's main blocklist, containing the most aggressive IPs identified as attacking our network. It is a core anti-bot, mass attack list you should subscribe to in priority.", 'references': []}, {'name': 'list:crowdsec_high_background_noise', 'label': 'High Background Noise', 'description': 'Contains IPs considered internet background noise, identified as malicious or potential threats. Blocking these IPs can reduce further your alert volume and save infrastructure resources.', 'references': []}, {'name': 'list:crowdsec_ai_vpn_proxy', 'label': 'Extended AI-Detected VPN/Proxy', 'description': 'This list includes IPs classified as anonymization services, often involved in repeated attacks. These IPs are from lesser-known, easily controlled proxies or VPNs, not from major providers.', 'references': []}]}
+ERROR 2025-02-12 22:27:20,399 base_scanner 87817 136428671469248 alienvault unexpected error: 
+INFO 2025-02-12 22:29:12,698 autoreload 87817 136428828762240 /home/Agile/code/Vristo/main/services/ip_scan/utils/data_formatter.py changed, reloading.
+INFO 2025-02-12 22:29:13,267 autoreload 89291 126569697824896 Watching for file changes with StatReloader
+INFO 2025-02-12 22:29:37,927 ip_analysis 89291 126569628567232 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-02-12 22:29:37,928 ip_analysis 89291 126569628567232 Retrieved key for platform abuseipdb: success (preview: c904***)
+INFO 2025-02-12 22:29:37,928 ip_analysis 89291 126569628567232 Retrieved key for platform alienvault: success (preview: 74a4***)
+INFO 2025-02-12 22:29:37,928 ip_analysis 89291 126569628567232 Retrieved key for platform ibm_xforce: success (preview: d291***)
+INFO 2025-02-12 22:29:37,928 ip_analysis 89291 126569628567232 Retrieved key for platform urlscan: success (preview: f91b***)
+INFO 2025-02-12 22:29:37,929 ip_analysis 89291 126569628567232 Retrieved key for platform securitytrails: success (preview: 9eID***)
+INFO 2025-02-12 22:29:37,929 ip_analysis 89291 126569628567232 Retrieved key for platform crowdsec: success (preview: QXRr***)
+INFO 2025-02-12 22:29:37,929 ip_analysis 89291 126569628567232 Retrieved key for platform greynoise: success (preview: byFS***)
+INFO 2025-02-12 22:29:37,929 ip_analysis 89291 126569628567232 Retrieved key for platform hybrid_analysis: success (preview: vfhd***)
+INFO 2025-02-12 22:29:37,930 ip_analysis 89291 126569628567232 Retrieved key for platform pulsedive: success (preview: 5458***)
+INFO 2025-02-12 22:29:37,930 ip_analysis 89291 126569628567232 Retrieved key for platform filescan: success (preview: K5HA***)
+INFO 2025-02-12 22:29:37,930 ip_analysis 89291 126569628567232 Retrieved key for platform malwarebazaar: success (preview: 66ec***)
+INFO 2025-02-12 22:29:37,930 ip_analysis 89291 126569628567232 Retrieved key for platform threatfox: success (preview: 66ec***)
+INFO 2025-02-12 22:29:37,930 ip_analysis 89291 126569628567232 Retrieved key for platform urlhaus: success (preview: 66ec***)
+INFO 2025-02-12 22:29:37,931 ip_analysis 89291 126569628567232 Retrieved key for platform spamhaus: success (preview: M2tY***)
+INFO 2025-02-12 22:29:37,931 ip_analysis 89291 126569628567232 Retrieved key for platform cloudmersive: success (preview: 3193***)
+INFO 2025-02-12 22:29:37,931 ip_analysis 89291 126569628567232 Retrieved key for platform metadefender: success (preview: 9387***)
+INFO 2025-02-12 22:29:37,931 ip_analysis 89291 126569628567232 Retrieved key for platform ipinfo: success (preview: e94d***)
+INFO 2025-02-12 22:29:37,934 crowdsec 89291 126569530001088 CrowdSec request - URL: https://cti.api.crowdsec.net/v2/smoke/73.32.175.15, Key Preview: QXRr***
+INFO 2025-02-12 22:29:37,935 ipinfo 89291 126569530001088 IPInfo request - URL: https://ipinfo.io/73.32.175.15/json?token=<hidden>, Key Preview: e94d***
+WARNING 2025-02-12 22:29:37,966 base_scanner 89291 126569530001088 greynoise rate limit hit
+WARNING 2025-02-12 22:29:37,966 greynoise 89291 126569530001088 GreyNoise rate limit hit, disabling further requests
+INFO 2025-02-12 22:29:38,019 ipinfo 89291 126569530001088 IPInfo basic info response: {'ip': '73.32.175.15', 'hostname': 'c-73-32-175-15.hsd1.tx.comcast.net', 'city': 'Houston', 'region': 'Texas', 'country': 'US', 'loc': '29.7633,-95.3633', 'org': 'AS7922 Comcast Cable Communications, LLC', 'postal': '77002', 'timezone': 'America/Chicago'}
+WARNING 2025-02-12 22:29:38,021 base_scanner 89291 126569530001088 pulsedive resource not found: https://pulsedive.com/api/info.php
+WARNING 2025-02-12 22:29:38,091 base_scanner 89291 126569530001088 securitytrails rate limit hit
+WARNING 2025-02-12 22:29:38,331 base_scanner 89291 126569530001088 crowdsec resource not found: https://cti.api.crowdsec.net/v2/smoke/73.32.175.15
+INFO 2025-02-12 22:29:38,332 crowdsec 89291 126569530001088 CrowdSec raw response: {'error': 'Resource not found', 'details': {'message': 'IP address information not found'}}
