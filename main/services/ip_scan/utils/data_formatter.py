@@ -426,7 +426,7 @@ class DataFormatter:
                         'Usage Type': abuse_data.get('usageType', 'N/A'),
                         'Domain': abuse_data.get('domain', 'N/A'),
                         'Country': abuse_data.get('countryName', 'N/A'),
-                        'Is Tor': 'Yes' if abuse_data.get('isTor', False) else 'No'
+                        'Is Tor': 'Yes' if abuse_data.get('isTor', False) else 'N/A'
                     }
                     formatted_data[platform].append({
                         'name': 'AbuseIPDB Information',
@@ -767,57 +767,15 @@ class DataFormatter:
                 ['ASN', general.get('asn', 'N/A')],
                 ['WHOIS', general.get('whois', 'N/A')]
             ]
+            if 'pulse_info' in general:
+                basic_info.append(['Total Pulses', str(general['pulse_info'].get('count', 0))])
+            
             formatted_data.append({
                 'name': 'General Information',
                 'type': 'table',
                 'headers': ['Property', 'Value'],
                 'rows': basic_info
             })
-
-            # Pulse Information
-            if 'pulse_info' in general:
-                pulse = general['pulse_info']
-                pulse_rows = [
-                    ['Total Pulses', str(pulse.get('count', 0))],
-                    ['References', str(len(pulse.get('references', [])))],
-                ]
-                
-                # Add malware families
-                malware_families = set()
-                for p in pulse.get('pulses', []):
-                    for mf in p.get('malware_families', []):
-                        if isinstance(mf, dict):
-                            malware_families.add(mf.get('display_name', ''))
-                if malware_families:
-                    pulse_rows.append(['Malware Families', ', '.join(sorted(malware_families))])
-
-                # Add attack techniques
-                attack_ids = set()
-                for p in pulse.get('pulses', []):
-                    for attack in p.get('attack_ids', []):
-                        if isinstance(attack, dict):
-                            attack_ids.add(attack.get('display_name', ''))
-                if attack_ids:
-                    pulse_rows.append(['Attack Techniques', ', '.join(sorted(attack_ids))])
-
-                # Add targeted countries and industries
-                targeted_countries = set()
-                industries = set()
-                for p in pulse.get('pulses', []):
-                    targeted_countries.update(p.get('targeted_countries', []))
-                    industries.update(p.get('industries', []))
-                
-                if targeted_countries:
-                    pulse_rows.append(['Targeted Countries', ', '.join(sorted(targeted_countries))])
-                if industries:
-                    pulse_rows.append(['Industries', ', '.join(sorted(industries))])
-
-                formatted_data.append({
-                    'name': 'Threat Intelligence',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': pulse_rows
-                })
 
         # Geographic Information
         if 'geo' in data:
@@ -838,5 +796,81 @@ class DataFormatter:
                 'headers': ['Property', 'Value'],
                 'rows': geo_rows
             })
+
+        # Pulse Information
+        if 'general' in data and 'pulse_info' in data['general']:
+            pulse_info = data['general']['pulse_info']
+            
+            # Recent Activities
+            activities = []
+            for pulse in pulse_info.get('pulses', []):
+                activity = [
+                    pulse.get('name', 'N/A'),
+                    DataFormatter.format_timestamp(pulse.get('modified', '')),
+                    pulse.get('description', 'N/A')[:100] + '...' if pulse.get('description', 'N/A') else 'N/A',
+                    ', '.join(pulse.get('tags', [])) or 'N/A'
+                ]
+                activities.append(activity)
+
+            if activities:
+                formatted_data.append({
+                    'name': 'Recent Activities',
+                    'type': 'datatable',
+                    'headers': ['Name', 'Last Modified', 'Description', 'Tags'],
+                    'rows': activities[:5]  # Show only the 5 most recent activities
+                })
+
+            # Threat Intelligence Summary
+            threat_info = []
+            
+            # Collect all unique malware families
+            malware_families = set()
+            for pulse in pulse_info.get('pulses', []):
+                for malware in pulse.get('malware_families', []):
+                    if isinstance(malware, dict):
+                        malware_families.add(malware.get('display_name', ''))
+                    else:
+                        malware_families.add(str(malware))
+            
+            # Collect all unique attack techniques
+            attack_techniques = set()
+            for pulse in pulse_info.get('pulses', []):
+                for attack in pulse.get('attack_ids', []):
+                    if isinstance(attack, dict):
+                        attack_techniques.add(attack.get('display_name', ''))
+
+            # Collect unique industries and countries
+            industries = set()
+            targeted_countries = set()
+            for pulse in pulse_info.get('pulses', []):
+                industries.update(pulse.get('industries', []))
+                targeted_countries.update(pulse.get('targeted_countries', []))
+
+            if malware_families:
+                threat_info.append(['Malware Families', ', '.join(sorted(malware_families))])
+            if attack_techniques:
+                threat_info.append(['Attack Techniques', ', '.join(sorted(attack_techniques))])
+            if industries:
+                threat_info.append(['Targeted Industries', ', '.join(sorted(industries))])
+            if targeted_countries:
+                threat_info.append(['Targeted Countries', ', '.join(sorted(targeted_countries))])
+
+            if threat_info:
+                formatted_data.append({
+                    'name': 'Threat Intelligence',
+                    'type': 'table',
+                    'headers': ['Category', 'Details'],
+                    'rows': threat_info
+                })
+
+            # References
+            references = pulse_info.get('references', [])
+            if references:
+                formatted_data.append({
+                    'name': 'References',
+                    'type': 'table',
+                    'headers': ['Reference'],
+                    'rows': [[ref] for ref in references if ref]
+                })
 
         return formatted_data
