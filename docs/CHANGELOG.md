@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Stack will be documented in this file.
+All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -69,3 +69,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented secure API key management
 - Added user authentication and authorization
 - Enhanced input validation and sanitization
+
+## [1.2.0] - 2025-02-13
+
+### Added
+- Enhanced hash analysis frontend display with comprehensive data visualization
+- New data categories in hash analysis results:
+  - Detailed malware information
+  - Extended threat intelligence data
+  - Platform-specific analysis results
+- Dynamic table headers for detection results
+- Improved array and complex data type handling
+- Better formatting for field names and values
+
+### Changed
+- Restructured hash analysis template for better organization
+- Updated data formatter to handle additional platform data
+- Improved error handling and display
+- Enhanced documentation with detailed implementation guides
+
+### Fixed
+- Table layout issues in platform-specific panels
+- Array display formatting in threat intelligence section
+- Field name capitalization and spacing
+
+## [1.1.0] - 2025-01-15
+
+### Added
+- Multi-platform integration for hash analysis
+- Cache system for API responses
+- Rate limiting and retry mechanisms
+- Basic threat intelligence display
+
+### Changed
+- Unified data structure for platform responses
+- Enhanced error handling system
+- Updated API endpoint structure
+
+### Fixed
+- Platform connection timeout issues
+- Cache invalidation bugs
+- API response formatting
+
+## [1.0.0] - 2024-12-01
+
+### Added
+- Initial release
+- Basic hash analysis functionality
+- VirusTotal integration
+- Simple frontend display
+- Basic documentation structure

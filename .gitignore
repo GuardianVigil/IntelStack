@@ -32,3 +32,4 @@ local_settings.py
 logs/
 logs/stack.log
 main/services/ip_scan/ipdata.txt
+main/services/hash_scan/platforms/data.txt

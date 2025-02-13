@@ -1,56 +1,40 @@
-# Stack Documentation
+# GuardianVigil Documentation
 
-Welcome to the Stack documentation. This guide will help you understand and use Stack effectively.
+## Overview
+GuardianVigil is a comprehensive threat intelligence platform that provides advanced capabilities for analyzing and monitoring various security threats. The platform integrates multiple threat intelligence sources and provides a unified interface for security analysis.
 
-## Documentation Sections
+## Key Features
+- **Hash Analysis**: Advanced file hash analysis using multiple threat intelligence platforms
+- **IP Analysis**: Comprehensive IP address threat intelligence and reputation analysis
+- **URL Analysis**: Deep URL scanning and threat detection
+- **Real-time Monitoring**: Continuous monitoring of security threats
+- **Integrated Platform Support**: 
+  - VirusTotal
+  - Hybrid Analysis
+  - MetaDefender
+  - MalwareBazaar
+  - ThreatFox
+  - FileScan
 
-### For Users
-- [User Guide](user-guide/getting-started.md) - Learn how to use Stack
-- [Investigation Guide](user-guide/investigation.md) - Learn how to conduct investigations
-- [API Integration](api/overview.md) - Integrate with threat intelligence platforms
-- [Troubleshooting](user-guide/troubleshooting.md) - Common issues and solutions
+## Documentation Structure
+- [API Documentation](api/index.md): API endpoints and integration guides
+- [Architecture Guide](architecture/index.md): System architecture and design patterns
+- [Development Guide](development/index.md): Setup and development guidelines
+- [User Guide](user-guide/index.md): End-user documentation and usage instructions
+- [Threat Intel](threat-intel/index.md): Detailed information about threat intelligence features
+- [Future Updates](future_updates.md): Planned features and improvements
+- [Changelog](CHANGELOG.md): Version history and updates
 
-### For Developers
-- [Development Guide](development/setup.md) - Set up your development environment
-- [Architecture](architecture/overview.md) - System design and components
-- [API Reference](api/reference.md) - API documentation
+## Quick Start
+1. **Installation**: Follow the [Development Guide](development/index.md) for setup instructions
+2. **Configuration**: Configure your environment variables and API keys
+3. **Usage**: Refer to the [User Guide](user-guide/index.md) for basic usage
+4. **Integration**: Check the [API Documentation](api/index.md) for integration details
 
-### For Administrators
-- [Deployment Guide](deployment/installation.md) - Deploy Stack
-- [Security](deployment/security.md) - Security considerations
-- [Maintenance](deployment/maintenance.md) - System maintenance
+## Support and Contribution
+- Report issues through the issue tracker
+- Follow the contribution guidelines in the Development Guide
+- Join our community discussions
 
-## Features
-
-### Threat Intelligence
-- Hunting
-- Threat Feed
-- Sandbox Analysis
-- MITRE ATT&CK Integration
-
-### Investigation & Analysis
-- IP Analysis
-- Domain Analysis
-- URL Analysis
-- File Analysis
-- Email Investigation
-
-### Reporting
-- Investigation History
-- Threat Reports
-- Export Findings
-
-### Integration Support
-- VirusTotal
-- GreyNoise
-- AbuseIPDB
-- CrowdSec
-- Hybrid Analysis
-- IBM X-Force
-- AlienVault OTX
-- PulseDive
-
-## Quick Links
-- [GitHub Repository](https://github.com/GuardianVigil/Stack)
-- [Issue Tracker](https://github.com/GuardianVigil/Stack/issues)
-- [Change Log](CHANGELOG.md)
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
