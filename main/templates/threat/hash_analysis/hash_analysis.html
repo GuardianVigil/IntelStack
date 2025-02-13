@@ -208,15 +208,17 @@
                                 <h6 class="text-lg font-bold">Summary</h6>
                             </div>
                             <div class="p-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <template x-for="(value, label) in results.platformData[platform].summary">
-                                        <div>
-                                            <p class="mb-2">
-                                                <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
-                                                <span x-text="typeof value === 'number' && label.includes('size') ? formatFileSize(value) : value"></span>
-                                            </p>
-                                        </div>
-                                    </template>
+                                <div class="table-responsive">
+                                    <table class="table-striped">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platformData[platform].summary">
+                                                <tr>
+                                                    <td class="font-semibold" x-text="key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -231,19 +233,17 @@
                                     <table class="table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Engine</th>
-                                                <th>Category</th>
-                                                <th>Result</th>
-                                                <th>Method</th>
+                                                <template x-for="header in Object.keys(results.platformData[platform].detections[0])">
+                                                    <th class="text-left" x-text="header.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())"></th>
+                                                </template>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <template x-for="detection in results.platformData[platform].detections" :key="detection.engine">
+                                            <template x-for="detection in results.platformData[platform].detections">
                                                 <tr>
-                                                    <td x-text="detection.engine"></td>
-                                                    <td x-text="detection.category"></td>
-                                                    <td x-text="detection.result"></td>
-                                                    <td x-text="detection.method"></td>
+                                                    <template x-for="(value, key) in detection">
+                                                        <td x-text="value"></td>
+                                                    </template>
                                                 </tr>
                                             </template>
                                         </tbody>
@@ -252,55 +252,67 @@
                             </div>
                         </div>
 
-                        <!-- Malware Info Panel -->
+                        <!-- Malware Information Panel -->
                         <div class="panel" x-show="results.platformData[platform].malware_info && Object.keys(results.platformData[platform].malware_info).length > 0">
                             <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
                                 <h6 class="text-lg font-bold">Malware Information</h6>
                             </div>
                             <div class="p-4">
-                                <template x-for="(value, label) in results.platformData[platform].malware_info">
-                                    <div class="mb-4">
-                                        <p class="mb-2">
-                                            <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
-                                            <template x-if="Array.isArray(value)">
-                                                <div class="flex flex-wrap gap-2 mt-1">
-                                                    <template x-for="item in value" :key="item">
-                                                        <span class="badge badge-outline-primary" x-text="item"></span>
-                                                    </template>
-                                                </div>
+                                <div class="table-responsive">
+                                    <table class="table-striped">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platformData[platform].malware_info">
+                                                <tr>
+                                                    <td class="font-semibold" x-text="key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())"></td>
+                                                    <td>
+                                                        <template x-if="Array.isArray(value)">
+                                                            <ul class="list-disc list-inside">
+                                                                <template x-for="item in value">
+                                                                    <li x-text="item"></li>
+                                                                </template>
+                                                            </ul>
+                                                        </template>
+                                                        <template x-if="!Array.isArray(value)">
+                                                            <span x-text="value"></span>
+                                                        </template>
+                                                    </td>
+                                                </tr>
                                             </template>
-                                            <template x-if="!Array.isArray(value)">
-                                                <span x-text="value"></span>
-                                            </template>
-                                        </p>
-                                    </div>
-                                </template>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Threat Intel Panel -->
+                        <!-- Threat Intelligence Panel -->
                         <div class="panel" x-show="results.platformData[platform].threat_intel && Object.keys(results.platformData[platform].threat_intel).length > 0">
                             <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
                                 <h6 class="text-lg font-bold">Threat Intelligence</h6>
                             </div>
                             <div class="p-4">
-                                <template x-for="(value, label) in results.platformData[platform].threat_intel">
-                                    <div class="mb-4">
-                                        <p class="mb-2">
-                                            <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
-                                            <template x-if="Array.isArray(value)">
-                                                <div class="flex flex-wrap gap-2 mt-1">
-                                                    <template x-for="item in value" :key="item">
-                                                        <span class="badge badge-outline-primary" x-text="item"></span>
-                                                    </template>
-                                                </div>
+                                <div class="table-responsive">
+                                    <table class="table-striped">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platformData[platform].threat_intel">
+                                                <tr>
+                                                    <td class="font-semibold" x-text="key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())"></td>
+                                                    <td>
+                                                        <template x-if="Array.isArray(value)">
+                                                            <ul class="list-disc list-inside">
+                                                                <template x-for="item in value">
+                                                                    <li x-text="item"></li>
+                                                                </template>
+                                                            </ul>
+                                                        </template>
+                                                        <template x-if="!Array.isArray(value)">
+                                                            <span x-text="value"></span>
+                                                        </template>
+                                                    </td>
+                                                </tr>
                                             </template>
-                                            <template x-if="!Array.isArray(value)">
-                                                <span x-text="value"></span>
-                                            </template>
-                                        </p>
-                                    </div>
-                                </template>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
