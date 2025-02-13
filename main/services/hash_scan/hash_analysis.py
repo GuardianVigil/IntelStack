@@ -28,8 +28,16 @@ class HashAnalysisService:
             results = {
                 'hash': file_hash,
                 'platforms': {},
-                'sigma_score': 0,
-                'total_detections': 0
+                'file_info': {
+                    'hash': file_hash,
+                    'type': None,
+                    'size': None,
+                    'magic': None,
+                    'mime_type': None,
+                    'first_seen': None,
+                    'last_seen': None
+                },
+                'threat_metrics': {}
             }
 
             # Open data file for logging responses
@@ -52,14 +60,38 @@ class HashAnalysisService:
                             f.write(json.dumps(platform_result, indent=2))
                             f.write("\n\n")
                             
-                            # Update scores if available
-                            if isinstance(platform_result, dict):
-                                results['total_detections'] += platform_result.get('detections', 0)
-                                results['sigma_score'] += platform_result.get('score', 0)
+                            # Extract file info from platform results
+                            if platform == 'virustotal' and 'scan_results' in platform_result:
+                                vt_results = platform_result['scan_results']
+                                results['file_info'].update({
+                                    'type': vt_results.get('file_type'),
+                                    'size': vt_results.get('size'),
+                                    'first_seen': datetime.fromtimestamp(vt_results.get('first_seen', 0)).isoformat() if vt_results.get('first_seen') else None,
+                                    'last_seen': datetime.fromtimestamp(vt_results.get('last_seen', 0)).isoformat() if vt_results.get('last_seen') else None
+                                })
+                            elif platform == 'hybrid_analysis' and not results['file_info'].get('type'):
+                                results['file_info'].update({
+                                    'type': platform_result.get('type'),
+                                    'size': platform_result.get('size'),
+                                    'first_seen': platform_result.get('submitted_at'),
+                                    'last_seen': platform_result.get('last_multi_scan')
+                                })
+                            elif platform == 'malwarebazaar' and 'data' in platform_result:
+                                mb_data = platform_result['data'][0] if platform_result['data'] else {}
+                                if not results['file_info'].get('type'):
+                                    results['file_info'].update({
+                                        'type': mb_data.get('file_type'),
+                                        'size': mb_data.get('file_size'),
+                                        'first_seen': mb_data.get('first_seen'),
+                                        'last_seen': mb_data.get('last_seen')
+                                    })
                     
                     except Exception as e:
                         results['platforms'][platform] = {'error': str(e)}
                         f.write(f"\n{platform.upper()} ERROR:\n{'-'*30}\n{str(e)}\n\n")
+
+            # Calculate threat metrics
+            results['threat_metrics'] = self._calculate_threat_score(results)
 
             return results
 
@@ -121,7 +153,8 @@ class HashAnalysisService:
             "threat_score": 0,
             "confidence_score": 0,
             "risk_level": "unknown",
-            "malware_families": set(),
+            "detection_rate": 0,
+            "verdict": "unknown",
             "detection_stats": {
                 "total": 0,
                 "detected": 0,
@@ -129,161 +162,97 @@ class HashAnalysisService:
                 "suspicious": 0,
                 "undetected": 0
             },
+            "malware_families": set(),
             "classifications": set(),
-            "first_seen": None,
-            "last_seen": None,
             "threat_categories": set(),
             "severity_factors": []
         }
 
+        platform_scores = []
+        total_engines = 0
+
         # Process VirusTotal results
         if "virustotal" in results["platforms"]:
-            vt_data = results["platforms"]["virustotal"]
-            if "scan_results" in vt_data:
+            vt_data = results["platforms"]["virustotal"].get("scan_results", {})
+            if vt_data:
                 # Process detection stats
-                stats = vt_data["scan_results"].get("last_analysis_stats", {})
+                stats = vt_data.get("last_analysis_stats", {})
                 threat_metrics["detection_stats"]["malicious"] += stats.get("malicious", 0)
                 threat_metrics["detection_stats"]["suspicious"] += stats.get("suspicious", 0)
                 threat_metrics["detection_stats"]["undetected"] += stats.get("undetected", 0)
-                threat_metrics["detection_stats"]["total"] = sum(stats.values())
-                threat_metrics["detection_stats"]["detected"] = stats.get("malicious", 0) + stats.get("suspicious", 0)
-
-                # Process sandbox verdicts
-                sandbox_score = 0
-                sandbox_confidence = 0
-                sandbox_count = 0
                 
-                if "sandbox_verdicts" in vt_data["scan_results"]:
-                    for verdict in vt_data["scan_results"]["sandbox_verdicts"].values():
-                        sandbox_count += 1
-                        if verdict.get("category") == "malicious":
-                            sandbox_score += 100
-                            if "confidence" in verdict:
-                                sandbox_confidence += verdict["confidence"]
-                        
-                        if "malware_classification" in verdict:
-                            threat_metrics["classifications"].update(verdict["malware_classification"])
-                            threat_metrics["threat_categories"].update(
-                                [c.lower() for c in verdict["malware_classification"]]
-                            )
-                        
-                        if "malware_names" in verdict:
-                            threat_metrics["malware_families"].update(verdict["malware_names"])
+                total = sum(stats.values()) if stats else 0
+                if total > 0:
+                    detected = stats.get("malicious", 0) + stats.get("suspicious", 0)
+                    platform_scores.append((detected / total) * 100)
+                    total_engines += total
 
-                # Calculate sandbox impact
-                if sandbox_count > 0:
-                    sandbox_score = sandbox_score / sandbox_count
-                    sandbox_confidence = sandbox_confidence / sandbox_count
-
-                # Process sigma rules if available
-                sigma_score = 0
-                if "sigma_analysis_results" in vt_data["scan_results"]:
-                    sigma_rules = vt_data["scan_results"]["sigma_analysis_results"]
-                    rule_weights = {"critical": 100, "high": 75, "medium": 50, "low": 25}
-                    
-                    for rule in sigma_rules:
-                        rule_level = rule.get("rule_level", "").lower()
-                        if rule_level in rule_weights:
-                            sigma_score += rule_weights[rule_level]
-                            threat_metrics["severity_factors"].append({
-                                "type": "sigma_rule",
-                                "level": rule_level,
-                                "description": rule.get("rule_title", "Unknown rule")
-                            })
+        # Process Hybrid Analysis results
+        if "hybrid_analysis" in results["platforms"]:
+            ha_data = results["platforms"]["hybrid_analysis"]
+            if ha_data.get("verdict") == "malicious":
+                threat_metrics["severity_factors"].append({
+                    "type": "platform_verdict",
+                    "platform": "hybrid_analysis",
+                    "verdict": "malicious"
+                })
+                platform_scores.append(100)
+            elif ha_data.get("verdict") == "suspicious":
+                platform_scores.append(50)
+            total_engines += 1
 
         # Process MalwareBazaar results
         if "malwarebazaar" in results["platforms"]:
             mb_data = results["platforms"]["malwarebazaar"]
-            if "data" in mb_data and len(mb_data["data"]) > 0:
+            if mb_data.get("data"):
                 mb_result = mb_data["data"][0]
-                
-                # Process vendor intelligence
-                if "vendor_intel" in mb_result:
-                    for vendor, intel in mb_result["vendor_intel"].items():
-                        if isinstance(intel, list):
-                            for item in intel:
-                                if "malware_family" in item and item["malware_family"]:
-                                    threat_metrics["malware_families"].add(item["malware_family"])
-                                if "verdict" in item:
-                                    threat_metrics["threat_categories"].add(item["verdict"].lower())
-                        elif isinstance(intel, dict):
-                            if "malware_family" in intel and intel["malware_family"]:
-                                threat_metrics["malware_families"].add(intel["malware_family"])
-                            if "score" in intel:
-                                try:
-                                    score = float(intel["score"])
-                                    threat_metrics["severity_factors"].append({
-                                        "type": "vendor_score",
-                                        "vendor": vendor,
-                                        "score": score
-                                    })
-                                except (ValueError, TypeError):
-                                    pass
+                if mb_result.get("signature"):
+                    threat_metrics["malware_families"].add(mb_result["signature"])
+                if mb_result.get("tags"):
+                    threat_metrics["threat_categories"].update(mb_result["tags"])
+                platform_scores.append(100)  # If result exists, it's malicious
+                total_engines += 1
 
-        # Calculate weighted threat score (0-100)
-        weights = {
-            "detection_ratio": 0.4,    # 40% weight for detection ratio
-            "sandbox_verdict": 0.3,     # 30% weight for sandbox analysis
-            "sigma_rules": 0.2,        # 20% weight for sigma rules
-            "vendor_intel": 0.1        # 10% weight for vendor intelligence
-        }
+        # Process ThreatFox results
+        if "threatfox" in results["platforms"]:
+            tf_data = results["platforms"]["threatfox"]
+            if tf_data.get("found"):
+                scan_results = tf_data.get("scan_results", {})
+                if scan_results.get("total_matches", 0) > 0:
+                    platform_scores.append(100)
+                    if "matches" in scan_results:
+                        for match in scan_results["matches"]:
+                            if match.get("malware"):
+                                threat_metrics["malware_families"].add(match["malware"])
+                            if match.get("threat_type"):
+                                threat_metrics["threat_categories"].add(match["threat_type"])
+                total_engines += 1
 
-        # 1. Detection ratio score
-        detection_score = 0
-        if threat_metrics["detection_stats"]["total"] > 0:
-            detection_ratio = threat_metrics["detection_stats"]["detected"] / threat_metrics["detection_stats"]["total"]
-            detection_score = detection_ratio * 100
+        # Calculate final scores
+        if platform_scores:
+            threat_metrics["threat_score"] = int(sum(platform_scores) / len(platform_scores))
+            threat_metrics["detection_rate"] = int((len([s for s in platform_scores if s > 50]) / len(platform_scores)) * 100)
+            
+            # Calculate confidence based on number of engines that analyzed the file
+            max_expected_engines = 100  # Reasonable maximum number of engines
+            threat_metrics["confidence_score"] = int(min((total_engines / max_expected_engines) * 100, 100))
 
-        # 2. Sandbox verdict score (already calculated)
-
-        # 3. Sigma rules score (normalize to 0-100)
-        if sigma_score > 100:
-            sigma_score = 100
-
-        # 4. Vendor intelligence score
-        vendor_score = 0
-        if threat_metrics["severity_factors"]:
-            vendor_scores = [f["score"] for f in threat_metrics["severity_factors"] 
-                           if f["type"] == "vendor_score"]
-            if vendor_scores:
-                vendor_score = sum(vendor_scores) / len(vendor_scores)
-
-        # Calculate final weighted threat score
-        threat_metrics["threat_score"] = int(
-            (detection_score * weights["detection_ratio"]) +
-            (sandbox_score * weights["sandbox_verdict"]) +
-            (sigma_score * weights["sigma_rules"]) +
-            (vendor_score * weights["vendor_intel"])
-        )
-
-        # Calculate confidence score (0-100)
-        platform_confidence = len([p for p in results["platforms"] if results["platforms"][p]]) / len(self.supported_platforms) * 100
-        sandbox_confidence_weight = 0.4
-        platform_confidence_weight = 0.6
-        
-        threat_metrics["confidence_score"] = int(
-            (sandbox_confidence * sandbox_confidence_weight) +
-            (platform_confidence * platform_confidence_weight)
-        )
-
-        # Determine risk level with more granular thresholds
+        # Determine risk level
         if threat_metrics["threat_score"] >= 80:
-            threat_metrics["risk_level"] = "critical"
+            threat_metrics["risk_level"] = "Critical"
+            threat_metrics["verdict"] = "Malicious"
         elif threat_metrics["threat_score"] >= 60:
-            threat_metrics["risk_level"] = "high"
+            threat_metrics["risk_level"] = "High"
+            threat_metrics["verdict"] = "Malicious"
         elif threat_metrics["threat_score"] >= 40:
-            threat_metrics["risk_level"] = "medium"
+            threat_metrics["risk_level"] = "Medium"
+            threat_metrics["verdict"] = "Suspicious"
         elif threat_metrics["threat_score"] > 20:
-            threat_metrics["risk_level"] = "low"
+            threat_metrics["risk_level"] = "Low"
+            threat_metrics["verdict"] = "Suspicious"
         else:
-            threat_metrics["risk_level"] = "safe"
-
-        # Add severity explanation
-        threat_metrics["severity_explanation"] = self._generate_severity_explanation(
-            threat_metrics["threat_score"],
-            threat_metrics["confidence_score"],
-            threat_metrics["severity_factors"]
-        )
+            threat_metrics["risk_level"] = "Safe"
+            threat_metrics["verdict"] = "Clean"
 
         # Convert sets to lists for JSON serialization
         threat_metrics["malware_families"] = list(threat_metrics["malware_families"])
@@ -291,41 +260,3 @@ class HashAnalysisService:
         threat_metrics["threat_categories"] = list(threat_metrics["threat_categories"])
 
         return threat_metrics
-
-    def _generate_severity_explanation(self, threat_score: int, confidence_score: int, severity_factors: list) -> str:
-        """Generate a human-readable explanation of the severity assessment."""
-        explanation = []
-
-        # Threat score explanation
-        if threat_score >= 80:
-            explanation.append("This file shows strong indicators of being malicious")
-        elif threat_score >= 60:
-            explanation.append("This file exhibits significant suspicious behavior")
-        elif threat_score >= 40:
-            explanation.append("This file shows some concerning characteristics")
-        elif threat_score > 20:
-            explanation.append("This file has minor suspicious indicators")
-        else:
-            explanation.append("This file shows no significant signs of malicious behavior")
-
-        # Add confidence context
-        if confidence_score >= 80:
-            explanation.append("with high confidence based on multiple reliable sources")
-        elif confidence_score >= 60:
-            explanation.append("with moderate confidence from several sources")
-        else:
-            explanation.append("but confidence is limited due to insufficient data")
-
-        # Add specific factors
-        if severity_factors:
-            factor_explanations = []
-            for factor in severity_factors:
-                if factor["type"] == "sigma_rule":
-                    factor_explanations.append(f"Triggered {factor['level']} severity rule: {factor['description']}")
-                elif factor["type"] == "vendor_score":
-                    factor_explanations.append(f"{factor['vendor']} rated severity at {factor['score']}/100")
-
-            if factor_explanations:
-                explanation.append("Key findings include: " + "; ".join(factor_explanations))
-
-        return " ".join(explanation)
