@@ -64,121 +64,60 @@
 
     <div x-show="results" x-cloak>
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols- xl:grid-cols-6 gap-6 mb-6"">
             <!-- Threat Score -->
-            <div class="panel bg-gradient-to-r from-danger/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-danger/20">
-                            <svg class="w-6 h-6 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-danger font-semibold">Threat Score</p>
-                            <h5 class="text-2xl font-bold" x-text="results.threatScore + '/100'"></h5>
-                        </div>
-                    </div>
+            <div class="panel h-full">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg">Threat Score</h5>
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="text-3xl font-bold" :class="{
+                        'text-success': results.threat_metrics.threat_score <= 20,
+                        'text-warning': results.threat_metrics.threat_score > 20 && results.threat_metrics.threat_score < 60,
+                        'text-danger': results.threat_metrics.threat_score >= 60
+                    }" x-text="results.threat_metrics.threat_score + '/100'"></div>
                 </div>
             </div>
 
             <!-- Confidence Score -->
-            <div class="panel bg-gradient-to-r from-info/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-info/20">
-                            <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-info font-semibold">Confidence Score</p>
-                            <h5 class="text-2xl font-bold" x-text="results.confidenceScore + '%'"></h5>
-                        </div>
-                    </div>
+            <div class="panel h-full">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg">Confidence Score</h5>
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="text-3xl font-bold" x-text="results.threat_metrics.confidence_score + '%'"></div>
                 </div>
             </div>
 
             <!-- Risk Level -->
-            <div class="panel bg-gradient-to-r from-warning/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-warning/20">
-                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-warning font-semibold">Risk Level</p>
-                            <h5 class="text-2xl font-bold">
-                                <span class="badge" :class="{
-                                    'badge-outline-success': results.riskLevel === 'Low',
-                                    'badge-outline-warning': results.riskLevel === 'Medium',
-                                    'badge-outline-danger': results.riskLevel === 'High',
-                                    'badge-outline-dark': results.riskLevel === 'Critical'
-                                }" x-text="results.riskLevel"></span>
-                            </h5>
-                        </div>
-                    </div>
+            <div class="panel h-full">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg">Risk Level</h5>
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="text-3xl font-bold" :class="{
+                        'text-success': results.threat_metrics.risk_level === 'Safe',
+                        'text-warning': results.threat_metrics.risk_level === 'Low' || results.threat_metrics.risk_level === 'Medium',
+                        'text-danger': results.threat_metrics.risk_level === 'High' || results.threat_metrics.risk_level === 'Critical'
+                    }" x-text="results.threat_metrics.risk_level"></div>
                 </div>
             </div>
 
             <!-- Detection Rate -->
-            <div class="panel bg-gradient-to-r from-primary/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-primary/20">
-                            <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-primary font-semibold">Detection Rate</p>
-                            <h5 class="text-2xl font-bold" x-text="results.detectionRate + '%'"></h5>
-                        </div>
-                    </div>
+            <div class="panel h-full">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg">Detection Rate</h5>
+                </div>
+                <div class="flex items-center justify-center">
+                    <div class="text-3xl font-bold" :class="{
+                        'text-success': results.threat_metrics.detection_rate <= 20,
+                        'text-warning': results.threat_metrics.detection_rate > 20 && results.threat_metrics.detection_rate < 60,
+                        'text-danger': results.threat_metrics.detection_rate >= 60
+                    }" x-text="results.threat_metrics.detection_rate + '%'"></div>
                 </div>
             </div>
 
-            <!-- First Seen -->
-            <div class="panel bg-gradient-to-r from-success/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-success/20">
-                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-success font-semibold">First Seen</p>
-                            <h5 class="text-2xl font-bold" x-text="results.firstSeen"></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Verdict -->
-            <div class="panel bg-gradient-to-r from-secondary/20 to-transparent">
-                <div class="flex items-center justify-between p-5">
-                    <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-secondary/20">
-                            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-secondary font-semibold">Verdict</p>
-                            <h5 class="text-2xl font-bold">
-                                <span class="badge" :class="{
-                                    'badge-outline-success': results.verdict === 'Clean',
-                                    'badge-outline-warning': results.verdict === 'Suspicious',
-                                    'badge-outline-danger': results.verdict === 'Malicious'
-                                }" x-text="results.verdict"></span>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- File Information -->
@@ -197,23 +136,23 @@
                         <tbody>
                             <tr>
                                 <td class="font-semibold">Hash:</td>
-                                <td x-text="results.hash"></td>
+                                <td x-text="results.file_info.hash"></td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">File Type:</td>
-                                <td x-text="results.fileType"></td>
+                                <td x-text="results.file_info.type || 'Unknown'"></td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">Size:</td>
-                                <td x-text="results.fileSize"></td>
+                                <td x-text="formatFileSize(results.file_info.size)"></td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">Magic:</td>
-                                <td x-text="results.magic"></td>
+                                <td x-text="results.file_info.magic || 'N/A'"></td>
                             </tr>
                             <tr>
                                 <td class="font-semibold">MIME Type:</td>
-                                <td x-text="results.mimeType"></td>
+                                <td x-text="results.file_info.mime_type || 'N/A'"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -221,46 +160,152 @@
             </div>
         </div>
 
-        <!-- Detection Results -->
-        <div class="panel mb-5">
-            <div class="flex items-center justify-between p-5 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
-                <h5 class="font-bold text-lg flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                    Detection Results
-                </h5>
-            </div>
-            <div class="p-5">
-                <div class="table-responsive">
-                    <table class="table-hover">
-                        <thead>
-                            <tr>
-                                <th>Engine</th>
-                                <th>Result</th>
-                                <th>Category</th>
-                                <th>Updated</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template x-for="detection in results.detections" :key="detection.engine">
-                                <tr>
-                                    <td x-text="detection.engine"></td>
-                                    <td>
-                                        <span class="badge" :class="{
-                                            'badge-outline-success': detection.result === 'Clean',
-                                            'badge-outline-warning': detection.result === 'Suspicious',
-                                            'badge-outline-danger': detection.result === 'Malicious'
-                                        }" x-text="detection.result"></span>
-                                    </td>
-                                    <td x-text="detection.category"></td>
-                                    <td x-text="detection.updated"></td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
+        <!-- Platform Content -->
+        <div class="p-5">
+            <!-- Tabs -->
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-bold text-lg">Platform Data</h5>
+                <div class="flex flex-wrap items-center gap-2">
+                    <template x-for="(platform, key) in {
+                        'VirusTotal': 'virusTotal',
+                        'HybridAnalysis': 'hybridAnalysis',
+                        'FileScan': 'fileScan',
+                        'Metadefender': 'metadefender',
+                        'MalwareBazaar': 'malwareBazaar',
+                        'ThreatFox': 'threatFox'
+                    }">
+                        <button 
+                            type="button" 
+                            class="btn btn-sm btn-secondary" 
+                            :class="{ 'active': activePlatformTab === key }" 
+                            @click="activePlatformTab = key"
+                            x-text="key">
+                        </button>
+                    </template>
                 </div>
             </div>
+
+            <!-- Platform Specific Content -->
+            <template x-for="(platform, key) in {
+                'VirusTotal': 'virusTotal',
+                'HybridAnalysis': 'hybridAnalysis',
+                'FileScan': 'fileScan',
+                'Metadefender': 'metadefender',
+                'MalwareBazaar': 'malwareBazaar',
+                'ThreatFox': 'threatFox'
+            }">
+                <div x-show="activePlatformTab === key" x-cloak>
+                    <!-- No Data Message -->
+                    <div x-show="!results.platformData[platform]" class="text-gray-500 dark:text-gray-400 text-center py-4">
+                        No data available from <span x-text="key"></span>
+                    </div>
+
+                    <!-- Platform Data Content -->
+                    <div x-show="results.platformData[platform]" class="space-y-6">
+                        <!-- Summary Panel -->
+                        <div class="panel" x-show="results.platformData[platform].summary">
+                            <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                                <h6 class="text-lg font-bold">Summary</h6>
+                            </div>
+                            <div class="p-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <template x-for="(value, label) in results.platformData[platform].summary">
+                                        <div>
+                                            <p class="mb-2">
+                                                <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
+                                                <span x-text="typeof value === 'number' && label.includes('size') ? formatFileSize(value) : value"></span>
+                                            </p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detections Panel -->
+                        <div class="panel" x-show="results.platformData[platform].detections && results.platformData[platform].detections.length > 0">
+                            <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                                <h6 class="text-lg font-bold">Detections</h6>
+                            </div>
+                            <div class="p-4">
+                                <div class="table-responsive">
+                                    <table class="table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Engine</th>
+                                                <th>Category</th>
+                                                <th>Result</th>
+                                                <th>Method</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="detection in results.platformData[platform].detections" :key="detection.engine">
+                                                <tr>
+                                                    <td x-text="detection.engine"></td>
+                                                    <td x-text="detection.category"></td>
+                                                    <td x-text="detection.result"></td>
+                                                    <td x-text="detection.method"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Malware Info Panel -->
+                        <div class="panel" x-show="results.platformData[platform].malware_info && Object.keys(results.platformData[platform].malware_info).length > 0">
+                            <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                                <h6 class="text-lg font-bold">Malware Information</h6>
+                            </div>
+                            <div class="p-4">
+                                <template x-for="(value, label) in results.platformData[platform].malware_info">
+                                    <div class="mb-4">
+                                        <p class="mb-2">
+                                            <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
+                                            <template x-if="Array.isArray(value)">
+                                                <div class="flex flex-wrap gap-2 mt-1">
+                                                    <template x-for="item in value" :key="item">
+                                                        <span class="badge badge-outline-primary" x-text="item"></span>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <template x-if="!Array.isArray(value)">
+                                                <span x-text="value"></span>
+                                            </template>
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Threat Intel Panel -->
+                        <div class="panel" x-show="results.platformData[platform].threat_intel && Object.keys(results.platformData[platform].threat_intel).length > 0">
+                            <div class="flex items-center justify-between p-4 border-b border-[#e0e6ed] dark:border-[#1b2e4b]">
+                                <h6 class="text-lg font-bold">Threat Intelligence</h6>
+                            </div>
+                            <div class="p-4">
+                                <template x-for="(value, label) in results.platformData[platform].threat_intel">
+                                    <div class="mb-4">
+                                        <p class="mb-2">
+                                            <span class="font-semibold" x-text="label.replace(/_/g, ' ').charAt(0).toUpperCase() + label.slice(1).replace(/_/g, ' ') + ':'"></span>
+                                            <template x-if="Array.isArray(value)">
+                                                <div class="flex flex-wrap gap-2 mt-1">
+                                                    <template x-for="item in value" :key="item">
+                                                        <span class="badge badge-outline-primary" x-text="item"></span>
+                                                    </template>
+                                                </div>
+                                            </template>
+                                            <template x-if="!Array.isArray(value)">
+                                                <span x-text="value"></span>
+                                            </template>
+                                        </p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
 
         <!-- Scan Errors -->
@@ -294,6 +339,11 @@ document.addEventListener('alpine:init', () => {
         loading: false,
         error: null,
         results: null,
+        activePlatformTab: 'VirusTotal',
+
+        init() {
+            this.results = null;
+        },
 
         async analyzeHash() {
             if (!this.hashValue) {
@@ -323,125 +373,48 @@ document.addEventListener('alpine:init', () => {
 
                 const data = await response.json();
                 
-                // Process the results
+                // Transform platform data to match frontend expectations
                 this.results = {
-                    hash: this.hashValue,
-                    threatScore: this.calculateThreatScore(data),
-                    confidenceScore: this.calculateConfidenceScore(data),
-                    riskLevel: this.determineRiskLevel(data),
-                    detectionRate: this.calculateDetectionRate(data),
-                    verdict: this.determineVerdict(data),
-                    firstSeen: data.first_seen || 'N/A',
-                    fileType: data.file_type || 'Unknown',
-                    fileSize: this.formatFileSize(data.file_size),
-                    magic: data.magic || 'N/A',
-                    mimeType: data.mime_type || 'N/A',
-                    errors: data.errors || []
+                    file_info: data.file_info,
+                    threat_metrics: data.threat_metrics,
+                    platformData: {
+                        virusTotal: data.platforms.virustotal,
+                        hybridAnalysis: data.platforms.hybrid_analysis,
+                        fileScan: data.platforms.filescan,
+                        metadefender: data.platforms.metadefender,
+                        malwareBazaar: data.platforms.malwarebazaar,
+                        threatFox: data.platforms.threatfox
+                    }
                 };
+
             } catch (err) {
-                this.error = err.message;
+                this.error = err.message || 'An error occurred while analyzing the hash';
             } finally {
                 this.loading = false;
             }
         },
 
-        calculateThreatScore(data) {
-            // Calculate threat score based on multiple factors
-            let score = 0;
-            const weights = {
-                maliciousEngines: 0.4,
-                riskIndicators: 0.3,
-                confidenceLevel: 0.3
-            };
-
-            // Factor 1: Percentage of engines detecting as malicious
-            const maliciousCount = data.last_analysis_stats?.malicious || 0;
-            const totalEngines = Object.values(data.last_analysis_stats || {}).reduce((a, b) => a + b, 0);
-            const maliciousScore = totalEngines ? (maliciousCount / totalEngines) * 100 : 0;
-
-            // Factor 2: Risk indicators (sandbox verdicts, sigma rules, etc.)
-            let riskScore = 0;
-            if (data.sandbox_verdicts) {
-                const maliciousSandboxes = Object.values(data.sandbox_verdicts).filter(v => v.category === 'malicious').length;
-                riskScore += (maliciousSandboxes / Object.keys(data.sandbox_verdicts).length) * 100;
-            }
-
-            // Factor 3: Confidence level from various platforms
-            let confidenceScore = 0;
-            if (data.sandbox_verdicts) {
-                const confidences = Object.values(data.sandbox_verdicts)
-                    .map(v => v.confidence || 0);
-                confidenceScore = confidences.length ? 
-                    confidences.reduce((a, b) => a + b, 0) / confidences.length : 0;
-            }
-
-            score = (maliciousScore * weights.maliciousEngines) +
-                   (riskScore * weights.riskIndicators) +
-                   (confidenceScore * weights.confidenceLevel);
-
-            return Math.round(score);
-        },
-
-        calculateConfidenceScore(data) {
-            // Calculate confidence score based on platform responses
-            let confidence = 0;
-            let totalPlatforms = 0;
-
-            if (data.sandbox_verdicts) {
-                Object.values(data.sandbox_verdicts).forEach(verdict => {
-                    if (verdict.confidence) {
-                        confidence += verdict.confidence;
-                        totalPlatforms++;
-                    }
-                });
-            }
-
-            return totalPlatforms ? Math.round(confidence / totalPlatforms) : 0;
-        },
-
-        determineRiskLevel(data) {
-            const threatScore = this.calculateThreatScore(data);
-            
-            if (threatScore >= 80) return 'Critical';
-            if (threatScore >= 60) return 'High';
-            if (threatScore >= 40) return 'Medium';
-            return 'Low';
-        },
-
-        calculateDetectionRate(data) {
-            if (!data.last_analysis_stats) return 0;
-            
-            const malicious = data.last_analysis_stats.malicious || 0;
-            const total = Object.values(data.last_analysis_stats).reduce((a, b) => a + b, 0);
-            
-            return total ? Math.round((malicious / total) * 100) : 0;
-        },
-
-        determineVerdict(data) {
-            const threatScore = this.calculateThreatScore(data);
-            
-            if (threatScore >= 70) return 'Malicious';
-            if (threatScore >= 40) return 'Suspicious';
-            return 'Clean';
-        },
-
         formatFileSize(size) {
             if (!size) return 'Unknown';
-            
             const units = ['B', 'KB', 'MB', 'GB'];
             let i = 0;
             while (size >= 1024 && i < units.length - 1) {
                 size /= 1024;
                 i++;
             }
-            return Math.round(size * 100) / 100 + ' ' + units[i];
+            return `${Math.round(size * 100) / 100} ${units[i]}`;
         },
 
         formatPlatformName(platform) {
-            return platform
-                .split('_')
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(' ');
+            const names = {
+                'virustotal': 'VirusTotal',
+                'hybrid_analysis': 'Hybrid Analysis',
+                'filescan': 'FileScan',
+                'metadefender': 'Metadefender',
+                'malwarebazaar': 'MalwareBazaar',
+                'threatfox': 'ThreatFox'
+            };
+            return names[platform] || platform;
         }
     }));
 });

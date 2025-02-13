@@ -6,6 +6,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from .platforms.factory import PlatformFactory
 from .utils.db import get_api_keys
+from .utils.data_formatter_hash import format_platform_data, calculate_confidence_score
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,13 @@ class HashAnalysisService:
                     'first_seen': None,
                     'last_seen': None
                 },
-                'threat_metrics': {}
+                'threat_metrics': {
+                    'threat_score': 0,
+                    'confidence_score': 0,
+                    'risk_level': 'Unknown',
+                    'detection_rate': 0,
+                    'verdict': 'Unknown'
+                }
             }
 
             # Open data file for logging responses
@@ -53,7 +60,9 @@ class HashAnalysisService:
                         platform_result = await self._analyze_platform(platform, api_key, file_hash)
                         
                         if platform_result:
-                            results['platforms'][platform] = platform_result
+                            # Format the platform data
+                            formatted_result = format_platform_data(platform, platform_result)
+                            results['platforms'][platform] = formatted_result
                             
                             # Log the complete response
                             f.write(f"\n{platform.upper()} RESPONSE:\n{'-'*30}\n")
@@ -90,8 +99,11 @@ class HashAnalysisService:
                         results['platforms'][platform] = {'error': str(e)}
                         f.write(f"\n{platform.upper()} ERROR:\n{'-'*30}\n{str(e)}\n\n")
 
-            # Calculate threat metrics
-            results['threat_metrics'] = self._calculate_threat_score(results)
+            # Calculate overall metrics
+            self._calculate_overall_metrics(results)
+            
+            # Calculate confidence score
+            results['threat_metrics']['confidence_score'] = calculate_confidence_score(results['platforms'])
 
             return results
 
@@ -146,6 +158,75 @@ class HashAnalysisService:
             return True
         except ValueError:
             return False
+
+    def _calculate_overall_metrics(self, results: Dict) -> None:
+        """Calculate overall threat metrics from all platform results."""
+        threat_metrics = results['threat_metrics']
+        platforms = results.get('platforms', {})
+        
+        total_detections = 0
+        total_engines = 0
+        platform_scores = []
+        
+        # Process VirusTotal results
+        if 'virustotal' in platforms:
+            vt_data = platforms['virustotal']
+            if 'summary' in vt_data:
+                total_scans = vt_data['summary'].get('total_scans', 0)
+                malicious = vt_data['summary'].get('malicious', 0)
+                if total_scans > 0:
+                    detection_rate = (malicious / total_scans) * 100
+                    platform_scores.append(detection_rate)
+                    total_engines += total_scans
+                    total_detections += malicious
+
+        # Process Hybrid Analysis results
+        if 'hybrid_analysis' in platforms:
+            ha_data = platforms['hybrid_analysis']
+            if 'summary' in ha_data:
+                threat_score = ha_data['summary'].get('threat_score')
+                if threat_score is not None:
+                    platform_scores.append(threat_score)
+                    if threat_score >= 50:
+                        total_detections += 1
+                    total_engines += 1
+
+        # Process FileScan results
+        if 'filescan' in platforms:
+            fs_data = platforms['filescan']
+            if 'summary' in fs_data:
+                total = fs_data['summary'].get('total_engines', 0)
+                detected = fs_data['summary'].get('total_detected', 0)
+                if total > 0:
+                    detection_rate = (detected / total) * 100
+                    platform_scores.append(detection_rate)
+                    total_engines += total
+                    total_detections += detected
+
+        # Calculate final scores
+        if platform_scores:
+            # Calculate threat score as weighted average of platform scores
+            threat_metrics['threat_score'] = int(sum(platform_scores) / len(platform_scores))
+            
+            # Calculate overall detection rate
+            threat_metrics['detection_rate'] = int((total_detections / total_engines * 100) if total_engines > 0 else 0)
+            
+            # Set risk level and verdict based on threat score
+            if threat_metrics['threat_score'] >= 80:
+                threat_metrics['risk_level'] = 'Critical'
+                threat_metrics['verdict'] = 'Malicious'
+            elif threat_metrics['threat_score'] >= 60:
+                threat_metrics['risk_level'] = 'High'
+                threat_metrics['verdict'] = 'Malicious'
+            elif threat_metrics['threat_score'] >= 40:
+                threat_metrics['risk_level'] = 'Medium'
+                threat_metrics['verdict'] = 'Suspicious'
+            elif threat_metrics['threat_score'] > 20:
+                threat_metrics['risk_level'] = 'Low'
+                threat_metrics['verdict'] = 'Suspicious'
+            else:
+                threat_metrics['risk_level'] = 'Safe'
+                threat_metrics['verdict'] = 'Clean'
 
     def _calculate_threat_score(self, results: Dict) -> Dict:
         """Calculate overall threat metrics from all platform results."""
