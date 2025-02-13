@@ -1,5 +1,8 @@
 from typing import Dict
 from .base import BasePlatform
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ThreatFoxClient(BasePlatform):
     """Client for interacting with ThreatFox API."""
@@ -9,60 +12,64 @@ class ThreatFoxClient(BasePlatform):
         self.base_url = "https://threatfox-api.abuse.ch/api/v1"
 
     async def analyze_hash(self, file_hash: str) -> Dict:
-        """
-        Search for a file hash in ThreatFox database.
+        """Analyze a file hash using ThreatFox."""
+        logger.info(f"ThreatFox analyzing hash: {file_hash}")
         
-        Args:
-            file_hash: MD5, SHA-1, or SHA-256 hash to analyze
-            
-        Returns:
-            Dict containing the analysis results
-        """
         headers = {
-            "API-KEY": self.api_key,
+            "Auth-Key": self.api_key,
             "Content-Type": "application/json"
         }
 
         data = {
-            "query": "search_ioc",
-            "search_term": file_hash
+            "query": "search_hash",
+            "hash": file_hash
         }
 
-        response = await self._make_request("POST", self.base_url, headers=headers, json=data)
-        
-        if "error" in response:
-            return response
-
         try:
-            if response.get("query_status") == "ok":
-                data = response.get("data", [])
-                if data:
-                    return {
-                        "platform": "threatfox",
-                        "found": True,
-                        "scan_results": {
-                            "total_matches": len(data),
-                            "matches": [{
-                                "ioc_id": item.get("ioc_id"),
-                                "threat_type": item.get("threat_type"),
-                                "malware": item.get("malware"),
-                                "confidence_level": item.get("confidence_level"),
-                                "first_seen": item.get("first_seen"),
-                                "last_seen": item.get("last_seen"),
-                                "tags": item.get("tags", []),
-                                "reference": item.get("reference")
-                            } for item in data]
-                        }
-                    }
-                else:
-                    return {
-                        "platform": "threatfox",
-                        "found": False,
-                        "message": "Hash not found in ThreatFox database"
-                    }
-            else:
+            response = await self._make_request(
+                method="POST",
+                url=self.base_url,
+                headers=headers,
+                json=data
+            )
+            
+            logger.info(f"ThreatFox raw response: {response}")
+            
+            # Check if we got a valid response
+            if response.get("query_status") == "ok" and "data" in response:
+                matches = response["data"]
+                logger.info(f"ThreatFox found {len(matches)} results")
+                
                 return {
-                    "error": f"Query failed: {response.get('query_status')}"
+                    "platform": "threatfox",
+                    "found": len(matches) > 0,
+                    "scan_results": {
+                        "total_matches": len(matches),
+                        "matches": matches
+                    } if matches else None
                 }
+            
+            # Handle no results or error cases
+            if "error" in response:
+                logger.warning(f"ThreatFox error: {response['error']}")
+                return {
+                    "platform": "threatfox",
+                    "found": False,
+                    "scan_results": None
+                }
+            
+            # Handle unknown response format
+            logger.error(f"ThreatFox unexpected response format: {response}")
+            return {
+                "platform": "threatfox",
+                "found": False,
+                "scan_results": None
+            }
+
         except Exception as e:
-            return {"error": f"Failed to parse ThreatFox response: {str(e)}"}
+            logger.error(f"ThreatFox request failed: {str(e)}")
+            return {
+                "platform": "threatfox",
+                "found": False,
+                "scan_results": None
+            }

@@ -1,6 +1,7 @@
 from typing import Dict, List, Optional
 import asyncio
 import logging
+import json
 from datetime import datetime
 from django.contrib.auth.models import User
 from .platforms.factory import PlatformFactory
@@ -16,24 +17,14 @@ class HashAnalysisService:
         self.user = user
 
     async def analyze_hash(self, file_hash: str, platforms: Optional[List[str]] = None) -> Dict:
-        """
-        Analyze a file hash across multiple platforms.
-        
-        Args:
-            file_hash: The hash to analyze
-            platforms: Optional list of specific platforms to check. If None, checks all platforms.
-            
-        Returns:
-            Dict containing analysis results from each platform
-        """
+        """Analyze a file hash across multiple platforms."""
         try:
-            # Get API keys for all platforms
-            api_keys = await get_api_keys()
+            # Define allowed platforms
+            ALLOWED_PLATFORMS = ['virustotal', 'hybrid_analysis', 'malwarebazaar', 'metadefender', 'threatfox', 'filescan']
             
-            if not api_keys:
-                raise ValueError("No API keys available")
-
-            # Initialize results
+            # Get API keys for allowed platforms only
+            api_keys = {k: v for k, v in (await get_api_keys()).items() if k in ALLOWED_PLATFORMS}
+            
             results = {
                 'hash': file_hash,
                 'platforms': {},
@@ -41,29 +32,34 @@ class HashAnalysisService:
                 'total_detections': 0
             }
 
-            # Process each platform
-            for platform, api_key in api_keys.items():
-                if platforms and platform not in platforms:
-                    continue
+            # Open data file for logging responses
+            with open('/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt', 'w') as f:
+                f.write(f"Hash Analysis Results for: {file_hash}\n{'='*50}\n\n")
+                
+                # Process each platform
+                for platform, api_key in api_keys.items():
+                    if not api_key:
+                        continue
+
+                    try:
+                        platform_result = await self._analyze_platform(platform, api_key, file_hash)
+                        
+                        if platform_result:
+                            results['platforms'][platform] = platform_result
+                            
+                            # Log the complete response
+                            f.write(f"\n{platform.upper()} RESPONSE:\n{'-'*30}\n")
+                            f.write(json.dumps(platform_result, indent=2))
+                            f.write("\n\n")
+                            
+                            # Update scores if available
+                            if isinstance(platform_result, dict):
+                                results['total_detections'] += platform_result.get('detections', 0)
+                                results['sigma_score'] += platform_result.get('score', 0)
                     
-                if not api_key:
-                    logger.warning(f"No API key available for {platform}")
-                    continue
-
-                try:
-                    platform_result = await self._analyze_platform(platform, api_key, file_hash)
-                    if platform_result:
-                        results['platforms'][platform] = platform_result
-                        results['total_detections'] += platform_result.get('detections', 0)
-                        results['sigma_score'] += platform_result.get('score', 0)
-                except Exception as e:
-                    logger.error(f"Error analyzing hash on {platform}: {str(e)}")
-                    results['platforms'][platform] = {'error': str(e)}
-
-            # Calculate final sigma score
-            platform_count = len([p for p in results['platforms'].values() if 'error' not in p])
-            if platform_count > 0:
-                results['sigma_score'] = results['sigma_score'] / platform_count
+                    except Exception as e:
+                        results['platforms'][platform] = {'error': str(e)}
+                        f.write(f"\n{platform.upper()} ERROR:\n{'-'*30}\n{str(e)}\n\n")
 
             return results
 
@@ -72,14 +68,21 @@ class HashAnalysisService:
             raise
 
     async def _analyze_platform(self, platform: str, api_key: str, file_hash: str) -> Dict:
-        """Analyze hash on a specific platform and handle errors."""
+        """Analyze hash on a specific platform."""
         try:
+            logger.info(f"Creating client for {platform}")
             client = await PlatformFactory.create_client(platform, api_key)
             if client:
                 async with client:
+                    logger.info(f"Analyzing hash on {platform}")
                     result = await client.analyze_hash(file_hash)
                     return result
+            else:
+                logger.error(f"Failed to create client for {platform}")
+                return {"error": "Failed to create platform client"}
+
         except Exception as e:
+            logger.error(f"Error in _analyze_platform for {platform}: {str(e)}")
             return {"error": str(e)}
 
     def _is_valid_hash(self, file_hash: str) -> bool:

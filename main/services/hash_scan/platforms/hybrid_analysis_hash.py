@@ -1,5 +1,8 @@
 from typing import Dict, Optional
 from .base import BasePlatform
+import logging
+
+logger = logging.getLogger(__name__)
 
 class HybridAnalysisClient(BasePlatform):
     """Client for interacting with Hybrid Analysis API."""
@@ -9,72 +12,38 @@ class HybridAnalysisClient(BasePlatform):
         self.base_url = "https://www.hybrid-analysis.com/api/v2"
 
     async def analyze_hash(self, file_hash: str) -> Dict:
-        """
-        Analyze a file hash using Hybrid Analysis API.
-        
-        Args:
-            file_hash: MD5, SHA-1, or SHA-256 hash to analyze
+        """Analyze a file hash using Hybrid Analysis."""
+        try:
+            # First, search for the hash
+            headers = {
+                'accept': 'application/json',
+                'api-key': self.api_key,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
             
-        Returns:
-            Dict containing the analysis results
-        """
-        # First, search for the hash
-        search_url = f"{self.base_url}/search/hash"
-        headers = {
-            "api-key": self.api_key,
-            "accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
+            search_url = "https://www.hybrid-analysis.com/api/v2/search/hash"
+            search_data = f"hash={file_hash}"
+            
+            async with self.session.post(search_url, headers=headers, data=search_data) as response:
+                if response.status != 200:
+                    raise Exception(f"Request failed: {response.status}, {await response.text()}")
+                search_result = await response.json()
 
-        search_response = await self._make_request(
-            "POST", 
-            search_url, 
-            headers=headers,
-            params={"hash": file_hash}
-        )
+            # If we got a SHA256 from the search, get the overview
+            if search_result and isinstance(search_result, list) and len(search_result) > 0:
+                sha256 = search_result[0].get('sha256')
+                if sha256:
+                    overview_url = f"https://www.hybrid-analysis.com/api/v2/overview/{sha256}"
+                    headers.pop('Content-Type', None)  # Remove Content-Type for GET request
+                    
+                    async with self.session.get(overview_url, headers=headers) as response:
+                        if response.status != 200:
+                            raise Exception(f"Overview request failed: {response.status}")
+                        overview_result = await response.json()
+                        return overview_result
 
-        if "error" in search_response:
-            return search_response
+            return search_result
 
-        # If we found a match, get the detailed overview
-        if search_response and isinstance(search_response, list) and len(search_response) > 0:
-            sha256_hash = search_response[0].get("sha256")
-            if sha256_hash:
-                overview_url = f"{self.base_url}/overview/{sha256_hash}"
-                headers = {
-                    "api-key": self.api_key,
-                    "accept": "application/json"
-                }
-
-                overview_response = await self._make_request("GET", overview_url, headers=headers)
-                
-                if "error" in overview_response:
-                    return overview_response
-
-                try:
-                    return {
-                        "platform": "hybrid_analysis",
-                        "found": True,
-                        "scan_results": {
-                            "verdict": overview_response.get("verdict"),
-                            "threat_score": overview_response.get("threat_score"),
-                            "sha256": overview_response.get("sha256"),
-                            "sha1": overview_response.get("sha1"),
-                            "md5": overview_response.get("md5"),
-                            "file_type": overview_response.get("type"),
-                            "environment_description": overview_response.get("environment_description"),
-                            "analysis_start_time": overview_response.get("analysis_start_time"),
-                            "total_signatures": len(overview_response.get("signatures", [])),
-                            "signatures": overview_response.get("signatures", []),
-                            "processes": overview_response.get("processes", []),
-                            "tags": overview_response.get("tags", [])
-                        }
-                    }
-                except Exception as e:
-                    return {"error": f"Failed to parse Hybrid Analysis response: {str(e)}"}
-
-        return {
-            "platform": "hybrid_analysis",
-            "found": False,
-            "message": "Hash not found in Hybrid Analysis database"
-        }
+        except Exception as e:
+            logger.error(f"Error in Hybrid Analysis: {str(e)}")
+            return {"error": str(e)}

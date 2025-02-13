@@ -9,58 +9,29 @@ class FileScanClient(BasePlatform):
         self.base_url = "https://www.filescan.io/api/v1"
 
     async def analyze_hash(self, file_hash: str) -> Dict:
-        """
-        Search for a file hash in FileScan database.
-        
-        Args:
-            file_hash: MD5, SHA-1, or SHA-256 hash to analyze
-            
-        Returns:
-            Dict containing the analysis results
-        """
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Accept": "application/json"
-        }
-
-        # First try to get existing report
-        response = await self._make_request(
-            "GET",
-            f"{self.base_url}/reports/hash/{file_hash}",
-            headers=headers
-        )
-
-        if "error" in response:
-            return response
-
+        """Analyze a file hash using FileScan."""
         try:
-            if response.get("status") == "success":
-                report = response.get("report", {})
-                return {
-                    "platform": "filescan",
-                    "found": True,
-                    "scan_results": {
-                        "scan_id": report.get("scan_id"),
-                        "sha256": report.get("sha256"),
-                        "sha1": report.get("sha1"),
-                        "md5": report.get("md5"),
-                        "file_type": report.get("file_type"),
-                        "file_size": report.get("file_size"),
-                        "scan_date": report.get("scan_date"),
-                        "score": report.get("score"),
-                        "verdict": report.get("verdict"),
-                        "signatures": report.get("signatures", []),
-                        "yara_matches": report.get("yara_matches", []),
-                        "mitre_attacks": report.get("mitre_attacks", []),
-                        "network_indicators": report.get("network_indicators", []),
-                        "file_metadata": report.get("file_metadata", {})
-                    }
-                }
+            headers = {
+                'accept': 'application/json',
+                'X-Api-Key': self.api_key
+            }
+
+            # Determine URL based on hash length
+            if len(file_hash) == 32:  # MD5
+                url = f"https://www.filescan.io/api/reputation/hash?md5={file_hash}"
+            elif len(file_hash) == 40:  # SHA1
+                url = f"https://www.filescan.io/api/reputation/hash?sha1={file_hash}"
+            elif len(file_hash) == 64:  # SHA256
+                url = f"https://www.filescan.io/api/reputation/hash?sha256={file_hash}"
             else:
-                return {
-                    "platform": "filescan",
-                    "found": False,
-                    "message": "Hash not found in FileScan database"
-                }
+                return {"error": "Invalid hash length. Must be MD5, SHA1, or SHA256."}
+
+            async with self.session.get(url, headers=headers) as response:
+                if response.status != 200:
+                    raise Exception(f"Request failed: {response.status}, {await response.text()}")
+                result = await response.json()
+                return result
+
         except Exception as e:
-            return {"error": f"Failed to parse FileScan response: {str(e)}"}
+            logger.error(f"Error in FileScan: {str(e)}")
+            return {"error": str(e)}

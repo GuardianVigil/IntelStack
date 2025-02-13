@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import aiohttp
 import logging
+import json as jsonlib
 from typing import Dict, Optional
 from ..utils.cache import cache
 from ..utils.rate_limiter import rate_limiter
@@ -31,14 +32,12 @@ class BasePlatform(ABC):
                           params: Optional[Dict] = None, json: Optional[Dict] = None) -> Dict:
         """Make an HTTP request to the platform API with caching and rate limiting."""
         platform = self.__class__.__name__.replace('Client', '').lower()
-        cache_key = cache.get_cache_key(file_hash=url, platform=platform)
-
-        # Try to get from cache first
-        cached_result = cache.get(cache_key)
-        if cached_result:
-            logger.info(f"Cache hit for {platform} request: {url}")
-            return cached_result
-
+        
+        # Log request details
+        logger.debug(f"{platform} request - URL: {url}")
+        logger.debug(f"{platform} request - Headers: {headers}")
+        logger.debug(f"{platform} request - JSON payload: {json}")
+        
         # Apply rate limiting
         await rate_limiter.acquire(platform)
 
@@ -48,15 +47,31 @@ class BasePlatform(ABC):
 
             async with self.session.request(method, url, headers=headers, 
                                          params=params, json=json) as response:
-                response.raise_for_status()
-                result = await response.json()
-
-                # Cache successful response
-                if "error" not in result:
-                    cache.set(cache_key, result)
+                # Log response status
+                logger.debug(f"{platform} response status: {response.status}")
+                
+                # Get response text first
+                text = await response.text()
+                logger.debug(f"{platform} raw response text: {text}")
+                
+                try:
+                    result = jsonlib.loads(text) if text else {}
+                except jsonlib.JSONDecodeError as e:
+                    logger.error(f"{platform} JSON decode error: {str(e)}")
+                    logger.error(f"{platform} Response text: {text}")
+                    raise
+                
+                # Check response status
+                if response.status != 200:
+                    logger.error(f"{platform} request failed with status {response.status}")
+                    logger.error(f"{platform} error response: {result}")
+                    return {"error": f"Request failed with status {response.status}"}
                 
                 return result
 
         except aiohttp.ClientError as e:
             logger.error(f"Request failed for {platform}: {str(e)}")
-            raise
+            return {"error": f"Request failed: {str(e)}"}
+        except Exception as e:
+            logger.error(f"Unexpected error for {platform}: {str(e)}")
+            return {"error": f"Unexpected error: {str(e)}"}
