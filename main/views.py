@@ -18,6 +18,7 @@ import requests
 from asgiref.sync import async_to_sync
 from .models import APIKey
 from .services.ip_scan.ip_analysis import IPAnalysisService
+from .services.hash_scan.hash_analysis import HashAnalysisService
 
 logger = logging.getLogger(__name__)
 
@@ -868,6 +869,47 @@ def url_scan(request):
 @login_required
 def email_investigation(request):
     return render(request, 'threat/email_investigation.html')
+
+# Hash Analysis View
+@csrf_exempt
+@require_http_methods(["POST"])
+async def analyze_hash(request):
+    """
+    API endpoint for analyzing file hashes.
+    Expects a POST request with JSON body containing:
+    {
+        "hash": "hash_value",
+        "platforms": ["platform1", "platform2"]  // optional
+    }
+    """
+    try:
+        data = json.loads(request.body)
+        file_hash = data.get('hash')
+        platforms = data.get('platforms')  # Optional
+
+        if not file_hash:
+            return JsonResponse(
+                {'error': 'Hash value is required'}, 
+                status=400
+            )
+
+        service = HashAnalysisService()
+        results = await service.analyze_hash(file_hash, platforms)
+        
+        return JsonResponse(results)
+
+    except ValueError as e:
+        logger.error(f"Invalid input: {str(e)}")
+        return JsonResponse(
+            {'error': str(e)}, 
+            status=400
+        )
+    except Exception as e:
+        logger.error(f"Failed to analyze hash: {str(e)}")
+        return JsonResponse(
+            {'error': f"Failed to analyze hash: {str(e)}"}, 
+            status=500
+        )
 
 # Threat Feed Views
 @login_required

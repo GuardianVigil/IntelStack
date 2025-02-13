@@ -64,8 +64,66 @@
 
     <div x-show="results" x-cloak>
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
-            <!-- Detection Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-6">
+            <!-- Threat Score -->
+            <div class="panel bg-gradient-to-r from-danger/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-danger/20">
+                            <svg class="w-6 h-6 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-danger font-semibold">Threat Score</p>
+                            <h5 class="text-2xl font-bold" x-text="results.threatScore + '/100'"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confidence Score -->
+            <div class="panel bg-gradient-to-r from-info/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-info/20">
+                            <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-info font-semibold">Confidence Score</p>
+                            <h5 class="text-2xl font-bold" x-text="results.confidenceScore + '%'"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Level -->
+            <div class="panel bg-gradient-to-r from-warning/20 to-transparent">
+                <div class="flex items-center justify-between p-5">
+                    <div class="flex items-center">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-warning/20">
+                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="text-warning font-semibold">Risk Level</p>
+                            <h5 class="text-2xl font-bold">
+                                <span class="badge" :class="{
+                                    'badge-outline-success': results.riskLevel === 'Low',
+                                    'badge-outline-warning': results.riskLevel === 'Medium',
+                                    'badge-outline-danger': results.riskLevel === 'High',
+                                    'badge-outline-dark': results.riskLevel === 'Critical'
+                                }" x-text="results.riskLevel"></span>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detection Rate -->
             <div class="panel bg-gradient-to-r from-primary/20 to-transparent">
                 <div class="flex items-center justify-between p-5">
                     <div class="flex items-center">
@@ -83,16 +141,16 @@
             </div>
 
             <!-- First Seen -->
-            <div class="panel bg-gradient-to-r from-warning/20 to-transparent">
+            <div class="panel bg-gradient-to-r from-success/20 to-transparent">
                 <div class="flex items-center justify-between p-5">
                     <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-warning/20">
-                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-success/20">
+                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
                         <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-warning font-semibold">First Seen</p>
+                            <p class="text-success font-semibold">First Seen</p>
                             <h5 class="text-2xl font-bold" x-text="results.firstSeen"></h5>
                         </div>
                     </div>
@@ -100,16 +158,16 @@
             </div>
 
             <!-- Verdict -->
-            <div class="panel bg-gradient-to-r from-success/20 to-transparent">
+            <div class="panel bg-gradient-to-r from-secondary/20 to-transparent">
                 <div class="flex items-center justify-between p-5">
                     <div class="flex items-center">
-                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-success/20">
-                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-14 h-14 rounded-full flex items-center justify-center bg-secondary/20">
+                            <svg class="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </div>
                         <div class="ltr:ml-4 rtl:mr-4">
-                            <p class="text-success font-semibold">Verdict</p>
+                            <p class="text-secondary font-semibold">Verdict</p>
                             <h5 class="text-2xl font-bold">
                                 <span class="badge" :class="{
                                     'badge-outline-success': results.verdict === 'Clean',
@@ -248,7 +306,7 @@ document.addEventListener('alpine:init', () => {
             this.results = null;
 
             try {
-                const response = await fetch('/api/analyze-hash/', {
+                const response = await fetch('/api/threat/hash-analysis/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -260,52 +318,130 @@ document.addEventListener('alpine:init', () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error('Failed to analyze hash');
                 }
 
-                // Sample data - replace with actual API response
+                const data = await response.json();
+                
+                // Process the results
                 this.results = {
                     hash: this.hashValue,
-                    fileType: "Windows Executable",
-                    fileSize: "2.4 MB",
-                    magic: "PE32+ executable for MS Windows (GUI) Mono/.Net assembly",
-                    mimeType: "application/x-dosexec",
-                    firstSeen: "2025-02-01",
-                    verdict: "Suspicious",
-                    detectionRate: 65,
-                    detections: [
-                        {
-                            engine: "Engine 1",
-                            result: "Clean",
-                            category: "None",
-                            updated: "2025-02-02"
-                        },
-                        {
-                            engine: "Engine 2",
-                            result: "Suspicious",
-                            category: "Potentially Unwanted",
-                            updated: "2025-02-02"
-                        },
-                        {
-                            engine: "Engine 3",
-                            result: "Malicious",
-                            category: "Trojan",
-                            updated: "2025-02-02"
-                        }
-                    ],
-                    errors: []
+                    threatScore: this.calculateThreatScore(data),
+                    confidenceScore: this.calculateConfidenceScore(data),
+                    riskLevel: this.determineRiskLevel(data),
+                    detectionRate: this.calculateDetectionRate(data),
+                    verdict: this.determineVerdict(data),
+                    firstSeen: data.first_seen || 'N/A',
+                    fileType: data.file_type || 'Unknown',
+                    fileSize: this.formatFileSize(data.file_size),
+                    magic: data.magic || 'N/A',
+                    mimeType: data.mime_type || 'N/A',
+                    errors: data.errors || []
                 };
             } catch (err) {
-                this.error = 'Failed to analyze hash: ' + err.message;
+                this.error = err.message;
             } finally {
                 this.loading = false;
             }
         },
 
+        calculateThreatScore(data) {
+            // Calculate threat score based on multiple factors
+            let score = 0;
+            const weights = {
+                maliciousEngines: 0.4,
+                riskIndicators: 0.3,
+                confidenceLevel: 0.3
+            };
+
+            // Factor 1: Percentage of engines detecting as malicious
+            const maliciousCount = data.last_analysis_stats?.malicious || 0;
+            const totalEngines = Object.values(data.last_analysis_stats || {}).reduce((a, b) => a + b, 0);
+            const maliciousScore = totalEngines ? (maliciousCount / totalEngines) * 100 : 0;
+
+            // Factor 2: Risk indicators (sandbox verdicts, sigma rules, etc.)
+            let riskScore = 0;
+            if (data.sandbox_verdicts) {
+                const maliciousSandboxes = Object.values(data.sandbox_verdicts).filter(v => v.category === 'malicious').length;
+                riskScore += (maliciousSandboxes / Object.keys(data.sandbox_verdicts).length) * 100;
+            }
+
+            // Factor 3: Confidence level from various platforms
+            let confidenceScore = 0;
+            if (data.sandbox_verdicts) {
+                const confidences = Object.values(data.sandbox_verdicts)
+                    .map(v => v.confidence || 0);
+                confidenceScore = confidences.length ? 
+                    confidences.reduce((a, b) => a + b, 0) / confidences.length : 0;
+            }
+
+            score = (maliciousScore * weights.maliciousEngines) +
+                   (riskScore * weights.riskIndicators) +
+                   (confidenceScore * weights.confidenceLevel);
+
+            return Math.round(score);
+        },
+
+        calculateConfidenceScore(data) {
+            // Calculate confidence score based on platform responses
+            let confidence = 0;
+            let totalPlatforms = 0;
+
+            if (data.sandbox_verdicts) {
+                Object.values(data.sandbox_verdicts).forEach(verdict => {
+                    if (verdict.confidence) {
+                        confidence += verdict.confidence;
+                        totalPlatforms++;
+                    }
+                });
+            }
+
+            return totalPlatforms ? Math.round(confidence / totalPlatforms) : 0;
+        },
+
+        determineRiskLevel(data) {
+            const threatScore = this.calculateThreatScore(data);
+            
+            if (threatScore >= 80) return 'Critical';
+            if (threatScore >= 60) return 'High';
+            if (threatScore >= 40) return 'Medium';
+            return 'Low';
+        },
+
+        calculateDetectionRate(data) {
+            if (!data.last_analysis_stats) return 0;
+            
+            const malicious = data.last_analysis_stats.malicious || 0;
+            const total = Object.values(data.last_analysis_stats).reduce((a, b) => a + b, 0);
+            
+            return total ? Math.round((malicious / total) * 100) : 0;
+        },
+
+        determineVerdict(data) {
+            const threatScore = this.calculateThreatScore(data);
+            
+            if (threatScore >= 70) return 'Malicious';
+            if (threatScore >= 40) return 'Suspicious';
+            return 'Clean';
+        },
+
+        formatFileSize(size) {
+            if (!size) return 'Unknown';
+            
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let i = 0;
+            while (size >= 1024 && i < units.length - 1) {
+                size /= 1024;
+                i++;
+            }
+            return Math.round(size * 100) / 100 + ' ' + units[i];
+        },
+
         formatPlatformName(platform) {
-            return platform.split('_').map(word => 
-                word.charAt(0).toUpperCase() + word.slice(1)
-            ).join(' ');
+            return platform
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
         }
     }));
 });

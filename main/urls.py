@@ -122,6 +122,7 @@ urlpatterns = [
     path('threat/ip-analysis/', views.ip_analysis, name='ip_analysis'),
     path('threat/ip-analysis/analyze/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
     path('threat/hash-analysis/', views.hash_analysis, name='hash_analysis'),
+    path('api/threat/hash-analysis/', views.analyze_hash, name='analyze_hash_api'),  # Match the frontend URL
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/url-scan/', views.url_scan, name='url_scan'),
     path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
@@ -149,6 +150,7 @@ urlpatterns = [
 
     # API Endpoints
     path('api/analyze-ip/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
+    path('api/analyze-hash/', views.analyze_hash, name='analyze_hash'),
 
     # Threat Feed URLs
     path('feeds/virustotal/', views.virustotal, name='virustotal'),

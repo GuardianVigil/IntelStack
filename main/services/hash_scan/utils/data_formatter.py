@@ -1,251 +1,231 @@
-from typing import Dict, List
+from typing import Dict, List, Any, Union
 from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
 
 class DataFormatter:
     """Formats raw data from various threat intelligence platforms for display."""
 
     def process_platform_data(self, data: Dict) -> Dict:
-        """
-        Process and format data from various platforms.
-        
-        Args:
-            data: Raw data from platforms
-            
-        Returns:
-            Dict containing formatted data for each platform
-        """
+        """Process and format data from various platforms."""
         formatted_data = {}
         
         for platform, platform_data in data.items():
-            if platform == 'hybrid_analysis':
+            if platform == 'virustotal':
+                formatted_data[platform] = self._format_virustotal_data(platform_data)
+            elif platform == 'hybrid_analysis':
                 formatted_data[platform] = self._format_hybrid_analysis_data(platform_data)
             elif platform == 'pulsedive':
                 formatted_data[platform] = self._format_pulsedive_data(platform_data)
-            elif platform == 'virustotal':
-                formatted_data[platform] = self._format_virustotal_data(platform_data)
             elif platform == 'greynoise':
                 formatted_data[platform] = self._format_greynoise_data(platform_data)
-
-            # If platform data couldn't be formatted, display raw data in a simple table
-            if not formatted_data[platform]:
-                formatted_data[platform] = [{
-                    'name': 'Raw Data',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': self._flatten_dict(platform_data)
-                }]
-
-        return formatted_data
-
-    def _format_hybrid_analysis_data(self, data: Dict) -> List[Dict]:
-        """Format Hybrid Analysis data."""
-        formatted_data = []
-        
-        if isinstance(data, dict):
-            # Basic Information
-            if 'submit' in data:
-                submit_info = data['submit']
-                basic_info = [
-                    ['File Name', submit_info.get('filename', 'N/A')],
-                    ['File Type', submit_info.get('filetype', 'N/A')],
-                    ['File Size', f"{submit_info.get('size', 0)} bytes"],
-                    ['Environment', submit_info.get('environment_id', 'N/A')],
-                    ['Analysis Date', self.format_timestamp(submit_info.get('date', ''))]
-                ]
-                formatted_data.append({
-                    'name': 'Basic Information',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': basic_info
-                })
-
-            # Analysis Results
-            if 'analysis' in data:
-                analysis = data['analysis']
-                result_info = [
-                    ['Verdict', analysis.get('verdict', 'N/A')],
-                    ['Threat Score', str(analysis.get('threat_score', 'N/A'))],
-                    ['Threat Level', analysis.get('threat_level', 'N/A')],
-                    ['Detection Rate', f"{analysis.get('detection_rate', 0)}%"]
-                ]
-                formatted_data.append({
-                    'name': 'Analysis Results',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': result_info
-                })
-
-            # Signatures
-            if 'signatures' in data:
-                sig_rows = []
-                for sig in data['signatures']:
-                    sig_rows.append([
-                        sig.get('name', 'N/A'),
-                        sig.get('description', 'N/A'),
-                        sig.get('severity', 'N/A')
-                    ])
-                if sig_rows:
-                    formatted_data.append({
-                        'name': 'Detected Signatures',
-                        'type': 'datatable',
-                        'headers': ['Name', 'Description', 'Severity'],
-                        'rows': sig_rows
-                    })
-
-        return formatted_data
-
-    def _format_pulsedive_data(self, data: Dict) -> List[Dict]:
-        """Format Pulsedive data."""
-        formatted_data = []
-        
-        if isinstance(data, dict):
-            # Basic Information
-            basic_info = [
-                ['Risk', data.get('risk', 'N/A')],
-                ['Risk Factor', str(data.get('risk_factor', 'N/A'))],
-                ['First Seen', self.format_timestamp(data.get('stamp_seen', ''))],
-                ['Last Seen', self.format_timestamp(data.get('stamp_updated', ''))]
-            ]
-            formatted_data.append({
-                'name': 'Basic Information',
-                'type': 'table',
-                'headers': ['Property', 'Value'],
-                'rows': basic_info
-            })
-
-            # Threats
-            if 'threats' in data and data['threats']:
-                threat_rows = []
-                for threat in data['threats']:
-                    threat_rows.append([
-                        threat.get('name', 'N/A'),
-                        threat.get('category', 'N/A'),
-                        threat.get('description', 'N/A')
-                    ])
-                formatted_data.append({
-                    'name': 'Threats',
-                    'type': 'datatable',
-                    'headers': ['Name', 'Category', 'Description'],
-                    'rows': threat_rows
-                })
 
         return formatted_data
 
     def _format_virustotal_data(self, data: Dict) -> List[Dict]:
         """Format VirusTotal data."""
-        formatted_data = []
+        if 'error' in data:
+            return [{'name': 'Error', 'type': 'error', 'message': data['error']}]
+
+        formatted_sections = []
         
-        if isinstance(data, dict):
-            # Basic Information
-            if 'attributes' in data:
-                attrs = data['attributes']
-                basic_info = [
-                    ['Type Description', attrs.get('type_description', 'N/A')],
-                    ['Size', f"{attrs.get('size', 0)} bytes"],
-                    ['First Submission', self.format_timestamp(attrs.get('first_submission_date', ''))],
-                    ['Last Analysis', self.format_timestamp(attrs.get('last_analysis_date', ''))]
-                ]
-                formatted_data.append({
-                    'name': 'Basic Information',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': basic_info
-                })
+        # Detection Statistics
+        stats = {
+            'name': 'Detection Statistics',
+            'type': 'table',
+            'headers': ['Status', 'Count'],
+            'rows': [
+                ['Malicious', data.get('malicious', 0)],
+                ['Suspicious', data.get('suspicious', 0)],
+                ['Undetected', data.get('undetected', 0)],
+                ['Total Scans', data.get('total_scans', 0)]
+            ]
+        }
+        formatted_sections.append(stats)
 
-            # Analysis Stats
-            if 'attributes' in data and 'last_analysis_stats' in data['attributes']:
-                stats = data['attributes']['last_analysis_stats']
-                stats_rows = [
-                    ['Malicious', str(stats.get('malicious', 0))],
-                    ['Suspicious', str(stats.get('suspicious', 0))],
-                    ['Harmless', str(stats.get('harmless', 0))],
-                    ['Undetected', str(stats.get('undetected', 0))]
-                ]
-                formatted_data.append({
-                    'name': 'Analysis Statistics',
-                    'type': 'table',
-                    'headers': ['Category', 'Count'],
-                    'rows': stats_rows
-                })
+        # File Information
+        file_info = {
+            'name': 'File Information',
+            'type': 'table',
+            'headers': ['Property', 'Value'],
+            'rows': [
+                ['Type', data.get('type', 'N/A')],
+                ['Size', f"{data.get('size', 0)} bytes"],
+                ['Scan Date', data.get('scan_date', 'N/A')],
+                ['Names', ', '.join(data.get('names', ['N/A']))]
+            ]
+        }
+        formatted_sections.append(file_info)
 
-            # Detailed Results
-            if 'attributes' in data and 'last_analysis_results' in data['attributes']:
-                results = data['attributes']['last_analysis_results']
-                result_rows = []
-                for engine, result in results.items():
-                    result_rows.append([
-                        engine,
-                        result.get('category', 'N/A'),
-                        result.get('result', 'N/A'),
-                        self.format_timestamp(result.get('update', ''))
+        # Analysis Results
+        if data.get('analysis_results'):
+            results = {
+                'name': 'Analysis Results',
+                'type': 'table',
+                'headers': ['Engine', 'Category', 'Result'],
+                'rows': []
+            }
+            for engine, result in data['analysis_results'].items():
+                results['rows'].append([
+                    engine,
+                    result.get('category', 'N/A'),
+                    result.get('result', 'N/A')
+                ])
+            formatted_sections.append(results)
+
+        return formatted_sections
+
+    def _format_hybrid_analysis_data(self, data: Dict) -> List[Dict]:
+        """Format Hybrid Analysis data."""
+        if 'error' in data:
+            return [{'name': 'Error', 'type': 'error', 'message': data['error']}]
+
+        formatted_sections = []
+        
+        # Basic Information
+        basic_info = {
+            'name': 'Basic Information',
+            'type': 'table',
+            'headers': ['Property', 'Value'],
+            'rows': [
+                ['Type', data.get('type', 'N/A')],
+                ['Size', f"{data.get('size', 0)} bytes"],
+                ['Verdict', data.get('verdict', 'N/A')],
+                ['Threat Score', str(data.get('threat_score', 'N/A'))],
+                ['Last Seen', data.get('last_seen', 'N/A')]
+            ]
+        }
+        formatted_sections.append(basic_info)
+
+        # Analysis Details
+        if data.get('analysis'):
+            analysis = {
+                'name': 'Analysis Details',
+                'type': 'table',
+                'headers': ['Property', 'Value'],
+                'rows': []
+            }
+            for key, value in data['analysis'].items():
+                if isinstance(value, (str, int, bool)):
+                    analysis['rows'].append([key, str(value)])
+            formatted_sections.append(analysis)
+
+        return formatted_sections
+
+    def _format_pulsedive_data(self, data: Dict) -> List[Dict]:
+        """Format Pulsedive data."""
+        if 'error' in data:
+            return [{'name': 'Error', 'type': 'error', 'message': data['error']}]
+
+        formatted_sections = []
+        
+        # Risk Assessment
+        risk_info = {
+            'name': 'Risk Assessment',
+            'type': 'table',
+            'headers': ['Property', 'Value'],
+            'rows': [
+                ['Risk Level', data.get('risk', 'N/A')],
+                ['Recommended Risk', data.get('risk_recommended', 'N/A')],
+                ['Manual Risk', data.get('manualrisk', 'N/A')],
+                ['Retired', 'Yes' if data.get('retired', False) else 'No']
+            ]
+        }
+        formatted_sections.append(risk_info)
+
+        # Timestamps
+        time_info = {
+            'name': 'Timeline',
+            'type': 'table',
+            'headers': ['Event', 'Date'],
+            'rows': [
+                ['Added', data.get('stamp_added', 'N/A')],
+                ['Updated', data.get('stamp_updated', 'N/A')]
+            ]
+        }
+        formatted_sections.append(time_info)
+
+        # Threats
+        if data.get('threats'):
+            threats = {
+                'name': 'Associated Threats',
+                'type': 'table',
+                'headers': ['Threat', 'Category'],
+                'rows': []
+            }
+            for threat in data['threats']:
+                if isinstance(threat, dict):
+                    threats['rows'].append([
+                        threat.get('name', 'N/A'),
+                        threat.get('category', 'N/A')
                     ])
-                formatted_data.append({
-                    'name': 'Analysis Results',
-                    'type': 'datatable',
-                    'headers': ['Engine', 'Category', 'Result', 'Updated'],
-                    'rows': result_rows
-                })
+            formatted_sections.append(threats)
 
-        return formatted_data
+        return formatted_sections
 
     def _format_greynoise_data(self, data: Dict) -> List[Dict]:
         """Format GreyNoise data."""
-        formatted_data = []
+        if 'error' in data:
+            return [{'name': 'Error', 'type': 'error', 'message': data['error']}]
+
+        formatted_sections = []
         
-        if isinstance(data, dict):
-            # Basic Information
-            basic_info = [
+        # Basic Information
+        basic_info = {
+            'name': 'Basic Information',
+            'type': 'table',
+            'headers': ['Property', 'Value'],
+            'rows': [
+                ['Seen', 'Yes' if data.get('seen', False) else 'No'],
                 ['Classification', data.get('classification', 'N/A')],
-                ['First Seen', self.format_timestamp(data.get('first_seen', ''))],
-                ['Last Seen', self.format_timestamp(data.get('last_seen', ''))],
-                ['Actor', data.get('actor', 'N/A')]
+                ['Confidence', f"{data.get('confidence', 0)}%"],
+                ['First Seen', data.get('first_seen', 'N/A')],
+                ['Last Seen', data.get('last_seen', 'N/A')]
             ]
-            formatted_data.append({
-                'name': 'Basic Information',
+        }
+        formatted_sections.append(basic_info)
+
+        # Metadata
+        if data.get('metadata'):
+            metadata = {
+                'name': 'Metadata',
                 'type': 'table',
                 'headers': ['Property', 'Value'],
-                'rows': basic_info
-            })
+                'rows': []
+            }
+            for key, value in data['metadata'].items():
+                if isinstance(value, (str, int, bool)):
+                    metadata['rows'].append([key, str(value)])
+            formatted_sections.append(metadata)
 
-            # Tags and Categories
-            if 'tags' in data or 'categories' in data:
-                metadata = []
-                if data.get('tags'):
-                    metadata.append(['Tags', ', '.join(data['tags'])])
-                if data.get('categories'):
-                    metadata.append(['Categories', ', '.join(data['categories'])])
-                
-                formatted_data.append({
-                    'name': 'Classification',
-                    'type': 'table',
-                    'headers': ['Property', 'Value'],
-                    'rows': metadata
-                })
+        return formatted_sections
 
-        return formatted_data
+    def format_timestamp(self, timestamp: Union[int, str, float]) -> str:
+        """Format timestamp to human-readable format."""
+        try:
+            if isinstance(timestamp, str):
+                try:
+                    return datetime.fromisoformat(timestamp.replace('Z', '+00:00')).strftime('%Y-%m-%d %H:%M:%S UTC')
+                except ValueError:
+                    timestamp = float(timestamp)
+            
+            if isinstance(timestamp, (int, float)):
+                return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S UTC')
+            
+            return str(timestamp)
+        except Exception as e:
+            logger.error(f"Error formatting timestamp: {str(e)}")
+            return str(timestamp)
 
-    @staticmethod
-    def _flatten_dict(d: Dict, parent_key: str = '', sep: str = '.') -> List[List[str]]:
-        """Flatten a nested dictionary into a list of [key, value] pairs."""
+    def _flatten_dict(self, d: Dict, parent_key: str = '', sep: str = '.') -> List[List[str]]:
+        """Flatten a nested dictionary for table display."""
         items = []
         for k, v in d.items():
             new_key = f"{parent_key}{sep}{k}" if parent_key else k
+            
             if isinstance(v, dict):
-                items.extend(DataFormatter._flatten_dict(v, new_key, sep))
+                items.extend(self._flatten_dict(v, new_key, sep=sep))
             else:
                 items.append([new_key, str(v)])
         return items
-
-    @staticmethod
-    def format_timestamp(timestamp) -> str:
-        """Format a timestamp into a human-readable string."""
-        if not timestamp:
-            return 'N/A'
-        try:
-            if isinstance(timestamp, (int, float)):
-                dt = datetime.fromtimestamp(timestamp)
-            else:
-                dt = datetime.fromisoformat(str(timestamp).replace('Z', '+00:00'))
-            return dt.strftime('%Y-%m-%d %H:%M:%S UTC')
-        except (ValueError, TypeError):
-            return str(timestamp)
