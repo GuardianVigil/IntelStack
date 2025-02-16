@@ -1,0 +1,1 @@
+{"endpoint":"/v1/domain/oracle.com","message":"You've exceeded the usage limits for your account."}

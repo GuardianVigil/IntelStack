@@ -1,0 +1,25 @@
+1. virustotal
+
+
+2. alienvault
+
+
+3. metadefender
+
+curl --request GET \
+ --url 'https://api.metadefender.com/v4/domain/dd.myapp.tcdn.qq.com' \
+ --header 'apikey: 938700a473dab8d29d3bb3d9c476b125'
+
+
+
+4. pulsedive.
+
+
+
+
+API_KEY_OTX = '74a4a5952635789101271500d1a61281e78ab1b7c4f515819a6b6f112c64fc1f' # Replace with your actual AlienVault OTX API key
+PULSEDIVE_API_KEY = '54589826af335f275e53017ee18944d76891662c8d77c0f11be174aae133e930' # Replace with your actual Pulsedive API key
+METADEFENDER_API_KEY = '938700a473dab8d29d3bb3d9c476b125' # Replace with your actual MetaDefender API key
+VIRUSTOTAL_API_KEY = '1f63fc47ce75dd8b08288111fb09cfb320ae89dea4a6794533f57cde520646f9' # Replace with your actual VirusTotal API key
+SECURITYTRAILS_API_KEY = '9eIDTe208cMDdAwWtNSmM5uT76aKFMQH' # Replace with your actual SecurityTrails API key
+

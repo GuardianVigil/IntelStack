@@ -1,0 +1,1618 @@
+--- AlienVault OTX Results ---
+Info for 1312stealer.ru:
+{
+    "general": {
+        "sections": [
+            "general",
+            "url_list",
+            "http_scans",
+            "screenshot"
+        ],
+        "indicator": "http://1312stealer.ru",
+        "type": "url",
+        "type_title": "URL",
+        "validation": [],
+        "base_indicator": {},
+        "pulse_info": {
+            "count": 0,
+            "pulses": [],
+            "references": [],
+            "related": {
+                "alienvault": {
+                    "adversary": [],
+                    "malware_families": [],
+                    "industries": [],
+                    "unique_indicators": 0
+                },
+                "other": {
+                    "adversary": [],
+                    "malware_families": [],
+                    "industries": [],
+                    "unique_indicators": 0
+                }
+            }
+        },
+        "false_positive": [],
+        "alexa": "http://www.alexa.com/siteinfo/1312stealer.ru",
+        "whois": "http://whois.domaintools.com/1312stealer.ru",
+        "domain": "1312stealer.ru",
+        "hostname": "Unavailable"
+    },
+    "url_list": {
+        "url_list": [
+            {
+                "url": "http://1312stealer.ru",
+                "result": {
+                    "urlworker": {
+                        "url": "http://1312stealer.ru",
+                        "ip": "104.21.9.114",
+                        "http_code": 200,
+                        "http_response": {
+                            "DATE": "Wed, 31 Jul 2024 11:21:09 GMT",
+                            "CONTENT-TYPE": "text/html; charset=UTF-8",
+                            "TRANSFER-ENCODING": "chunked",
+                            "CONNECTION": "keep-alive",
+                            "X-FRAME-OPTIONS": "SAMEORIGIN",
+                            "REPORT-TO": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v4?s=6rXM2chx%2BE9hoCGZzYXJP1dAcvi9RjmP8b4h5tbnn9jzzRknQhHxcX4CQDn9QgCDptvQhMH6ogZgyV6oNOCPY0CNf1R1M7lmMh6dBXLPRiJKp3CT34DU0YHEPDe7HHzvpA%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}",
+                            "NEL": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}",
+                            "VARY": "Accept-Encoding",
+                            "SERVER": "cloudflare",
+                            "CF-RAY": "8abd34079e50a3aa-SEA",
+                            "CONTENT-ENCODING": "gzip"
+                        },
+                        "filemagic": "HTML document, ASCII text, with very long lines",
+                        "filetype": "text/html",
+                        "fileclass": "HTML",
+                        "cert": {
+                            "issuer": {
+                                "country_name": "US",
+                                "organization_name": "Google Trust Services",
+                                "common_name": "WE1"
+                            },
+                            "issuer_str": "Common Name: WE1, Organization: Google Trust Services, Country: US",
+                            "subject": {
+                                "common_name": "1312stealer.ru"
+                            },
+                            "subject_str": "Common Name: 1312stealer.ru",
+                            "subject_alt_names": [
+                                "1312stealer.ru",
+                                "*.1312stealer.ru"
+                            ],
+                            "subject_alt_names_str": "1312stealer.ru, *.1312stealer.ru",
+                            "fingerprint_sha1": "F2 24 62 B7 92 C3 76 19 74 6D 85 C2 57 2B 70 F8 A8 B5 86 20",
+                            "fingerprint_sha256": "F0 F1 DE 8A 8E 9B CD E4 E7 AC 6D 23 B4 AD 65 4C 1A 5F 99 83 F9 48 A1 2C DC E2 FB 6E CB 3F 49 EA",
+                            "public_key": "0411B20A53D9515370DFAA1B83E9B60D53F7CC35926C865AD158F3411E90D7F68C7C59BC394354F447122F4AFA51F04DE4F692B5B8F14A1565BE66382E13801364",
+                            "public_key_str": "04 11 B2 0A 53 D9 51 53 70 DF AA 1B 83 E9 B6 0D 53 F7 CC 35 92 6C 86\n5A D1 58 F3 41 1E 90 D7 F6 8C 7C 59 BC 39 43 54 F4 47 12 2F 4A FA 51\nF0 4D E4 F6 92 B5 B8 F1 4A 15 65 BE 66 38 2E 13 80 13 64",
+                            "public_key_parameters": "secp256r1",
+                            "public_key_algorithm": "ec",
+                            "public_key_size": 256,
+                            "public_key_exponent": null,
+                            "signature": "30460221008A36DD2EE6BD69CB960C980C50511F76736791ACA8CB9CC97D18FDA544C0F25802210091F8C930DA0A65A53B2DB64F523541FA61AF3C701B65FEC4EBC010127A4C4FAE",
+                            "signature_str": "30 46 02 21 00 8A 36 DD 2E E6 BD 69 CB 96 0C 98 0C 50 51 1F 76 73 67\n91 AC A8 CB 9C C9 7D 18 FD A5 44 C0 F2 58 02 21 00 91 F8 C9 30 DA 0A\n65 A5 3B 2D B6 4F 52 35 41 FA 61 AF 3C 70 1B 65 FE C4 EB C0 10 12 7A\n4C 4F AE",
+                            "signature_algorithm": "sha256_ecdsa",
+                            "x509_version": "v3",
+                            "serial_number": "38162245235073902091222715175786048811",
+                            "serial_number_str": "38162245235073902091222715175786048811",
+                            "is_expired": false,
+                            "is_self_signed": "no",
+                            "is_self_issued": false,
+                            "not_valid_before": "2024-07-22T22:26:27+00:00",
+                            "not_valid_before_str": "2024-07-22 22:26:27+00:00",
+                            "not_valid_after": "2024-10-20T22:26:26+00:00",
+                            "not_valid_after_str": "2024-10-20 22:26:26+00:00",
+                            "extensions": {
+                                "keyUsage": "Digital Signature",
+                                "extendedKeyUsage": "TLS Web Server Authentication",
+                                "basicConstraints": "CA:FALSE",
+                                "subjectKeyIdentifier": "F1:1A:0D:4A:40:37:B4:DC:06:EF:9D:66:0C:9B:FA:F5:D5:13:51:E1",
+                                "authorityKeyIdentifier": "90:77:92:35:67:C4:FF:A8:CC:A9:E6:7B:D9:80:79:7B:CC:93:F9:38",
+                                "authorityInfoAccess": "OCSP - URI:http://o.pki.goog/s/we1/HLU CA Issuers - URI:http://i.pki.goog/we1.crt",
+                                "subjectAltName": "DNS:1312stealer.ru, DNS:*.1312stealer.ru",
+                                "certificatePolicies": "Policy: 2.23.140.1.2.1",
+                                "crlDistributionPoints": "Full Name:   URI:http://c.pki.goog/we1/BR1mWoHyxgA.crl",
+                                "ct_precert_scts": "Signed Certificate Timestamp:\n    Version   : v1 (0x0)\n    Log ID    : DA:B6:BF:6B:3F:B5:B6:22:9F:9B:C2:BB:5C:6B:E8:70:\n                91:71:6C:BB:51:84:85:34:BD:A4:3D:30:48:D7:FB:AB\n    Timestamp : Jul 22 23:26:27.379 2024 GMT\n    Extensions: none\n    Signature : ecdsa-with-SHA256\n                30:44:02:20:6C:78:4E:30:A3:8E:16:F0:6D:46:68:16:\n                DC:86:5B:18:46:41:E8:67:23:39:BE:4A:5E:1B:E8:36:\n                89:BF:67:4A:02:20:2B:A5:D6:77:D2:E3:93:AA:78:B8:\n                63:96:BD:0F:9B:E9:AE:53:E7:74:C9:08:B1:27:F1:53:\n                3B:A8:6A:AB:E3:42\nSigned Certificate Timestamp:\n    Version   : v1 (0x0)\n    Log ID    : 76:FF:88:3F:0A:B6:FB:95:51:C2:61:CC:F5:87:BA:34:\n                B4:A4:CD:BB:29:DC:68:42:0A:9F:E6:67:4C:5A:3A:74\n    Timestamp : Jul 22 23:26:27.372 2024 GMT\n    Extensions: none\n    Signature : ecdsa-with-SHA256\n                30:45:02:20:2E:92:AB:D1:56:09:1E:10:12:83:52:28:\n                BA:2C:7A:EF:6B:EA:77:6A:87:AA:4D:F9:BA:19:FE:6E:\n                51:E1:1F:37:02:21:00:E1:0E:E7:F9:C0:6D:BA:22:B0:\n                80:7B:B5:58:83:16:26:44:83:2D:71:29:52:48:BC:64:\n                66:7F:AE:37:1F:A9:9B"
+                            },
+                            "extensions_str": "Extension 1, name=keyUsage, value=Digital Signature\nExtension 2, name=extendedKeyUsage, value=TLS Web Server Authentication\nExtension 3, name=basicConstraints, value=CA:FALSE\nExtension 4, name=subjectKeyIdentifier, value=F1:1A:0D:4A:40:37:B4:DC:06:EF:9D:66:0C:9B:FA:F5:D5:13:51:E1\nExtension 5, name=authorityKeyIdentifier, value=90:77:92:35:67:C4:FF:A8:CC:A9:E6:7B:D9:80:79:7B:CC:93:F9:38\nExtension 6, name=authorityInfoAccess, value=OCSP - URI:http://o.pki.goog/s/we1/HLU CA Issuers - URI:http://i.pki.goog/we1.crt\nExtension 7, name=subjectAltName, value=DNS:1312stealer.ru, DNS:*.1312stealer.ru\nExtension 8, name=certificatePolicies, value=Policy: 2.23.140.1.2.1\nExtension 9, name=crlDistributionPoints, value=Full Name:   URI:http://c.pki.goog/we1/BR1mWoHyxgA.crl\nExtension 10, name=ct_precert_scts, value=Signed Certificate Timestamp:\n    Version   : v1 (0x0)\n    Log ID    : DA:B6:BF:6B:3F:B5:B6:22:9F:9B:C2:BB:5C:6B:E8:70:\n                91:71:6C:BB:51:84:85:34:BD:A4:3D:30:48:D7:FB:AB\n    Timestamp : Jul 22 23:26:27.379 2024 GMT\n    Extensions: none\n    Signature : ecdsa-with-SHA256\n                30:44:02:20:6C:78:4E:30:A3:8E:16:F0:6D:46:68:16:\n                DC:86:5B:18:46:41:E8:67:23:39:BE:4A:5E:1B:E8:36:\n                89:BF:67:4A:02:20:2B:A5:D6:77:D2:E3:93:AA:78:B8:\n                63:96:BD:0F:9B:E9:AE:53:E7:74:C9:08:B1:27:F1:53:\n                3B:A8:6A:AB:E3:42\nSigned Certificate Timestamp:\n    Version   : v1 (0x0)\n    Log ID    : 76:FF:88:3F:0A:B6:FB:95:51:C2:61:CC:F5:87:BA:34:\n                B4:A4:CD:BB:29:DC:68:42:0A:9F:E6:67:4C:5A:3A:74\n    Timestamp : Jul 22 23:26:27.372 2024 GMT\n    Extensions: none\n    Signature : ecdsa-with-SHA256\n                30:45:02:20:2E:92:AB:D1:56:09:1E:10:12:83:52:28:\n                BA:2C:7A:EF:6B:EA:77:6A:87:AA:4D:F9:BA:19:FE:6E:\n                51:E1:1F:37:02:21:00:E1:0E:E7:F9:C0:6D:BA:22:B0:\n                80:7B:B5:58:83:16:26:44:83:2D:71:29:52:48:BC:64:\n                66:7F:AE:37:1F:A9:9B"
+                        },
+                        "md5": "4eba1830afda4606f0a72eb14bd0c490",
+                        "sha256": "9f346504c91453ac1344c687a71bf08773d7fb8673a9867d1f28484888752d05",
+                        "has_file_analysis": false
+                    },
+                    "extractor": {
+                        "title": "<title>Suspected phishing site | Cloudflare</title>"
+                    },
+                    "safebrowsing": {
+                        "matches": []
+                    },
+                    "tlp": "WHITE",
+                    "webanalyzer": {
+                        "report": "2024/7/31/76fdc19fcebc99f2978e7dbdda61a45a77cb24a08b58ce40af611f19ab97c1c3/76fdc19fcebc99f2978e7dbdda61a45a77cb24a08b58ce40af611f19ab97c1c3.json.gz",
+                        "screenshot": "2024/7/31/76fdc19fcebc99f2978e7dbdda61a45a77cb24a08b58ce40af611f19ab97c1c3/76fdc19fcebc99f2978e7dbdda61a45a77cb24a08b58ce40af611f19ab97c1c3.png",
+                        "phishiness": 0.08403672277927399
+                    }
+                },
+                "params": {},
+                "date": "2024-07-29T23:32:09",
+                "checked": 1,
+                "deep_analysis": true,
+                "secs": 1722295929.0,
+                "httpcode": 200,
+                "gsb": []
+            }
+        ],
+        "net_loc": "1312stealer.ru",
+        "city_data": false
+    }
+}
+
+--- Pulsedive Links ---
+{
+    "Active DNS": [
+        {
+            "iid": 101909,
+            "indicator": "54.225.108.200",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 101910,
+            "indicator": "54.225.133.127",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 101911,
+            "indicator": "54.197.234.71",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 105008,
+            "indicator": "50.17.208.250",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 105009,
+            "indicator": "50.17.233.190",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 105010,
+            "indicator": "50.19.107.142",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": [
+                            "Seattle",
+                            "Ashburn"
+                        ],
+                        "org": [
+                            "AMAZON-AES",
+                            "Amazon.com, Inc. (AMAZO-4)"
+                        ],
+                        "region": [
+                            "Virginia",
+                            "WA"
+                        ],
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100200,
+            "indicator": "54.225.138.190",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:36",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100203,
+            "indicator": "54.225.144.171",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:36",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100204,
+            "indicator": "54.225.148.67",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:36",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100205,
+            "indicator": "54.225.150.65",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:37",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100206,
+            "indicator": "54.225.221.120",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:37",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 100207,
+            "indicator": "54.225.150.200",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:37",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 102793,
+            "indicator": "54.225.121.197",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:37",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 103231,
+            "indicator": "54.225.128.217",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:37",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 101904,
+            "indicator": "54.225.135.129",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        },
+        {
+            "iid": 101908,
+            "indicator": "50.19.253.20",
+            "type": "ip",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:52",
+            "summary": {
+                "properties": {
+                    "geo": {
+                        "country": "United States of America",
+                        "city": "Ashburn",
+                        "org": "Amazon.com, Inc.",
+                        "region": "Virginia",
+                        "countrycode": "US"
+                    }
+                }
+            }
+        }
+    ],
+    "Related Domains": [
+        {
+            "iid": 122586,
+            "indicator": "perfotec.net76.net",
+            "type": "domain",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:04:51",
+            "summary": {}
+        },
+        {
+            "iid": 122771,
+            "indicator": "forum-cs.net76.net",
+            "type": "domain",
+            "risk": "retired",
+            "stamp_linked": "2017-10-19 03:06:36",
+            "summary": {}
+        }
+    ]
+}
+
+--- MetaDefender Domain Info ---
+{
+    "address": "dd.myapp.tcdn.qq.com",
+    "lookup_results": {
+        "start_time": "2025-02-15T23:38:15.452Z",
+        "detected_by": 0,
+        "sources": [
+            {
+                "provider": "webroot.com",
+                "assessment": "trustworthy",
+                "category": "Internet Portals",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:19.944Z",
+                "status": 0
+            },
+            {
+                "provider": "dataplane.org",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "www.usom.gov.tr",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "www.team-cymru.org",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "check.torproject.org",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "urlhaus.abuse.ch",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "blocklist.de",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "stopforumspam.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "sblam.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "spamhaus.org",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "openphish.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "rules.emergingthreats.net",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "normshield.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "botscout.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "tracker.viriback.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "www.darklist.de",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "danger.rulez.sk",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "reputation.alienvault.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "vxvault.net",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "mirc.com",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "sslbl.abuse.ch",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            },
+            {
+                "provider": "isc.sans.edu",
+                "assessment": "",
+                "detect_time": "",
+                "update_time": "2025-02-15T23:12:20.162Z",
+                "status": 5
+            }
+        ]
+    }
+}
+
+--- VirusTotal Domain Info ---
+{
+    "data": {
+        "id": "google.com",
+        "type": "domain",
+        "links": {
+            "self": "https://www.virustotal.com/api/v3/domains/google.com"
+        },
+        "attributes": {
+            "total_votes": {
+                "harmless": 401,
+                "malicious": 66
+            },
+            "last_https_certificate_date": 1739638707,
+            "last_analysis_stats": {
+                "malicious": 0,
+                "suspicious": 0,
+                "undetected": 28,
+                "harmless": 66,
+                "timeout": 0
+            },
+            "last_analysis_results": {
+                "Acronis": {
+                    "method": "blacklist",
+                    "engine_name": "Acronis",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "0xSI_f33d": {
+                    "method": "blacklist",
+                    "engine_name": "0xSI_f33d",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Abusix": {
+                    "method": "blacklist",
+                    "engine_name": "Abusix",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ADMINUSLabs": {
+                    "method": "blacklist",
+                    "engine_name": "ADMINUSLabs",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Axur": {
+                    "method": "blacklist",
+                    "engine_name": "Axur",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Criminal IP": {
+                    "method": "blacklist",
+                    "engine_name": "Criminal IP",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "AILabs (MONITORAPP)": {
+                    "method": "blacklist",
+                    "engine_name": "AILabs (MONITORAPP)",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "AlienVault": {
+                    "method": "blacklist",
+                    "engine_name": "AlienVault",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "alphaMountain.ai": {
+                    "method": "blacklist",
+                    "engine_name": "alphaMountain.ai",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "AlphaSOC": {
+                    "method": "blacklist",
+                    "engine_name": "AlphaSOC",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Antiy-AVL": {
+                    "method": "blacklist",
+                    "engine_name": "Antiy-AVL",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ArcSight Threat Intelligence": {
+                    "method": "blacklist",
+                    "engine_name": "ArcSight Threat Intelligence",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "AutoShun": {
+                    "method": "blacklist",
+                    "engine_name": "AutoShun",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "benkow.cc": {
+                    "method": "blacklist",
+                    "engine_name": "benkow.cc",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Bfore.Ai PreCrime": {
+                    "method": "blacklist",
+                    "engine_name": "Bfore.Ai PreCrime",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "BitDefender": {
+                    "method": "blacklist",
+                    "engine_name": "BitDefender",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Bkav": {
+                    "method": "blacklist",
+                    "engine_name": "Bkav",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Blueliv": {
+                    "method": "blacklist",
+                    "engine_name": "Blueliv",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Certego": {
+                    "method": "blacklist",
+                    "engine_name": "Certego",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Chong Lua Dao": {
+                    "method": "blacklist",
+                    "engine_name": "Chong Lua Dao",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "CINS Army": {
+                    "method": "blacklist",
+                    "engine_name": "CINS Army",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Cluster25": {
+                    "method": "blacklist",
+                    "engine_name": "Cluster25",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "CRDF": {
+                    "method": "blacklist",
+                    "engine_name": "CRDF",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "CSIS Security Group": {
+                    "method": "blacklist",
+                    "engine_name": "CSIS Security Group",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Snort IP sample list": {
+                    "method": "blacklist",
+                    "engine_name": "Snort IP sample list",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "CMC Threat Intelligence": {
+                    "method": "blacklist",
+                    "engine_name": "CMC Threat Intelligence",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Cyan": {
+                    "method": "blacklist",
+                    "engine_name": "Cyan",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Cyble": {
+                    "method": "blacklist",
+                    "engine_name": "Cyble",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "CyRadar": {
+                    "method": "blacklist",
+                    "engine_name": "CyRadar",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "DNS8": {
+                    "method": "blacklist",
+                    "engine_name": "DNS8",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Dr.Web": {
+                    "method": "blacklist",
+                    "engine_name": "Dr.Web",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Ermes": {
+                    "method": "blacklist",
+                    "engine_name": "Ermes",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "ESET": {
+                    "method": "blacklist",
+                    "engine_name": "ESET",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ESTsecurity": {
+                    "method": "blacklist",
+                    "engine_name": "ESTsecurity",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "EmergingThreats": {
+                    "method": "blacklist",
+                    "engine_name": "EmergingThreats",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Emsisoft": {
+                    "method": "blacklist",
+                    "engine_name": "Emsisoft",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Forcepoint ThreatSeeker": {
+                    "method": "blacklist",
+                    "engine_name": "Forcepoint ThreatSeeker",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Fortinet": {
+                    "method": "blacklist",
+                    "engine_name": "Fortinet",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "G-Data": {
+                    "method": "blacklist",
+                    "engine_name": "G-Data",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "GCP Abuse Intelligence": {
+                    "method": "blacklist",
+                    "engine_name": "GCP Abuse Intelligence",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Google Safebrowsing": {
+                    "method": "blacklist",
+                    "engine_name": "Google Safebrowsing",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "GreenSnow": {
+                    "method": "blacklist",
+                    "engine_name": "GreenSnow",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Gridinsoft": {
+                    "method": "blacklist",
+                    "engine_name": "Gridinsoft",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Heimdal Security": {
+                    "method": "blacklist",
+                    "engine_name": "Heimdal Security",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Hunt.io Intelligence": {
+                    "method": "blacklist",
+                    "engine_name": "Hunt.io Intelligence",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "IPsum": {
+                    "method": "blacklist",
+                    "engine_name": "IPsum",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Juniper Networks": {
+                    "method": "blacklist",
+                    "engine_name": "Juniper Networks",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Kaspersky": {
+                    "method": "blacklist",
+                    "engine_name": "Kaspersky",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Lionic": {
+                    "method": "blacklist",
+                    "engine_name": "Lionic",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Lumu": {
+                    "method": "blacklist",
+                    "engine_name": "Lumu",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "MalwarePatrol": {
+                    "method": "blacklist",
+                    "engine_name": "MalwarePatrol",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "MalwareURL": {
+                    "method": "blacklist",
+                    "engine_name": "MalwareURL",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Malwared": {
+                    "method": "blacklist",
+                    "engine_name": "Malwared",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Netcraft": {
+                    "method": "blacklist",
+                    "engine_name": "Netcraft",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "OpenPhish": {
+                    "method": "blacklist",
+                    "engine_name": "OpenPhish",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Phishing Database": {
+                    "method": "blacklist",
+                    "engine_name": "Phishing Database",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "PhishFort": {
+                    "method": "blacklist",
+                    "engine_name": "PhishFort",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "PhishLabs": {
+                    "method": "blacklist",
+                    "engine_name": "PhishLabs",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Phishtank": {
+                    "method": "blacklist",
+                    "engine_name": "Phishtank",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "PREBYTES": {
+                    "method": "blacklist",
+                    "engine_name": "PREBYTES",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "PrecisionSec": {
+                    "method": "blacklist",
+                    "engine_name": "PrecisionSec",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Quick Heal": {
+                    "method": "blacklist",
+                    "engine_name": "Quick Heal",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Quttera": {
+                    "method": "blacklist",
+                    "engine_name": "Quttera",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "SafeToOpen": {
+                    "method": "blacklist",
+                    "engine_name": "SafeToOpen",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Sansec eComscan": {
+                    "method": "blacklist",
+                    "engine_name": "Sansec eComscan",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Scantitan": {
+                    "method": "blacklist",
+                    "engine_name": "Scantitan",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "SCUMWARE.org": {
+                    "method": "blacklist",
+                    "engine_name": "SCUMWARE.org",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Seclookup": {
+                    "method": "blacklist",
+                    "engine_name": "Seclookup",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "SecureBrain": {
+                    "method": "blacklist",
+                    "engine_name": "SecureBrain",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "Segasec": {
+                    "method": "blacklist",
+                    "engine_name": "Segasec",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "SOCRadar": {
+                    "method": "blacklist",
+                    "engine_name": "SOCRadar",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Sophos": {
+                    "method": "blacklist",
+                    "engine_name": "Sophos",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Spam404": {
+                    "method": "blacklist",
+                    "engine_name": "Spam404",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "StopForumSpam": {
+                    "method": "blacklist",
+                    "engine_name": "StopForumSpam",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Sucuri SiteCheck": {
+                    "method": "blacklist",
+                    "engine_name": "Sucuri SiteCheck",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ThreatHive": {
+                    "method": "blacklist",
+                    "engine_name": "ThreatHive",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Threatsourcing": {
+                    "method": "blacklist",
+                    "engine_name": "Threatsourcing",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Trustwave": {
+                    "method": "blacklist",
+                    "engine_name": "Trustwave",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Underworld": {
+                    "method": "blacklist",
+                    "engine_name": "Underworld",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "URLhaus": {
+                    "method": "blacklist",
+                    "engine_name": "URLhaus",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "URLQuery": {
+                    "method": "blacklist",
+                    "engine_name": "URLQuery",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Viettel Threat Intelligence": {
+                    "method": "blacklist",
+                    "engine_name": "Viettel Threat Intelligence",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "VIPRE": {
+                    "method": "blacklist",
+                    "engine_name": "VIPRE",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "VX Vault": {
+                    "method": "blacklist",
+                    "engine_name": "VX Vault",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ViriBack": {
+                    "method": "blacklist",
+                    "engine_name": "ViriBack",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Webroot": {
+                    "method": "blacklist",
+                    "engine_name": "Webroot",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Yandex Safebrowsing": {
+                    "method": "blacklist",
+                    "engine_name": "Yandex Safebrowsing",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "ZeroCERT": {
+                    "method": "blacklist",
+                    "engine_name": "ZeroCERT",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "desenmascara.me": {
+                    "method": "blacklist",
+                    "engine_name": "desenmascara.me",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "malwares.com URL checker": {
+                    "method": "blacklist",
+                    "engine_name": "malwares.com URL checker",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "securolytics": {
+                    "method": "blacklist",
+                    "engine_name": "securolytics",
+                    "category": "harmless",
+                    "result": "clean"
+                },
+                "Xcitium Verdict Cloud": {
+                    "method": "blacklist",
+                    "engine_name": "Xcitium Verdict Cloud",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "zvelo": {
+                    "method": "blacklist",
+                    "engine_name": "zvelo",
+                    "category": "undetected",
+                    "result": "unrated"
+                },
+                "ZeroFox": {
+                    "method": "blacklist",
+                    "engine_name": "ZeroFox",
+                    "category": "undetected",
+                    "result": "unrated"
+                }
+            },
+            "last_analysis_date": 1739638706,
+            "last_https_certificate": {
+                "cert_signature": {
+                    "signature_algorithm": "sha256RSA",
+                    "signature": "09035689adc29544b0ff743e5d79e6fd26e21741e67f6f13405dd45583e5e82e968b282f9d89b5c54d0965bf7c8befcb45053c6fe6498464618c85351853693a658918878de26d2ba76b499cb528a8afa086e1fb75895ccabcdd5eee805f1af27f121761022a807c4ba2203c98cf518f746fe9546f5a2789615046d760434b037c990eae0f52b670fc132e448009b908870073b29d90217a7dae82602f147c557ccc1fa6d5b9183c448756422edfa4282a8a81acc13a9e2c82b36802c2c702a15f2e0f6972de53816f127b4ce27f00c1bba4d18382cc3b528e215a97cad29ce19b6a8ad2ca67a039c7cf861af39b65263cb50a121d95fb604d8bff4ad8074bfe"
+                },
+                "extensions": {
+                    "key_usage": [
+                        "digitalSignature"
+                    ],
+                    "extended_key_usage": [
+                        "serverAuth"
+                    ],
+                    "CA": false,
+                    "subject_key_identifier": "e6751f6da83932e6bd95ecb1d194dbd55381f814",
+                    "authority_key_identifier": {
+                        "keyid": "de1b1eed7915d43e3724c321bbec34396d42b230"
+                    },
+                    "ca_information_access": {
+                        "OCSP": "http://o.pki.goog/wr2",
+                        "CA Issuers": "http://i.pki.goog/wr2.crt"
+                    },
+                    "subject_alternative_name": [
+                        "*.google.com",
+                        "*.appengine.google.com",
+                        "*.bdn.dev",
+                        "*.origin-test.bdn.dev",
+                        "*.cloud.google.com",
+                        "*.crowdsource.google.com",
+                        "*.datacompute.google.com",
+                        "*.google.ca",
+                        "*.google.cl",
+                        "*.google.co.in",
+                        "*.google.co.jp",
+                        "*.google.co.uk",
+                        "*.google.com.ar",
+                        "*.google.com.au",
+                        "*.google.com.br",
+                        "*.google.com.co",
+                        "*.google.com.mx",
+                        "*.google.com.tr",
+                        "*.google.com.vn",
+                        "*.google.de",
+                        "*.google.es",
+                        "*.google.fr",
+                        "*.google.hu",
+                        "*.google.it",
+                        "*.google.nl",
+                        "*.google.pl",
+                        "*.google.pt",
+                        "*.googleapis.cn",
+                        "*.googlevideo.com",
+                        "*.gstatic.cn",
+                        "*.gstatic-cn.com",
+                        "googlecnapps.cn",
+                        "*.googlecnapps.cn",
+                        "googleapps-cn.com",
+                        "*.googleapps-cn.com",
+                        "gkecnapps.cn",
+                        "*.gkecnapps.cn",
+                        "googledownloads.cn",
+                        "*.googledownloads.cn",
+                        "recaptcha.net.cn",
+                        "*.recaptcha.net.cn",
+                        "recaptcha-cn.net",
+                        "*.recaptcha-cn.net",
+                        "widevine.cn",
+                        "*.widevine.cn",
+                        "ampproject.org.cn",
+                        "*.ampproject.org.cn",
+                        "ampproject.net.cn",
+                        "*.ampproject.net.cn",
+                        "google-analytics-cn.com",
+                        "*.google-analytics-cn.com",
+                        "googleadservices-cn.com",
+                        "*.googleadservices-cn.com",
+                        "googlevads-cn.com",
+                        "*.googlevads-cn.com",
+                        "googleapis-cn.com",
+                        "*.googleapis-cn.com",
+                        "googleoptimize-cn.com",
+                        "*.googleoptimize-cn.com",
+                        "doubleclick-cn.net",
+                        "*.doubleclick-cn.net",
+                        "*.fls.doubleclick-cn.net",
+                        "*.g.doubleclick-cn.net",
+                        "doubleclick.cn",
+                        "*.doubleclick.cn",
+                        "*.fls.doubleclick.cn",
+                        "*.g.doubleclick.cn",
+                        "dartsearch-cn.net",
+                        "*.dartsearch-cn.net",
+                        "googletraveladservices-cn.com",
+                        "*.googletraveladservices-cn.com",
+                        "googletagservices-cn.com",
+                        "*.googletagservices-cn.com",
+                        "googletagmanager-cn.com",
+                        "*.googletagmanager-cn.com",
+                        "googlesyndication-cn.com",
+                        "*.googlesyndication-cn.com",
+                        "*.safeframe.googlesyndication-cn.com",
+                        "app-measurement-cn.com",
+                        "*.app-measurement-cn.com",
+                        "gvt1-cn.com",
+                        "*.gvt1-cn.com",
+                        "gvt2-cn.com",
+                        "*.gvt2-cn.com",
+                        "2mdn-cn.net",
+                        "*.2mdn-cn.net",
+                        "googleflights-cn.net",
+                        "*.googleflights-cn.net",
+                        "admob-cn.com",
+                        "*.admob-cn.com",
+                        "googlesandbox-cn.com",
+                        "*.googlesandbox-cn.com",
+                        "*.safenup.googlesandbox-cn.com",
+                        "*.gstatic.com",
+                        "*.metric.gstatic.com",
+                        "*.gvt1.com",
+                        "*.gcpcdn.gvt1.com",
+                        "*.gvt2.com",
+                        "*.gcp.gvt2.com",
+                        "*.url.google.com",
+                        "*.youtube-nocookie.com",
+                        "*.ytimg.com",
+                        "android.com",
+                        "*.android.com",
+                        "*.flash.android.com",
+                        "g.cn",
+                        "*.g.cn",
+                        "g.co",
+                        "*.g.co",
+                        "goo.gl",
+                        "www.goo.gl",
+                        "google-analytics.com",
+                        "*.google-analytics.com",
+                        "google.com",
+                        "googlecommerce.com",
+                        "*.googlecommerce.com",
+                        "ggpht.cn",
+                        "*.ggpht.cn",
+                        "urchin.com",
+                        "*.urchin.com",
+                        "youtu.be",
+                        "youtube.com",
+                        "*.youtube.com",
+                        "music.youtube.com",
+                        "*.music.youtube.com",
+                        "youtubeeducation.com",
+                        "*.youtubeeducation.com",
+                        "youtubekids.com",
+                        "*.youtubekids.com",
+                        "yt.be",
+                        "*.yt.be",
+                        "android.clients.google.com",
+                        "*.android.google.cn",
+                        "*.chrome.google.cn",
+                        "*.developers.google.cn"
+                    ],
+                    "certificate_policies": [
+                        "2.23.140.1.2.1"
+                    ],
+                    "crl_distribution_points": [
+                        "http://c.pki.goog/wr2/oQ6nyr8F0m0.crl"
+                    ],
+                    "1.3.6.1.4.1.11129.2.4.2": "0481f100ef0075007320220f08168af9f3c4a68b0ab26a9a4a00eef577858a08"
+                },
+                "validity": {
+                    "not_after": "2025-04-21 08:35:26",
+                    "not_before": "2025-01-27 08:35:27"
+                },
+                "size": 3598,
+                "version": "V3",
+                "public_key": {
+                    "algorithm": "EC",
+                    "ec": {
+                        "oid": "secp256r1",
+                        "pub": "3059301306072a8648ce3d020106082a8648ce3d03010703420004a0268648d605d93736b3e3d0443e645f61889cae3dc35201445e917fdee2c6a8b383121f0381ad6496798008e4d1258780e459f82be09cc51bca2c7b85b9a87f"
+                    }
+                },
+                "thumbprint_sha256": "110a2ca9bdc4f6bd2394c3782f72c93da17ac28179ceaa7b5ff355db9182c72c",
+                "thumbprint": "059787a1ad4eae90a2f7464f365e72b3168f5adf",
+                "serial_number": "df5b691b21764a32121c2f378be596d3",
+                "issuer": {
+                    "C": "US",
+                    "O": "Google Trust Services",
+                    "CN": "WR2"
+                },
+                "subject": {
+                    "CN": "*.google.com"
+                }
+            },
+            "tld": "com",
+            "last_dns_records_date": 1739638707,
+            "last_update_date": 1722565053,
+            "tags": [],
+            "creation_date": 874306800,
+            "whois": "Admin Country: US\nAdmin Organization: Google LLC\nAdmin State/Province: CA\nCreation Date: 1997-09-15T04:00:00Z\nCreation Date: 1997-09-15T07:00:00+0000\nDNSSEC: unsigned\nDomain Name: GOOGLE.COM\nDomain Name: google.com\nDomain Status: clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)\nDomain Status: clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited\nDomain Status: clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)\nDomain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited\nDomain Status: clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)\nDomain Status: clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited\nDomain Status: serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)\nDomain Status: serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited\nDomain Status: serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)\nDomain Status: serverTransferProhibited https://icann.org/epp#serverTransferProhibited\nDomain Status: serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)\nDomain Status: serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited\nName Server: NS1.GOOGLE.COM\nName Server: NS2.GOOGLE.COM\nName Server: NS3.GOOGLE.COM\nName Server: NS4.GOOGLE.COM\nName Server: ns1.google.com\nName Server: ns2.google.com\nName Server: ns3.google.com\nName Server: ns4.google.com\nRegistrant Country: US\nRegistrant Email: ca4484b9e50182bds@\nRegistrant Organization: 3307059bbb3149c4\nRegistrant State/Province: b1952dfc047df18a\nRegistrar Abuse Contact Email: abusecomplaints@markmonitor.com\nRegistrar Abuse Contact Phone: +1.2086851750\nRegistrar IANA ID: 292\nRegistrar Registration Expiration Date: 2028-09-13T07:00:00+0000\nRegistrar URL: http://www.markmonitor.com\nRegistrar WHOIS Server: whois.markmonitor.com\nRegistrar: MarkMonitor Inc.\nRegistrar: MarkMonitor, Inc.\nRegistry Domain ID: 2138514_DOMAIN_COM-VRSN\nRegistry Expiry Date: 2028-09-14T04:00:00Z\nTech Country: US\nTech Organization: Google LLC\nTech State/Province: CA\nUpdated Date: 2019-09-09T15:39:04Z\nUpdated Date: 2024-08-02T02:17:33+0000",
+            "popularity_ranks": {
+                "Majestic": {
+                    "rank": 1,
+                    "timestamp": 1739630291
+                },
+                "Statvoo": {
+                    "timestamp": 1684083481,
+                    "rank": 1
+                },
+                "Alexa": {
+                    "timestamp": 1684083480,
+                    "rank": 1
+                },
+                "Cisco Umbrella": {
+                    "rank": 1,
+                    "timestamp": 1739630281
+                },
+                "Quantcast": {
+                    "timestamp": 1585755370,
+                    "rank": 1
+                },
+                "Cloudflare Radar": {
+                    "rank": 1,
+                    "timestamp": 1739630292
+                }
+            },
+            "last_dns_records": [
+                {
+                    "type": "NS",
+                    "ttl": 21600,
+                    "value": "ns2.google.com"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "onetrust-domain-verification=de01ed21f2fa4d8781cbc3ffb89cf4ef"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "cisco-ci-domain-verification=479146de172eb01ddee38b1a455ab9e8bb51542ddd7f1fa298557dfa7b22d963"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.139"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.138"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "facebook-domain-verification=22rm551cu4k0ab0bxsw536tlds4h95"
+                },
+                {
+                    "type": "CAA",
+                    "ttl": 15597,
+                    "flag": 0,
+                    "tag": "issue",
+                    "value": "pki.goog"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "google-site-verification=4ibFUgB-wXLQ_S7vsXVomSTVamuOXBiVAzpR5IZ87D0"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "google-site-verification=TV9-DBe4R80X4v0M4U_bd_J9cpOJM0nikft0jAgjmsQ"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.102"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "apple-domain-verification=30afIBcvSuDV2PLX"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "google-site-verification=wD8N7i1JTNTkezJ49swvWW48f8_9xveREV4oB-0Hf5o"
+                },
+                {
+                    "type": "NS",
+                    "ttl": 21600,
+                    "value": "ns4.google.com"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.101"
+                },
+                {
+                    "type": "AAAA",
+                    "ttl": 300,
+                    "value": "2607:f8b0:4001:c00::71"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "docusign=05958488-4752-4ef2-95eb-aa7ba8a3bd0e"
+                },
+                {
+                    "type": "NS",
+                    "ttl": 21600,
+                    "value": "ns3.google.com"
+                },
+                {
+                    "type": "AAAA",
+                    "ttl": 300,
+                    "value": "2607:f8b0:4001:c00::64"
+                },
+                {
+                    "type": "MX",
+                    "ttl": 149,
+                    "priority": 10,
+                    "value": "smtp.google.com"
+                },
+                {
+                    "type": "NS",
+                    "ttl": 21600,
+                    "value": "ns1.google.com"
+                },
+                {
+                    "type": "AAAA",
+                    "ttl": 300,
+                    "value": "2607:f8b0:4001:c00::8a"
+                },
+                {
+                    "type": "AAAA",
+                    "ttl": 300,
+                    "value": "2607:f8b0:4001:c00::66"
+                },
+                {
+                    "type": "SOA",
+                    "ttl": 32,
+                    "value": "ns1.google.com",
+                    "rname": "dns-admin.google.com",
+                    "serial": 726852545,
+                    "refresh": 900,
+                    "retry": 900,
+                    "expire": 1800,
+                    "minimum": 60
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "docusign=1b0a6754-49b1-4db5-8540-d2c12664b289"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.113"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "MS=E4A68B9AB2BB9670BCE15412F62916164C0B20BB"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "v=spf1 include:_spf.google.com ~all"
+                },
+                {
+                    "type": "A",
+                    "ttl": 300,
+                    "value": "74.125.132.100"
+                },
+                {
+                    "type": "TXT",
+                    "ttl": 3600,
+                    "value": "globalsign-smime-dv=CDYX+XFHUw2wml6/Gb8+59BsH31KzUr6c1l2BPvqKX8="
+                }
+            ],
+            "reputation": 604,
+            "whois_date": 1738682976,
+            "categories": {
+                "alphaMountain.ai": "Search Engines/Portals (alphaMountain.ai)",
+                "BitDefender": "searchengines",
+                "Sophos": "search engines",
+                "Forcepoint ThreatSeeker": "search engines and portals"
+            },
+            "registrar": "MarkMonitor Inc.",
+            "jarm": "27d40d40d29d40d1dc42d43d00041d4689ee210389f4f6b4b5b1b93f92252d",
+            "last_modification_date": 1739662663
+        }
+    }
+}
+
+--- SecurityTrails Domain Info ---
+{"alexa_rank":null,"apex_domain":"oracle.com","current_dns":{"a":{"first_seen":"2024-12-11","values":[{"h":null,"ip":"138.1.33.162","ip_count":0,"ip_organization":"Oracle Corporation"}]},"aaaa":{},"mx":{"first_seen":"2024-12-11","values":[{"hostname":"mxb-00069f01.gslb.pphosted.com","hostname_count":0,"hostname_organization":"Proofpoint, Inc.","priority":20},{"hostname":"mxa-00069f01.gslb.pphosted.com","hostname_count":0,"hostname_organization":"Proofpoint, Inc.","priority":20}]},"ns":{"first_seen":"2024-12-11","values":[{"nameserver":"ns4.p201.dns.oraclecloud.net","nameserver_count":0,"nameserver_organization":"Oracle Corporation"},{"nameserver":"ns3.p201.dns.oraclecloud.net","nameserver_count":0,"nameserver_organization":"Oracle Corporation"},{"nameserver":"ns2.p201.dns.oraclecloud.net","nameserver_count":0,"nameserver_organization":"Oracle Corporation"},{"nameserver":"ns1.p201.dns.oraclecloud.net","nameserver_count":0,"nameserver_organization":"Oracle Corporation"},{"nameserver":"a18-67.akam.net","nameserver_count":0,"nameserver_organization":"Akamai International B.V."},{"nameserver":"a13-65.akam.net","nameserver_count":0,"nameserver_organization":"Akamai International B.V."},{"nameserver":"a11-66.akam.net","nameserver_count":0,"nameserver_organization":"Akamai International B.V."},{"nameserver":"a1-160.akam.net","nameserver_count":0,"nameserver_organization":"Akamai International B.V."}]},"soa":{"first_seen":"2024-12-11","values":[{"email":"hostmaster.oracle.com","email_count":0,"ttl":7200}]},"txt":{"first_seen":"2024-12-11","values":[{"value":"zoom-domain-verification = 31c4caad-f2b3-4ef8-8d92-26df2e836f3e"},{"value":"zoom-domain-verification\n=\n31c4caad-f2b3-4ef8-8d92-26df2e836f3e"},{"value":"yandex-verification: 4f894a8e737184e9"},{"value":"webexdomainverification.LSOJ=4b3a4ca8-7b0a-4bbc-8816-686e1bb4ddf7"},{"value":"webexdomainverification.LSOE=4e1c3c86-abf0-4902-8a84-b34420ef075c"},{"value":"webexdomainverification.JRJC=6ac35490-0c1a-4729-b3fc-78a568159417"},{"value":"webexdomainverification.JRGF=35895e43-87ca-4bdf-8feb-b7a0e22694f3"},{"value":"webexdomainverification.JM3I=c1caad11-9eb5-4c76-877d-06dcfcb95db3"},{"value":"webexdomainverification.JIOB=3bc19d00-8f37-45bd-9799-e8ffa9c77306"},{"value":"webexdomainverification.HO6U=eeb397a4-2b0c-4475-ae07-56dfc4507757"},{"value":"webexdomainverification.F00R=81ccb499-274a-447d-a54a-934bb0dafec4"},{"value":"webexdomainverification.=e86664eb-38ad-46f7-aa1a-60203dfca9a0"},{"value":"webexdomainverification.=d729667e-36b8-4d4a-bbb7-0f3069025573"},{"value":"webexdomainverification.=d3071182-7ce2-4cb6-b315-90e9b7f866dc"},{"value":"webexdomainverification.=cfeaa219-cb2c-458e-baea-d24703ba2355"},{"value":"webexdomainverification.=bbd0294a-bc53-46f4-b21c-8dfab1cb7666"},{"value":"webexdomainverification.=a3652afd-f531-4076-9a45-1e184df3a2d6"},{"value":"webexdomainverification.=6d066ca0-8f37-48c6-8a96-1909343f9c23"},{"value":"webexdomainverification.=603d007e-3304-48a2-b9bc-c8d22b669304"},{"value":"webexdomainverification.=5c0fd5af-2fff-48d7-a138-10711dd460bb"},{"value":"webexdomainverification.=2f927290-1d5f-4df2-b1bb-bbb71bea85a9"},{"value":"webexdomainverification.=21e2aa9c-745f-4388-a31f-eac4f6c16444"},{"value":"webexdomainverification.=1f146848-946a-45a1-b021-4b3d4ef924d6"},{"value":"webexdomainverification.=04ce0c34-7d39-41dd-a3ba-627a30cd205c"},{"value":"v=spf1 include:spf_s.oracle.com include:spf_r.oracle.com include:spf_c.oraclecloud.com include:spf_x.oracle.com include:spf_z.oracle.com include:stspg-customer.com ~all"},{"value":"google-site-verification=wXL-gAW01OVDMhb-6YPCh4XxwPBIXfGhGDcQhLSzd-k"},{"value":"google-site-verification=Tpoo3Bhw4cI4JjPp4v2RZz3JzSNkYg98yPwOLanQ2gI"},{"value":"google-site-verification=RzPlMxOfod0eiMchm-MP3BhdhPgDHzL2mE_mAD91IWg"},{"value":"google-site-verification=IwkBNLXsgiyZ9wUuXa1-PynELZFJlYOduHp7uPcTfdo"},{"value":"docusign=2be17354-8326-4a61-8700-8276a284f7f8"},{"value":"docusign=061e3d77-6c9b-4908-afd2-b2f02c39ecf2"},{"value":"cloudhealth=647661d7-af1e-4696-88b6-eed192d10e56"},{"value":"ciscocidomainverification=1864e14e0478e40197a9f4b07e52f6add508db236b82a10b6aa2df2eac6fe75b"},{"value":"atlassian-domain-verification=xpCgyo81RlS8Nywge8zAU0pqo89fXgqXNsCp9VVSIxP2j0Z9sthcjZbygEUlocRy"},{"value":"atlassian-domain-verification=dKssjBiaoCdxRMWHZE/bBDYu4Wh4oJ6P6tJ/jxDKM37grHev0Qa5eWhnuAi1lJfJ"},{"value":"amazonses:w4vl+NQAMony+agN9mt8H5MV4isrTCU3iFGSFSmgs7E="},{"value":"amazonses:rJLKgYvappkvPl76X7w/Eeq6Qdk9AorogfUGE0NB0G8="},{"value":"amazonses:bGS07pWw+FmfvUu4KgJNzF1GIZqr8BJrrqcw7NtMJlI="},{"value":"amazonses:WiyIwuGeeSNOIz7rqmlfP1MfDGCQFLMv4MgUsvcUTWE="},{"value":"adobe-idp-site-verification=897d22d1-bca0-4449-90a4-1ac86c506dcd"},{"value":"MS=ms68450787"},{"value":"5mqsjfm8mpy57x4xwfs8dbfrgx14vhs5"}]}},"endpoint":"/v1/domain/oracle.com","hostname":"oracle.com","subdomain_count":1}

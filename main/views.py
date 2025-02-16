@@ -868,10 +868,11 @@ def url_scan(request):
 
 @login_required
 def email_investigation(request):
-    return render(request, 'threat/email_investigation.html')
+    return render(request, 'threat/email_investigation/email_investigation.html')
 
 # Hash Analysis View
 @csrf_exempt
+@require_http_methods(["POST"])
 @require_http_methods(["POST"])
 async def analyze_hash(request):
     """
