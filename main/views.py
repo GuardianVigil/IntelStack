@@ -860,7 +860,7 @@ def hash_analysis(request):
 
 @login_required
 def domain_reputation(request):
-    return render(request, 'threat/domain_reputation.html')
+    return render(request, 'threat/domain_reputation/domain_reputation.html')
 
 @login_required
 def url_scan(request):

@@ -1,0 +1,279 @@
+{% extends 'components/layouts/default.html' %}
+{% load static %}
+
+{% block content %}
+<div x-data="{ 
+    domain: '',
+    loading: false,
+    results: null,
+    error: null,
+    showDetails: { virustotal: false, alienvault: false, pulsedive: false, metaDefender: false },
+    getRiskDescription(level) {
+        const descriptions = {
+            'Low': 'This domain appears to be safe',
+            'Medium': 'Exercise caution with this domain',
+            'High': 'This domain may be dangerous'
+        };
+        return descriptions[level] || 'Unknown risk level';
+    },
+    formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        return new Date(dateString).toLocaleDateString();
+    },
+    async analyzeDomain() {
+        if (!this.domain) return;
+        this.loading = true;
+        this.results = null;
+        this.error = null;
+        
+        try {
+            const response = await fetch(`/services/domain-scan/api/domain-reputation/${encodeURIComponent(this.domain)}/`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            
+            // Check for error in response
+            if (data.error) {
+                this.error = data.error;
+                // Show error notification
+                const toast = window.Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    padding: '10px 20px'
+                });
+                toast.fire({
+                    icon: 'error',
+                    title: 'Error analyzing domain',
+                    text: data.error
+                });
+                return;
+            }
+            
+            // Store results
+            this.results = data;
+            
+            // Show success notification
+            const toast = window.Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                padding: '10px 20px'
+            });
+            toast.fire({
+                icon: 'success',
+                title: 'Analysis Complete',
+                text: 'Domain analysis completed successfully'
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            this.error = error.message;
+            // Show error notification
+            const toast = window.Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                padding: '10px 20px'
+            });
+            toast.fire({
+                icon: 'error',
+                title: 'Error analyzing domain',
+                text: error.message
+            });
+        } finally {
+            this.loading = false;
+        }
+    }
+}">
+  <!-- Breadcrumb -->
+  <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
+    <li>
+      <a href="/" class="text-primary hover:underline">Dashboard</a>
+    </li>
+    <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
+      <span>Domain Reputation</span>
+    </li>
+  </ul>
+
+  <!-- Search Section  -->
+  <div class="pt-5">
+    <div class="panel p-6">
+      <div class="mb-4">
+        <h5 class="text-2xl font-bold">Domain Reputation Checker</h5>
+        <p class="text-gray-500 mt-1">Enter a domain to evaluate its reputation and security status.</p>
+      </div>
+      <form @submit.prevent="analyzeDomain" class="flex flex-col sm:flex-row gap-4">
+        <input type="text" 
+               x-model="domain"
+               placeholder="Enter domain name (e.g., example.com)" 
+               class="form-input flex-1" />
+        <button type="submit" 
+                class="btn btn-primary"
+                :disabled="loading || !domain">
+            <template x-if="!loading">
+                <span>Analyze Domain</span>
+            </template>
+            <template x-if="loading">
+                <div class="flex items-center">
+                    <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    </svg>
+                    <span>Analyzing...</span>
+                </div>
+            </template>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <template x-if="error">
+    <div class="mt-8">
+      <div class="panel p-6 bg-red-50 border-red-200">
+        <div class="flex items-center text-red-500">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h6 class="text-lg font-semibold" x-text="error"></h6>
+        </div>
+        <p class="mt-2 text-red-600">Please try again or contact support if the problem persists.</p>
+      </div>
+    </div>
+  </template>
+
+  <!-- Results Section -->
+  <template x-if="results && !error">
+    <div class="mt-8">
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <!-- Threat Analysis / Score -->
+        <div class="panel p-6 rounded-lg bg-gradient-to-r from-blue-500/20 to-blue-400/20 border-0">
+          <div class="flex flex-col items-center">
+            <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Threat Analysis</h5>
+            <div class="relative w-32 h-32 mb-4">
+              <div class="w-full h-full rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                <span class="text-4xl font-bold" x-text="results.threat_score + '%'"></span>
+              </div>
+            </div>
+            <p class="text-center text-gray-600 dark:text-gray-400" x-text="getRiskDescription(results.summary.risk_level)"></p>
+          </div>
+        </div>
+
+        <!-- WHOIS Information -->
+        <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
+          <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">WHOIS Information</h5>
+          <div class="space-y-3">
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">Registrar</label>
+              <p class="font-semibold mt-1" x-text="results.whois.registrar || 'N/A'"></p>
+            </div>
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">Created Date</label>
+              <p class="font-semibold mt-1" x-text="formatDate(results.whois.createdDate)"></p>
+            </div>
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">Expiry Date</label>
+              <p class="font-semibold mt-1" x-text="formatDate(results.whois.expiryDate)"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Status -->
+        <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
+          <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Status</h5>
+          <div class="space-y-3">
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">Blacklist Status</label>
+              <div class="mt-1">
+                <span class="badge" :class="{
+                  'badge-outline-success': results.security.blacklistStatus === 'Clean',
+                  'badge-outline-warning': results.security.blacklistStatus === 'Suspicious',
+                  'badge-outline-danger': results.security.blacklistStatus === 'Blacklisted'
+                }" x-text="results.security.blacklistStatus || 'Unknown'"></span>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">SSL Status</label>
+              <div class="mt-1">
+                <span class="badge" :class="{
+                  'badge-outline-success': results.security.sslStatus === 'Valid',
+                  'badge-outline-warning': results.security.sslStatus === 'Expired',
+                  'badge-outline-danger': results.security.sslStatus === 'Invalid'
+                }" x-text="results.security.sslStatus || 'Unknown'"></span>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-600 dark:text-gray-400">Malware Status</label>
+              <div class="mt-1">
+                <span class="badge" :class="{
+                  'badge-outline-success': results.security.malwareStatus === 'Clean',
+                  'badge-outline-warning': results.security.malwareStatus === 'Suspicious',
+                  'badge-outline-danger': results.security.malwareStatus === 'Detected'
+                }" x-text="results.security.malwareStatus || 'Unknown'"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Platform Results -->
+        <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow xl:col-span-3">
+          <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Platforms</h5>
+          <div class="space-y-4">
+            <!-- Platform Cards -->
+            <template x-for="(data, platform) in results.platform_data" :key="platform">
+              <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-md hover:shadow-lg transition">
+                <div class="flex items-center justify-between">
+                  <h6 class="text-base font-semibold text-gray-800 dark:text-white" x-text="platform"></h6>
+                  <div class="flex items-center">
+                    <template x-if="data.error">
+                      <span class="badge badge-outline-danger" x-text="'Error: ' + data.error"></span>
+                    </template>
+                    <template x-if="!data.error">
+                      <div>
+                        <span class="badge" :class="{
+                          'badge-outline-success': data.status === 'Clean',
+                          'badge-outline-warning': data.status === 'Suspicious',
+                          'badge-outline-danger': data.status === 'Malicious'
+                        }" x-text="data.status"></span>
+                        <span class="text-sm text-gray-500 ml-2" x-text="'Last analyzed: ' + formatDate(data.lastAnalysisDate)"></span>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+                
+                <!-- Platform Details -->
+                <template x-if="!data.error && data.detections">
+                  <div class="mt-3 pl-4 border-l-2 border-gray-200">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                      <div>
+                        <span class="text-sm text-gray-500">Total Scans</span>
+                        <p class="font-semibold" x-text="data.detections.total"></p>
+                      </div>
+                      <div>
+                        <span class="text-sm text-gray-500">Malicious</span>
+                        <p class="font-semibold text-red-500" x-text="data.detections.malicious"></p>
+                      </div>
+                      <div>
+                        <span class="text-sm text-gray-500">Suspicious</span>
+                        <p class="font-semibold text-yellow-500" x-text="data.detections.suspicious"></p>
+                      </div>
+                      <div>
+                        <span class="text-sm text-gray-500">Clean</span>
+                        <p class="font-semibold text-green-500" x-text="data.detections.clean"></p>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+</div>
+{% endblock %}

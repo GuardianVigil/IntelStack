@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -168,4 +168,6 @@ urlpatterns = [
     path('settings/user-profile/', views.user_profile, name='user_profile'),
     path('settings/security-settings/', views.security_settings, name='security_settings'),
     
+    # Domain Reputation URLs
+    path('services/domain-scan/', include('main.services.domain_scan.urls')),
 ]

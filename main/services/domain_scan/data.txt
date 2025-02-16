@@ -1,0 +1,5071 @@
+
+====================================================================================================
+PLATFORM: ALIENVAULT_RESULT
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.176176
+----------------------------------------------------------------------------------------------------
+{
+  "general": {
+    "sections": [
+      "general",
+      "geo",
+      "url_list",
+      "passive_dns",
+      "malware",
+      "whois",
+      "http_scans"
+    ],
+    "whois": "http://whois.domaintools.com/kinltd.top",
+    "alexa": "http://www.alexa.com/siteinfo/kinltd.top",
+    "indicator": "kinltd.top",
+    "type": "domain",
+    "type_title": "Domain",
+    "validation": [],
+    "base_indicator": {
+      "id": 3918475328,
+      "indicator": "kinltd.top",
+      "type": "domain",
+      "title": "",
+      "description": "",
+      "content": "",
+      "access_type": "public",
+      "access_reason": ""
+    },
+    "pulse_info": {
+      "count": 2,
+      "pulses": [
+        {
+          "id": "67af27334c36ae76f4b8ff00",
+          "name": "SarlackLab C2 Tracking",
+          "description": "",
+          "modified": "2025-02-15T14:30:30.837000",
+          "created": "2025-02-14T11:21:23.828000",
+          "tags": [
+            "c2"
+          ],
+          "references": [
+            "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv",
+            "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+            "https://abjuri5t.github.io/SarlackLab/",
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak"
+          ],
+          "public": 1,
+          "adversary": "",
+          "targeted_countries": [],
+          "malware_families": [
+            {
+              "id": "NanoCore",
+              "display_name": "NanoCore",
+              "target": null
+            },
+            {
+              "id": "RedLine Stealer",
+              "display_name": "RedLine Stealer",
+              "target": null
+            },
+            {
+              "id": "NjRAT",
+              "display_name": "NjRAT",
+              "target": null
+            }
+          ],
+          "attack_ids": [],
+          "industries": [],
+          "TLP": "white",
+          "cloned_from": null,
+          "export_count": 5,
+          "upvotes_count": 0,
+          "downvotes_count": 0,
+          "votes_count": 0,
+          "locked": false,
+          "pulse_source": "web",
+          "validator_count": 0,
+          "comment_count": 0,
+          "follower_count": 0,
+          "vote": 0,
+          "author": {
+            "username": "skocherhan",
+            "id": "249290",
+            "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_249290/resized/80/avatar_3b9c358f36.png",
+            "is_subscribed": false,
+            "is_following": false
+          },
+          "indicator_type_counts": {
+            "IPv4": 1312,
+            "URL": 8,
+            "domain": 211,
+            "hostname": 637
+          },
+          "indicator_count": 2168,
+          "is_author": false,
+          "is_subscribing": null,
+          "subscriber_count": 97,
+          "modified_text": "14 hours ago ",
+          "is_modified": true,
+          "groups": [],
+          "in_group": false,
+          "threat_hunter_scannable": true,
+          "threat_hunter_has_agents": 1,
+          "related_indicator_type": "domain",
+          "related_indicator_is_active": 1
+        },
+        {
+          "id": "6733ef6b97878a39759383c3",
+          "name": "URLHaus data - 12-11-2024",
+          "description": "",
+          "modified": "2024-12-13T00:04:03",
+          "created": "2024-11-13T00:14:35.362000",
+          "tags": [
+            "32-bit",
+            "elf",
+            "mips",
+            "Mozi",
+            "arm",
+            "hajime",
+            "mirai",
+            "SocGholish",
+            "fbi.gov",
+            "moobot",
+            "WebServerPirata",
+            "selfrep",
+            "dlr",
+            "db0fa4b8db0333367e9bda3ab68b8042",
+            "Yakuza",
+            "sh",
+            "NetSupport",
+            "NetSupportModules",
+            "NetSupportRAT",
+            "NetSupportRATModules",
+            "zip",
+            "meerkat",
+            "opendir",
+            "encrypted",
+            "GuLoader",
+            "rat",
+            "RemcosRAT",
+            "ascii",
+            "Encoded",
+            "malicious",
+            "windows",
+            "ConnectBack",
+            "Metasploit",
+            "64-bit",
+            "x86-64",
+            "botnetdomain",
+            "ua-wget",
+            "lnk",
+            "lnk-powershell",
+            "md5-4cb51635512723175f9ef97770ed3ebc",
+            "xmrig",
+            "Ransomware",
+            "CobaltStrike",
+            "xworm",
+            "jerryRAT",
+            "payload.bin",
+            "test.txt",
+            "payloadbin",
+            "AgentTesla",
+            "hta",
+            "younglotus",
+            "07NOV2024ESM",
+            "AsyncRAT",
+            "pw-07NOV2024ESM"
+          ],
+          "references": [
+            "https://urlhaus.abuse.ch/browse/"
+          ],
+          "public": 1,
+          "adversary": "",
+          "targeted_countries": [],
+          "malware_families": [],
+          "attack_ids": [],
+          "industries": [],
+          "TLP": "green",
+          "cloned_from": null,
+          "export_count": 69,
+          "upvotes_count": 0,
+          "downvotes_count": 0,
+          "votes_count": 0,
+          "locked": false,
+          "pulse_source": "api",
+          "validator_count": 0,
+          "comment_count": 0,
+          "follower_count": 0,
+          "vote": 0,
+          "author": {
+            "username": "CyberHunterAutoFeed",
+            "id": "182496",
+            "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_182496/resized/80/avatar_3b9c358f36.png",
+            "is_subscribed": false,
+            "is_following": false
+          },
+          "indicator_type_counts": {
+            "URL": 1000,
+            "hostname": 7,
+            "domain": 6
+          },
+          "indicator_count": 1013,
+          "is_author": false,
+          "is_subscribing": null,
+          "subscriber_count": 1075,
+          "modified_text": "65 days ago ",
+          "is_modified": true,
+          "groups": [],
+          "in_group": false,
+          "threat_hunter_scannable": false,
+          "threat_hunter_has_agents": 1,
+          "related_indicator_type": "domain",
+          "related_indicator_is_active": 1
+        }
+      ],
+      "references": [
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak",
+        "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+        "https://urlhaus.abuse.ch/browse/",
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+        "https://abjuri5t.github.io/SarlackLab/",
+        "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+        "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv"
+      ],
+      "related": {
+        "alienvault": {
+          "adversary": [],
+          "malware_families": [],
+          "industries": []
+        },
+        "other": {
+          "adversary": [],
+          "malware_families": [
+            "Nanocore",
+            "Njrat",
+            "Redline stealer"
+          ],
+          "industries": []
+        }
+      }
+    },
+    "false_positive": []
+  },
+  "reputation": {},
+  "geo": {
+    "asn": "AS13335 cloudflare",
+    "city_data": true,
+    "city": null,
+    "region": null,
+    "continent_code": "NA",
+    "country_code3": "USA",
+    "country_code2": "US",
+    "subdivision": null,
+    "latitude": 37.751,
+    "postal_code": null,
+    "longitude": -97.822,
+    "accuracy_radius": 1000,
+    "country_code": "US",
+    "country_name": "United States of America",
+    "dma_code": 0,
+    "charset": 0,
+    "area_code": 0,
+    "flag_url": "/assets/images/flags/us.png",
+    "flag_title": "United States of America"
+  },
+  "malware": {
+    "data": [],
+    "size": 0,
+    "count": 0
+  },
+  "url_list": {
+    "url_list": [
+      {
+        "url": "http://kinltd.top/",
+        "date": "2024-12-19T13:40:27",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "result": {
+          "urlworker": {
+            "ip": "172.67.216.75",
+            "http_code": 403
+          },
+          "safebrowsing": {
+            "matches": []
+          }
+        },
+        "httpcode": 403,
+        "gsb": [],
+        "encoded": "http%3A//kinltd.top/"
+      },
+      {
+        "url": "http://_dc-mx.c7cc51a3401b.kinltd.top/",
+        "date": "2024-11-13T14:56:37",
+        "domain": "kinltd.top",
+        "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+        "encoded": "http%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+      },
+      {
+        "url": "https://_dc-mx.c7cc51a3401b.kinltd.top/",
+        "date": "2024-11-13T14:56:34",
+        "domain": "kinltd.top",
+        "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+        "encoded": "https%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+      },
+      {
+        "url": "https://kinltd.top/KAxnVVwaQV3.bink",
+        "date": "2024-11-12T10:47:38",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bink"
+      },
+      {
+        "url": "https://kinltd.top/KAxnVVwaQV3.bin=",
+        "date": "2024-11-12T10:47:38",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin%3D"
+      },
+      {
+        "url": "https://kinltd.top/KAxnVVwaQV3.bin",
+        "date": "2024-11-12T10:47:36",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin"
+      },
+      {
+        "url": "https://www.kinltd.top/",
+        "date": "2024-10-25T15:07:50",
+        "domain": "kinltd.top",
+        "hostname": "www.kinltd.top",
+        "result": {
+          "urlworker": {
+            "ip": "104.21.24.17",
+            "http_code": 200
+          },
+          "safebrowsing": {
+            "matches": []
+          }
+        },
+        "httpcode": 200,
+        "gsb": [],
+        "encoded": "https%3A//www.kinltd.top/"
+      },
+      {
+        "url": "https://kinltd.top/",
+        "date": "2024-09-26T21:12:12",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "result": {
+          "urlworker": {
+            "ip": "104.21.24.17",
+            "http_code": 200
+          },
+          "safebrowsing": {
+            "matches": []
+          }
+        },
+        "httpcode": 200,
+        "gsb": [],
+        "encoded": "https%3A//kinltd.top/"
+      },
+      {
+        "url": "http://kinltd.top/cgi-sys/defaultwebpage.cgi",
+        "date": "2024-07-19T02:39:20",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "result": {
+          "urlworker": {
+            "ip": "104.21.24.17",
+            "http_code": 200
+          },
+          "safebrowsing": {
+            "matches": []
+          }
+        },
+        "httpcode": 200,
+        "gsb": [],
+        "encoded": "http%3A//kinltd.top/cgi-sys/defaultwebpage.cgi"
+      },
+      {
+        "url": "http://kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php",
+        "date": "2024-07-09T17:15:16",
+        "domain": "kinltd.top",
+        "hostname": "kinltd.top",
+        "result": {
+          "urlworker": {
+            "http_code": 0
+          },
+          "safebrowsing": {
+            "matches": []
+          }
+        },
+        "httpcode": 0,
+        "gsb": [],
+        "encoded": "http%3A//kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php"
+      }
+    ],
+    "page_num": 1,
+    "limit": 10,
+    "paged": true,
+    "has_next": true,
+    "full_size": 15,
+    "actual_size": 15
+  },
+  "passive_dns": {
+    "passive_dns": [
+      {
+        "address": "2606:4700:3035::ac43:d84b",
+        "first": "2024-10-30T14:28:30",
+        "last": "2024-10-30T14:58:37",
+        "hostname": "www.kinltd.top",
+        "record_type": "AAAA",
+        "indicator_link": "/indicator/hostname/www.kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "hostname",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "2606:4700:3030::6815:1811",
+        "first": "2024-10-30T14:28:30",
+        "last": "2024-10-30T14:58:37",
+        "hostname": "www.kinltd.top",
+        "record_type": "AAAA",
+        "indicator_link": "/indicator/hostname/www.kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "hostname",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "172.67.216.75",
+        "first": "2024-10-30T14:28:28",
+        "last": "2024-10-30T15:00:36",
+        "hostname": "www.kinltd.top",
+        "record_type": "A",
+        "indicator_link": "/indicator/hostname/www.kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "hostname",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "104.21.24.17",
+        "first": "2024-10-30T14:28:28",
+        "last": "2024-10-30T15:00:36",
+        "hostname": "www.kinltd.top",
+        "record_type": "A",
+        "indicator_link": "/indicator/hostname/www.kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "hostname",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "troy.ns.cloudflare.com",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "NS",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "2606:4700:3035::ac43:d84b",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "AAAA",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "104.21.24.17",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "A",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "2606:4700:3030::6815:1811",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "AAAA",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "172.67.216.75",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "A",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "maisie.ns.cloudflare.com",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "SOA",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      },
+      {
+        "address": "maisie.ns.cloudflare.com",
+        "first": "2024-07-05T09:33:38",
+        "last": "2024-12-24T13:40:41",
+        "hostname": "kinltd.top",
+        "record_type": "NS",
+        "indicator_link": "/indicator/domain/kinltd.top",
+        "flag_url": "assets/images/flags/us.png",
+        "flag_title": "United States",
+        "asset_type": "domain",
+        "asn": "AS13335 cloudflare"
+      }
+    ],
+    "count": 11
+  }
+}
+
+
+====================================================================================================
+PLATFORM: VIRUSTOTAL_RESULT
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.178498
+----------------------------------------------------------------------------------------------------
+{
+  "last_analysis_stats": {
+    "malicious": 15,
+    "suspicious": 2,
+    "undetected": 28,
+    "harmless": 49,
+    "timeout": 0
+  },
+  "reputation": -2,
+  "total_votes": {
+    "harmless": 0,
+    "malicious": 2
+  },
+  "last_analysis_results": {
+    "Acronis": {
+      "method": "blacklist",
+      "engine_name": "Acronis",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "0xSI_f33d": {
+      "method": "blacklist",
+      "engine_name": "0xSI_f33d",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Abusix": {
+      "method": "blacklist",
+      "engine_name": "Abusix",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "ADMINUSLabs": {
+      "method": "blacklist",
+      "engine_name": "ADMINUSLabs",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Axur": {
+      "method": "blacklist",
+      "engine_name": "Axur",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Criminal IP": {
+      "method": "blacklist",
+      "engine_name": "Criminal IP",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "AILabs (MONITORAPP)": {
+      "method": "blacklist",
+      "engine_name": "AILabs (MONITORAPP)",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "AlienVault": {
+      "method": "blacklist",
+      "engine_name": "AlienVault",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "alphaMountain.ai": {
+      "method": "blacklist",
+      "engine_name": "alphaMountain.ai",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "AlphaSOC": {
+      "method": "blacklist",
+      "engine_name": "AlphaSOC",
+      "category": "malicious",
+      "result": "malware"
+    },
+    "Antiy-AVL": {
+      "method": "blacklist",
+      "engine_name": "Antiy-AVL",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "ArcSight Threat Intelligence": {
+      "method": "blacklist",
+      "engine_name": "ArcSight Threat Intelligence",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "AutoShun": {
+      "method": "blacklist",
+      "engine_name": "AutoShun",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "benkow.cc": {
+      "method": "blacklist",
+      "engine_name": "benkow.cc",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Bfore.Ai PreCrime": {
+      "method": "blacklist",
+      "engine_name": "Bfore.Ai PreCrime",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "BitDefender": {
+      "method": "blacklist",
+      "engine_name": "BitDefender",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "Bkav": {
+      "method": "blacklist",
+      "engine_name": "Bkav",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Blueliv": {
+      "method": "blacklist",
+      "engine_name": "Blueliv",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Certego": {
+      "method": "blacklist",
+      "engine_name": "Certego",
+      "category": "malicious",
+      "result": "malicious"
+    },
+    "Chong Lua Dao": {
+      "method": "blacklist",
+      "engine_name": "Chong Lua Dao",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "CINS Army": {
+      "method": "blacklist",
+      "engine_name": "CINS Army",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Cluster25": {
+      "method": "blacklist",
+      "engine_name": "Cluster25",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "CRDF": {
+      "method": "blacklist",
+      "engine_name": "CRDF",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "CSIS Security Group": {
+      "method": "blacklist",
+      "engine_name": "CSIS Security Group",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Snort IP sample list": {
+      "method": "blacklist",
+      "engine_name": "Snort IP sample list",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "CMC Threat Intelligence": {
+      "method": "blacklist",
+      "engine_name": "CMC Threat Intelligence",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Cyan": {
+      "method": "blacklist",
+      "engine_name": "Cyan",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Cyble": {
+      "method": "blacklist",
+      "engine_name": "Cyble",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "CyRadar": {
+      "method": "blacklist",
+      "engine_name": "CyRadar",
+      "category": "malicious",
+      "result": "malicious"
+    },
+    "DNS8": {
+      "method": "blacklist",
+      "engine_name": "DNS8",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Dr.Web": {
+      "method": "blacklist",
+      "engine_name": "Dr.Web",
+      "category": "malicious",
+      "result": "malicious"
+    },
+    "Ermes": {
+      "method": "blacklist",
+      "engine_name": "Ermes",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "ESET": {
+      "method": "blacklist",
+      "engine_name": "ESET",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "ESTsecurity": {
+      "method": "blacklist",
+      "engine_name": "ESTsecurity",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "EmergingThreats": {
+      "method": "blacklist",
+      "engine_name": "EmergingThreats",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Emsisoft": {
+      "method": "blacklist",
+      "engine_name": "Emsisoft",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Forcepoint ThreatSeeker": {
+      "method": "blacklist",
+      "engine_name": "Forcepoint ThreatSeeker",
+      "category": "suspicious",
+      "result": "suspicious"
+    },
+    "Fortinet": {
+      "method": "blacklist",
+      "engine_name": "Fortinet",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "G-Data": {
+      "method": "blacklist",
+      "engine_name": "G-Data",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "GCP Abuse Intelligence": {
+      "method": "blacklist",
+      "engine_name": "GCP Abuse Intelligence",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Google Safebrowsing": {
+      "method": "blacklist",
+      "engine_name": "Google Safebrowsing",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "GreenSnow": {
+      "method": "blacklist",
+      "engine_name": "GreenSnow",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Gridinsoft": {
+      "method": "blacklist",
+      "engine_name": "Gridinsoft",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Heimdal Security": {
+      "method": "blacklist",
+      "engine_name": "Heimdal Security",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Hunt.io Intelligence": {
+      "method": "blacklist",
+      "engine_name": "Hunt.io Intelligence",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "IPsum": {
+      "method": "blacklist",
+      "engine_name": "IPsum",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Juniper Networks": {
+      "method": "blacklist",
+      "engine_name": "Juniper Networks",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Kaspersky": {
+      "method": "blacklist",
+      "engine_name": "Kaspersky",
+      "category": "malicious",
+      "result": "malware"
+    },
+    "Lionic": {
+      "method": "blacklist",
+      "engine_name": "Lionic",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Lumu": {
+      "method": "blacklist",
+      "engine_name": "Lumu",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "MalwarePatrol": {
+      "method": "blacklist",
+      "engine_name": "MalwarePatrol",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "MalwareURL": {
+      "method": "blacklist",
+      "engine_name": "MalwareURL",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Malwared": {
+      "method": "blacklist",
+      "engine_name": "Malwared",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Netcraft": {
+      "method": "blacklist",
+      "engine_name": "Netcraft",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "OpenPhish": {
+      "method": "blacklist",
+      "engine_name": "OpenPhish",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Phishing Database": {
+      "method": "blacklist",
+      "engine_name": "Phishing Database",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "PhishFort": {
+      "method": "blacklist",
+      "engine_name": "PhishFort",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "PhishLabs": {
+      "method": "blacklist",
+      "engine_name": "PhishLabs",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Phishtank": {
+      "method": "blacklist",
+      "engine_name": "Phishtank",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "PREBYTES": {
+      "method": "blacklist",
+      "engine_name": "PREBYTES",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "PrecisionSec": {
+      "method": "blacklist",
+      "engine_name": "PrecisionSec",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Quick Heal": {
+      "method": "blacklist",
+      "engine_name": "Quick Heal",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Quttera": {
+      "method": "blacklist",
+      "engine_name": "Quttera",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "SafeToOpen": {
+      "method": "blacklist",
+      "engine_name": "SafeToOpen",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Sansec eComscan": {
+      "method": "blacklist",
+      "engine_name": "Sansec eComscan",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Scantitan": {
+      "method": "blacklist",
+      "engine_name": "Scantitan",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "SCUMWARE.org": {
+      "method": "blacklist",
+      "engine_name": "SCUMWARE.org",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Seclookup": {
+      "method": "blacklist",
+      "engine_name": "Seclookup",
+      "category": "malicious",
+      "result": "malicious"
+    },
+    "SecureBrain": {
+      "method": "blacklist",
+      "engine_name": "SecureBrain",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Segasec": {
+      "method": "blacklist",
+      "engine_name": "Segasec",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "SOCRadar": {
+      "method": "blacklist",
+      "engine_name": "SOCRadar",
+      "category": "malicious",
+      "result": "malware"
+    },
+    "Sophos": {
+      "method": "blacklist",
+      "engine_name": "Sophos",
+      "category": "malicious",
+      "result": "phishing"
+    },
+    "Spam404": {
+      "method": "blacklist",
+      "engine_name": "Spam404",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "StopForumSpam": {
+      "method": "blacklist",
+      "engine_name": "StopForumSpam",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Sucuri SiteCheck": {
+      "method": "blacklist",
+      "engine_name": "Sucuri SiteCheck",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "ThreatHive": {
+      "method": "blacklist",
+      "engine_name": "ThreatHive",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Threatsourcing": {
+      "method": "blacklist",
+      "engine_name": "Threatsourcing",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Trustwave": {
+      "method": "blacklist",
+      "engine_name": "Trustwave",
+      "category": "suspicious",
+      "result": "suspicious"
+    },
+    "Underworld": {
+      "method": "blacklist",
+      "engine_name": "Underworld",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "URLhaus": {
+      "method": "blacklist",
+      "engine_name": "URLhaus",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "URLQuery": {
+      "method": "blacklist",
+      "engine_name": "URLQuery",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "Viettel Threat Intelligence": {
+      "method": "blacklist",
+      "engine_name": "Viettel Threat Intelligence",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "VIPRE": {
+      "method": "blacklist",
+      "engine_name": "VIPRE",
+      "category": "malicious",
+      "result": "malware"
+    },
+    "VX Vault": {
+      "method": "blacklist",
+      "engine_name": "VX Vault",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "ViriBack": {
+      "method": "blacklist",
+      "engine_name": "ViriBack",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Webroot": {
+      "method": "blacklist",
+      "engine_name": "Webroot",
+      "category": "malicious",
+      "result": "malicious"
+    },
+    "Yandex Safebrowsing": {
+      "method": "blacklist",
+      "engine_name": "Yandex Safebrowsing",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "ZeroCERT": {
+      "method": "blacklist",
+      "engine_name": "ZeroCERT",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "desenmascara.me": {
+      "method": "blacklist",
+      "engine_name": "desenmascara.me",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "malwares.com URL checker": {
+      "method": "blacklist",
+      "engine_name": "malwares.com URL checker",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "securolytics": {
+      "method": "blacklist",
+      "engine_name": "securolytics",
+      "category": "harmless",
+      "result": "clean"
+    },
+    "Xcitium Verdict Cloud": {
+      "method": "blacklist",
+      "engine_name": "Xcitium Verdict Cloud",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "zvelo": {
+      "method": "blacklist",
+      "engine_name": "zvelo",
+      "category": "undetected",
+      "result": "unrated"
+    },
+    "ZeroFox": {
+      "method": "blacklist",
+      "engine_name": "ZeroFox",
+      "category": "undetected",
+      "result": "unrated"
+    }
+  },
+  "categories": {},
+  "creation_date": 1719964800,
+  "last_update_date": 1719964800,
+  "last_dns_records": [
+    {
+      "type": "NS",
+      "ttl": 21600,
+      "value": "troy.ns.cloudflare.com"
+    },
+    {
+      "type": "SOA",
+      "ttl": 1800,
+      "value": "maisie.ns.cloudflare.com",
+      "rname": "dns.cloudflare.com",
+      "serial": 2360843922,
+      "refresh": 10000,
+      "retry": 2400,
+      "expire": 604800,
+      "minimum": 1800
+    },
+    {
+      "type": "A",
+      "ttl": 300,
+      "value": "172.67.216.75"
+    },
+    {
+      "type": "NS",
+      "ttl": 21600,
+      "value": "maisie.ns.cloudflare.com"
+    },
+    {
+      "type": "MX",
+      "ttl": 300,
+      "priority": 10,
+      "value": "_dc-mx.c7cc51a3401b.kinltd.top"
+    },
+    {
+      "type": "A",
+      "ttl": 300,
+      "value": "104.21.24.17"
+    },
+    {
+      "type": "TXT",
+      "ttl": 300,
+      "value": "v=spf1 a mx ip4:195.123.211.110 ~all"
+    },
+    {
+      "type": "AAAA",
+      "ttl": 300,
+      "value": "2606:4700:3030::6815:1811"
+    },
+    {
+      "type": "AAAA",
+      "ttl": 300,
+      "value": "2606:4700:3035::ac43:d84b"
+    }
+  ],
+  "tags": [],
+  "popularity_ranks": {
+    "Cisco Umbrella": {
+      "rank": 372160,
+      "timestamp": 1739630288
+    },
+    "Cloudflare Radar": {
+      "rank": 100000,
+      "timestamp": 1739630296
+    }
+  }
+}
+
+
+====================================================================================================
+PLATFORM: PULSEDIVE_ERROR
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.180518
+----------------------------------------------------------------------------------------------------
+{
+  "error": "Invalid or empty response"
+}
+
+
+====================================================================================================
+PLATFORM: METADEFENDER_RESULT
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.180893
+----------------------------------------------------------------------------------------------------
+{
+  "lookup_results": {
+    "detected_by": 0,
+    "scan_results": [],
+    "address": "kinltd.top",
+    "geo_info": {},
+    "last_seen": null
+  },
+  "reputation": {
+    "reputation_score": 0,
+    "threat_level": "unknown",
+    "detection_sources": [],
+    "first_seen": null,
+    "last_seen": null
+  }
+}
+
+
+====================================================================================================
+PLATFORM: SECURITYTRAILS_ERROR
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.181701
+----------------------------------------------------------------------------------------------------
+{
+  "error": "Invalid or empty response"
+}
+
+
+====================================================================================================
+PLATFORM: ALL_PLATFORMS_RAW
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.182033
+----------------------------------------------------------------------------------------------------
+{
+  "alienvault": {
+    "general": {
+      "sections": [
+        "general",
+        "geo",
+        "url_list",
+        "passive_dns",
+        "malware",
+        "whois",
+        "http_scans"
+      ],
+      "whois": "http://whois.domaintools.com/kinltd.top",
+      "alexa": "http://www.alexa.com/siteinfo/kinltd.top",
+      "indicator": "kinltd.top",
+      "type": "domain",
+      "type_title": "Domain",
+      "validation": [],
+      "base_indicator": {
+        "id": 3918475328,
+        "indicator": "kinltd.top",
+        "type": "domain",
+        "title": "",
+        "description": "",
+        "content": "",
+        "access_type": "public",
+        "access_reason": ""
+      },
+      "pulse_info": {
+        "count": 2,
+        "pulses": [
+          {
+            "id": "67af27334c36ae76f4b8ff00",
+            "name": "SarlackLab C2 Tracking",
+            "description": "",
+            "modified": "2025-02-15T14:30:30.837000",
+            "created": "2025-02-14T11:21:23.828000",
+            "tags": [
+              "c2"
+            ],
+            "references": [
+              "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv",
+              "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+              "https://abjuri5t.github.io/SarlackLab/",
+              "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+              "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+              "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak"
+            ],
+            "public": 1,
+            "adversary": "",
+            "targeted_countries": [],
+            "malware_families": [
+              {
+                "id": "NanoCore",
+                "display_name": "NanoCore",
+                "target": null
+              },
+              {
+                "id": "RedLine Stealer",
+                "display_name": "RedLine Stealer",
+                "target": null
+              },
+              {
+                "id": "NjRAT",
+                "display_name": "NjRAT",
+                "target": null
+              }
+            ],
+            "attack_ids": [],
+            "industries": [],
+            "TLP": "white",
+            "cloned_from": null,
+            "export_count": 5,
+            "upvotes_count": 0,
+            "downvotes_count": 0,
+            "votes_count": 0,
+            "locked": false,
+            "pulse_source": "web",
+            "validator_count": 0,
+            "comment_count": 0,
+            "follower_count": 0,
+            "vote": 0,
+            "author": {
+              "username": "skocherhan",
+              "id": "249290",
+              "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_249290/resized/80/avatar_3b9c358f36.png",
+              "is_subscribed": false,
+              "is_following": false
+            },
+            "indicator_type_counts": {
+              "IPv4": 1312,
+              "URL": 8,
+              "domain": 211,
+              "hostname": 637
+            },
+            "indicator_count": 2168,
+            "is_author": false,
+            "is_subscribing": null,
+            "subscriber_count": 97,
+            "modified_text": "14 hours ago ",
+            "is_modified": true,
+            "groups": [],
+            "in_group": false,
+            "threat_hunter_scannable": true,
+            "threat_hunter_has_agents": 1,
+            "related_indicator_type": "domain",
+            "related_indicator_is_active": 1
+          },
+          {
+            "id": "6733ef6b97878a39759383c3",
+            "name": "URLHaus data - 12-11-2024",
+            "description": "",
+            "modified": "2024-12-13T00:04:03",
+            "created": "2024-11-13T00:14:35.362000",
+            "tags": [
+              "32-bit",
+              "elf",
+              "mips",
+              "Mozi",
+              "arm",
+              "hajime",
+              "mirai",
+              "SocGholish",
+              "fbi.gov",
+              "moobot",
+              "WebServerPirata",
+              "selfrep",
+              "dlr",
+              "db0fa4b8db0333367e9bda3ab68b8042",
+              "Yakuza",
+              "sh",
+              "NetSupport",
+              "NetSupportModules",
+              "NetSupportRAT",
+              "NetSupportRATModules",
+              "zip",
+              "meerkat",
+              "opendir",
+              "encrypted",
+              "GuLoader",
+              "rat",
+              "RemcosRAT",
+              "ascii",
+              "Encoded",
+              "malicious",
+              "windows",
+              "ConnectBack",
+              "Metasploit",
+              "64-bit",
+              "x86-64",
+              "botnetdomain",
+              "ua-wget",
+              "lnk",
+              "lnk-powershell",
+              "md5-4cb51635512723175f9ef97770ed3ebc",
+              "xmrig",
+              "Ransomware",
+              "CobaltStrike",
+              "xworm",
+              "jerryRAT",
+              "payload.bin",
+              "test.txt",
+              "payloadbin",
+              "AgentTesla",
+              "hta",
+              "younglotus",
+              "07NOV2024ESM",
+              "AsyncRAT",
+              "pw-07NOV2024ESM"
+            ],
+            "references": [
+              "https://urlhaus.abuse.ch/browse/"
+            ],
+            "public": 1,
+            "adversary": "",
+            "targeted_countries": [],
+            "malware_families": [],
+            "attack_ids": [],
+            "industries": [],
+            "TLP": "green",
+            "cloned_from": null,
+            "export_count": 69,
+            "upvotes_count": 0,
+            "downvotes_count": 0,
+            "votes_count": 0,
+            "locked": false,
+            "pulse_source": "api",
+            "validator_count": 0,
+            "comment_count": 0,
+            "follower_count": 0,
+            "vote": 0,
+            "author": {
+              "username": "CyberHunterAutoFeed",
+              "id": "182496",
+              "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_182496/resized/80/avatar_3b9c358f36.png",
+              "is_subscribed": false,
+              "is_following": false
+            },
+            "indicator_type_counts": {
+              "URL": 1000,
+              "hostname": 7,
+              "domain": 6
+            },
+            "indicator_count": 1013,
+            "is_author": false,
+            "is_subscribing": null,
+            "subscriber_count": 1075,
+            "modified_text": "65 days ago ",
+            "is_modified": true,
+            "groups": [],
+            "in_group": false,
+            "threat_hunter_scannable": false,
+            "threat_hunter_has_agents": 1,
+            "related_indicator_type": "domain",
+            "related_indicator_is_active": 1
+          }
+        ],
+        "references": [
+          "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak",
+          "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+          "https://urlhaus.abuse.ch/browse/",
+          "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+          "https://abjuri5t.github.io/SarlackLab/",
+          "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+          "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv"
+        ],
+        "related": {
+          "alienvault": {
+            "adversary": [],
+            "malware_families": [],
+            "industries": []
+          },
+          "other": {
+            "adversary": [],
+            "malware_families": [
+              "Nanocore",
+              "Njrat",
+              "Redline stealer"
+            ],
+            "industries": []
+          }
+        }
+      },
+      "false_positive": []
+    },
+    "reputation": {},
+    "geo": {
+      "asn": "AS13335 cloudflare",
+      "city_data": true,
+      "city": null,
+      "region": null,
+      "continent_code": "NA",
+      "country_code3": "USA",
+      "country_code2": "US",
+      "subdivision": null,
+      "latitude": 37.751,
+      "postal_code": null,
+      "longitude": -97.822,
+      "accuracy_radius": 1000,
+      "country_code": "US",
+      "country_name": "United States of America",
+      "dma_code": 0,
+      "charset": 0,
+      "area_code": 0,
+      "flag_url": "/assets/images/flags/us.png",
+      "flag_title": "United States of America"
+    },
+    "malware": {
+      "data": [],
+      "size": 0,
+      "count": 0
+    },
+    "url_list": {
+      "url_list": [
+        {
+          "url": "http://kinltd.top/",
+          "date": "2024-12-19T13:40:27",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "result": {
+            "urlworker": {
+              "ip": "172.67.216.75",
+              "http_code": 403
+            },
+            "safebrowsing": {
+              "matches": []
+            }
+          },
+          "httpcode": 403,
+          "gsb": [],
+          "encoded": "http%3A//kinltd.top/"
+        },
+        {
+          "url": "http://_dc-mx.c7cc51a3401b.kinltd.top/",
+          "date": "2024-11-13T14:56:37",
+          "domain": "kinltd.top",
+          "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+          "encoded": "http%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+        },
+        {
+          "url": "https://_dc-mx.c7cc51a3401b.kinltd.top/",
+          "date": "2024-11-13T14:56:34",
+          "domain": "kinltd.top",
+          "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+          "encoded": "https%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+        },
+        {
+          "url": "https://kinltd.top/KAxnVVwaQV3.bink",
+          "date": "2024-11-12T10:47:38",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bink"
+        },
+        {
+          "url": "https://kinltd.top/KAxnVVwaQV3.bin=",
+          "date": "2024-11-12T10:47:38",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin%3D"
+        },
+        {
+          "url": "https://kinltd.top/KAxnVVwaQV3.bin",
+          "date": "2024-11-12T10:47:36",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin"
+        },
+        {
+          "url": "https://www.kinltd.top/",
+          "date": "2024-10-25T15:07:50",
+          "domain": "kinltd.top",
+          "hostname": "www.kinltd.top",
+          "result": {
+            "urlworker": {
+              "ip": "104.21.24.17",
+              "http_code": 200
+            },
+            "safebrowsing": {
+              "matches": []
+            }
+          },
+          "httpcode": 200,
+          "gsb": [],
+          "encoded": "https%3A//www.kinltd.top/"
+        },
+        {
+          "url": "https://kinltd.top/",
+          "date": "2024-09-26T21:12:12",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "result": {
+            "urlworker": {
+              "ip": "104.21.24.17",
+              "http_code": 200
+            },
+            "safebrowsing": {
+              "matches": []
+            }
+          },
+          "httpcode": 200,
+          "gsb": [],
+          "encoded": "https%3A//kinltd.top/"
+        },
+        {
+          "url": "http://kinltd.top/cgi-sys/defaultwebpage.cgi",
+          "date": "2024-07-19T02:39:20",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "result": {
+            "urlworker": {
+              "ip": "104.21.24.17",
+              "http_code": 200
+            },
+            "safebrowsing": {
+              "matches": []
+            }
+          },
+          "httpcode": 200,
+          "gsb": [],
+          "encoded": "http%3A//kinltd.top/cgi-sys/defaultwebpage.cgi"
+        },
+        {
+          "url": "http://kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php",
+          "date": "2024-07-09T17:15:16",
+          "domain": "kinltd.top",
+          "hostname": "kinltd.top",
+          "result": {
+            "urlworker": {
+              "http_code": 0
+            },
+            "safebrowsing": {
+              "matches": []
+            }
+          },
+          "httpcode": 0,
+          "gsb": [],
+          "encoded": "http%3A//kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php"
+        }
+      ],
+      "page_num": 1,
+      "limit": 10,
+      "paged": true,
+      "has_next": true,
+      "full_size": 15,
+      "actual_size": 15
+    },
+    "passive_dns": {
+      "passive_dns": [
+        {
+          "address": "2606:4700:3035::ac43:d84b",
+          "first": "2024-10-30T14:28:30",
+          "last": "2024-10-30T14:58:37",
+          "hostname": "www.kinltd.top",
+          "record_type": "AAAA",
+          "indicator_link": "/indicator/hostname/www.kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "hostname",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "2606:4700:3030::6815:1811",
+          "first": "2024-10-30T14:28:30",
+          "last": "2024-10-30T14:58:37",
+          "hostname": "www.kinltd.top",
+          "record_type": "AAAA",
+          "indicator_link": "/indicator/hostname/www.kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "hostname",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "172.67.216.75",
+          "first": "2024-10-30T14:28:28",
+          "last": "2024-10-30T15:00:36",
+          "hostname": "www.kinltd.top",
+          "record_type": "A",
+          "indicator_link": "/indicator/hostname/www.kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "hostname",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "104.21.24.17",
+          "first": "2024-10-30T14:28:28",
+          "last": "2024-10-30T15:00:36",
+          "hostname": "www.kinltd.top",
+          "record_type": "A",
+          "indicator_link": "/indicator/hostname/www.kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "hostname",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "troy.ns.cloudflare.com",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "NS",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "2606:4700:3035::ac43:d84b",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "AAAA",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "104.21.24.17",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "A",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "2606:4700:3030::6815:1811",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "AAAA",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "172.67.216.75",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "A",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "maisie.ns.cloudflare.com",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "SOA",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        },
+        {
+          "address": "maisie.ns.cloudflare.com",
+          "first": "2024-07-05T09:33:38",
+          "last": "2024-12-24T13:40:41",
+          "hostname": "kinltd.top",
+          "record_type": "NS",
+          "indicator_link": "/indicator/domain/kinltd.top",
+          "flag_url": "assets/images/flags/us.png",
+          "flag_title": "United States",
+          "asset_type": "domain",
+          "asn": "AS13335 cloudflare"
+        }
+      ],
+      "count": 11
+    }
+  },
+  "virustotal": {
+    "last_analysis_stats": {
+      "malicious": 15,
+      "suspicious": 2,
+      "undetected": 28,
+      "harmless": 49,
+      "timeout": 0
+    },
+    "reputation": -2,
+    "total_votes": {
+      "harmless": 0,
+      "malicious": 2
+    },
+    "last_analysis_results": {
+      "Acronis": {
+        "method": "blacklist",
+        "engine_name": "Acronis",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "0xSI_f33d": {
+        "method": "blacklist",
+        "engine_name": "0xSI_f33d",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Abusix": {
+        "method": "blacklist",
+        "engine_name": "Abusix",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "ADMINUSLabs": {
+        "method": "blacklist",
+        "engine_name": "ADMINUSLabs",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Axur": {
+        "method": "blacklist",
+        "engine_name": "Axur",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Criminal IP": {
+        "method": "blacklist",
+        "engine_name": "Criminal IP",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "AILabs (MONITORAPP)": {
+        "method": "blacklist",
+        "engine_name": "AILabs (MONITORAPP)",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "AlienVault": {
+        "method": "blacklist",
+        "engine_name": "AlienVault",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "alphaMountain.ai": {
+        "method": "blacklist",
+        "engine_name": "alphaMountain.ai",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "AlphaSOC": {
+        "method": "blacklist",
+        "engine_name": "AlphaSOC",
+        "category": "malicious",
+        "result": "malware"
+      },
+      "Antiy-AVL": {
+        "method": "blacklist",
+        "engine_name": "Antiy-AVL",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "ArcSight Threat Intelligence": {
+        "method": "blacklist",
+        "engine_name": "ArcSight Threat Intelligence",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "AutoShun": {
+        "method": "blacklist",
+        "engine_name": "AutoShun",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "benkow.cc": {
+        "method": "blacklist",
+        "engine_name": "benkow.cc",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Bfore.Ai PreCrime": {
+        "method": "blacklist",
+        "engine_name": "Bfore.Ai PreCrime",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "BitDefender": {
+        "method": "blacklist",
+        "engine_name": "BitDefender",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "Bkav": {
+        "method": "blacklist",
+        "engine_name": "Bkav",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Blueliv": {
+        "method": "blacklist",
+        "engine_name": "Blueliv",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Certego": {
+        "method": "blacklist",
+        "engine_name": "Certego",
+        "category": "malicious",
+        "result": "malicious"
+      },
+      "Chong Lua Dao": {
+        "method": "blacklist",
+        "engine_name": "Chong Lua Dao",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "CINS Army": {
+        "method": "blacklist",
+        "engine_name": "CINS Army",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Cluster25": {
+        "method": "blacklist",
+        "engine_name": "Cluster25",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "CRDF": {
+        "method": "blacklist",
+        "engine_name": "CRDF",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "CSIS Security Group": {
+        "method": "blacklist",
+        "engine_name": "CSIS Security Group",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Snort IP sample list": {
+        "method": "blacklist",
+        "engine_name": "Snort IP sample list",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "CMC Threat Intelligence": {
+        "method": "blacklist",
+        "engine_name": "CMC Threat Intelligence",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Cyan": {
+        "method": "blacklist",
+        "engine_name": "Cyan",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Cyble": {
+        "method": "blacklist",
+        "engine_name": "Cyble",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "CyRadar": {
+        "method": "blacklist",
+        "engine_name": "CyRadar",
+        "category": "malicious",
+        "result": "malicious"
+      },
+      "DNS8": {
+        "method": "blacklist",
+        "engine_name": "DNS8",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Dr.Web": {
+        "method": "blacklist",
+        "engine_name": "Dr.Web",
+        "category": "malicious",
+        "result": "malicious"
+      },
+      "Ermes": {
+        "method": "blacklist",
+        "engine_name": "Ermes",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "ESET": {
+        "method": "blacklist",
+        "engine_name": "ESET",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "ESTsecurity": {
+        "method": "blacklist",
+        "engine_name": "ESTsecurity",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "EmergingThreats": {
+        "method": "blacklist",
+        "engine_name": "EmergingThreats",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Emsisoft": {
+        "method": "blacklist",
+        "engine_name": "Emsisoft",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Forcepoint ThreatSeeker": {
+        "method": "blacklist",
+        "engine_name": "Forcepoint ThreatSeeker",
+        "category": "suspicious",
+        "result": "suspicious"
+      },
+      "Fortinet": {
+        "method": "blacklist",
+        "engine_name": "Fortinet",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "G-Data": {
+        "method": "blacklist",
+        "engine_name": "G-Data",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "GCP Abuse Intelligence": {
+        "method": "blacklist",
+        "engine_name": "GCP Abuse Intelligence",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Google Safebrowsing": {
+        "method": "blacklist",
+        "engine_name": "Google Safebrowsing",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "GreenSnow": {
+        "method": "blacklist",
+        "engine_name": "GreenSnow",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Gridinsoft": {
+        "method": "blacklist",
+        "engine_name": "Gridinsoft",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Heimdal Security": {
+        "method": "blacklist",
+        "engine_name": "Heimdal Security",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Hunt.io Intelligence": {
+        "method": "blacklist",
+        "engine_name": "Hunt.io Intelligence",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "IPsum": {
+        "method": "blacklist",
+        "engine_name": "IPsum",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Juniper Networks": {
+        "method": "blacklist",
+        "engine_name": "Juniper Networks",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Kaspersky": {
+        "method": "blacklist",
+        "engine_name": "Kaspersky",
+        "category": "malicious",
+        "result": "malware"
+      },
+      "Lionic": {
+        "method": "blacklist",
+        "engine_name": "Lionic",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Lumu": {
+        "method": "blacklist",
+        "engine_name": "Lumu",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "MalwarePatrol": {
+        "method": "blacklist",
+        "engine_name": "MalwarePatrol",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "MalwareURL": {
+        "method": "blacklist",
+        "engine_name": "MalwareURL",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Malwared": {
+        "method": "blacklist",
+        "engine_name": "Malwared",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Netcraft": {
+        "method": "blacklist",
+        "engine_name": "Netcraft",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "OpenPhish": {
+        "method": "blacklist",
+        "engine_name": "OpenPhish",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Phishing Database": {
+        "method": "blacklist",
+        "engine_name": "Phishing Database",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "PhishFort": {
+        "method": "blacklist",
+        "engine_name": "PhishFort",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "PhishLabs": {
+        "method": "blacklist",
+        "engine_name": "PhishLabs",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Phishtank": {
+        "method": "blacklist",
+        "engine_name": "Phishtank",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "PREBYTES": {
+        "method": "blacklist",
+        "engine_name": "PREBYTES",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "PrecisionSec": {
+        "method": "blacklist",
+        "engine_name": "PrecisionSec",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Quick Heal": {
+        "method": "blacklist",
+        "engine_name": "Quick Heal",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Quttera": {
+        "method": "blacklist",
+        "engine_name": "Quttera",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "SafeToOpen": {
+        "method": "blacklist",
+        "engine_name": "SafeToOpen",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Sansec eComscan": {
+        "method": "blacklist",
+        "engine_name": "Sansec eComscan",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Scantitan": {
+        "method": "blacklist",
+        "engine_name": "Scantitan",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "SCUMWARE.org": {
+        "method": "blacklist",
+        "engine_name": "SCUMWARE.org",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Seclookup": {
+        "method": "blacklist",
+        "engine_name": "Seclookup",
+        "category": "malicious",
+        "result": "malicious"
+      },
+      "SecureBrain": {
+        "method": "blacklist",
+        "engine_name": "SecureBrain",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Segasec": {
+        "method": "blacklist",
+        "engine_name": "Segasec",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "SOCRadar": {
+        "method": "blacklist",
+        "engine_name": "SOCRadar",
+        "category": "malicious",
+        "result": "malware"
+      },
+      "Sophos": {
+        "method": "blacklist",
+        "engine_name": "Sophos",
+        "category": "malicious",
+        "result": "phishing"
+      },
+      "Spam404": {
+        "method": "blacklist",
+        "engine_name": "Spam404",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "StopForumSpam": {
+        "method": "blacklist",
+        "engine_name": "StopForumSpam",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Sucuri SiteCheck": {
+        "method": "blacklist",
+        "engine_name": "Sucuri SiteCheck",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "ThreatHive": {
+        "method": "blacklist",
+        "engine_name": "ThreatHive",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Threatsourcing": {
+        "method": "blacklist",
+        "engine_name": "Threatsourcing",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Trustwave": {
+        "method": "blacklist",
+        "engine_name": "Trustwave",
+        "category": "suspicious",
+        "result": "suspicious"
+      },
+      "Underworld": {
+        "method": "blacklist",
+        "engine_name": "Underworld",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "URLhaus": {
+        "method": "blacklist",
+        "engine_name": "URLhaus",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "URLQuery": {
+        "method": "blacklist",
+        "engine_name": "URLQuery",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "Viettel Threat Intelligence": {
+        "method": "blacklist",
+        "engine_name": "Viettel Threat Intelligence",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "VIPRE": {
+        "method": "blacklist",
+        "engine_name": "VIPRE",
+        "category": "malicious",
+        "result": "malware"
+      },
+      "VX Vault": {
+        "method": "blacklist",
+        "engine_name": "VX Vault",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "ViriBack": {
+        "method": "blacklist",
+        "engine_name": "ViriBack",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Webroot": {
+        "method": "blacklist",
+        "engine_name": "Webroot",
+        "category": "malicious",
+        "result": "malicious"
+      },
+      "Yandex Safebrowsing": {
+        "method": "blacklist",
+        "engine_name": "Yandex Safebrowsing",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "ZeroCERT": {
+        "method": "blacklist",
+        "engine_name": "ZeroCERT",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "desenmascara.me": {
+        "method": "blacklist",
+        "engine_name": "desenmascara.me",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "malwares.com URL checker": {
+        "method": "blacklist",
+        "engine_name": "malwares.com URL checker",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "securolytics": {
+        "method": "blacklist",
+        "engine_name": "securolytics",
+        "category": "harmless",
+        "result": "clean"
+      },
+      "Xcitium Verdict Cloud": {
+        "method": "blacklist",
+        "engine_name": "Xcitium Verdict Cloud",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "zvelo": {
+        "method": "blacklist",
+        "engine_name": "zvelo",
+        "category": "undetected",
+        "result": "unrated"
+      },
+      "ZeroFox": {
+        "method": "blacklist",
+        "engine_name": "ZeroFox",
+        "category": "undetected",
+        "result": "unrated"
+      }
+    },
+    "categories": {},
+    "creation_date": 1719964800,
+    "last_update_date": 1719964800,
+    "last_dns_records": [
+      {
+        "type": "NS",
+        "ttl": 21600,
+        "value": "troy.ns.cloudflare.com"
+      },
+      {
+        "type": "SOA",
+        "ttl": 1800,
+        "value": "maisie.ns.cloudflare.com",
+        "rname": "dns.cloudflare.com",
+        "serial": 2360843922,
+        "refresh": 10000,
+        "retry": 2400,
+        "expire": 604800,
+        "minimum": 1800
+      },
+      {
+        "type": "A",
+        "ttl": 300,
+        "value": "172.67.216.75"
+      },
+      {
+        "type": "NS",
+        "ttl": 21600,
+        "value": "maisie.ns.cloudflare.com"
+      },
+      {
+        "type": "MX",
+        "ttl": 300,
+        "priority": 10,
+        "value": "_dc-mx.c7cc51a3401b.kinltd.top"
+      },
+      {
+        "type": "A",
+        "ttl": 300,
+        "value": "104.21.24.17"
+      },
+      {
+        "type": "TXT",
+        "ttl": 300,
+        "value": "v=spf1 a mx ip4:195.123.211.110 ~all"
+      },
+      {
+        "type": "AAAA",
+        "ttl": 300,
+        "value": "2606:4700:3030::6815:1811"
+      },
+      {
+        "type": "AAAA",
+        "ttl": 300,
+        "value": "2606:4700:3035::ac43:d84b"
+      }
+    ],
+    "tags": [],
+    "popularity_ranks": {
+      "Cisco Umbrella": {
+        "rank": 372160,
+        "timestamp": 1739630288
+      },
+      "Cloudflare Radar": {
+        "rank": 100000,
+        "timestamp": 1739630296
+      }
+    }
+  },
+  "pulsedive": {
+    "error": "Invalid or empty response"
+  },
+  "metadefender": {
+    "lookup_results": {
+      "detected_by": 0,
+      "scan_results": [],
+      "address": "kinltd.top",
+      "geo_info": {},
+      "last_seen": null
+    },
+    "reputation": {
+      "reputation_score": 0,
+      "threat_level": "unknown",
+      "detection_sources": [],
+      "first_seen": null,
+      "last_seen": null
+    }
+  },
+  "securitytrails": {
+    "error": "Invalid or empty response"
+  }
+}
+
+
+====================================================================================================
+PLATFORM: AGGREGATED_DATA
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.184171
+----------------------------------------------------------------------------------------------------
+{
+  "summary": {
+    "total_detections": 0,
+    "risk_level": "Medium",
+    "categories": "set()",
+    "detection_engines": 94,
+    "malicious_engines": 15
+  },
+  "whois": {},
+  "security_analysis": {
+    "blacklist_status": "Blacklisted",
+    "ssl_status": "Unknown",
+    "malware_status": "Unknown"
+  },
+  "threat_indicators": [
+    {
+      "name": "SarlackLab C2 Tracking",
+      "description": "",
+      "tags": [
+        "c2"
+      ],
+      "created": "2025-02-14T11:21:23.828000"
+    },
+    {
+      "name": "URLHaus data - 12-11-2024",
+      "description": "",
+      "tags": [
+        "32-bit",
+        "elf",
+        "mips",
+        "Mozi",
+        "arm",
+        "hajime",
+        "mirai",
+        "SocGholish",
+        "fbi.gov",
+        "moobot",
+        "WebServerPirata",
+        "selfrep",
+        "dlr",
+        "db0fa4b8db0333367e9bda3ab68b8042",
+        "Yakuza",
+        "sh",
+        "NetSupport",
+        "NetSupportModules",
+        "NetSupportRAT",
+        "NetSupportRATModules",
+        "zip",
+        "meerkat",
+        "opendir",
+        "encrypted",
+        "GuLoader",
+        "rat",
+        "RemcosRAT",
+        "ascii",
+        "Encoded",
+        "malicious",
+        "windows",
+        "ConnectBack",
+        "Metasploit",
+        "64-bit",
+        "x86-64",
+        "botnetdomain",
+        "ua-wget",
+        "lnk",
+        "lnk-powershell",
+        "md5-4cb51635512723175f9ef97770ed3ebc",
+        "xmrig",
+        "Ransomware",
+        "CobaltStrike",
+        "xworm",
+        "jerryRAT",
+        "payload.bin",
+        "test.txt",
+        "payloadbin",
+        "AgentTesla",
+        "hta",
+        "younglotus",
+        "07NOV2024ESM",
+        "AsyncRAT",
+        "pw-07NOV2024ESM"
+      ],
+      "created": "2024-11-13T00:14:35.362000"
+    }
+  ],
+  "raw_platform_data": {
+    "alienvault": {
+      "general": {
+        "sections": [
+          "general",
+          "geo",
+          "url_list",
+          "passive_dns",
+          "malware",
+          "whois",
+          "http_scans"
+        ],
+        "whois": "http://whois.domaintools.com/kinltd.top",
+        "alexa": "http://www.alexa.com/siteinfo/kinltd.top",
+        "indicator": "kinltd.top",
+        "type": "domain",
+        "type_title": "Domain",
+        "validation": [],
+        "base_indicator": {
+          "id": 3918475328,
+          "indicator": "kinltd.top",
+          "type": "domain",
+          "title": "",
+          "description": "",
+          "content": "",
+          "access_type": "public",
+          "access_reason": ""
+        },
+        "pulse_info": {
+          "count": 2,
+          "pulses": [
+            {
+              "id": "67af27334c36ae76f4b8ff00",
+              "name": "SarlackLab C2 Tracking",
+              "description": "",
+              "modified": "2025-02-15T14:30:30.837000",
+              "created": "2025-02-14T11:21:23.828000",
+              "tags": [
+                "c2"
+              ],
+              "references": [
+                "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv",
+                "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+                "https://abjuri5t.github.io/SarlackLab/",
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak"
+              ],
+              "public": 1,
+              "adversary": "",
+              "targeted_countries": [],
+              "malware_families": [
+                {
+                  "id": "NanoCore",
+                  "display_name": "NanoCore",
+                  "target": null
+                },
+                {
+                  "id": "RedLine Stealer",
+                  "display_name": "RedLine Stealer",
+                  "target": null
+                },
+                {
+                  "id": "NjRAT",
+                  "display_name": "NjRAT",
+                  "target": null
+                }
+              ],
+              "attack_ids": [],
+              "industries": [],
+              "TLP": "white",
+              "cloned_from": null,
+              "export_count": 5,
+              "upvotes_count": 0,
+              "downvotes_count": 0,
+              "votes_count": 0,
+              "locked": false,
+              "pulse_source": "web",
+              "validator_count": 0,
+              "comment_count": 0,
+              "follower_count": 0,
+              "vote": 0,
+              "author": {
+                "username": "skocherhan",
+                "id": "249290",
+                "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_249290/resized/80/avatar_3b9c358f36.png",
+                "is_subscribed": false,
+                "is_following": false
+              },
+              "indicator_type_counts": {
+                "IPv4": 1312,
+                "URL": 8,
+                "domain": 211,
+                "hostname": 637
+              },
+              "indicator_count": 2168,
+              "is_author": false,
+              "is_subscribing": null,
+              "subscriber_count": 97,
+              "modified_text": "14 hours ago ",
+              "is_modified": true,
+              "groups": [],
+              "in_group": false,
+              "threat_hunter_scannable": true,
+              "threat_hunter_has_agents": 1,
+              "related_indicator_type": "domain",
+              "related_indicator_is_active": 1
+            },
+            {
+              "id": "6733ef6b97878a39759383c3",
+              "name": "URLHaus data - 12-11-2024",
+              "description": "",
+              "modified": "2024-12-13T00:04:03",
+              "created": "2024-11-13T00:14:35.362000",
+              "tags": [
+                "32-bit",
+                "elf",
+                "mips",
+                "Mozi",
+                "arm",
+                "hajime",
+                "mirai",
+                "SocGholish",
+                "fbi.gov",
+                "moobot",
+                "WebServerPirata",
+                "selfrep",
+                "dlr",
+                "db0fa4b8db0333367e9bda3ab68b8042",
+                "Yakuza",
+                "sh",
+                "NetSupport",
+                "NetSupportModules",
+                "NetSupportRAT",
+                "NetSupportRATModules",
+                "zip",
+                "meerkat",
+                "opendir",
+                "encrypted",
+                "GuLoader",
+                "rat",
+                "RemcosRAT",
+                "ascii",
+                "Encoded",
+                "malicious",
+                "windows",
+                "ConnectBack",
+                "Metasploit",
+                "64-bit",
+                "x86-64",
+                "botnetdomain",
+                "ua-wget",
+                "lnk",
+                "lnk-powershell",
+                "md5-4cb51635512723175f9ef97770ed3ebc",
+                "xmrig",
+                "Ransomware",
+                "CobaltStrike",
+                "xworm",
+                "jerryRAT",
+                "payload.bin",
+                "test.txt",
+                "payloadbin",
+                "AgentTesla",
+                "hta",
+                "younglotus",
+                "07NOV2024ESM",
+                "AsyncRAT",
+                "pw-07NOV2024ESM"
+              ],
+              "references": [
+                "https://urlhaus.abuse.ch/browse/"
+              ],
+              "public": 1,
+              "adversary": "",
+              "targeted_countries": [],
+              "malware_families": [],
+              "attack_ids": [],
+              "industries": [],
+              "TLP": "green",
+              "cloned_from": null,
+              "export_count": 69,
+              "upvotes_count": 0,
+              "downvotes_count": 0,
+              "votes_count": 0,
+              "locked": false,
+              "pulse_source": "api",
+              "validator_count": 0,
+              "comment_count": 0,
+              "follower_count": 0,
+              "vote": 0,
+              "author": {
+                "username": "CyberHunterAutoFeed",
+                "id": "182496",
+                "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_182496/resized/80/avatar_3b9c358f36.png",
+                "is_subscribed": false,
+                "is_following": false
+              },
+              "indicator_type_counts": {
+                "URL": 1000,
+                "hostname": 7,
+                "domain": 6
+              },
+              "indicator_count": 1013,
+              "is_author": false,
+              "is_subscribing": null,
+              "subscriber_count": 1075,
+              "modified_text": "65 days ago ",
+              "is_modified": true,
+              "groups": [],
+              "in_group": false,
+              "threat_hunter_scannable": false,
+              "threat_hunter_has_agents": 1,
+              "related_indicator_type": "domain",
+              "related_indicator_is_active": 1
+            }
+          ],
+          "references": [
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak",
+            "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+            "https://urlhaus.abuse.ch/browse/",
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+            "https://abjuri5t.github.io/SarlackLab/",
+            "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+            "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv"
+          ],
+          "related": {
+            "alienvault": {
+              "adversary": [],
+              "malware_families": [],
+              "industries": []
+            },
+            "other": {
+              "adversary": [],
+              "malware_families": [
+                "Nanocore",
+                "Njrat",
+                "Redline stealer"
+              ],
+              "industries": []
+            }
+          }
+        },
+        "false_positive": []
+      },
+      "reputation": {},
+      "geo": {
+        "asn": "AS13335 cloudflare",
+        "city_data": true,
+        "city": null,
+        "region": null,
+        "continent_code": "NA",
+        "country_code3": "USA",
+        "country_code2": "US",
+        "subdivision": null,
+        "latitude": 37.751,
+        "postal_code": null,
+        "longitude": -97.822,
+        "accuracy_radius": 1000,
+        "country_code": "US",
+        "country_name": "United States of America",
+        "dma_code": 0,
+        "charset": 0,
+        "area_code": 0,
+        "flag_url": "/assets/images/flags/us.png",
+        "flag_title": "United States of America"
+      },
+      "malware": {
+        "data": [],
+        "size": 0,
+        "count": 0
+      },
+      "url_list": {
+        "url_list": [
+          {
+            "url": "http://kinltd.top/",
+            "date": "2024-12-19T13:40:27",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "result": {
+              "urlworker": {
+                "ip": "172.67.216.75",
+                "http_code": 403
+              },
+              "safebrowsing": {
+                "matches": []
+              }
+            },
+            "httpcode": 403,
+            "gsb": [],
+            "encoded": "http%3A//kinltd.top/"
+          },
+          {
+            "url": "http://_dc-mx.c7cc51a3401b.kinltd.top/",
+            "date": "2024-11-13T14:56:37",
+            "domain": "kinltd.top",
+            "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+            "encoded": "http%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+          },
+          {
+            "url": "https://_dc-mx.c7cc51a3401b.kinltd.top/",
+            "date": "2024-11-13T14:56:34",
+            "domain": "kinltd.top",
+            "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+            "encoded": "https%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+          },
+          {
+            "url": "https://kinltd.top/KAxnVVwaQV3.bink",
+            "date": "2024-11-12T10:47:38",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bink"
+          },
+          {
+            "url": "https://kinltd.top/KAxnVVwaQV3.bin=",
+            "date": "2024-11-12T10:47:38",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin%3D"
+          },
+          {
+            "url": "https://kinltd.top/KAxnVVwaQV3.bin",
+            "date": "2024-11-12T10:47:36",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin"
+          },
+          {
+            "url": "https://www.kinltd.top/",
+            "date": "2024-10-25T15:07:50",
+            "domain": "kinltd.top",
+            "hostname": "www.kinltd.top",
+            "result": {
+              "urlworker": {
+                "ip": "104.21.24.17",
+                "http_code": 200
+              },
+              "safebrowsing": {
+                "matches": []
+              }
+            },
+            "httpcode": 200,
+            "gsb": [],
+            "encoded": "https%3A//www.kinltd.top/"
+          },
+          {
+            "url": "https://kinltd.top/",
+            "date": "2024-09-26T21:12:12",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "result": {
+              "urlworker": {
+                "ip": "104.21.24.17",
+                "http_code": 200
+              },
+              "safebrowsing": {
+                "matches": []
+              }
+            },
+            "httpcode": 200,
+            "gsb": [],
+            "encoded": "https%3A//kinltd.top/"
+          },
+          {
+            "url": "http://kinltd.top/cgi-sys/defaultwebpage.cgi",
+            "date": "2024-07-19T02:39:20",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "result": {
+              "urlworker": {
+                "ip": "104.21.24.17",
+                "http_code": 200
+              },
+              "safebrowsing": {
+                "matches": []
+              }
+            },
+            "httpcode": 200,
+            "gsb": [],
+            "encoded": "http%3A//kinltd.top/cgi-sys/defaultwebpage.cgi"
+          },
+          {
+            "url": "http://kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php",
+            "date": "2024-07-09T17:15:16",
+            "domain": "kinltd.top",
+            "hostname": "kinltd.top",
+            "result": {
+              "urlworker": {
+                "http_code": 0
+              },
+              "safebrowsing": {
+                "matches": []
+              }
+            },
+            "httpcode": 0,
+            "gsb": [],
+            "encoded": "http%3A//kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php"
+          }
+        ],
+        "page_num": 1,
+        "limit": 10,
+        "paged": true,
+        "has_next": true,
+        "full_size": 15,
+        "actual_size": 15
+      },
+      "passive_dns": {
+        "passive_dns": [
+          {
+            "address": "2606:4700:3035::ac43:d84b",
+            "first": "2024-10-30T14:28:30",
+            "last": "2024-10-30T14:58:37",
+            "hostname": "www.kinltd.top",
+            "record_type": "AAAA",
+            "indicator_link": "/indicator/hostname/www.kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "hostname",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "2606:4700:3030::6815:1811",
+            "first": "2024-10-30T14:28:30",
+            "last": "2024-10-30T14:58:37",
+            "hostname": "www.kinltd.top",
+            "record_type": "AAAA",
+            "indicator_link": "/indicator/hostname/www.kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "hostname",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "172.67.216.75",
+            "first": "2024-10-30T14:28:28",
+            "last": "2024-10-30T15:00:36",
+            "hostname": "www.kinltd.top",
+            "record_type": "A",
+            "indicator_link": "/indicator/hostname/www.kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "hostname",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "104.21.24.17",
+            "first": "2024-10-30T14:28:28",
+            "last": "2024-10-30T15:00:36",
+            "hostname": "www.kinltd.top",
+            "record_type": "A",
+            "indicator_link": "/indicator/hostname/www.kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "hostname",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "troy.ns.cloudflare.com",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "NS",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "2606:4700:3035::ac43:d84b",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "AAAA",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "104.21.24.17",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "A",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "2606:4700:3030::6815:1811",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "AAAA",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "172.67.216.75",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "A",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "maisie.ns.cloudflare.com",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "SOA",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          },
+          {
+            "address": "maisie.ns.cloudflare.com",
+            "first": "2024-07-05T09:33:38",
+            "last": "2024-12-24T13:40:41",
+            "hostname": "kinltd.top",
+            "record_type": "NS",
+            "indicator_link": "/indicator/domain/kinltd.top",
+            "flag_url": "assets/images/flags/us.png",
+            "flag_title": "United States",
+            "asset_type": "domain",
+            "asn": "AS13335 cloudflare"
+          }
+        ],
+        "count": 11
+      }
+    },
+    "virustotal": {
+      "last_analysis_stats": {
+        "malicious": 15,
+        "suspicious": 2,
+        "undetected": 28,
+        "harmless": 49,
+        "timeout": 0
+      },
+      "reputation": -2,
+      "total_votes": {
+        "harmless": 0,
+        "malicious": 2
+      },
+      "last_analysis_results": {
+        "Acronis": {
+          "method": "blacklist",
+          "engine_name": "Acronis",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "0xSI_f33d": {
+          "method": "blacklist",
+          "engine_name": "0xSI_f33d",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Abusix": {
+          "method": "blacklist",
+          "engine_name": "Abusix",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "ADMINUSLabs": {
+          "method": "blacklist",
+          "engine_name": "ADMINUSLabs",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Axur": {
+          "method": "blacklist",
+          "engine_name": "Axur",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Criminal IP": {
+          "method": "blacklist",
+          "engine_name": "Criminal IP",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "AILabs (MONITORAPP)": {
+          "method": "blacklist",
+          "engine_name": "AILabs (MONITORAPP)",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "AlienVault": {
+          "method": "blacklist",
+          "engine_name": "AlienVault",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "alphaMountain.ai": {
+          "method": "blacklist",
+          "engine_name": "alphaMountain.ai",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "AlphaSOC": {
+          "method": "blacklist",
+          "engine_name": "AlphaSOC",
+          "category": "malicious",
+          "result": "malware"
+        },
+        "Antiy-AVL": {
+          "method": "blacklist",
+          "engine_name": "Antiy-AVL",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "ArcSight Threat Intelligence": {
+          "method": "blacklist",
+          "engine_name": "ArcSight Threat Intelligence",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "AutoShun": {
+          "method": "blacklist",
+          "engine_name": "AutoShun",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "benkow.cc": {
+          "method": "blacklist",
+          "engine_name": "benkow.cc",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Bfore.Ai PreCrime": {
+          "method": "blacklist",
+          "engine_name": "Bfore.Ai PreCrime",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "BitDefender": {
+          "method": "blacklist",
+          "engine_name": "BitDefender",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "Bkav": {
+          "method": "blacklist",
+          "engine_name": "Bkav",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Blueliv": {
+          "method": "blacklist",
+          "engine_name": "Blueliv",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Certego": {
+          "method": "blacklist",
+          "engine_name": "Certego",
+          "category": "malicious",
+          "result": "malicious"
+        },
+        "Chong Lua Dao": {
+          "method": "blacklist",
+          "engine_name": "Chong Lua Dao",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "CINS Army": {
+          "method": "blacklist",
+          "engine_name": "CINS Army",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Cluster25": {
+          "method": "blacklist",
+          "engine_name": "Cluster25",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "CRDF": {
+          "method": "blacklist",
+          "engine_name": "CRDF",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "CSIS Security Group": {
+          "method": "blacklist",
+          "engine_name": "CSIS Security Group",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Snort IP sample list": {
+          "method": "blacklist",
+          "engine_name": "Snort IP sample list",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "CMC Threat Intelligence": {
+          "method": "blacklist",
+          "engine_name": "CMC Threat Intelligence",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Cyan": {
+          "method": "blacklist",
+          "engine_name": "Cyan",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Cyble": {
+          "method": "blacklist",
+          "engine_name": "Cyble",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "CyRadar": {
+          "method": "blacklist",
+          "engine_name": "CyRadar",
+          "category": "malicious",
+          "result": "malicious"
+        },
+        "DNS8": {
+          "method": "blacklist",
+          "engine_name": "DNS8",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Dr.Web": {
+          "method": "blacklist",
+          "engine_name": "Dr.Web",
+          "category": "malicious",
+          "result": "malicious"
+        },
+        "Ermes": {
+          "method": "blacklist",
+          "engine_name": "Ermes",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "ESET": {
+          "method": "blacklist",
+          "engine_name": "ESET",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "ESTsecurity": {
+          "method": "blacklist",
+          "engine_name": "ESTsecurity",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "EmergingThreats": {
+          "method": "blacklist",
+          "engine_name": "EmergingThreats",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Emsisoft": {
+          "method": "blacklist",
+          "engine_name": "Emsisoft",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Forcepoint ThreatSeeker": {
+          "method": "blacklist",
+          "engine_name": "Forcepoint ThreatSeeker",
+          "category": "suspicious",
+          "result": "suspicious"
+        },
+        "Fortinet": {
+          "method": "blacklist",
+          "engine_name": "Fortinet",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "G-Data": {
+          "method": "blacklist",
+          "engine_name": "G-Data",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "GCP Abuse Intelligence": {
+          "method": "blacklist",
+          "engine_name": "GCP Abuse Intelligence",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Google Safebrowsing": {
+          "method": "blacklist",
+          "engine_name": "Google Safebrowsing",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "GreenSnow": {
+          "method": "blacklist",
+          "engine_name": "GreenSnow",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Gridinsoft": {
+          "method": "blacklist",
+          "engine_name": "Gridinsoft",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Heimdal Security": {
+          "method": "blacklist",
+          "engine_name": "Heimdal Security",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Hunt.io Intelligence": {
+          "method": "blacklist",
+          "engine_name": "Hunt.io Intelligence",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "IPsum": {
+          "method": "blacklist",
+          "engine_name": "IPsum",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Juniper Networks": {
+          "method": "blacklist",
+          "engine_name": "Juniper Networks",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Kaspersky": {
+          "method": "blacklist",
+          "engine_name": "Kaspersky",
+          "category": "malicious",
+          "result": "malware"
+        },
+        "Lionic": {
+          "method": "blacklist",
+          "engine_name": "Lionic",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Lumu": {
+          "method": "blacklist",
+          "engine_name": "Lumu",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "MalwarePatrol": {
+          "method": "blacklist",
+          "engine_name": "MalwarePatrol",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "MalwareURL": {
+          "method": "blacklist",
+          "engine_name": "MalwareURL",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Malwared": {
+          "method": "blacklist",
+          "engine_name": "Malwared",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Netcraft": {
+          "method": "blacklist",
+          "engine_name": "Netcraft",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "OpenPhish": {
+          "method": "blacklist",
+          "engine_name": "OpenPhish",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Phishing Database": {
+          "method": "blacklist",
+          "engine_name": "Phishing Database",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "PhishFort": {
+          "method": "blacklist",
+          "engine_name": "PhishFort",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "PhishLabs": {
+          "method": "blacklist",
+          "engine_name": "PhishLabs",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Phishtank": {
+          "method": "blacklist",
+          "engine_name": "Phishtank",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "PREBYTES": {
+          "method": "blacklist",
+          "engine_name": "PREBYTES",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "PrecisionSec": {
+          "method": "blacklist",
+          "engine_name": "PrecisionSec",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Quick Heal": {
+          "method": "blacklist",
+          "engine_name": "Quick Heal",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Quttera": {
+          "method": "blacklist",
+          "engine_name": "Quttera",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "SafeToOpen": {
+          "method": "blacklist",
+          "engine_name": "SafeToOpen",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Sansec eComscan": {
+          "method": "blacklist",
+          "engine_name": "Sansec eComscan",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Scantitan": {
+          "method": "blacklist",
+          "engine_name": "Scantitan",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "SCUMWARE.org": {
+          "method": "blacklist",
+          "engine_name": "SCUMWARE.org",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Seclookup": {
+          "method": "blacklist",
+          "engine_name": "Seclookup",
+          "category": "malicious",
+          "result": "malicious"
+        },
+        "SecureBrain": {
+          "method": "blacklist",
+          "engine_name": "SecureBrain",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Segasec": {
+          "method": "blacklist",
+          "engine_name": "Segasec",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "SOCRadar": {
+          "method": "blacklist",
+          "engine_name": "SOCRadar",
+          "category": "malicious",
+          "result": "malware"
+        },
+        "Sophos": {
+          "method": "blacklist",
+          "engine_name": "Sophos",
+          "category": "malicious",
+          "result": "phishing"
+        },
+        "Spam404": {
+          "method": "blacklist",
+          "engine_name": "Spam404",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "StopForumSpam": {
+          "method": "blacklist",
+          "engine_name": "StopForumSpam",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Sucuri SiteCheck": {
+          "method": "blacklist",
+          "engine_name": "Sucuri SiteCheck",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "ThreatHive": {
+          "method": "blacklist",
+          "engine_name": "ThreatHive",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Threatsourcing": {
+          "method": "blacklist",
+          "engine_name": "Threatsourcing",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Trustwave": {
+          "method": "blacklist",
+          "engine_name": "Trustwave",
+          "category": "suspicious",
+          "result": "suspicious"
+        },
+        "Underworld": {
+          "method": "blacklist",
+          "engine_name": "Underworld",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "URLhaus": {
+          "method": "blacklist",
+          "engine_name": "URLhaus",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "URLQuery": {
+          "method": "blacklist",
+          "engine_name": "URLQuery",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "Viettel Threat Intelligence": {
+          "method": "blacklist",
+          "engine_name": "Viettel Threat Intelligence",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "VIPRE": {
+          "method": "blacklist",
+          "engine_name": "VIPRE",
+          "category": "malicious",
+          "result": "malware"
+        },
+        "VX Vault": {
+          "method": "blacklist",
+          "engine_name": "VX Vault",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "ViriBack": {
+          "method": "blacklist",
+          "engine_name": "ViriBack",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Webroot": {
+          "method": "blacklist",
+          "engine_name": "Webroot",
+          "category": "malicious",
+          "result": "malicious"
+        },
+        "Yandex Safebrowsing": {
+          "method": "blacklist",
+          "engine_name": "Yandex Safebrowsing",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "ZeroCERT": {
+          "method": "blacklist",
+          "engine_name": "ZeroCERT",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "desenmascara.me": {
+          "method": "blacklist",
+          "engine_name": "desenmascara.me",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "malwares.com URL checker": {
+          "method": "blacklist",
+          "engine_name": "malwares.com URL checker",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "securolytics": {
+          "method": "blacklist",
+          "engine_name": "securolytics",
+          "category": "harmless",
+          "result": "clean"
+        },
+        "Xcitium Verdict Cloud": {
+          "method": "blacklist",
+          "engine_name": "Xcitium Verdict Cloud",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "zvelo": {
+          "method": "blacklist",
+          "engine_name": "zvelo",
+          "category": "undetected",
+          "result": "unrated"
+        },
+        "ZeroFox": {
+          "method": "blacklist",
+          "engine_name": "ZeroFox",
+          "category": "undetected",
+          "result": "unrated"
+        }
+      },
+      "categories": {},
+      "creation_date": 1719964800,
+      "last_update_date": 1719964800,
+      "last_dns_records": [
+        {
+          "type": "NS",
+          "ttl": 21600,
+          "value": "troy.ns.cloudflare.com"
+        },
+        {
+          "type": "SOA",
+          "ttl": 1800,
+          "value": "maisie.ns.cloudflare.com",
+          "rname": "dns.cloudflare.com",
+          "serial": 2360843922,
+          "refresh": 10000,
+          "retry": 2400,
+          "expire": 604800,
+          "minimum": 1800
+        },
+        {
+          "type": "A",
+          "ttl": 300,
+          "value": "172.67.216.75"
+        },
+        {
+          "type": "NS",
+          "ttl": 21600,
+          "value": "maisie.ns.cloudflare.com"
+        },
+        {
+          "type": "MX",
+          "ttl": 300,
+          "priority": 10,
+          "value": "_dc-mx.c7cc51a3401b.kinltd.top"
+        },
+        {
+          "type": "A",
+          "ttl": 300,
+          "value": "104.21.24.17"
+        },
+        {
+          "type": "TXT",
+          "ttl": 300,
+          "value": "v=spf1 a mx ip4:195.123.211.110 ~all"
+        },
+        {
+          "type": "AAAA",
+          "ttl": 300,
+          "value": "2606:4700:3030::6815:1811"
+        },
+        {
+          "type": "AAAA",
+          "ttl": 300,
+          "value": "2606:4700:3035::ac43:d84b"
+        }
+      ],
+      "tags": [],
+      "popularity_ranks": {
+        "Cisco Umbrella": {
+          "rank": 372160,
+          "timestamp": 1739630288
+        },
+        "Cloudflare Radar": {
+          "rank": 100000,
+          "timestamp": 1739630296
+        }
+      }
+    },
+    "pulsedive": {
+      "error": "Invalid or empty response"
+    },
+    "metadefender": {
+      "lookup_results": {
+        "detected_by": 0,
+        "scan_results": [],
+        "address": "kinltd.top",
+        "geo_info": {},
+        "last_seen": null
+      },
+      "reputation": {
+        "reputation_score": 0,
+        "threat_level": "unknown",
+        "detection_sources": [],
+        "first_seen": null,
+        "last_seen": null
+      }
+    },
+    "securitytrails": {
+      "error": "Invalid or empty response"
+    }
+  }
+}
+
+
+====================================================================================================
+PLATFORM: FINAL_RESULTS
+DOMAIN: kinltd.top
+TIMESTAMP: 2025-02-16T05:09:57.186159
+----------------------------------------------------------------------------------------------------
+{
+  "domain": "kinltd.top",
+  "threat_score": 0,
+  "summary": {
+    "total_detections": 0,
+    "risk_level": "Medium",
+    "categories": "set()",
+    "detection_engines": 94,
+    "malicious_engines": 15
+  },
+  "whois": {},
+  "security_analysis": {
+    "blacklist_status": "Blacklisted",
+    "ssl_status": "Unknown",
+    "malware_status": "Unknown"
+  },
+  "platform_data": {
+    "quickStats": {
+      "threatScore": 53,
+      "riskLevel": "Medium",
+      "totalDetections": 0
+    },
+    "whois": {
+      "registrar": "N/A",
+      "createdDate": "N/A",
+      "expiryDate": "N/A",
+      "nameServers": [],
+      "status": "N/A"
+    },
+    "security": {
+      "blacklistStatus": "Blacklisted",
+      "blacklistDetails": "No details available",
+      "sslStatus": "Unknown",
+      "sslDetails": "Certificate information not available",
+      "malwareStatus": "Unknown",
+      "malwareDetails": "No threats detected"
+    },
+    "platforms": {
+      "alienvault": {
+        "status": "Clean",
+        "lastAnalysisDate": "N/A",
+        "detections": {
+          "total": 0,
+          "malicious": 0,
+          "suspicious": 0,
+          "clean": 0
+        },
+        "details": {
+          "general": {
+            "sections": [
+              "general",
+              "geo",
+              "url_list",
+              "passive_dns",
+              "malware",
+              "whois",
+              "http_scans"
+            ],
+            "whois": "http://whois.domaintools.com/kinltd.top",
+            "alexa": "http://www.alexa.com/siteinfo/kinltd.top",
+            "indicator": "kinltd.top",
+            "type": "domain",
+            "type_title": "Domain",
+            "validation": [],
+            "base_indicator": {
+              "id": 3918475328,
+              "indicator": "kinltd.top",
+              "type": "domain",
+              "title": "",
+              "description": "",
+              "content": "",
+              "access_type": "public",
+              "access_reason": ""
+            },
+            "pulse_info": {
+              "count": 2,
+              "pulses": [
+                {
+                  "id": "67af27334c36ae76f4b8ff00",
+                  "name": "SarlackLab C2 Tracking",
+                  "description": "",
+                  "modified": "2025-02-15T14:30:30.837000",
+                  "created": "2025-02-14T11:21:23.828000",
+                  "tags": [
+                    "c2"
+                  ],
+                  "references": [
+                    "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv",
+                    "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+                    "https://abjuri5t.github.io/SarlackLab/",
+                    "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+                    "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+                    "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak"
+                  ],
+                  "public": 1,
+                  "adversary": "",
+                  "targeted_countries": [],
+                  "malware_families": [
+                    {
+                      "id": "NanoCore",
+                      "display_name": "NanoCore",
+                      "target": null
+                    },
+                    {
+                      "id": "RedLine Stealer",
+                      "display_name": "RedLine Stealer",
+                      "target": null
+                    },
+                    {
+                      "id": "NjRAT",
+                      "display_name": "NjRAT",
+                      "target": null
+                    }
+                  ],
+                  "attack_ids": [],
+                  "industries": [],
+                  "TLP": "white",
+                  "cloned_from": null,
+                  "export_count": 5,
+                  "upvotes_count": 0,
+                  "downvotes_count": 0,
+                  "votes_count": 0,
+                  "locked": false,
+                  "pulse_source": "web",
+                  "validator_count": 0,
+                  "comment_count": 0,
+                  "follower_count": 0,
+                  "vote": 0,
+                  "author": {
+                    "username": "skocherhan",
+                    "id": "249290",
+                    "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_249290/resized/80/avatar_3b9c358f36.png",
+                    "is_subscribed": false,
+                    "is_following": false
+                  },
+                  "indicator_type_counts": {
+                    "IPv4": 1312,
+                    "URL": 8,
+                    "domain": 211,
+                    "hostname": 637
+                  },
+                  "indicator_count": 2168,
+                  "is_author": false,
+                  "is_subscribing": null,
+                  "subscriber_count": 97,
+                  "modified_text": "14 hours ago ",
+                  "is_modified": true,
+                  "groups": [],
+                  "in_group": false,
+                  "threat_hunter_scannable": true,
+                  "threat_hunter_has_agents": 1,
+                  "related_indicator_type": "domain",
+                  "related_indicator_is_active": 1
+                },
+                {
+                  "id": "6733ef6b97878a39759383c3",
+                  "name": "URLHaus data - 12-11-2024",
+                  "description": "",
+                  "modified": "2024-12-13T00:04:03",
+                  "created": "2024-11-13T00:14:35.362000",
+                  "tags": [
+                    "32-bit",
+                    "elf",
+                    "mips",
+                    "Mozi",
+                    "arm",
+                    "hajime",
+                    "mirai",
+                    "SocGholish",
+                    "fbi.gov",
+                    "moobot",
+                    "WebServerPirata",
+                    "selfrep",
+                    "dlr",
+                    "db0fa4b8db0333367e9bda3ab68b8042",
+                    "Yakuza",
+                    "sh",
+                    "NetSupport",
+                    "NetSupportModules",
+                    "NetSupportRAT",
+                    "NetSupportRATModules",
+                    "zip",
+                    "meerkat",
+                    "opendir",
+                    "encrypted",
+                    "GuLoader",
+                    "rat",
+                    "RemcosRAT",
+                    "ascii",
+                    "Encoded",
+                    "malicious",
+                    "windows",
+                    "ConnectBack",
+                    "Metasploit",
+                    "64-bit",
+                    "x86-64",
+                    "botnetdomain",
+                    "ua-wget",
+                    "lnk",
+                    "lnk-powershell",
+                    "md5-4cb51635512723175f9ef97770ed3ebc",
+                    "xmrig",
+                    "Ransomware",
+                    "CobaltStrike",
+                    "xworm",
+                    "jerryRAT",
+                    "payload.bin",
+                    "test.txt",
+                    "payloadbin",
+                    "AgentTesla",
+                    "hta",
+                    "younglotus",
+                    "07NOV2024ESM",
+                    "AsyncRAT",
+                    "pw-07NOV2024ESM"
+                  ],
+                  "references": [
+                    "https://urlhaus.abuse.ch/browse/"
+                  ],
+                  "public": 1,
+                  "adversary": "",
+                  "targeted_countries": [],
+                  "malware_families": [],
+                  "attack_ids": [],
+                  "industries": [],
+                  "TLP": "green",
+                  "cloned_from": null,
+                  "export_count": 69,
+                  "upvotes_count": 0,
+                  "downvotes_count": 0,
+                  "votes_count": 0,
+                  "locked": false,
+                  "pulse_source": "api",
+                  "validator_count": 0,
+                  "comment_count": 0,
+                  "follower_count": 0,
+                  "vote": 0,
+                  "author": {
+                    "username": "CyberHunterAutoFeed",
+                    "id": "182496",
+                    "avatar_url": "/otxapi/users/avatar_image/media/avatars/user_182496/resized/80/avatar_3b9c358f36.png",
+                    "is_subscribed": false,
+                    "is_following": false
+                  },
+                  "indicator_type_counts": {
+                    "URL": 1000,
+                    "hostname": 7,
+                    "domain": 6
+                  },
+                  "indicator_count": 1013,
+                  "is_author": false,
+                  "is_subscribing": null,
+                  "subscriber_count": 1075,
+                  "modified_text": "65 days ago ",
+                  "is_modified": true,
+                  "groups": [],
+                  "in_group": false,
+                  "threat_hunter_scannable": false,
+                  "threat_hunter_has_agents": 1,
+                  "related_indicator_type": "domain",
+                  "related_indicator_is_active": 1
+                }
+              ],
+              "references": [
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.njrat // ak",
+                "https://github.com/Abjuri5t/SarlackLab/tree/main/IOCs.csv/",
+                "https://urlhaus.abuse.ch/browse/",
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.redline_ste",
+                "https://abjuri5t.github.io/SarlackLab/",
+                "https://malpedia.caad.fkie.fraunhofer.de/details/win.nanocore //",
+                "https://github.com/Abjuri5t/SarlackLab/raw/refs/heads/main/IOCs.csv"
+              ],
+              "related": {
+                "alienvault": {
+                  "adversary": [],
+                  "malware_families": [],
+                  "industries": []
+                },
+                "other": {
+                  "adversary": [],
+                  "malware_families": [
+                    "Nanocore",
+                    "Njrat",
+                    "Redline stealer"
+                  ],
+                  "industries": []
+                }
+              }
+            },
+            "false_positive": []
+          },
+          "reputation": {},
+          "geo": {
+            "asn": "AS13335 cloudflare",
+            "city_data": true,
+            "city": null,
+            "region": null,
+            "continent_code": "NA",
+            "country_code3": "USA",
+            "country_code2": "US",
+            "subdivision": null,
+            "latitude": 37.751,
+            "postal_code": null,
+            "longitude": -97.822,
+            "accuracy_radius": 1000,
+            "country_code": "US",
+            "country_name": "United States of America",
+            "dma_code": 0,
+            "charset": 0,
+            "area_code": 0,
+            "flag_url": "/assets/images/flags/us.png",
+            "flag_title": "United States of America"
+          },
+          "malware": {
+            "data": [],
+            "size": 0,
+            "count": 0
+          },
+          "url_list": {
+            "url_list": [
+              {
+                "url": "http://kinltd.top/",
+                "date": "2024-12-19T13:40:27",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "result": {
+                  "urlworker": {
+                    "ip": "172.67.216.75",
+                    "http_code": 403
+                  },
+                  "safebrowsing": {
+                    "matches": []
+                  }
+                },
+                "httpcode": 403,
+                "gsb": [],
+                "encoded": "http%3A//kinltd.top/"
+              },
+              {
+                "url": "http://_dc-mx.c7cc51a3401b.kinltd.top/",
+                "date": "2024-11-13T14:56:37",
+                "domain": "kinltd.top",
+                "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+                "encoded": "http%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+              },
+              {
+                "url": "https://_dc-mx.c7cc51a3401b.kinltd.top/",
+                "date": "2024-11-13T14:56:34",
+                "domain": "kinltd.top",
+                "hostname": "_dc-mx.c7cc51a3401b.kinltd.top",
+                "encoded": "https%3A//_dc-mx.c7cc51a3401b.kinltd.top/"
+              },
+              {
+                "url": "https://kinltd.top/KAxnVVwaQV3.bink",
+                "date": "2024-11-12T10:47:38",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bink"
+              },
+              {
+                "url": "https://kinltd.top/KAxnVVwaQV3.bin=",
+                "date": "2024-11-12T10:47:38",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin%3D"
+              },
+              {
+                "url": "https://kinltd.top/KAxnVVwaQV3.bin",
+                "date": "2024-11-12T10:47:36",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "encoded": "https%3A//kinltd.top/KAxnVVwaQV3.bin"
+              },
+              {
+                "url": "https://www.kinltd.top/",
+                "date": "2024-10-25T15:07:50",
+                "domain": "kinltd.top",
+                "hostname": "www.kinltd.top",
+                "result": {
+                  "urlworker": {
+                    "ip": "104.21.24.17",
+                    "http_code": 200
+                  },
+                  "safebrowsing": {
+                    "matches": []
+                  }
+                },
+                "httpcode": 200,
+                "gsb": [],
+                "encoded": "https%3A//www.kinltd.top/"
+              },
+              {
+                "url": "https://kinltd.top/",
+                "date": "2024-09-26T21:12:12",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "result": {
+                  "urlworker": {
+                    "ip": "104.21.24.17",
+                    "http_code": 200
+                  },
+                  "safebrowsing": {
+                    "matches": []
+                  }
+                },
+                "httpcode": 200,
+                "gsb": [],
+                "encoded": "https%3A//kinltd.top/"
+              },
+              {
+                "url": "http://kinltd.top/cgi-sys/defaultwebpage.cgi",
+                "date": "2024-07-19T02:39:20",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "result": {
+                  "urlworker": {
+                    "ip": "104.21.24.17",
+                    "http_code": 200
+                  },
+                  "safebrowsing": {
+                    "matches": []
+                  }
+                },
+                "httpcode": 200,
+                "gsb": [],
+                "encoded": "http%3A//kinltd.top/cgi-sys/defaultwebpage.cgi"
+              },
+              {
+                "url": "http://kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php",
+                "date": "2024-07-09T17:15:16",
+                "domain": "kinltd.top",
+                "hostname": "kinltd.top",
+                "result": {
+                  "urlworker": {
+                    "http_code": 0
+                  },
+                  "safebrowsing": {
+                    "matches": []
+                  }
+                },
+                "httpcode": 0,
+                "gsb": [],
+                "encoded": "http%3A//kinltd.top/evie1/five/PvqDq929BSx_A_D_M1n_a.php"
+              }
+            ],
+            "page_num": 1,
+            "limit": 10,
+            "paged": true,
+            "has_next": true,
+            "full_size": 15,
+            "actual_size": 15
+          },
+          "passive_dns": {
+            "passive_dns": [
+              {
+                "address": "2606:4700:3035::ac43:d84b",
+                "first": "2024-10-30T14:28:30",
+                "last": "2024-10-30T14:58:37",
+                "hostname": "www.kinltd.top",
+                "record_type": "AAAA",
+                "indicator_link": "/indicator/hostname/www.kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "hostname",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "2606:4700:3030::6815:1811",
+                "first": "2024-10-30T14:28:30",
+                "last": "2024-10-30T14:58:37",
+                "hostname": "www.kinltd.top",
+                "record_type": "AAAA",
+                "indicator_link": "/indicator/hostname/www.kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "hostname",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "172.67.216.75",
+                "first": "2024-10-30T14:28:28",
+                "last": "2024-10-30T15:00:36",
+                "hostname": "www.kinltd.top",
+                "record_type": "A",
+                "indicator_link": "/indicator/hostname/www.kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "hostname",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "104.21.24.17",
+                "first": "2024-10-30T14:28:28",
+                "last": "2024-10-30T15:00:36",
+                "hostname": "www.kinltd.top",
+                "record_type": "A",
+                "indicator_link": "/indicator/hostname/www.kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "hostname",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "troy.ns.cloudflare.com",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "NS",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "2606:4700:3035::ac43:d84b",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "AAAA",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "104.21.24.17",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "A",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "2606:4700:3030::6815:1811",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "AAAA",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "172.67.216.75",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "A",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "maisie.ns.cloudflare.com",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "SOA",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              },
+              {
+                "address": "maisie.ns.cloudflare.com",
+                "first": "2024-07-05T09:33:38",
+                "last": "2024-12-24T13:40:41",
+                "hostname": "kinltd.top",
+                "record_type": "NS",
+                "indicator_link": "/indicator/domain/kinltd.top",
+                "flag_url": "assets/images/flags/us.png",
+                "flag_title": "United States",
+                "asset_type": "domain",
+                "asn": "AS13335 cloudflare"
+              }
+            ],
+            "count": 11
+          }
+        }
+      },
+      "virustotal": {
+        "status": "Malicious",
+        "lastAnalysisDate": "N/A",
+        "detections": {
+          "total": 94,
+          "malicious": 15,
+          "suspicious": 2,
+          "clean": 49
+        },
+        "details": {
+          "last_analysis_stats": {
+            "malicious": 15,
+            "suspicious": 2,
+            "undetected": 28,
+            "harmless": 49,
+            "timeout": 0
+          },
+          "reputation": -2,
+          "total_votes": {
+            "harmless": 0,
+            "malicious": 2
+          },
+          "last_analysis_results": {
+            "Acronis": {
+              "method": "blacklist",
+              "engine_name": "Acronis",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "0xSI_f33d": {
+              "method": "blacklist",
+              "engine_name": "0xSI_f33d",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Abusix": {
+              "method": "blacklist",
+              "engine_name": "Abusix",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "ADMINUSLabs": {
+              "method": "blacklist",
+              "engine_name": "ADMINUSLabs",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Axur": {
+              "method": "blacklist",
+              "engine_name": "Axur",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Criminal IP": {
+              "method": "blacklist",
+              "engine_name": "Criminal IP",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "AILabs (MONITORAPP)": {
+              "method": "blacklist",
+              "engine_name": "AILabs (MONITORAPP)",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "AlienVault": {
+              "method": "blacklist",
+              "engine_name": "AlienVault",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "alphaMountain.ai": {
+              "method": "blacklist",
+              "engine_name": "alphaMountain.ai",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "AlphaSOC": {
+              "method": "blacklist",
+              "engine_name": "AlphaSOC",
+              "category": "malicious",
+              "result": "malware"
+            },
+            "Antiy-AVL": {
+              "method": "blacklist",
+              "engine_name": "Antiy-AVL",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "ArcSight Threat Intelligence": {
+              "method": "blacklist",
+              "engine_name": "ArcSight Threat Intelligence",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "AutoShun": {
+              "method": "blacklist",
+              "engine_name": "AutoShun",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "benkow.cc": {
+              "method": "blacklist",
+              "engine_name": "benkow.cc",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Bfore.Ai PreCrime": {
+              "method": "blacklist",
+              "engine_name": "Bfore.Ai PreCrime",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "BitDefender": {
+              "method": "blacklist",
+              "engine_name": "BitDefender",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "Bkav": {
+              "method": "blacklist",
+              "engine_name": "Bkav",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Blueliv": {
+              "method": "blacklist",
+              "engine_name": "Blueliv",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Certego": {
+              "method": "blacklist",
+              "engine_name": "Certego",
+              "category": "malicious",
+              "result": "malicious"
+            },
+            "Chong Lua Dao": {
+              "method": "blacklist",
+              "engine_name": "Chong Lua Dao",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "CINS Army": {
+              "method": "blacklist",
+              "engine_name": "CINS Army",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Cluster25": {
+              "method": "blacklist",
+              "engine_name": "Cluster25",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "CRDF": {
+              "method": "blacklist",
+              "engine_name": "CRDF",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "CSIS Security Group": {
+              "method": "blacklist",
+              "engine_name": "CSIS Security Group",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Snort IP sample list": {
+              "method": "blacklist",
+              "engine_name": "Snort IP sample list",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "CMC Threat Intelligence": {
+              "method": "blacklist",
+              "engine_name": "CMC Threat Intelligence",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Cyan": {
+              "method": "blacklist",
+              "engine_name": "Cyan",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Cyble": {
+              "method": "blacklist",
+              "engine_name": "Cyble",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "CyRadar": {
+              "method": "blacklist",
+              "engine_name": "CyRadar",
+              "category": "malicious",
+              "result": "malicious"
+            },
+            "DNS8": {
+              "method": "blacklist",
+              "engine_name": "DNS8",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Dr.Web": {
+              "method": "blacklist",
+              "engine_name": "Dr.Web",
+              "category": "malicious",
+              "result": "malicious"
+            },
+            "Ermes": {
+              "method": "blacklist",
+              "engine_name": "Ermes",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "ESET": {
+              "method": "blacklist",
+              "engine_name": "ESET",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "ESTsecurity": {
+              "method": "blacklist",
+              "engine_name": "ESTsecurity",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "EmergingThreats": {
+              "method": "blacklist",
+              "engine_name": "EmergingThreats",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Emsisoft": {
+              "method": "blacklist",
+              "engine_name": "Emsisoft",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Forcepoint ThreatSeeker": {
+              "method": "blacklist",
+              "engine_name": "Forcepoint ThreatSeeker",
+              "category": "suspicious",
+              "result": "suspicious"
+            },
+            "Fortinet": {
+              "method": "blacklist",
+              "engine_name": "Fortinet",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "G-Data": {
+              "method": "blacklist",
+              "engine_name": "G-Data",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "GCP Abuse Intelligence": {
+              "method": "blacklist",
+              "engine_name": "GCP Abuse Intelligence",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Google Safebrowsing": {
+              "method": "blacklist",
+              "engine_name": "Google Safebrowsing",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "GreenSnow": {
+              "method": "blacklist",
+              "engine_name": "GreenSnow",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Gridinsoft": {
+              "method": "blacklist",
+              "engine_name": "Gridinsoft",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Heimdal Security": {
+              "method": "blacklist",
+              "engine_name": "Heimdal Security",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Hunt.io Intelligence": {
+              "method": "blacklist",
+              "engine_name": "Hunt.io Intelligence",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "IPsum": {
+              "method": "blacklist",
+              "engine_name": "IPsum",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Juniper Networks": {
+              "method": "blacklist",
+              "engine_name": "Juniper Networks",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Kaspersky": {
+              "method": "blacklist",
+              "engine_name": "Kaspersky",
+              "category": "malicious",
+              "result": "malware"
+            },
+            "Lionic": {
+              "method": "blacklist",
+              "engine_name": "Lionic",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Lumu": {
+              "method": "blacklist",
+              "engine_name": "Lumu",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "MalwarePatrol": {
+              "method": "blacklist",
+              "engine_name": "MalwarePatrol",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "MalwareURL": {
+              "method": "blacklist",
+              "engine_name": "MalwareURL",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Malwared": {
+              "method": "blacklist",
+              "engine_name": "Malwared",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Netcraft": {
+              "method": "blacklist",
+              "engine_name": "Netcraft",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "OpenPhish": {
+              "method": "blacklist",
+              "engine_name": "OpenPhish",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Phishing Database": {
+              "method": "blacklist",
+              "engine_name": "Phishing Database",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "PhishFort": {
+              "method": "blacklist",
+              "engine_name": "PhishFort",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "PhishLabs": {
+              "method": "blacklist",
+              "engine_name": "PhishLabs",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Phishtank": {
+              "method": "blacklist",
+              "engine_name": "Phishtank",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "PREBYTES": {
+              "method": "blacklist",
+              "engine_name": "PREBYTES",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "PrecisionSec": {
+              "method": "blacklist",
+              "engine_name": "PrecisionSec",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Quick Heal": {
+              "method": "blacklist",
+              "engine_name": "Quick Heal",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Quttera": {
+              "method": "blacklist",
+              "engine_name": "Quttera",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "SafeToOpen": {
+              "method": "blacklist",
+              "engine_name": "SafeToOpen",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Sansec eComscan": {
+              "method": "blacklist",
+              "engine_name": "Sansec eComscan",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Scantitan": {
+              "method": "blacklist",
+              "engine_name": "Scantitan",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "SCUMWARE.org": {
+              "method": "blacklist",
+              "engine_name": "SCUMWARE.org",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Seclookup": {
+              "method": "blacklist",
+              "engine_name": "Seclookup",
+              "category": "malicious",
+              "result": "malicious"
+            },
+            "SecureBrain": {
+              "method": "blacklist",
+              "engine_name": "SecureBrain",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Segasec": {
+              "method": "blacklist",
+              "engine_name": "Segasec",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "SOCRadar": {
+              "method": "blacklist",
+              "engine_name": "SOCRadar",
+              "category": "malicious",
+              "result": "malware"
+            },
+            "Sophos": {
+              "method": "blacklist",
+              "engine_name": "Sophos",
+              "category": "malicious",
+              "result": "phishing"
+            },
+            "Spam404": {
+              "method": "blacklist",
+              "engine_name": "Spam404",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "StopForumSpam": {
+              "method": "blacklist",
+              "engine_name": "StopForumSpam",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Sucuri SiteCheck": {
+              "method": "blacklist",
+              "engine_name": "Sucuri SiteCheck",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "ThreatHive": {
+              "method": "blacklist",
+              "engine_name": "ThreatHive",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Threatsourcing": {
+              "method": "blacklist",
+              "engine_name": "Threatsourcing",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Trustwave": {
+              "method": "blacklist",
+              "engine_name": "Trustwave",
+              "category": "suspicious",
+              "result": "suspicious"
+            },
+            "Underworld": {
+              "method": "blacklist",
+              "engine_name": "Underworld",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "URLhaus": {
+              "method": "blacklist",
+              "engine_name": "URLhaus",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "URLQuery": {
+              "method": "blacklist",
+              "engine_name": "URLQuery",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "Viettel Threat Intelligence": {
+              "method": "blacklist",
+              "engine_name": "Viettel Threat Intelligence",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "VIPRE": {
+              "method": "blacklist",
+              "engine_name": "VIPRE",
+              "category": "malicious",
+              "result": "malware"
+            },
+            "VX Vault": {
+              "method": "blacklist",
+              "engine_name": "VX Vault",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "ViriBack": {
+              "method": "blacklist",
+              "engine_name": "ViriBack",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Webroot": {
+              "method": "blacklist",
+              "engine_name": "Webroot",
+              "category": "malicious",
+              "result": "malicious"
+            },
+            "Yandex Safebrowsing": {
+              "method": "blacklist",
+              "engine_name": "Yandex Safebrowsing",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "ZeroCERT": {
+              "method": "blacklist",
+              "engine_name": "ZeroCERT",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "desenmascara.me": {
+              "method": "blacklist",
+              "engine_name": "desenmascara.me",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "malwares.com URL checker": {
+              "method": "blacklist",
+              "engine_name": "malwares.com URL checker",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "securolytics": {
+              "method": "blacklist",
+              "engine_name": "securolytics",
+              "category": "harmless",
+              "result": "clean"
+            },
+            "Xcitium Verdict Cloud": {
+              "method": "blacklist",
+              "engine_name": "Xcitium Verdict Cloud",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "zvelo": {
+              "method": "blacklist",
+              "engine_name": "zvelo",
+              "category": "undetected",
+              "result": "unrated"
+            },
+            "ZeroFox": {
+              "method": "blacklist",
+              "engine_name": "ZeroFox",
+              "category": "undetected",
+              "result": "unrated"
+            }
+          },
+          "categories": {},
+          "creation_date": 1719964800,
+          "last_update_date": 1719964800,
+          "last_dns_records": [
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "troy.ns.cloudflare.com"
+            },
+            {
+              "type": "SOA",
+              "ttl": 1800,
+              "value": "maisie.ns.cloudflare.com",
+              "rname": "dns.cloudflare.com",
+              "serial": 2360843922,
+              "refresh": 10000,
+              "retry": 2400,
+              "expire": 604800,
+              "minimum": 1800
+            },
+            {
+              "type": "A",
+              "ttl": 300,
+              "value": "172.67.216.75"
+            },
+            {
+              "type": "NS",
+              "ttl": 21600,
+              "value": "maisie.ns.cloudflare.com"
+            },
+            {
+              "type": "MX",
+              "ttl": 300,
+              "priority": 10,
+              "value": "_dc-mx.c7cc51a3401b.kinltd.top"
+            },
+            {
+              "type": "A",
+              "ttl": 300,
+              "value": "104.21.24.17"
+            },
+            {
+              "type": "TXT",
+              "ttl": 300,
+              "value": "v=spf1 a mx ip4:195.123.211.110 ~all"
+            },
+            {
+              "type": "AAAA",
+              "ttl": 300,
+              "value": "2606:4700:3030::6815:1811"
+            },
+            {
+              "type": "AAAA",
+              "ttl": 300,
+              "value": "2606:4700:3035::ac43:d84b"
+            }
+          ],
+          "tags": [],
+          "popularity_ranks": {
+            "Cisco Umbrella": {
+              "rank": 372160,
+              "timestamp": 1739630288
+            },
+            "Cloudflare Radar": {
+              "rank": 100000,
+              "timestamp": 1739630296
+            }
+          }
+        }
+      },
+      "pulsedive": {
+        "status": "Error",
+        "error": "Invalid or empty response"
+      },
+      "metadefender": {
+        "status": "Clean",
+        "lastAnalysisDate": "N/A",
+        "detections": {
+          "total": 0,
+          "malicious": 0,
+          "suspicious": 0,
+          "clean": 0
+        },
+        "details": {
+          "lookup_results": {
+            "detected_by": 0,
+            "scan_results": [],
+            "address": "kinltd.top",
+            "geo_info": {},
+            "last_seen": null
+          },
+          "reputation": {
+            "reputation_score": 0,
+            "threat_level": "unknown",
+            "detection_sources": [],
+            "first_seen": null,
+            "last_seen": null
+          }
+        }
+      },
+      "securitytrails": {
+        "status": "Error",
+        "error": "Invalid or empty response"
+      }
+    }
+  }
+}
+
