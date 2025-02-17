@@ -21,7 +21,7 @@ def aggregate_platform_data(platform_data: Dict[str, Any]) -> Dict[str, Any]:
         'summary': {
             'total_detections': 0,
             'risk_level': 'Unknown',
-            'categories': set(),
+            'categories': [],  
             'detection_engines': 0,
             'malicious_engines': 0
         },
@@ -49,21 +49,21 @@ def aggregate_platform_data(platform_data: Dict[str, Any]) -> Dict[str, Any]:
                 logger.warning(f"Invalid AlienVault data: {av_data}")
             else:
                 _process_alienvault_data(av_data, aggregated)
-        
+                
         # Process Pulsedive data
         if pd_data := platform_data.get('pulsedive'):
             if not isinstance(pd_data, dict) or pd_data.get('error'):
                 logger.warning(f"Invalid Pulsedive data: {pd_data}")
             else:
                 _process_pulsedive_data(pd_data, aggregated)
-        
+                
         # Process MetaDefender data
         if md_data := platform_data.get('metadefender'):
             if not isinstance(md_data, dict) or md_data.get('error'):
                 logger.warning(f"Invalid MetaDefender data: {md_data}")
             else:
                 _process_metadefender_data(md_data, aggregated)
-        
+                
         # Process SecurityTrails data
         if st_data := platform_data.get('securitytrails'):
             if not isinstance(st_data, dict) or st_data.get('error'):
@@ -71,15 +71,22 @@ def aggregate_platform_data(platform_data: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 _process_securitytrails_data(st_data, aggregated)
         
-        # Calculate risk level
-        aggregated['summary']['risk_level'] = _calculate_risk_level(aggregated)
+        # Calculate overall risk level
+        if any(platform_data.values()):
+            aggregated['summary']['risk_level'] = _calculate_risk_level(aggregated)
+            
+        # Convert any remaining sets to lists for JSON serialization
+        if isinstance(aggregated['summary']['categories'], set):
+            aggregated['summary']['categories'] = list(aggregated['summary']['categories'])
+            
+        return aggregated
         
     except Exception as e:
         logger.error(f"Error aggregating platform data: {str(e)}")
-        # Ensure we return valid data even if aggregation fails
-        aggregated['summary']['risk_level'] = 'Unknown'
-    
-    return aggregated
+        return {
+            'error': f"Error processing platform data: {str(e)}",
+            'raw_data': platform_data
+        }
 
 def _process_virustotal_data(vt_data: Dict[str, Any], aggregated: Dict[str, Any]):
     """Process VirusTotal data"""
@@ -114,7 +121,7 @@ def _process_alienvault_data(av_data: Dict[str, Any], aggregated: Dict[str, Any]
                 
                 # Update categories
                 if industries := pulse_info.get('industries', []):
-                    aggregated['summary']['categories'].update(industries)
+                    aggregated['summary']['categories'].extend(industries)
             
             # Update WHOIS data if available
             if whois := av_data.get('whois', {}):

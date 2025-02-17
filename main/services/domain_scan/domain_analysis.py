@@ -194,8 +194,8 @@ TIMESTAMP: {timestamp}
                     'threat_score': threat_score,
                     'summary': aggregated_data.get('summary', {}),
                     'whois': aggregated_data.get('whois', {}),
-                    'security_analysis': aggregated_data.get('security_analysis', {}),
-                    'platform_data': formatted_data
+                    'security': aggregated_data.get('security_analysis', {}),
+                    'platform_data': platform_data
                 }
                 
                 # Log final results
@@ -213,7 +213,7 @@ TIMESTAMP: {timestamp}
                 return {
                     'domain': domain,
                     'error': error_msg,
-                    'raw_data': platform_data
+                    'platform_data': platform_data
                 }
             
         except Exception as e:
@@ -222,7 +222,8 @@ TIMESTAMP: {timestamp}
             await self._log_platform_data(domain, "FATAL_ERROR", {"error": error_msg})
             return {
                 'domain': domain,
-                'error': error_msg
+                'error': error_msg,
+                'platform_data': {}
             }
 
     async def _scan_platform(self, platform_name: str, platform: Any, domain: str) -> Optional[Dict[str, Any]]:
