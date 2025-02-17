@@ -18,7 +18,7 @@ class PulsediveAPI:
             api_key: Pulsedive API key
         """
         self.api_key = api_key
-        self.base_url = "https://pulsedive.com/api/v1"
+        self.base_url = "https://pulsedive.com/api"  # Fixed base URL
 
     async def scan_domain(self, domain: str) -> Optional[Dict[str, Any]]:
         """
@@ -43,23 +43,16 @@ class PulsediveAPI:
                 info_url = f"{self.base_url}/info.php"
                 async with session.get(info_url, params=params) as response:
                     if response.status == 200:
-                        info_data = await response.json()
+                        try:
+                            info_data = await response.json()
+                            return info_data
+                        except aiohttp.ContentTypeError as e:
+                            logger.error(f"Error parsing Pulsedive response: {str(e)}")
+                            return None
                     else:
                         error_data = await response.text()
                         logger.error(f"Pulsedive API error: {error_data}")
                         return None
-                
-                # Get domain links
-                links_url = f"{self.base_url}/info.php"
-                params['get'] = 'links'
-                async with session.get(links_url, params=params) as response:
-                    if response.status == 200:
-                        links_data = await response.json()
-                    else:
-                        links_data = {}
-                
-                # Combine and process results
-                return self._process_response(info_data, links_data)
                 
         except Exception as e:
             logger.error(f"Error scanning domain {domain} with Pulsedive: {str(e)}")
