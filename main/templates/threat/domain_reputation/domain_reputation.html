@@ -204,24 +204,139 @@
                                 </template>
 
                                 <template x-if="platform === 'alienvault'">
-                                    <div>
-                                        <h6 class="text-lg font-semibold mb-3">General Information</h6>
-                                        <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-6">
+                                        <!-- Basic Information -->
+                                        <div>
+                                            <h6 class="text-lg font-semibold mb-3">Basic Information</h6>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Domain:</span> <span x-text="data.general.indicator"></span></p>
+                                                    <p><span class="font-medium">Type:</span> <span x-text="data.general.type_title"></span></p>
+                                                    <p><span class="font-medium">Whois:</span> <a :href="data.general.whois" target="_blank" class="text-primary hover:underline">View Whois</a></p>
+                                                    <p><span class="font-medium">Alexa:</span> <a :href="data.general.alexa" target="_blank" class="text-primary hover:underline">View Alexa Info</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Validation Messages -->
+                                        <template x-if="data.general.validation && data.general.validation.length > 0">
                                             <div>
-                                                <h6 class="font-semibold">Geographical Data</h6>
-                                                <template x-if="data.geo">
-                                                    <div class="mt-2 space-y-2">
-                                                        <p><span class="font-medium">Country:</span> <span x-text="data.geo.country_name"></span></p>
-                                                        <p><span class="font-medium">City:</span> <span x-text="data.geo.city || 'N/A'"></span></p>
-                                                        <p><span class="font-medium">ASN:</span> <span x-text="data.geo.asn"></span></p>
+                                                <h6 class="text-lg font-semibold mb-3">Validation Messages</h6>
+                                                <div class="space-y-2">
+                                                    <template x-for="(validation, index) in data.general.validation" :key="index">
+                                                        <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                                                            <p><span class="font-medium">Source:</span> <span x-text="validation.source"></span></p>
+                                                            <p><span class="font-medium">Message:</span> <span x-text="validation.message"></span></p>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <!-- Pulse Information -->
+                                        <template x-if="data.general.pulse_info && data.general.pulse_info.count > 0">
+                                            <div>
+                                                <h6 class="text-lg font-semibold mb-3">Threat Intelligence</h6>
+                                                <p class="mb-3"><span class="font-medium">Total Pulses:</span> <span x-text="data.general.pulse_info.count"></span></p>
+                                                <div class="space-y-4">
+                                                    <template x-for="(pulse, index) in data.general.pulse_info.pulses" :key="pulse.id">
+                                                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded">
+                                                            <h6 class="font-medium mb-2" x-text="pulse.name"></h6>
+                                                            <p class="text-sm mb-2" x-text="pulse.description || 'No description available'"></p>
+                                                            <div class="grid grid-cols-2 gap-2 text-sm">
+                                                                <p><span class="font-medium">Created:</span> <span x-text="pulse.created"></span></p>
+                                                                <p><span class="font-medium">Modified:</span> <span x-text="pulse.modified"></span></p>
+                                                                <p><span class="font-medium">TLP:</span> <span x-text="pulse.TLP" class="uppercase"></span></p>
+                                                                <p><span class="font-medium">Author:</span> <span x-text="pulse.author.username"></span></p>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <!-- URL List -->
+                                        <template x-if="data.url_list && data.url_list.url_list.length > 0">
+                                            <div>
+                                                <h6 class="text-lg font-semibold mb-3">Associated URLs</h6>
+                                                <div class="space-y-3">
+                                                    <template x-for="(url, index) in data.url_list.url_list" :key="index">
+                                                        <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded">
+                                                            <p class="break-all"><span class="font-medium">URL:</span> <span x-text="url.url"></span></p>
+                                                            <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                                                                <p><span class="font-medium">Last Seen:</span> <span x-text="url.date"></span></p>
+                                                                <p><span class="font-medium">Status:</span> <span x-text="url.httpcode"></span></p>
+                                                                <template x-if="url.result && url.result.urlworker">
+                                                                    <p><span class="font-medium">IP:</span> <span x-text="url.result.urlworker.ip"></span></p>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+
+                                        <!-- Passive DNS -->
+                                        <template x-if="data.passive_dns && data.passive_dns.passive_dns.length > 0">
+                                            <div>
+                                                <h6 class="text-lg font-semibold mb-3">Passive DNS Records</h6>
+                                                <div class="space-y-3">
+                                                    <template x-for="(record, index) in data.passive_dns.passive_dns" :key="index">
+                                                        <div class="p-3 bg-gray-50 dark:bg-gray-800 rounded">
+                                                            <div class="grid grid-cols-2 gap-2">
+                                                                <p><span class="font-medium">Record Type:</span> <span x-text="record.record_type"></span></p>
+                                                                <p><span class="font-medium">Address:</span> <span x-text="record.address"></span></p>
+                                                                <p><span class="font-medium">First Seen:</span> <span x-text="record.first"></span></p>
+                                                                <p><span class="font-medium">Last Seen:</span> <span x-text="record.last"></span></p>
+                                                                <template x-if="record.asn">
+                                                                    <p><span class="font-medium">ASN:</span> <span x-text="record.asn"></span></p>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+
+                                <template x-if="platform === 'pulsedive'">
+                                    <div class="space-y-6">
+                                        <!-- Basic Info -->
+                                        <div>
+                                            <h6 class="text-lg font-semibold mb-3">Basic Information</h6>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Domain:</span> <span x-text="data.indicator"></span></p>
+                                                    <p><span class="font-medium">Risk Level:</span> <span x-text="data.risk" class="capitalize"></span></p>
+                                                    <p><span class="font-medium">Added:</span> <span x-text="data.stamp_added"></span></p>
+                                                    <p><span class="font-medium">Last Seen:</span> <span x-text="data.stamp_seen"></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Risk Factors -->
+                                        <div x-show="data.riskfactors && data.riskfactors.length > 0">
+                                            <h6 class="text-lg font-semibold mb-3">Risk Factors</h6>
+                                            <div class="space-y-2">
+                                                <template x-for="factor in data.riskfactors" :key="factor.rfid">
+                                                    <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                                                        <p><span class="font-medium">Risk Level:</span> <span x-text="factor.risk" class="capitalize"></span></p>
+                                                        <p><span class="font-medium">Description:</span> <span x-text="factor.description"></span></p>
                                                     </div>
                                                 </template>
                                             </div>
-                                            <div>
-                                                <h6 class="font-semibold">Pulse Information</h6>
-                                                <template x-if="data.general.pulse_info">
-                                                    <div class="mt-2 space-y-2">
-                                                        <p><span class="font-medium">Pulse Count:</span> <span x-text="data.general.pulse_info.count"></span></p>
+                                        </div>
+
+                                        <!-- Threats -->
+                                        <div x-show="data.threats && data.threats.length > 0">
+                                            <h6 class="text-lg font-semibold mb-3">Threats</h6>
+                                            <div class="space-y-2">
+                                                <template x-for="threat in data.threats" :key="threat.tid">
+                                                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                                                        <p><span class="font-medium">Name:</span> <span x-text="threat.name"></span></p>
+                                                        <p><span class="font-medium">Category:</span> <span x-text="threat.category"></span></p>
+                                                        <p><span class="font-medium">Risk:</span> <span x-text="threat.risk || 'Unknown'" class="capitalize"></span></p>
                                                     </div>
                                                 </template>
                                             </div>
@@ -229,17 +344,77 @@
                                     </div>
                                 </template>
 
-                                <template x-if="platform === 'pulsedive'">
-                                    <div>
-                                        <h6 class="text-lg font-semibold mb-3">Domain Information</h6>
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <template x-if="data">
-                                                <div class="space-y-2">
-                                                    <p><span class="font-medium">Indicator:</span> <span x-text="data.indicator"></span></p>
-                                                    <p><span class="font-medium">ID:</span> <span x-text="data.iid"></span></p>
-                                                </div>
-                                            </template>
+                                <template x-if="platform === 'securitytrails'">
+                                    <div class="space-y-6">
+                                        <!-- DNS Information -->
+                                        <div>
+                                            <h6 class="text-lg font-semibold mb-3">Current DNS Information</h6>
+                                            <div class="space-y-4">
+                                                <!-- A Records -->
+                                                <template x-if="data.domain_info.current_dns.a">
+                                                    <div>
+                                                        <h6 class="font-medium mb-2">A Records</h6>
+                                                        <div class="space-y-2">
+                                                            <template x-for="(record, index) in data.domain_info.current_dns.a.values" :key="index">
+                                                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                                                    <p><span class="font-medium">IP:</span> <span x-text="record.ip"></span></p>
+                                                                    <p><span class="font-medium">Organization:</span> <span x-text="record.ip_organization || 'N/A'"></span></p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <!-- MX Records -->
+                                                <template x-if="data.domain_info.current_dns.mx">
+                                                    <div>
+                                                        <h6 class="font-medium mb-2">MX Records</h6>
+                                                        <div class="space-y-2">
+                                                            <template x-for="(record, index) in data.domain_info.current_dns.mx.values" :key="index">
+                                                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                                                    <p><span class="font-medium">Hostname:</span> <span x-text="record.hostname"></span></p>
+                                                                    <p><span class="font-medium">Priority:</span> <span x-text="record.priority"></span></p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+
+                                                <!-- NS Records -->
+                                                <template x-if="data.domain_info.current_dns.ns">
+                                                    <div>
+                                                        <h6 class="font-medium mb-2">NS Records</h6>
+                                                        <div class="space-y-2">
+                                                            <template x-for="(record, index) in data.domain_info.current_dns.ns.values" :key="index">
+                                                                <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                                                                    <p><span class="font-medium">Nameserver:</span> <span x-text="record.nameserver"></span></p>
+                                                                    <p><span class="font-medium">Organization:</span> <span x-text="record.nameserver_organization || 'N/A'"></span></p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </div>
                                         </div>
+
+                                        <!-- SSL Certificates -->
+                                        <template x-if="data.ssl_certificates && data.ssl_certificates.certificates.length > 0">
+                                            <div>
+                                                <h6 class="text-lg font-semibold mb-3">SSL Certificates</h6>
+                                                <div class="space-y-2">
+                                                    <template x-for="(cert, index) in data.ssl_certificates.certificates" :key="index">
+                                                        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                                                            <template x-if="cert">
+                                                                <div>
+                                                                    <p><span class="font-medium">Issuer:</span> <span x-text="cert.issuer"></span></p>
+                                                                    <p><span class="font-medium">Subject:</span> <span x-text="cert.subject"></span></p>
+                                                                </div>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
                                     </div>
                                 </template>
                             </div>
