@@ -78,7 +78,7 @@
                         <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Threat Analysis</h5>
                         <div class="relative w-32 h-32 mb-4">
                             <div class="w-full h-full rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                                <span class="text-4xl font-bold" x-text="results.threat_score + '%'"></span>
+                                <span class="text-4xl font-bold" x-text="calculateThreatScore(results.platform_data) + '%'"></span>
                             </div>
                         </div>
                         <p class="text-center text-gray-600 dark:text-gray-400" x-text="getRiskDescription(results.summary.risk_level)"></p>
@@ -89,18 +89,29 @@
                 <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
                     <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">WHOIS Information</h5>
                     <div class="space-y-3">
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">Registrar</label>
-                            <p class="font-semibold mt-1" x-text="results.whois?.registrar || 'N/A'"></p>
-                        </div>
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">Created Date</label>
-                            <p class="font-semibold mt-1" x-text="formatDate(results.whois?.createdDate)"></p>
-                        </div>
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">Expiry Date</label>
-                            <p class="font-semibold mt-1" x-text="formatDate(results.whois?.expiryDate)"></p>
-                        </div>
+                        <template x-if="results.platform_data.virustotal">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="text-gray-600 dark:text-gray-400">Creation Date</label>
+                                    <p class="font-semibold mt-1" x-text="formatDate(results.platform_data.virustotal.creation_date) || 'N/A'"></p>
+                                </div>
+                                <div>
+                                    <label class="text-gray-600 dark:text-gray-400">Last Update</label>
+                                    <p class="font-semibold mt-1" x-text="formatDate(results.platform_data.virustotal.last_update_date) || 'N/A'"></p>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="text-gray-600 dark:text-gray-400">DNS Records</label>
+                                    <div class="mt-2 max-h-40 overflow-y-auto">
+                                        <template x-for="record in results.platform_data.virustotal.last_dns_records" :key="record.type">
+                                            <div class="p-2 bg-gray-50 dark:bg-gray-700 rounded mb-2">
+                                                <p><span class="font-semibold">Type:</span> <span x-text="record.type"></span></p>
+                                                <p><span class="font-semibold">Value:</span> <span x-text="record.value"></span></p>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -108,85 +119,126 @@
                 <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
                     <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Status</h5>
                     <div class="space-y-3">
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">Blacklist Status</label>
-                            <div class="mt-1">
-                                <span class="badge" :class="{
-                                    'badge-outline-success': results.security?.blacklistStatus === 'Clean',
-                                    'badge-outline-warning': results.security?.blacklistStatus === 'Suspicious',
-                                    'badge-outline-danger': results.security?.blacklistStatus === 'Blacklisted'
-                                }" x-text="results.security?.blacklistStatus || 'Unknown'"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">SSL Status</label>
-                            <div class="mt-1">
-                                <span class="badge" :class="{
-                                    'badge-outline-success': results.security?.sslStatus === 'Valid',
-                                    'badge-outline-warning': results.security?.sslStatus === 'Expired',
-                                    'badge-outline-danger': results.security?.sslStatus === 'Invalid'
-                                }" x-text="results.security?.sslStatus || 'Unknown'"></span>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="text-gray-600 dark:text-gray-400">Malware Status</label>
-                            <div class="mt-1">
-                                <span class="badge" :class="{
-                                    'badge-outline-success': results.security?.malwareStatus === 'Clean',
-                                    'badge-outline-warning': results.security?.malwareStatus === 'Suspicious',
-                                    'badge-outline-danger': results.security?.malwareStatus === 'Detected'
-                                }" x-text="results.security?.malwareStatus || 'Unknown'"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Platform Results -->
-                <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow xl:col-span-3">
-                    <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Platforms</h5>
-                    <div class="space-y-4">
-                        <!-- Platform Cards -->
-                        <template x-for="(data, platform) in results.platform_data" :key="platform">
-                            <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-md hover:shadow-lg transition">
-                                <div class="flex items-center justify-between">
-                                    <h6 class="text-base font-semibold text-gray-800 dark:text-white" x-text="platform"></h6>
-                                    <div class="flex items-center">
-                                        <template x-if="data.error">
-                                            <span class="badge badge-outline-danger" x-text="'Error: ' + data.error"></span>
-                                        </template>
-                                        <template x-if="!data.error">
-                                            <div>
-                                                <span class="badge" :class="{
-                                                    'badge-outline-success': data.status === 'Clean',
-                                                    'badge-outline-warning': data.status === 'Suspicious',
-                                                    'badge-outline-danger': data.status === 'Malicious'
-                                                }" x-text="data.status"></span>
-                                                <span class="text-sm text-gray-500 ml-2" x-text="'Last analyzed: ' + formatDate(data.lastAnalysisDate)"></span>
-                                            </div>
-                                        </template>
+                        <template x-if="results.platform_data.virustotal">
+                            <div>
+                                <label class="text-gray-600 dark:text-gray-400">Analysis Stats</label>
+                                <div class="grid grid-cols-3 gap-4 mt-2">
+                                    <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                                        <p class="text-sm text-red-600 dark:text-red-400">Malicious</p>
+                                        <p class="text-2xl font-bold text-red-700 dark:text-red-300" x-text="results.platform_data.virustotal.last_analysis_stats.malicious"></p>
+                                    </div>
+                                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                                        <p class="text-sm text-yellow-600 dark:text-yellow-400">Suspicious</p>
+                                        <p class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="results.platform_data.virustotal.last_analysis_stats.suspicious"></p>
+                                    </div>
+                                    <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded">
+                                        <p class="text-sm text-green-600 dark:text-green-400">Clean</p>
+                                        <p class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="results.platform_data.virustotal.last_analysis_stats.undetected"></p>
                                     </div>
                                 </div>
-                                
-                                <!-- Platform Details -->
-                                <template x-if="!data.error && data.detections">
-                                    <div class="mt-3 pl-4 border-l-2 border-gray-200">
-                                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Results -->
+            <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow xl:col-span-3 mt-6">
+                <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Platforms</h5>
+                
+                <!-- Platform Tabs -->
+                <div x-data="{ activeTab: Object.keys(results.platform_data)[0] }">
+                    <div class="mb-5 border-b border-gray-200">
+                        <ul class="flex flex-wrap -mb-px">
+                            <template x-for="(data, platform) in results.platform_data" :key="platform">
+                                <li class="mr-2">
+                                    <button 
+                                        class="inline-block p-4 rounded-t-lg"
+                                        :class="activeTab === platform ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-gray-600 hover:border-gray-300'"
+                                        @click="activeTab = platform"
+                                        x-text="platform.toUpperCase()"
+                                    ></button>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <!-- Platform Content -->
+                    <div class="mt-4">
+                        <template x-for="(data, platform) in results.platform_data" :key="platform">
+                            <div x-show="activeTab === platform" class="space-y-4">
+                                <template x-if="platform === 'virustotal'">
+                                    <div>
+                                        <h6 class="text-lg font-semibold mb-3">Analysis Results</h6>
+                                        <div class="overflow-x-auto">
+                                            <table class="min-w-full table-auto">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="px-4 py-2 bg-gray-50 dark:bg-gray-700">Engine</th>
+                                                        <th class="px-4 py-2 bg-gray-50 dark:bg-gray-700">Category</th>
+                                                        <th class="px-4 py-2 bg-gray-50 dark:bg-gray-700">Result</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template x-for="(result, engine) in data.last_analysis_results" :key="engine">
+                                                        <tr class="border-b dark:border-gray-700">
+                                                            <td class="px-4 py-2" x-text="engine"></td>
+                                                            <td class="px-4 py-2">
+                                                                <span class="badge" 
+                                                                    :class="{
+                                                                        'badge-outline-success': result.category === 'harmless',
+                                                                        'badge-outline-warning': result.category === 'suspicious',
+                                                                        'badge-outline-danger': result.category === 'malicious',
+                                                                        'badge-outline-info': result.category === 'undetected'
+                                                                    }"
+                                                                    x-text="result.category">
+                                                                </span>
+                                                            </td>
+                                                            <td class="px-4 py-2" x-text="result.result"></td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <template x-if="platform === 'alienvault'">
+                                    <div>
+                                        <h6 class="text-lg font-semibold mb-3">General Information</h6>
+                                        <div class="grid grid-cols-2 gap-4">
                                             <div>
-                                                <span class="text-sm text-gray-500">Total Scans</span>
-                                                <p class="font-semibold" x-text="data.detections.total"></p>
+                                                <h6 class="font-semibold">Geographical Data</h6>
+                                                <template x-if="data.geo">
+                                                    <div class="mt-2 space-y-2">
+                                                        <p><span class="font-medium">Country:</span> <span x-text="data.geo.country_name"></span></p>
+                                                        <p><span class="font-medium">City:</span> <span x-text="data.geo.city || 'N/A'"></span></p>
+                                                        <p><span class="font-medium">ASN:</span> <span x-text="data.geo.asn"></span></p>
+                                                    </div>
+                                                </template>
                                             </div>
                                             <div>
-                                                <span class="text-sm text-gray-500">Malicious</span>
-                                                <p class="font-semibold text-red-500" x-text="data.detections.malicious"></p>
+                                                <h6 class="font-semibold">Pulse Information</h6>
+                                                <template x-if="data.general.pulse_info">
+                                                    <div class="mt-2 space-y-2">
+                                                        <p><span class="font-medium">Pulse Count:</span> <span x-text="data.general.pulse_info.count"></span></p>
+                                                    </div>
+                                                </template>
                                             </div>
-                                            <div>
-                                                <span class="text-sm text-gray-500">Suspicious</span>
-                                                <p class="font-semibold text-yellow-500" x-text="data.detections.suspicious"></p>
-                                            </div>
-                                            <div>
-                                                <span class="text-sm text-gray-500">Clean</span>
-                                                <p class="font-semibold text-green-500" x-text="data.detections.clean"></p>
-                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <template x-if="platform === 'pulsedive'">
+                                    <div>
+                                        <h6 class="text-lg font-semibold mb-3">Domain Information</h6>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <template x-if="data">
+                                                <div class="space-y-2">
+                                                    <p><span class="font-medium">Indicator:</span> <span x-text="data.indicator"></span></p>
+                                                    <p><span class="font-medium">ID:</span> <span x-text="data.iid"></span></p>
+                                                </div>
+                                            </template>
                                         </div>
                                     </div>
                                 </template>
@@ -204,82 +256,65 @@ function domainChecker() {
     return {
         domain: '',
         loading: false,
-        results: null,
         error: null,
-        showDetails: { virustotal: false, alienvault: false, pulsedive: false, metaDefender: false },
-        getRiskDescription(level) {
-            const descriptions = {
-                'Low': 'This domain appears to be safe',
-                'Medium': 'Exercise caution with this domain',
-                'High': 'This domain may be dangerous'
-            };
-            return descriptions[level] || 'Unknown risk level';
-        },
-        formatDate(dateString) {
-            if (!dateString) return 'N/A';
-            return new Date(dateString).toLocaleDateString();
-        },
-        async analyzeDomain() {
-            if (!this.domain) return;
+        results: null,
+
+        analyzeDomain() {
             this.loading = true;
-            this.results = null;
             this.error = null;
             
-            try {
-                const response = await fetch(`/services/domain-scan/api/domain-reputation/${encodeURIComponent(this.domain)}/`);
-                const data = await response.json();
-                
-                if (data.error) {
-                    this.error = data.error;
-                    const toast = window.Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        padding: '10px 20px'
-                    });
-                    toast.fire({
-                        icon: 'error',
-                        title: 'Error analyzing domain',
-                        text: data.error
-                    });
+            fetch(`/services/domain-scan/api/domain-reputation/${encodeURIComponent(this.domain.trim())}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to analyze domain');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
                     this.results = data;
-                    return;
-                }
-                
-                this.results = data;
-                const toast = window.Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    padding: '10px 20px'
+                    this.loading = false;
+                })
+                .catch(err => {
+                    this.error = err.message || 'Failed to analyze domain. Please try again.';
+                    this.loading = false;
                 });
-                toast.fire({
-                    icon: 'success',
-                    title: 'Analysis Complete',
-                    text: 'Domain analysis completed successfully'
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                this.error = "Failed to connect to the server. Please try again later.";
-                const toast = window.Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    padding: '10px 20px'
-                });
-                toast.fire({
-                    icon: 'error',
-                    title: 'Connection Error',
-                    text: this.error
-                });
-            } finally {
-                this.loading = false;
-            }
+        },
+
+        calculateThreatScore(platformData) {
+            if (!platformData || !platformData.virustotal) return 0;
+            
+            const stats = platformData.virustotal.last_analysis_stats;
+            if (!stats) return 0;
+
+            const total = stats.malicious + stats.suspicious + stats.undetected;
+            if (total === 0) return 0;
+
+            // Calculate weighted score
+            const maliciousWeight = 1.0;
+            const suspiciousWeight = 0.5;
+            
+            const score = ((stats.malicious * maliciousWeight) + (stats.suspicious * suspiciousWeight)) / total * 100;
+            return Math.round(score);
+        },
+
+        getRiskDescription(riskLevel) {
+            const descriptions = {
+                'Low': 'This domain appears to be safe',
+                'Medium': 'Exercise caution when interacting with this domain',
+                'High': 'This domain may be dangerous',
+                'Critical': 'This domain is potentially malicious'
+            };
+            return descriptions[riskLevel] || 'Risk level unknown';
+        },
+
+        formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            return new Date(timestamp).toLocaleString();
         }
-    }
+    };
 }
 </script>
 {% endblock %}
