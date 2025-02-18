@@ -3,15 +3,6 @@
 
 {% block content %}
 <div x-cloak x-data="domainChecker()">
-    <!-- Breadcrumb -->
-    <ul class="flex space-x-2 rtl:space-x-reverse mb-4">
-        <li>
-            <a href="/" class="text-primary hover:underline">Dashboard</a>
-        </li>
-        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-            <span>Domain Reputation</span>
-        </li>
-    </ul>
 
     <!-- Search Section -->
     <div class="pt-5">
@@ -73,67 +64,108 @@
             <!-- Quick Stats -->
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <!-- Threat Analysis / Score -->
-                <div class="panel p-6 rounded-lg bg-gradient-to-r from-blue-500/20 to-blue-400/20 border-0">
+                <div class="panel threat-panel p-6 rounded-lg border-0"
+                    :class="{
+                        'bg-gradient-to-r from-red-500/20 to-red-400/20': calculateThreatScore(results.platform_data) >= 75,
+                        'bg-gradient-to-r from-yellow-500/20 to-yellow-400/20': calculateThreatScore(results.platform_data) >= 50 && calculateThreatScore(results.platform_data) < 75,
+                        'bg-gradient-to-r from-blue-500/20 to-blue-400/20': calculateThreatScore(results.platform_data) < 50
+                    }">
                     <div class="flex flex-col items-center">
                         <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Threat Analysis</h5>
                         <div class="relative w-32 h-32 mb-4">
-                            <div class="w-full h-full rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                                <span class="text-4xl font-bold" x-text="calculateThreatScore(results.platform_data) + '%'"></span>
+                            <div class="w-full h-full rounded-full flex items-center justify-center"
+                                :class="{
+                                    'bg-red-100 dark:bg-red-900/50': calculateThreatScore(results.platform_data) >= 75,
+                                    'bg-yellow-100 dark:bg-yellow-900/50': calculateThreatScore(results.platform_data) >= 50 && calculateThreatScore(results.platform_data) < 75,
+                                    'bg-blue-100 dark:bg-blue-900/50': calculateThreatScore(results.platform_data) < 50
+                                }">
+                                <span class="text-4xl font-bold" 
+                                    :class="{
+                                        'text-red-700 dark:text-red-300': calculateThreatScore(results.platform_data) >= 75,
+                                        'text-yellow-700 dark:text-yellow-300': calculateThreatScore(results.platform_data) >= 50 && calculateThreatScore(results.platform_data) < 75,
+                                        'text-blue-700 dark:text-blue-300': calculateThreatScore(results.platform_data) < 50
+                                    }"
+                                    x-text="calculateThreatScore(results.platform_data) + '%'"></span>
                             </div>
                         </div>
-                        <p class="text-center text-gray-600 dark:text-gray-400" x-text="getRiskDescription(results.summary.risk_level)"></p>
+                        <p class="text-center font-semibold"
+                            :class="{
+                                'text-red-600 dark:text-red-400': calculateThreatScore(results.platform_data) >= 75,
+                                'text-yellow-600 dark:text-yellow-400': calculateThreatScore(results.platform_data) >= 50 && calculateThreatScore(results.platform_data) < 75,
+                                'text-blue-600 dark:text-blue-400': calculateThreatScore(results.platform_data) < 50
+                            }"
+                            x-text="getRiskDescription(results.summary.risk_level)"></p>
                     </div>
                 </div>
 
                 <!-- WHOIS Information -->
-                <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
-                    <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">WHOIS Information</h5>
+                <div class="panel whois-panel p-6 rounded-lg bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 shadow-lg">
+                    <h5 class="text-xl font-bold mb-4 text-indigo-900 dark:text-gray-400">WHOIS Information</h5>
                     <div class="space-y-3">
                         <template x-if="results.platform_data.virustotal">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="text-gray-600 dark:text-gray-400">Creation Date</label>
-                                    <p class="font-semibold mt-1" x-text="formatDate(results.platform_data.virustotal.creation_date) || 'N/A'"></p>
-                                </div>
-                                <div>
-                                    <label class="text-gray-600 dark:text-gray-400">Last Update</label>
-                                    <p class="font-semibold mt-1" x-text="formatDate(results.platform_data.virustotal.last_update_date) || 'N/A'"></p>
-                                </div>
-                                <div class="col-span-2">
-                                    <label class="text-gray-600 dark:text-gray-400">DNS Records</label>
-                                    <div class="mt-2 max-h-40 overflow-y-auto">
-                                        <template x-for="record in results.platform_data.virustotal.last_dns_records" :key="record.type">
-                                            <div class="p-2 bg-gray-50 dark:bg-gray-700 rounded mb-2">
-                                                <p><span class="font-semibold">Type:</span> <span x-text="record.type"></span></p>
-                                                <p><span class="font-semibold">Value:</span> <span x-text="record.value"></span></p>
-                                            </div>
-                                        </template>
+                            <div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="p-4 bg-white/50 dark:bg-indigo-900/40 rounded-lg border-l-4 border-indigo-500">
+                                        <p class="text-sm font-medium text-indigo-900 dark:text-gray-400">Creation Date</p>
+                                        <p class="text-gray-800 dark:text-white" x-text="formatDate(results.platform_data.virustotal.creation_date)"></p>
+                                    </div>
+                                    <div class="p-4 bg-white/50 dark:bg-indigo-900/40 rounded-lg border-l-4 border-indigo-500">
+                                        <p class="text-sm font-medium text-indigo-900 dark:text-gray-400">Last Update</p>
+                                        <p class="text-gray-800 dark:text-white" x-text="formatDate(results.platform_data.virustotal.last_update_date)"></p>
                                     </div>
                                 </div>
+
+                                <div class="mt-4 p-4 bg-white/50 dark:bg-indigo-900/40 rounded-lg border-l-4 border-indigo-500">
+                                    <p class="text-sm font-medium text-indigo-900 dark:text-gray-400">DNS Records</p>
+                                    <template x-if="results.platform_data.virustotal.last_dns_records">
+                                        <div class="mt-2 space-y-2">
+                                            <template x-for="record in results.platform_data.virustotal.last_dns_records" :key="record.type + record.value">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="text-indigo-600 dark:text-gray-400" x-text="record.type + ':'"></span>
+                                                    <span class="text-gray-800 dark:text-white" x-text="record.value"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+
+                                <template x-if="results.platform_data.pulsedive?.properties?.whois">
+                                    <div class="mt-4 p-4 bg-white/50 dark:bg-indigo-900/40 rounded-lg border-l-4 border-indigo-500">
+                                        <p class="text-sm font-medium text-indigo-900 dark:text-gray-400">Registrar Information</p>
+                                        <div class="mt-2 space-y-2">
+                                            <template x-for="(value, key) in results.platform_data.pulsedive.properties.whois" :key="key">
+                                                <div class="flex flex-col">
+                                                    <span class="text-indigo-600 dark:text-gray-400" x-text="key"></span>
+                                                    <span class="text-gray-800 dark:text-white ml-4" x-text="value"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
                         </template>
                     </div>
                 </div>
 
                 <!-- Security Status -->
-                <div class="panel p-6 rounded-lg bg-white dark:bg-gray-800 shadow">
-                    <h5 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">Security Status</h5>
+                <div class="panel security-panel p-6 rounded-lg bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 shadow">
+                    <h5 class="text-xl font-bold mb-4 text-emerald-800 dark:text-emerald-300">Security Status</h5>
                     <div class="space-y-3">
                         <template x-if="results.platform_data.virustotal">
                             <div>
-                                <label class="text-gray-600 dark:text-gray-400">Analysis Stats</label>
+                                <label class="text-emerald-600 dark:text-emerald-400 font-medium">Analysis Stats</label>
                                 <div class="grid grid-cols-3 gap-4 mt-2">
-                                    <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                                        <p class="text-sm text-red-600 dark:text-red-400">Malicious</p>
-                                        <p class="text-2xl font-bold text-red-700 dark:text-red-300" x-text="results.platform_data.virustotal.last_analysis_stats.malicious"></p>
+                                    <div class="stat-card malicious-card">
+                                        <p class="text-3xl font-bold text-rose-600" x-text="results.platform_data.virustotal.last_analysis_stats.malicious"></p>
+                                        <p class="text-sm text-gray-600">Malicious</p>
                                     </div>
-                                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                                        <p class="text-sm text-yellow-600 dark:text-yellow-400">Suspicious</p>
-                                        <p class="text-2xl font-bold text-yellow-700 dark:text-yellow-300" x-text="results.platform_data.virustotal.last_analysis_stats.suspicious"></p>
+                                    <div class="stat-card suspicious-card">
+                                        <p class="text-3xl font-bold text-amber-600" x-text="results.platform_data.virustotal.last_analysis_stats.suspicious"></p>
+                                        <p class="text-sm text-gray-600">Suspicious</p>
                                     </div>
-                                    <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                                        <p class="text-sm text-green-600 dark:text-green-400">Clean</p>
-                                        <p class="text-2xl font-bold text-green-700 dark:text-green-300" x-text="results.platform_data.virustotal.last_analysis_stats.undetected"></p>
+                                    <div class="stat-card clean-card">
+                                        <p class="text-3xl font-bold text-emerald-600" x-text="results.platform_data.virustotal.last_analysis_stats.undetected"></p>
+                                        <p class="text-sm text-gray-600">Clean</p>
                                     </div>
                                 </div>
                             </div>
@@ -153,8 +185,8 @@
                             <template x-for="(data, platform) in results.platform_data" :key="platform">
                                 <li class="mr-2">
                                     <button 
-                                        class="inline-block p-4 rounded-t-lg"
-                                        :class="activeTab === platform ? 'text-blue-600 border-b-2 border-blue-600' : 'hover:text-gray-600 hover:border-gray-300'"
+                                        class="inline-block p-4 rounded-t-lg transition-all duration-200"
+                                        :class="activeTab === platform ? 'text-primary border-b-2 border-primary font-semibold' : 'hover:text-gray-600 hover:border-gray-300 text-gray-500'"
                                         @click="activeTab = platform"
                                         x-text="platform.toUpperCase()"
                                     ></button>
@@ -425,6 +457,59 @@
         </div>
     </template>
 </div>
+
+<style>
+    .threat-panel {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(225, 29, 72, 0.1), rgba(219, 39, 119, 0.1));
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .whois-panel {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .security-panel {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(20, 184, 166, 0.1), rgba(6, 182, 212, 0.1));
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card {
+        border-radius: 0.5rem;
+        padding: 1rem;
+        transition: transform 0.2s;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .malicious-card {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(225, 29, 72, 0.15));
+        border-left: 4px solid rgb(239, 68, 68);
+    }
+    
+    .suspicious-card {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.15));
+        border-left: 4px solid rgb(245, 158, 11);
+    }
+    
+    .clean-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(20, 184, 166, 0.15));
+        border-left: 4px solid rgb(16, 185, 129);
+    }
+    
+    .platform-tab.active {
+        border-bottom: 2px solid rgb(99, 102, 241);
+        font-weight: 600;
+    }
+    
+    .platform-content {
+        background: linear-gradient(135deg, rgba(243, 244, 246, 0.1), rgba(249, 250, 251, 0.1));
+        border-radius: 0.5rem;
+    }
+</style>
 
 <script>
 function domainChecker() {
