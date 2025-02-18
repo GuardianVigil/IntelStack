@@ -25,3 +25,7 @@ python-dateutil>=2.8.2
 
 django-tailwind
 markdown
+whitenoise
+ratelimit
+
+OTXv2

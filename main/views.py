@@ -157,16 +157,16 @@ def load_api_keys(request):
         for key in user_api_keys:
             if key.platform == 'hybrid_analysis':
                 api_keys[key.platform] = {
-                    'api_key': mask_key(key.get_decrypted_api_key()),
-                    'api_secret': mask_key(key.get_decrypted_api_secret())
+                    'api_key': mask_key(key.api_key),
+                    'api_secret': mask_key(key.api_secret)
                 }
             elif key.platform == 'ibm_xforce':
                 api_keys[key.platform] = {
-                    'api_key': mask_key(key.get_decrypted_api_key()),
-                    'api_password': mask_key(key.get_decrypted_api_secret())
+                    'api_key': mask_key(key.api_key),
+                    'api_password': mask_key(key.api_secret)
                 }
             else:
-                api_keys[key.platform] = mask_key(key.get_decrypted_api_key())
+                api_keys[key.platform] = mask_key(key.api_key)
         
         return JsonResponse({'success': True, 'api_keys': api_keys})
     except Exception as e:
@@ -182,8 +182,8 @@ def test_api_key(request):
     
     try:
         api_key = APIKey.objects.get(user=request.user, platform=platform, is_active=True)
-        key = api_key.get_decrypted_api_key()
-        secret = api_key.get_decrypted_api_secret() if platform == 'hybrid_analysis' else None
+        key = api_key.api_key
+        secret = api_key.api_secret if platform == 'hybrid_analysis' else None
         
         # Test API key based on platform
         if platform == 'virustotal':
