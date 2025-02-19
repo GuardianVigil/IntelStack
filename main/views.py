@@ -864,7 +864,7 @@ def domain_reputation(request):
 
 @login_required
 def url_scan(request):
-    return render(request, 'threat/url_scan.html')
+    return render(request, 'threat/url_scan/url_scan.html')
 
 @login_required
 def email_investigation(request):

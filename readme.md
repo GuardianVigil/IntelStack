@@ -58,37 +58,45 @@ git clone https://github.com/yourusername/GuardianVigil.git
 cd GuardianVigil
 ```
 
-2. Create and activate a virtual environment:
+2. Run the installation script:
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+chmod +x install.sh
+./install.sh        # Normal installation
+# or
+./install.sh --debug # Installation with debug output
 ```
 
-3. Install dependencies:
+The installation script will:
+- Create and activate a virtual environment
+- Install all required dependencies
+- Set up Redis server
+- Create necessary directories for screenshots and logs
+- Set up automatic cleanup of old screenshots (30 days retention)
+- Run database migrations
+- Collect static files
+
+3. Start the application:
 ```bash
-pip install -r requirements.txt
+./run.sh           # Normal run
+./run.sh --debug   # Run with debug output
 ```
 
-4. Set up environment variables:
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
+The run script provides:
+- Automatic virtual environment activation
+- Redis server status check
+- Timestamped logging
+- Graceful shutdown handling
 
-5. Run migrations:
-```bash
-python manage.py migrate
-```
+### 📝 Logs
+- Application logs are stored in the `logs` directory
+- Each run creates a new timestamped log file
+- Screenshots are stored in `storage/screenshots` with date-based organization
+- Automatic cleanup of screenshots older than 30 days
 
-6. Create a superuser:
-```bash
-python manage.py createsuperuser
-```
-
-7. Start the development server:
-```bash
-python manage.py runserver
-```
+### 🔍 Debugging
+Use the `--debug` flag with either script for verbose output:
+- `./install.sh --debug`: Shows detailed installation progress
+- `./run.sh --debug`: Shows detailed server logs
 
 ## 🔐 Environment Variables
 
