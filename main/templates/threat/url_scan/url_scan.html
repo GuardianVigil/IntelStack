@@ -3,92 +3,343 @@
 
 {% block content %}
 <div x-data="urlAnalysis">
-    <ul class="flex space-x-2 rtl:space-x-reverse">
-        <li>
-            <a href="/" class="text-primary hover:underline">Dashboard</a>
-        </li>
-        <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-            <span>URL Scan</span>
-        </li>
-    </ul>
-
-    <div class="pt-5">
-        <div class="panel">
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">URL Analysis</h5>
-            </div>
-            
+    <div class="panel">
+        {% csrf_token %}
+        <div class="flex items-center justify-between mb-5">
+            <h5 class="font-semibold text-lg dark:text-white-light">URL Scanner</h5>
+        </div>
+        
+        <!-- URL Input Form -->
+        <form @submit.prevent="analyzeUrl" class="mb-5">
             <div class="mb-5">
-                <form @submit.prevent="analyzeUrl" class="space-y-5">
-                    <div class="grid grid-cols-1 gap-4">
-                        <div>
-                            <label for="url">URL</label>
-                            <input id="url" type="text" placeholder="Enter URL to scan" class="form-input" x-model="url" />
-                        </div>
-                        <div>
-                            <button type="submit" class="btn btn-primary">Scan URL</button>
-                        </div>
+                <div class="flex flex-col space-y-2">
+                    <div class="flex">
+                        <input x-model="url" type="text" placeholder="Enter URL" class="form-input h-10 ltr:rounded-l-md rtl:rounded-r-md" required />
+                        <button type="submit" class="btn btn-primary !text-white h-10 ltr:rounded-r-md rtl:rounded-l-md flex items-center justify-center px-4" :class="{ 'opacity-50 cursor-not-allowed': loading }" :disabled="loading">
+                            <div x-show="!loading" class="!text-white">Scan</div>
+                            <div x-show="loading" class="flex items-center">
+                                <span class="animate-spin border-2 border-white border-l-transparent rounded-full w-4 h-4 ltr:mr-2 rtl:ml-2"></span>
+                                <span class="!text-white">Scanning...</span>
+                            </div>
+                        </button>
                     </div>
-                </form>
+                </div>
+                
+                <div class="text-xs text-gray-500 dark:text-gray-400 space-y-1">
+                    <p class="font-medium">Accepted URL formats:</p>
+                    <ul class="list-disc list-inside ml-2 space-y-1">
+                        <li>Domain only: <span class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">example.com</span></li>
+                        <li>With path: <span class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">example.com/page</span></li>
+                        <li>Full URL: <span class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">https://example.com</span></li>
+                        <li>Subdomain: <span class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">sub.example.com</span></li>
+                    </ul>
+                </div>
             </div>
+        </form>
 
-            <div x-show="loading" class="flex justify-center">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+        <!-- Error Message -->
+        <div x-show="error" x-cloak class="mb-5">
+            <div class="flex items-center p-3.5 rounded text-danger bg-danger-light dark:bg-danger-dark-light">
+                <span class="ltr:mr-2 rtl:ml-2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </span>
+                <span x-text="error"></span>
             </div>
+        </div>
 
-            <div x-show="!loading && results" class="space-y-5">
-                <!-- URL Analysis Results -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="panel">
-                        <h6 class="text-lg font-bold mb-2">URL Information</h6>
-                        <div class="table-responsive">
-                            <table class="table-striped">
-                                <tbody>
-                                    <tr>
-                                        <td class="font-semibold">URL:</td>
-                                        <td x-text="results.url"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-semibold">Final URL:</td>
-                                        <td x-text="results.finalUrl"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-semibold">IP Address:</td>
-                                        <td x-text="results.ipAddress"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="font-semibold">Server:</td>
-                                        <td x-text="results.server"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+        <!-- Results Section -->
+        <div x-show="results" x-cloak>
+            <!-- Overall Threat Score Card -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="panel bg-gradient-to-r from-blue-500 to-blue-400">
+                    <div class="flex justify-between">
+                        <div class="text-white">
+                            <h5 class="text-2xl font-semibold mb-1" x-text="`${Math.round(results.overall_score)}/100`"></h5>
+                            <p>Overall Threat Score</p>
                         </div>
-                    </div>
-
-                    <div class="panel">
-                        <h6 class="text-lg font-bold mb-2">Security Assessment</h6>
-                        <div class="space-y-4">
-                            <template x-for="(category, index) in results.categories" :key="index">
-                                <div>
-                                    <div class="flex justify-between mb-1">
-                                        <span x-text="category.name"></span>
-                                        <span class="badge" :class="{
-                                            'badge-outline-success': category.risk === 'Low',
-                                            'badge-outline-warning': category.risk === 'Medium',
-                                            'badge-outline-danger': category.risk === 'High'
-                                        }" x-text="category.risk"></span>
-                                    </div>
-                                    <p class="text-xs text-gray-500" x-text="category.description"></p>
-                                </div>
-                            </template>
+                        <div class="text-white" x-show="results.threat_level">
+                            <span class="px-2 py-1 rounded-full" :class="{
+                                'bg-success/30': results.threat_level === 'Low',
+                                'bg-warning/30': results.threat_level === 'Medium',
+                                'bg-danger/30': results.threat_level === 'High'
+                            }" x-text="results.threat_level"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Screenshot -->
-                <div class="panel" x-show="results.screenshot">
-                    <h6 class="text-lg font-bold mb-2">Website Screenshot</h6>
-                    <img :src="results.screenshot" alt="Website Screenshot" class="w-full rounded-lg shadow-sm" />
+                <!-- URL Info -->
+                <div class="panel">
+                    <div class="flex items-center">
+                        <div class="text-info">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="font-semibold">Scanned URL</p>
+                            <h5 class="text-lg break-all" x-text="results.url"></h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan Date -->
+                <div class="panel">
+                    <div class="flex items-center">
+                        <div class="text-primary">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <div class="ltr:ml-4 rtl:mr-4">
+                            <p class="font-semibold">Scan Date</p>
+                            <h5 class="text-lg" x-text="new Date(results.scan_date).toLocaleString()"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WHOIS Information -->
+            <div class="panel mb-5" x-show="results.domain_info">
+                <h5 class="font-semibold text-lg dark:text-white-light mb-5">Domain Information</h5>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <template x-for="(value, key) in results.domain_info" :key="key">
+                        <div class="panel">
+                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace('_', ' ')"></h6>
+                            <p class="text-white-dark break-all" x-text="value"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Platform Results Tabs -->
+            <div class="panel mb-5">
+                <div x-data="{tab: 'virustotal'}">
+                    <!-- Tab Navigation -->
+                    <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a] mb-5">
+                        <li>
+                            <a href="javascript:;" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary"
+                               :class="{'!border-b-white !border-[#ebedf2] !border dark:!border-[#191e3a] dark:!border-b-[#0e1726] !text-primary': tab === 'virustotal'}"
+                               @click="tab = 'virustotal'">
+                                VirusTotal
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary"
+                               :class="{'!border-b-white !border-[#ebedf2] !border dark:!border-[#191e3a] dark:!border-b-[#0e1726] !text-primary': tab === 'urlscan'}"
+                               @click="tab = 'urlscan'">
+                                URLScan.io
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary"
+                               :class="{'!border-b-white !border-[#ebedf2] !border dark:!border-[#191e3a] dark:!border-b-[#0e1726] !text-primary': tab === 'hybridanalysis'}"
+                               @click="tab = 'hybridanalysis'">
+                                Hybrid Analysis
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Contents -->
+                    <!-- VirusTotal Tab -->
+                    <div x-show="tab === 'virustotal'" x-cloak>
+                        <template x-if="results.platform_results.virustotal">
+                            <div>
+                                <!-- Basic Info -->
+                                <h6 class="font-bold mb-4">Basic Information</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.virustotal.basic_info" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Analysis Stats -->
+                                <h6 class="font-bold mb-4">Analysis Statistics</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.virustotal.analysis_stats" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Analysis Results -->
+                                <h6 class="font-bold mb-4">Engine Results</h6>
+                                <div class="table-responsive">
+                                    <table class="table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Engine</th>
+                                                <th>Category</th>
+                                                <th>Result</th>
+                                                <th>Method</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <template x-for="(result, engine) in results.platform_results.virustotal.analysis_results" :key="engine">
+                                                <tr>
+                                                    <td x-text="engine"></td>
+                                                    <td x-text="result.category"></td>
+                                                    <td x-text="result.result"></td>
+                                                    <td x-text="result.method"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- URLScan.io Tab -->
+                    <div x-show="tab === 'urlscan'" x-cloak>
+                        <template x-if="results.platform_results.urlscan">
+                            <div>
+                                <!-- Page Info -->
+                                <h6 class="font-bold mb-4">Page Information</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.urlscan.page_info" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Security Info -->
+                                <h6 class="font-bold mb-4">Security Information</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.urlscan.security_info" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Technologies -->
+                                <template x-if="results.platform_results.urlscan.technologies.length > 0">
+                                    <div class="mb-5">
+                                        <h6 class="font-bold mb-4">Technologies Used</h6>
+                                        <div class="flex flex-wrap gap-2">
+                                            <template x-for="tech in results.platform_results.urlscan.technologies" :key="tech">
+                                                <span class="badge badge-outline-info" x-text="tech"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Screenshot -->
+                                <template x-if="results.platform_results.urlscan.screenshot_url">
+                                    <div>
+                                        <h6 class="font-bold mb-4">Screenshot</h6>
+                                        <img :src="results.platform_results.urlscan.screenshot_url" alt="URL Screenshot" class="max-w-full h-auto rounded-lg shadow-lg">
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Hybrid Analysis Tab -->
+                    <div x-show="tab === 'hybridanalysis'" x-cloak>
+                        <template x-if="results.platform_results.hybridanalysis">
+                            <div>
+                                <!-- Summary -->
+                                <h6 class="font-bold mb-4">Analysis Summary</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.hybridanalysis.summary" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Analysis Details -->
+                                <h6 class="font-bold mb-4">Analysis Details</h6>
+                                <div class="table-responsive mb-5">
+                                    <table class="table-hover">
+                                        <tbody>
+                                            <template x-for="(value, key) in results.platform_results.hybridanalysis.analysis" :key="key">
+                                                <tr>
+                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
+                                                    <td x-text="value"></td>
+                                                </tr>
+                                            </template>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Classification Tags -->
+                                <template x-if="results.platform_results.hybridanalysis.classification_tags.length > 0">
+                                    <div class="mb-5">
+                                        <h6 class="font-bold mb-4">Classification Tags</h6>
+                                        <div class="flex flex-wrap gap-2">
+                                            <template x-for="tag in results.platform_results.hybridanalysis.classification_tags" :key="tag">
+                                                <span class="badge badge-outline-danger" x-text="tag"></span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Domains -->
+                                <template x-if="results.platform_results.hybridanalysis.domains.length > 0">
+                                    <div>
+                                        <h6 class="font-bold mb-4">Related Domains</h6>
+                                        <div class="table-responsive">
+                                            <table class="table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Domain</th>
+                                                        <th>IP</th>
+                                                        <th>Country</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template x-for="domain in results.platform_results.hybridanalysis.domains" :key="domain.domain">
+                                                        <tr>
+                                                            <td x-text="domain.domain"></td>
+                                                            <td x-text="domain.ip || 'N/A'"></td>
+                                                            <td x-text="domain.country || 'N/A'"></td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,38 +352,45 @@
             url: "",
             loading: false,
             results: null,
+            error: null,
 
             async analyzeUrl() {
                 this.loading = true;
-                // Simulated API call - replace with actual API integration
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                this.error = null;
+                this.results = null;
                 
-                // Sample data - replace with actual API response
-                this.results = {
-                    url: this.url,
-                    finalUrl: this.url,
-                    ipAddress: "192.168.1.1",
-                    server: "nginx/1.18.0",
-                    categories: [
-                        {
-                            name: "Phishing",
-                            risk: "Low",
-                            description: "No phishing indicators detected"
+                try {
+                    const csrfToken = document.cookie
+                        .split('; ')
+                        .find(row => row.startsWith('csrftoken='))
+                        ?.split('=')[1];
+                        
+                    if (!csrfToken) {
+                        throw new Error('CSRF token not found. Please refresh the page.');
+                    }
+
+                    const response = await fetch('/api/url-scan/analyze/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrfToken
                         },
-                        {
-                            name: "Malware",
-                            risk: "Medium",
-                            description: "Suspicious JavaScript detected"
-                        },
-                        {
-                            name: "Reputation",
-                            risk: "High",
-                            description: "Domain recently registered"
-                        }
-                    ],
-                    screenshot: "https://via.placeholder.com/800x600"
-                };
-                this.loading = false;
+                        body: JSON.stringify({ url: this.url })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to scan URL. Please try again.');
+                    }
+                    
+                    this.results = data.results;
+                } catch (error) {
+                    this.error = error.message;
+                    console.error('Error during URL scan:', error);
+                } finally {
+                    this.loading = false;
+                }
             }
         }));
     });

@@ -6,13 +6,15 @@ import aiohttp
 from typing import Dict, Any, List
 import os
 from datetime import datetime
+import logging
+import json
+
+logger = logging.getLogger(__name__)
 
 from .platforms.hybrid_analysis import HybridAnalysisScanner
 from .platforms.urlscan_io import URLScanScanner
 from .platforms.virustotal import VirusTotalScanner
-from .platforms.screenshot_machine import ScreenshotMachineScanner
-from .utils.threat_score import calculate_overall_threat_score, get_threat_level
-from .utils.whois_lookup import get_whois_info
+from .platforms.domain_info import get_domain_info
 
 class URLScanner:
     def __init__(self, api_keys: Dict[str, str]):
@@ -27,47 +29,125 @@ class URLScanner:
         if self.session:
             await self.session.close()
 
+    def _clean_response(self, data: Any) -> Any:
+        """Clean response data to ensure JSON serializable"""
+        if data is None:
+            return ""
+        elif isinstance(data, (str, int, float, bool)):
+            return data
+        elif isinstance(data, dict):
+            return {
+                str(k): self._clean_response(v)
+                for k, v in data.items()
+                if k is not None
+            }
+        elif isinstance(data, (list, tuple)):
+            return [self._clean_response(x) for x in data if x is not None]
+        else:
+            try:
+                return str(data)
+            except:
+                return ""
+
     async def scan_url(self, url: str) -> Dict[str, Any]:
-        """Scan URL using all available platforms"""
-        scanners = [
-            HybridAnalysisScanner(self.session, self.api_keys["hybrid_analysis"]),
-            URLScanScanner(self.session, self.api_keys["urlscan"]),
-            VirusTotalScanner(self.session, self.api_keys["virustotal"]),
-            ScreenshotMachineScanner(self.session, self.api_keys["screenshot_machine"])
-        ]
+        """
+        Scan a URL using multiple platforms and return aggregated results
+        """
+        try:
+            # Initialize scanners with proper error handling
+            scanners = []
+            for platform, api_key in self.api_keys.items():
+                if platform == "hybrid_analysis":
+                    scanners.append(HybridAnalysisScanner(self.session, api_key))
+                elif platform == "urlscan":
+                    scanners.append(URLScanScanner(self.session, api_key))
+                elif platform == "virustotal":
+                    scanners.append(VirusTotalScanner(self.session, api_key))
+            
+            # Collect results from all platforms
+            platform_results = {}
+            for scanner in scanners:
+                platform_name = scanner.__class__.__name__.replace('Scanner', '').lower()
+                try:
+                    result = await scanner.scan(url)
+                    # Clean and validate result
+                    if isinstance(result, dict):
+                        platform_results[platform_name] = self._clean_response(result)
+                    else:
+                        platform_results[platform_name] = {"error": "Invalid response format"}
+                except Exception as e:
+                    logger.error(f"Error in {platform_name} scan: {str(e)}")
+                    platform_results[platform_name] = {"error": str(e)}
 
-        # Run all scans concurrently
-        scan_tasks = [scanner.scan(url) for scanner in scanners]
-        results = await asyncio.gather(*scan_tasks)
+            # Get domain info with error handling
+            try:
+                domain_info = get_domain_info(
+                    urlscan_result=platform_results.get('urlscan', {}),
+                    virustotal_result=platform_results.get('virustotal', {}),
+                    hybrid_result=platform_results.get('hybridanalysis', {})
+                )
+            except Exception as e:
+                logger.error(f"Error getting domain info: {str(e)}")
+                domain_info = {"error": str(e)}
 
-        # Calculate scores (excluding Screenshot Machine which returns None)
-        scores = [scanner.calculate_score(result) 
-                 for scanner, result in zip(scanners, results)]
-        
-        # Get WHOIS information
-        whois_info = await get_whois_info(url)
+            # Calculate overall threat score with validation
+            total_score = 0
+            num_scores = 0
+            for result in platform_results.values():
+                if isinstance(result, dict) and 'score' in result:
+                    try:
+                        score = float(result['score'])
+                        if 0 <= score <= 100:  # Validate score range
+                            total_score += score
+                            num_scores += 1
+                    except (ValueError, TypeError) as e:
+                        logger.warning(f"Invalid score value: {e}")
 
-        # Calculate overall threat score (excluding None values from Screenshot Machine)
-        overall_score = calculate_overall_threat_score([s for s in scores if s is not None])
-        threat_level = get_threat_level(overall_score)
+            overall_score = round(total_score / max(num_scores, 1), 2)  # Avoid division by zero
+            threat_level = 'High' if overall_score >= 80 else 'Medium' if overall_score >= 40 else 'Low'
 
-        # Extract screenshot path if available
-        screenshot_info = results[3] if results[3].get("success") else None
-        screenshot_path = screenshot_info.get("screenshot_path") if screenshot_info else None
+            # Prepare final response with thorough cleaning
+            response = {
+                'url': str(url),
+                'scan_date': datetime.now().isoformat(),
+                'threat_level': str(threat_level),
+                'overall_score': float(overall_score),
+                'domain_info': self._clean_response(domain_info),
+                'platform_results': platform_results,
+                'categories': [
+                    {
+                        'name': 'Overall Threat',
+                        'risk': str(threat_level),
+                        'description': f"Overall threat score: {overall_score}/100"
+                    }
+                ]
+            }
 
-        return {
-            "url": url,
-            "scan_date": datetime.utcnow().isoformat(),
-            "overall_score": overall_score,
-            "threat_level": threat_level,
-            "platform_results": {
-                "hybrid_analysis": results[0],
-                "urlscan": results[1],
-                "virustotal": results[2]
-            },
-            "screenshot": {
-                "path": screenshot_path,
-                "timestamp": screenshot_info.get("timestamp") if screenshot_info else None
-            } if screenshot_path else None,
-            "whois_info": whois_info
-        }
+            # Add platform-specific categories
+            for platform, result in platform_results.items():
+                if isinstance(result, dict) and 'score' in result:
+                    try:
+                        score = float(result['score'])
+                        risk = 'High' if score >= 80 else 'Medium' if score >= 40 else 'Low'
+                        response['categories'].append({
+                            'name': str(platform).replace('_', ' ').title(),
+                            'risk': str(risk),
+                            'description': f"Platform score: {score}/100"
+                        })
+                    except (ValueError, TypeError) as e:
+                        logger.warning(f"Error processing platform score: {e}")
+
+            # Validate final response is JSON serializable
+            try:
+                json.dumps(response)
+                return response
+            except (TypeError, ValueError) as e:
+                logger.error(f"Response serialization error: {e}")
+                return {
+                    "error": "Failed to serialize response",
+                    "message": str(e)
+                }
+
+        except Exception as e:
+            logger.error(f"Error in URL scan: {str(e)}")
+            return {"error": str(e)}

@@ -15,10 +15,12 @@ import ipaddress
 import logging
 import json
 import requests
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from .models import APIKey
 from .services.ip_scan.ip_analysis import IPAnalysisService
 from .services.hash_scan.hash_analysis import HashAnalysisService
+from .services.url_scan.platforms.domain_info import get_domain_info
+from .services.url_scan.urlscan import URLScanner
 
 logger = logging.getLogger(__name__)
 
@@ -954,3 +956,69 @@ def user_profile(request):
 @login_required
 def security_settings(request):
     return render(request, 'settings/security_settings.html')
+
+@login_required
+@require_http_methods(["GET"])
+def url_scan(request):
+    """Render the URL scan page"""
+    return render(request, 'threat/url_scan/url_scan.html')
+
+from asgiref.sync import sync_to_async
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
+import json
+import logging
+from .services.url_scan.urlscan import URLScanner
+
+logger = logging.getLogger(__name__)
+
+@login_required
+@require_http_methods(["POST"])
+async def analyze_url(request):
+    """
+    Analyze a URL using multiple threat intelligence platforms.
+    Expects a POST request with JSON body containing a 'url' field.
+    """
+    try:
+        # Parse JSON data
+        data = json.loads(request.body)
+        url = data.get('url')
+        
+        if not url:
+            return JsonResponse({'error': 'URL is required'}, status=400)
+
+        # Get API keys asynchronously
+        api_keys = {}
+        for platform in ['hybrid_analysis', 'urlscan', 'virustotal']:
+            try:
+                api_key = await sync_to_async(APIKey.objects.get)(platform=platform, user=request.user)
+                decrypted_key = await sync_to_async(getattr)(api_key, 'api_key')
+                if not decrypted_key:
+                    return JsonResponse(
+                        {'error': f'API key for {platform} is invalid or not properly configured.'}, 
+                        status=400
+                    )
+                api_keys[platform] = decrypted_key
+            except APIKey.DoesNotExist:
+                return JsonResponse(
+                    {'error': f'API key for {platform} is not configured. Please configure it in API settings.'}, 
+                    status=400
+                )
+        # Initialize scanner and scan URL
+        try:
+            async with URLScanner(api_keys) as scanner:
+                results = await scanner.scan_url(url)
+                return JsonResponse({'results': results})
+        except Exception as e:
+            logger.error(f"Error during URL scan: {str(e)}")
+            return JsonResponse(
+                {'error': 'Error occurred while scanning the URL. Please try again.'}, 
+                status=500
+            )
+            
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON data in request'}, status=400)
+    except Exception as e:
+        logger.error(f"Unexpected error in URL scan: {str(e)}")
+        return JsonResponse({'error': 'Internal server error'}, status=500)
