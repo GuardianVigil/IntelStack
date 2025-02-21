@@ -33,3 +33,12 @@ logs/
 logs/stack.log
 main/services/ip_scan/ipdata.txt
 main/services/hash_scan/platforms/data.txt
+logs/stack.log
+main/services/domain_scan/data.txt
+main/services/hash_scan/platforms/data.txt
+main/services/ip_scan/ipdata.txt
+main/services/url_scan/test/data.txt
+main/services/url_scan/test/final.py
+main/services/url_scan/test/url.py
+main/services/url_scan/test/virus.py
+main/services/url_scan/test/whois.py
