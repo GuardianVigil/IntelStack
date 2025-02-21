@@ -26,6 +26,7 @@
             <!-- File Upload & Input Section -->
             <div class="mb-5">
                 <form @submit.prevent="analyzeEmail" class="space-y-5">
+                    {% csrf_token %}
                     <div class="grid grid-cols-1 gap-4">
                         <!-- Drag & Drop Zone -->
                         <div class="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-6 text-center" 
@@ -71,10 +72,10 @@
                         <div class="flex justify-between">
                             <div>
                                 <h5 class="text-xl font-semibold mb-1">Threat Score</h5>
-                                <p class="text-3xl" x-text="results.threatScore + '/100'"></p>
+                                <p class="text-3xl" x-text="results.risk_assessment.threat_score + '/100'"></p>
                             </div>
                             <div class="text-right">
-                                <span class="text-sm" x-text="results.riskLevel"></span>
+                                <span class="text-sm" x-text="results.risk_assessment.risk_level"></span>
                             </div>
                         </div>
                     </div>
@@ -85,16 +86,19 @@
                         <div class="flex space-x-2">
                             <span class="badge" :class="{
                                 'badge-outline-success': results.authentication.spf === 'pass',
-                                'badge-outline-danger': results.authentication.spf === 'fail'
-                            }">SPF</span>
+                                'badge-outline-danger': results.authentication.spf === 'fail',
+                                'badge-outline-warning': results.authentication.spf === 'neutral'
+                            }" x-text="results.authentication.spf"></span>
                             <span class="badge" :class="{
                                 'badge-outline-success': results.authentication.dkim === 'pass',
-                                'badge-outline-danger': results.authentication.dkim === 'fail'
-                            }">DKIM</span>
+                                'badge-outline-danger': results.authentication.dkim === 'fail',
+                                'badge-outline-warning': results.authentication.dkim === 'neutral'
+                            }" x-text="results.authentication.dkim"></span>
                             <span class="badge" :class="{
                                 'badge-outline-success': results.authentication.dmarc === 'pass',
-                                'badge-outline-danger': results.authentication.dmarc === 'fail'
-                            }">DMARC</span>
+                                'badge-outline-danger': results.authentication.dmarc === 'fail',
+                                'badge-outline-warning': results.authentication.dmarc === 'neutral'
+                            }" x-text="results.authentication.dmarc"></span>
                         </div>
                     </div>
 
@@ -103,29 +107,29 @@
                         <h5 class="font-semibold mb-2">Threats Detected</h5>
                         <div class="space-y-1">
                             <p>
-                                <span class="text-danger" x-text="results.threats_detected.suspicious_ips"></span> Suspicious IPs
+                                <span class="text-danger" x-text="results.risk_assessment.indicators.suspicious_sender ? 1 : 0"></span> Suspicious IPs
                             </p>
                             <p>
-                                <span class="text-danger" x-text="results.threats_detected.malicious_urls"></span> Malicious URLs
+                                <span class="text-danger" x-text="results.risk_assessment.indicators.suspicious_urls"></span> Malicious URLs
                             </p>
                             <p>
-                                <span class="text-danger" x-text="results.threats_detected.suspicious_attachments"></span> Suspicious Attachments
+                                <span class="text-danger" x-text="results.risk_assessment.indicators.malicious_attachments"></span> Suspicious Attachments
                             </p>
                         </div>
                     </div>
 
                     <!-- Risk Indicators -->
                     <div class="panel">
-                        <h5 class="font-semibold mb-2">Risk Indicators</h5>
+                        <h5 class="font-semibold mb-2">Risk Factors</h5>
                         <div class="space-y-1">
-                            <div class="flex justify-between">
-                                <span>Phishing Probability</span>
-                                <span x-text="(results.indicators.phishing_probability * 100).toFixed(1) + '%'"></span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Spam Score</span>
-                                <span x-text="(results.indicators.spam_score * 100).toFixed(1) + '%'"></span>
-                            </div>
+                            <template x-for="factor in results.risk_assessment.risk_factors" :key="factor">
+                                <div class="flex items-center text-danger">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    <span x-text="factor"></span>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -174,52 +178,42 @@
 
                     <!-- Header Analysis Tab -->
                     <div x-show="activeTab === 'headerAnalysis'" class="p-4">
-                        <div class="mb-5">
-                            <h6 class="text-lg font-bold mb-2">Email Headers</h6>
-                            <div class="overflow-x-auto">
-                                <table class="table-striped w-full">
-                                    <tbody>
-                                        <template x-for="(value, key) in results.header_analysis" :key="key">
-                                            <tr>
-                                                <td class="font-semibold" x-text="key"></td>
-                                                <td x-text="value"></td>
-                                            </tr>
-                                        </template>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Message Path Visualization -->
-                        <div class="mb-5">
-                            <h6 class="text-lg font-bold mb-2">Message Path</h6>
-                            <div id="messagePath" class="h-64"></div>
+                        <div class="space-y-4">
+                            <template x-for="(value, key) in results.headers.headers" :key="key">
+                                <div class="panel">
+                                    <h6 class="font-semibold mb-2" x-text="key"></h6>
+                                    <p class="text-sm break-all" x-text="value"></p>
+                                </div>
+                            </template>
                         </div>
                     </div>
 
                     <!-- IP Analysis Tab -->
                     <div x-show="activeTab === 'ipAnalysis'" class="p-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- IP Geolocation Map -->
-                            <div class="panel">
-                                <h6 class="text-lg font-bold mb-2">IP Geolocation</h6>
-                                <div id="geoMap" class="h-64"></div>
-                            </div>
-
-                            <!-- IP Details -->
-                            <div class="panel">
-                                <h6 class="text-lg font-bold mb-2">IP Information</h6>
-                                <div class="space-y-2">
-                                    <template x-for="ip in results.ip_analysis" :key="ip.address">
-                                        <div class="p-4 border rounded">
-                                            <p><strong>IP:</strong> <span x-text="ip.address"></span></p>
-                                            <p><strong>Location:</strong> <span x-text="ip.location"></span></p>
-                                            <p><strong>ASN:</strong> <span x-text="ip.asn"></span></p>
-                                            <p><strong>Reputation:</strong> <span x-text="ip.reputation"></span></p>
+                        <div class="panel">
+                            <template x-if="results.sender_ip">
+                                <div>
+                                    <h6 class="font-semibold mb-2">Sender IP</h6>
+                                    <p class="text-sm" x-text="results.sender_ip.ip"></p>
+                                    <div class="mt-2">
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': results.sender_ip.reputation === 'clean',
+                                            'badge-outline-warning': results.sender_ip.reputation === 'suspicious',
+                                            'badge-outline-danger': results.sender_ip.reputation === 'malicious'
+                                        }" x-text="results.sender_ip.reputation"></span>
+                                    </div>
+                                    <template x-if="results.sender_ip.geolocation">
+                                        <div class="mt-4">
+                                            <h6 class="font-semibold mb-2">Geolocation</h6>
+                                            <p class="text-sm">
+                                                <span x-text="results.sender_ip.geolocation.city"></span>,
+                                                <span x-text="results.sender_ip.geolocation.region"></span>,
+                                                <span x-text="results.sender_ip.geolocation.country"></span>
+                                            </p>
                                         </div>
                                     </template>
                                 </div>
-                            </div>
+                            </template>
                         </div>
                     </div>
 
@@ -228,17 +222,23 @@
                         <div class="space-y-4">
                             <template x-for="url in results.urls" :key="url.url">
                                 <div class="panel">
-                                    <h6 class="text-lg font-bold mb-2" x-text="url.url"></h6>
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <p><strong>Reputation:</strong> <span x-text="url.reputation"></span></p>
-                                            <p><strong>Category:</strong> <span x-text="url.category"></span></p>
-                                            <p><strong>SSL Valid:</strong> <span x-text="url.ssl_valid"></span></p>
-                                        </div>
-                                        <div>
-                                            <img :src="url.screenshot" alt="URL Preview" class="w-full rounded">
-                                        </div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h6 class="font-semibold break-all" x-text="url.url"></h6>
+                                        <span class="badge" :class="{
+                                            'badge-outline-success': !url.malicious,
+                                            'badge-outline-danger': url.malicious
+                                        }" x-text="url.malicious ? 'Malicious' : 'Clean'"></span>
                                     </div>
+                                    <template x-if="url.analysis">
+                                        <div class="mt-2 space-y-2">
+                                            <template x-for="(result, scanner) in url.analysis" :key="scanner">
+                                                <div class="text-sm">
+                                                    <span class="font-semibold" x-text="scanner + ': '"></span>
+                                                    <span x-text="JSON.stringify(result)"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
                                 </div>
                             </template>
                         </div>
@@ -342,103 +342,46 @@
             },
 
             async analyzeEmail() {
-                if (!this.emailContent) return;
+                console.log('Starting email analysis...');
+                if (!this.emailContent) {
+                    console.log('No email content provided');
+                    return;
+                }
 
                 this.loading = true;
+                console.log('Sending request to backend...');
                 try {
-                    // Simulated API response with sample data
-                    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-                    
-                    this.results = {
-                        threatScore: 85,
-                        riskLevel: "High",
-                        authentication: {
-                            spf: "pass",
-                            dkim: "fail",
-                            dmarc: "none"
-                        },
-                        threats_detected: {
-                            suspicious_ips: 2,
-                            malicious_urls: 1,
-                            suspicious_attachments: 1
-                        },
-                        indicators: {
-                            phishing_probability: 0.92,
-                            spam_score: 0.3,
-                            brand_impersonation: true
-                        },
-                        header_analysis: {
-                            "From": "PayPal Security <security@paypa1.com>",
-                            "Return-Path": "<bounce@paypa1.com>",
-                            "Reply-To": "support@paypa1.com",
-                            "Subject": "Urgent: Your PayPal account needs attention",
-                            "Date": "Thu, 21 Feb 2025 17:28:18 +0000",
-                            "Message-ID": "<1234567890@mail-server>",
-                            "X-Sender": "mail-server.paypa1.com",
-                            "X-Mailer": "PHPMailer 6.0.1"
-                        },
-                        ip_analysis: [
-                            {
-                                address: "192.168.1.100",
-                                location: "Moscow, Russia",
-                                asn: "AS12345 - Suspicious Host Ltd",
-                                reputation: "Poor - Known Spam Source"
-                            },
-                            {
-                                address: "10.20.30.40",
-                                location: "Beijing, China",
-                                asn: "AS67890 - Malicious Network Corp",
-                                reputation: "Bad - Multiple Reports"
-                            }
-                        ],
-                        urls: [
-                            {
-                                url: "https://paypa1.com/secure/login",
-                                reputation: "Malicious",
-                                category: "Phishing",
-                                ssl_valid: "Invalid Certificate",
-                                screenshot: "https://via.placeholder.com/300x200"
-                            },
-                            {
-                                url: "https://account-verification.paypa1.com",
-                                reputation: "Suspicious",
-                                category: "Newly Registered Domain",
-                                ssl_valid: "Self-signed Certificate",
-                                screenshot: "https://via.placeholder.com/300x200"
-                            }
-                        ],
-                        attachments: [
-                            {
-                                filename: "PayPal_Statement.pdf",
-                                type: "PDF Document",
-                                size: "245 KB",
-                                verdict: "malicious",
-                                md5: "d41d8cd98f00b204e9800998ecf8427e",
-                                sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-                                threat_intel: {
-                                    "VirusTotal": "20/68 Detections",
-                                    "Hybrid Analysis": "Malicious",
-                                    "Malware Bazaar": "Known Malware"
-                                }
-                            },
-                            {
-                                filename: "Account_Details.xlsx",
-                                type: "Excel Document",
-                                size: "132 KB",
-                                verdict: "suspicious",
-                                md5: "a87ff679a2f3e71d9181a67b7542122c",
-                                sha256: "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
-                                threat_intel: {
-                                    "VirusTotal": "3/68 Detections",
-                                    "Hybrid Analysis": "Suspicious",
-                                    "Malware Bazaar": "No Match"
-                                }
-                            }
-                        ]
+                    const requestData = {
+                        emailContent: this.emailContent,
+                        attachments: [] // TODO: Implement attachment handling
                     };
+                    console.log('Request data:', requestData);
+
+                    const response = await fetch('/threat/email-investigation/analyze/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Failed to analyze email');
+                    }
+
+                    this.results = await response.json();
+                    console.log('Analysis results:', this.results);
+                    this.initializeVisualizations();
                 } catch (error) {
-                    console.error('Analysis failed:', error);
-                    // Show error notification
+                    console.error('Error:', error);
+                    // Show error to user
+                    const toast = window.$store.app.toast({
+                        message: error.message || 'An error occurred while analyzing the email',
+                        type: 'error'
+                    });
                 } finally {
                     this.loading = false;
                 }

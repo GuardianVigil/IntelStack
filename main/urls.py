@@ -129,6 +129,7 @@ urlpatterns = [
     path('api/threat/hash-analysis/', views.analyze_hash, name='analyze_hash_api'),  # Match the frontend URL
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
+    path('threat/email-investigation/analyze/', views.analyze_email, name='analyze_email'),
     # Header Menu URLs
     path('hunting/', views.hunting, name='hunting'),
     path('threat-feed/', views.threat_feed, name='threat_feed'),

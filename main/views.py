@@ -14,6 +14,7 @@ import asyncio
 import ipaddress
 import logging
 import json
+import base64
 import requests
 from asgiref.sync import async_to_sync, sync_to_async
 from .models import APIKey
@@ -21,6 +22,8 @@ from .services.ip_scan.ip_analysis import IPAnalysisService
 from .services.hash_scan.hash_analysis import HashAnalysisService
 from .services.url_scan.platforms.domain_info import get_domain_info
 from .services.url_scan.urlscan import URLScanner
+from .services.email_scan.email_analyzer import EmailAnalyzer
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -871,6 +874,121 @@ def url_scan(request):
 @login_required
 def email_investigation(request):
     return render(request, 'threat/email_investigation/email_investigation.html')
+
+@login_required
+@csrf_exempt
+@require_http_methods(['POST'])
+@async_view
+async def analyze_email(request):
+    """
+    API endpoint for analyzing emails.
+    Expects a POST request with JSON body containing:
+    {
+        "emailContent": "raw email content or headers",
+        "attachments": [
+            {
+                "name": "filename.ext",
+                "content": "base64 encoded content"
+            }
+        ]
+    }
+    """
+    try:
+        logger.info("Received email analysis request")
+        data = json.loads(request.body)
+        email_content = data.get('emailContent')
+        
+        if not email_content:
+            logger.warning("No email content provided")
+            return JsonResponse({
+                'error': 'No email content provided',
+                'headers': {'headers': {}, 'received_chain': []},
+                'authentication': {'spf': 'neutral', 'dkim': 'neutral', 'dmarc': 'neutral'},
+                'urls': [],
+                'attachments': [],
+                'sender_ip': {'ip': '', 'analysis': {}},
+                'risk_assessment': {
+                    'threat_score': 0,
+                    'risk_level': 'unknown',
+                    'risk_factors': [],
+                    'indicators': {
+                        'authentication_failed': False,
+                        'suspicious_urls': 0,
+                        'malicious_attachments': 0,
+                        'suspicious_sender': False
+                    }
+                },
+                'timeline': [
+                    {'timestamp': datetime.now().isoformat(), 'event': 'Analysis failed', 'status': 'error', 'error': 'No email content provided'}
+                ]
+            })
+
+        attachments = []
+        # Process attachments if present
+        for attachment in data.get('attachments', []):
+            try:
+                name = attachment.get('name')
+                content = base64.b64decode(attachment.get('content'))
+                attachments.append((name, content))
+            except Exception as e:
+                logger.error(f"Error processing attachment {attachment.get('name')}: {str(e)}")
+                continue
+
+        logger.info("Initializing analyzer")
+        # Initialize analyzer with user context
+        analyzer = EmailAnalyzer(request.user)
+        
+        try:
+            # Initialize scanners
+            logger.info("Initializing scanners")
+            await analyzer.initialize_scanners()
+            
+            # Analyze email
+            logger.info("Starting email analysis")
+            results = await analyzer.analyze_email(email_content, attachments)
+            
+            # Close analyzer session
+            await analyzer.close()
+            
+            logger.info("Analysis completed successfully")
+            return JsonResponse(results)
+            
+        except Exception as e:
+            logger.error(f"Error during email analysis: {str(e)}")
+            await analyzer.close()
+            raise
+            
+    except json.JSONDecodeError as e:
+        logger.error(f"Invalid JSON in request: {str(e)}")
+        return JsonResponse({
+            'error': 'Invalid JSON in request',
+            'details': str(e)
+        }, status=400)
+        
+    except Exception as e:
+        logger.error(f"Error in analyze_email view: {str(e)}")
+        return JsonResponse({
+            'error': str(e),
+            'headers': {'headers': {}, 'received_chain': []},
+            'authentication': {'spf': 'neutral', 'dkim': 'neutral', 'dmarc': 'neutral'},
+            'urls': [],
+            'attachments': [],
+            'sender_ip': {'ip': '', 'analysis': {}},
+            'risk_assessment': {
+                'threat_score': 0,
+                'risk_level': 'unknown',
+                'risk_factors': [],
+                'indicators': {
+                    'authentication_failed': False,
+                    'suspicious_urls': 0,
+                    'malicious_attachments': 0,
+                    'suspicious_sender': False
+                }
+            },
+            'timeline': [
+                {'timestamp': datetime.now().isoformat(), 'event': 'Analysis failed', 'status': 'error', 'error': str(e)}
+            ]
+        })
 
 # Hash Analysis View
 @csrf_exempt

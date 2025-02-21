@@ -1,128 +1,178 @@
-"""
-Utility functions for calculating threat and confidence scores
-"""
-from typing import Dict, Any
-import logging
+"""Scoring module for email analysis"""
+from typing import Dict, Any, List
 
-logger = logging.getLogger(__name__)
-
-def calculate_threat_score(platform_results: Dict[str, Any]) -> float:
+def calculate_threat_score(analysis: Dict[str, Any]) -> int:
     """
-    Calculate overall threat score from platform results
+    Calculate overall threat score based on multiple factors
     
     Args:
-        platform_results: Dictionary containing results from each platform
+        analysis: Complete analysis results
         
     Returns:
-        Threat score between 0-100
+        Integer score from 0-100
     """
-    try:
-        total_score = 0
-        weights = 0
-        
-        for platform, result in platform_results.items():
-            if result.get("status") == "success" and "data" in result:
-                # Get platform-specific score if available
-                platform_score = _get_platform_score(platform, result["data"])
-                if platform_score is not None:
-                    weight = _get_platform_weight(platform)
-                    total_score += platform_score * weight
-                    weights += weight
-        
-        # Return weighted average if we have scores
-        if weights > 0:
-            return round(total_score / weights, 2)
-        
-        return 0
-        
-    except Exception as e:
-        logger.error(f"Error calculating threat score: {str(e)}")
-        return 0
-
-def calculate_confidence_score(platform_results: Dict[str, Any]) -> float:
-    """
-    Calculate confidence score based on number of responding platforms and their reliability
-    
-    Args:
-        platform_results: Dictionary containing results from each platform
-        
-    Returns:
-        Confidence score between 0-100
-    """
-    try:
-        total_weight = 0
-        available_weight = 0
-        
-        for platform, result in platform_results.items():
-            weight = _get_platform_weight(platform)
-            available_weight += weight
-            
-            if result.get("status") == "success" and "data" in result:
-                total_weight += weight
-        
-        if available_weight > 0:
-            return round((total_weight / available_weight) * 100, 2)
-        
-        return 0
-        
-    except Exception as e:
-        logger.error(f"Error calculating confidence score: {str(e)}")
-        return 0
-
-def _get_platform_score(platform: str, data: Dict[str, Any]) -> float:
-    """Get normalized threat score (0-100) from platform-specific data"""
-    try:
-        if platform == "virustotal":
-            return _normalize_virustotal_score(data)
-        # Add other platform-specific score calculations here
-        
-        return None
-        
-    except Exception as e:
-        logger.error(f"Error getting platform score for {platform}: {str(e)}")
-        return None
-
-def _get_platform_weight(platform: str) -> float:
-    """Get weight for platform (0-1) based on reliability and completeness"""
-    weights = {
-        "virustotal": 1.0,
-        "abuseipdb": 0.8,
-        "greynoise": 0.7,
-        "crowdsec": 0.6,
-        "securitytrails": 0.7,
-        "ipinfo": 0.5,
-        "metadefender": 0.8,
-        "pulsedive": 0.6,
-        "alienvault": 0.7
+    scores = {
+        'authentication': _score_authentication(analysis['authentication']),
+        'ip_reputation': _score_ip_reputation(analysis['ip_analysis']),
+        'url_analysis': _score_urls(analysis['url_analysis']),
+        'attachments': _score_attachments(analysis.get('attachments', [])),
+        'headers': _score_headers(analysis['header_analysis'])
     }
-    return weights.get(platform, 0.5)
+    
+    weights = {
+        'authentication': 0.3,
+        'ip_reputation': 0.2,
+        'url_analysis': 0.2,
+        'attachments': 0.2,
+        'headers': 0.1
+    }
+    
+    final_score = sum(score * weights[key] for key, score in scores.items())
+    return min(round(final_score * 100), 100)  # Convert to 0-100 scale
 
-def _normalize_virustotal_score(data: Dict[str, Any]) -> float:
-    """Normalize VirusTotal data to a 0-100 score"""
-    try:
-        total_score = 0
-        components = 0
+def calculate_risk_indicators(analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """
+    Generate list of risk indicators from analysis
+    
+    Args:
+        analysis: Complete analysis results
         
-        # Score from URLs
-        for url_data in data.get("urls", []):
-            if "malicious" in url_data and "total" in url_data:
-                score = (url_data["malicious"] / url_data["total"]) * 100
-                total_score += score
-                components += 1
+    Returns:
+        List of risk indicators with severity
+    """
+    indicators = []
+    
+    # Authentication risks
+    auth = analysis['authentication']
+    if auth['spf']['result'] != 'pass':
+        indicators.append({
+            'type': 'authentication',
+            'severity': 'high',
+            'message': 'SPF authentication failed'
+        })
+    if auth['dkim']['result'] != 'pass':
+        indicators.append({
+            'type': 'authentication',
+            'severity': 'high',
+            'message': 'DKIM signature invalid'
+        })
+    if auth['dmarc']['result'] != 'pass':
+        indicators.append({
+            'type': 'authentication',
+            'severity': 'medium',
+            'message': 'DMARC policy not enforced'
+        })
         
-        # Score from attachments
-        for attachment_data in data.get("attachments", []):
-            if "malicious" in attachment_data and "total" in attachment_data:
-                score = (attachment_data["malicious"] / attachment_data["total"]) * 100
-                total_score += score
-                components += 1
+    # IP reputation risks
+    for ip, details in analysis['ip_analysis'].items():
+        if details.get('abuse_confidence', 0) > 80:
+            indicators.append({
+                'type': 'ip',
+                'severity': 'critical',
+                'message': f'IP {ip} has high abuse confidence score'
+            })
+            
+    # URL risks
+    for url in analysis['url_analysis']:
+        if url.get('virustotal_results', {}).get('malicious', 0) > 0:
+            indicators.append({
+                'type': 'url',
+                'severity': 'critical',
+                'message': f'Malicious URL detected: {url["url"]}'
+            })
+            
+    # Attachment risks
+    for attachment in analysis.get('attachments', []):
+        if attachment.get('virustotal', {}).get('malicious', 0) > 0:
+            indicators.append({
+                'type': 'attachment',
+                'severity': 'critical',
+                'message': f'Malicious attachment detected: {attachment["filename"]}'
+            })
+            
+    return indicators
+
+def _score_authentication(auth: Dict[str, Any]) -> float:
+    """Score authentication results"""
+    score = 1.0
+    
+    if auth['spf']['result'] != 'pass':
+        score -= 0.4
+    if auth['dkim']['result'] != 'pass':
+        score -= 0.4
+    if auth['dmarc']['result'] != 'pass':
+        score -= 0.2
         
-        # Return average if we have components
-        if components > 0:
-            return round(total_score / components, 2)
+    return max(score, 0)
+
+def _score_ip_reputation(ip_analysis: Dict[str, Any]) -> float:
+    """Score IP reputation"""
+    if not ip_analysis:
+        return 0.5  # Neutral score if no IPs
         
-        return 0
+    scores = []
+    for ip_details in ip_analysis.values():
+        ip_score = 1.0
+        abuse_confidence = ip_details.get('abuse_confidence', 0)
         
-    except Exception as e:
-        logger.error(f"Error normalizing VirusTotal score: {str(e)}")
-        return 0
+        if abuse_confidence > 80:
+            ip_score = 0
+        elif abuse_confidence > 60:
+            ip_score = 0.2
+        elif abuse_confidence > 40:
+            ip_score = 0.4
+        elif abuse_confidence > 20:
+            ip_score = 0.6
+            
+        scores.append(ip_score)
+        
+    return min(scores) if scores else 0.5
+
+def _score_urls(url_analysis: List[Dict[str, Any]]) -> float:
+    """Score URL analysis results"""
+    if not url_analysis:
+        return 1.0  # Perfect score if no URLs
+        
+    scores = []
+    for url in url_analysis:
+        url_score = 1.0
+        vt_results = url.get('virustotal_results', {})
+        
+        if vt_results.get('malicious', 0) > 0:
+            url_score = 0
+        elif vt_results.get('suspicious', 0) > 0:
+            url_score = 0.3
+            
+        scores.append(url_score)
+        
+    return min(scores)
+
+def _score_attachments(attachments: List[Dict[str, Any]]) -> float:
+    """Score attachment analysis results"""
+    if not attachments:
+        return 1.0  # Perfect score if no attachments
+        
+    scores = []
+    for attachment in attachments:
+        att_score = 1.0
+        vt_results = attachment.get('virustotal', {})
+        
+        if vt_results.get('malicious', 0) > 0:
+            att_score = 0
+        elif vt_results.get('suspicious', 0) > 0:
+            att_score = 0.3
+            
+        scores.append(att_score)
+        
+    return min(scores)
+
+def _score_headers(header_analysis: Dict[str, Any]) -> float:
+    """Score header analysis results"""
+    score = 1.0
+    
+    # Check for suspicious patterns in headers
+    headers = header_analysis.get('x_headers', {})
+    if 'X-Spam-Flag' in headers or 'X-Spam-Status' in headers:
+        score -= 0.3
+        
+    return max(score, 0)
