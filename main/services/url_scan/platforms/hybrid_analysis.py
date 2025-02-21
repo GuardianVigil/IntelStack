@@ -19,36 +19,51 @@ class HybridAnalysisScanner(BaseScanner):
             if not isinstance(data, dict):
                 return {"error": "Invalid response from Hybrid Analysis"}
 
-            # Helper function to safely convert to float
-            def safe_float(value, default=0.0):
-                try:
-                    if not value:  # Handle empty string, None, etc.
-                        return default
-                    return float(value)
-                except (ValueError, TypeError):
-                    return default
+            # Extract domains and hosts
+            domains = data.get("domains", [])
+            hosts = data.get("hosts", [])
+            compromised_hosts = data.get("compromised_hosts", [])
+
+            # Get process and network info
+            total_processes = data.get("total_processes", 0)
+            total_network_connections = data.get("total_network_connections", 0)
+            total_signatures = data.get("total_signatures", 0)
+
+            # Get submission info
+            submissions = data.get("submissions", [])
+            submission_info = submissions[0] if submissions else {}
+
+            # Get environment info
+            environment_id = data.get("environment_id")
+            environment_description = data.get("environment_description", "Unknown")
 
             return {
-                "summary": {
-                    "threat_score": safe_float(data.get("threat_score", 0)),
-                    "verdict": str(data.get("verdict", "N/A")),
-                    "threat_level": str(data.get("threat_level", "N/A")),
-                    "environment_id": str(data.get("environment_id", "N/A")),
-                    "submission_type": str(data.get("submission_type", "N/A"))
+                "basic_info": {
+                    "environment": f"{environment_description} (ID: {environment_id})" if environment_id else "Unknown",
+                    "analysis_time": data.get("analysis_start_time", "N/A"),
+                    "verdict": data.get("verdict", "Unknown"),
+                    "submission_type": "URL Analysis" if data.get("url_analysis") else "File Analysis"
                 },
-                "analysis": {
-                    "type": str(data.get("type", "N/A")),
-                    "vx_family": str(data.get("vx_family", "N/A")),
-                    "process_count": int(data.get("process_count", 0)),
-                    "total_network_connections": int(data.get("total_network_connections", 0)),
-                    "total_processes": int(data.get("total_processes", 0)),
-                    "total_signatures": int(data.get("total_signatures", 0))
+                "network_info": {
+                    "total_processes": total_processes,
+                    "total_network_connections": total_network_connections,
+                    "total_signatures": total_signatures,
+                    "domains": domains,
+                    "hosts": hosts,
+                    "compromised_hosts": compromised_hosts
                 },
-                "classification_tags": data.get("classification_tags", []),
-                "compromised_hosts": data.get("compromised_hosts", []),
-                "hosts": data.get("hosts", []),
-                "domains": data.get("domains", []),
-                "score": self.calculate_score(data)
+                "submission_details": {
+                    "url": submission_info.get("url", "N/A"),
+                    "submitted_at": submission_info.get("created_at", "N/A")
+                },
+                "threat_info": {
+                    "threat_score": self.calculate_score(data),
+                    "threat_level": data.get("threat_level", 0),
+                    "verdict": data.get("verdict", "Unknown"),
+                    "vx_family": data.get("vx_family", "None"),
+                    "tags": data.get("tags", []),
+                    "classification_tags": data.get("classification_tags", [])
+                }
             }
         except Exception as e:
             logger.error(f"Error in _structure_results: {str(e)}")
@@ -87,45 +102,35 @@ class HybridAnalysisScanner(BaseScanner):
             return {"error": str(e)}
 
     def calculate_score(self, data: Dict[str, Any]) -> float:
-        """Calculate threat score from scan data"""
+        """Calculate threat score from Hybrid Analysis results"""
         try:
-            if not isinstance(data, dict):
-                return 0.0
+            # Get threat level and verdict
+            threat_level = data.get("threat_level", 0)
+            verdict = data.get("verdict", "").lower()
             
-            # Helper function to safely convert to float
-            def safe_float(value, default=0.0):
-                try:
-                    if not value:  # Handle empty string, None, etc.
-                        return default
-                    return float(value)
-                except (ValueError, TypeError):
-                    return default
+            # Count malicious indicators
+            malicious_tags = sum(1 for tag in data.get("tags", []) 
+                               if "malicious" in tag.lower())
+            classification_tags = len(data.get("classification_tags", []))
+            compromised_hosts = len(data.get("compromised_hosts", []))
             
-            # Base score on threat_score if available
-            threat_score = safe_float(data.get("threat_score", 0))
-            if threat_score > 0:
-                return threat_score
+            # Base score from threat level (0-100)
+            base_score = threat_level * 20  # Convert 0-5 scale to 0-100
             
-            # Calculate score based on other factors
-            score = 0.0
+            # Add points for malicious indicators
+            score = base_score
+            score += malicious_tags * 10  # +10 points per malicious tag
+            score += classification_tags * 5  # +5 points per classification tag
+            score += compromised_hosts * 15  # +15 points per compromised host
             
-            # Check verdict
-            verdict = str(data.get("verdict", "")).lower()
-            if verdict in ["malicious", "suspicious"]:
-                score += 50
-            
-            # Check threat level
-            threat_level = str(data.get("threat_level", "")).lower()
-            if threat_level == "high":
+            # Adjust based on verdict
+            if "malicious" in verdict:
                 score += 30
-            elif threat_level == "medium":
+            elif "suspicious" in verdict:
                 score += 15
-            
-            # Add points for suspicious indicators
-            score += len(data.get("classification_tags", [])) * 5
-            score += len(data.get("compromised_hosts", [])) * 10
-            
-            return min(score, 100)  # Cap at 100
+                
+            # Ensure score is between 0 and 100
+            return round(max(0.0, min(100.0, score)), 2)
             
         except Exception as e:
             logger.error(f"Error calculating score: {str(e)}")

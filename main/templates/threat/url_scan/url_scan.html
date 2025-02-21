@@ -55,18 +55,22 @@
         <div x-show="results" x-cloak>
             <!-- Overall Threat Score Card -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                <div class="panel bg-gradient-to-r from-blue-500 to-blue-400">
+                <div class="panel" :class="{
+                    'bg-gradient-to-r from-green-500 to-green-400': results.overall_score < 30,
+                    'bg-gradient-to-r from-yellow-500 to-yellow-400': results.overall_score >= 30 && results.overall_score < 70,
+                    'bg-gradient-to-r from-red-500 to-red-400': results.overall_score >= 70
+                }">
                     <div class="flex justify-between">
-                        <div class="text-white">
-                            <h5 class="text-2xl font-semibold mb-1" x-text="`${Math.round(results.overall_score)}/100`"></h5>
-                            <p>Overall Threat Score</p>
+                        <div>
+                            <h5 class="text-2xl font-semibold mb-1 !text-white dark:!text-white" x-text="`${Math.round(results.overall_score)}/100`"></h5>
+                            <p class="!text-white dark:!text-white">Overall Threat Score</p>
                         </div>
-                        <div class="text-white" x-show="results.threat_level">
-                            <span class="px-2 py-1 rounded-full" :class="{
-                                'bg-success/30': results.threat_level === 'Low',
-                                'bg-warning/30': results.threat_level === 'Medium',
-                                'bg-danger/30': results.threat_level === 'High'
-                            }" x-text="results.threat_level"></span>
+                        <div x-show="results.threat_level">
+                            <span class="px-2 py-1 rounded-full !text-white dark:!text-white" :class="{
+                                'bg-success/30': results.overall_score < 30,
+                                'bg-warning/30': results.overall_score >= 30 && results.overall_score < 70,
+                                'bg-danger/30': results.overall_score >= 70
+                            }" x-text="results.overall_score < 30 ? 'Low' : (results.overall_score < 70 ? 'Medium' : 'High')"></span>
                         </div>
                     </div>
                 </div>
@@ -104,18 +108,7 @@
                 </div>
             </div>
 
-            <!-- WHOIS Information -->
-            <div class="panel mb-5" x-show="results.domain_info">
-                <h5 class="font-semibold text-lg dark:text-white-light mb-5">Domain Information</h5>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <template x-for="(value, key) in results.domain_info" :key="key">
-                        <div class="panel">
-                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace('_', ' ')"></h6>
-                            <p class="text-white-dark break-all" x-text="value"></p>
-                        </div>
-                    </template>
-                </div>
-            </div>
+
 
             <!-- Platform Results Tabs -->
             <div class="panel mb-5">
@@ -152,37 +145,35 @@
                             <div>
                                 <!-- Basic Info -->
                                 <h6 class="font-bold mb-4">Basic Information</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.virustotal.basic_info" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <template x-for="(value, key) in results.platform_results.virustotal.basic_info" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace(/_/g, ' ')"></h6>
+                                            <p class="text-white-dark break-all" x-text="key.includes('date') ? new Date(parseInt(value) * 1000).toLocaleString() : value"></p>
+                                        </div>
+                                    </template>
                                 </div>
 
-                                <!-- Analysis Stats -->
-                                <h6 class="font-bold mb-4">Analysis Statistics</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.virustotal.analysis_stats" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
+                                <!-- Analysis Summary -->
+                                <h6 class="font-bold mb-4">Analysis Summary</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <template x-for="(value, key) in results.platform_results.virustotal.analysis_summary" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key"></h6>
+                                            <p class="text-2xl font-bold" :class="{
+                                                'text-success': key === 'harmless',
+                                                'text-danger': key === 'malicious',
+                                                'text-warning': key === 'suspicious',
+                                                'text-info': key === 'undetected',
+                                                'text-gray-500': key === 'timeout'
+                                            }" x-text="value"></p>
+                                        </div>
+                                    </template>
                                 </div>
 
                                 <!-- Analysis Results -->
                                 <h6 class="font-bold mb-4">Engine Results</h6>
-                                <div class="table-responsive">
+                                <div class="panel overflow-x-auto">
                                     <table class="table-hover">
                                         <thead>
                                             <tr>
@@ -193,10 +184,17 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <template x-for="(result, engine) in results.platform_results.virustotal.analysis_results" :key="engine">
+                                            <template x-for="result in results.platform_results.virustotal.analysis_results" :key="result.engine_name">
                                                 <tr>
-                                                    <td x-text="engine"></td>
-                                                    <td x-text="result.category"></td>
+                                                    <td x-text="result.engine_name"></td>
+                                                    <td>
+                                                        <span :class="{
+                                                            'badge badge-outline-success': result.category === 'harmless',
+                                                            'badge badge-outline-danger': result.category === 'malicious',
+                                                            'badge badge-outline-warning': result.category === 'suspicious',
+                                                            'badge badge-outline-info': result.category === 'undetected'
+                                                        }" x-text="result.category"></span>
+                                                    </td>
                                                     <td x-text="result.result"></td>
                                                     <td x-text="result.method"></td>
                                                 </tr>
@@ -206,50 +204,66 @@
                                 </div>
                             </div>
                         </template>
+                        <template x-if="!results.platform_results.virustotal">
+                            <div class="text-center text-gray-500 dark:text-gray-400">
+                                No data available from VirusTotal
+                            </div>
+                        </template>
                     </div>
 
                     <!-- URLScan.io Tab -->
                     <div x-show="tab === 'urlscan'" x-cloak>
                         <template x-if="results.platform_results.urlscan">
                             <div>
-                                <!-- Page Info -->
+                                <!-- Page Information -->
                                 <h6 class="font-bold mb-4">Page Information</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.urlscan.page_info" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <template x-for="(value, key) in results.platform_results.urlscan.page_info" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace(/_/g, ' ')"></h6>
+                                            <p class="text-white-dark break-all" x-text="value"></p>
+                                        </div>
+                                    </template>
                                 </div>
 
-                                <!-- Security Info -->
+                                <!-- Security Information -->
                                 <h6 class="font-bold mb-4">Security Information</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.urlscan.security_info" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <template x-for="(value, key) in results.platform_results.urlscan.security_info" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace(/_/g, ' ')"></h6>
+                                            <template x-if="typeof value === 'boolean'">
+                                                <div class="flex items-center">
+                                                    <span x-show="value" class="text-success">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <span x-show="!value" class="text-danger">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                        </svg>
+                                                    </span>
+                                                    <span class="ml-2" x-text="value ? 'Yes' : 'No'"></span>
+                                                </div>
                                             </template>
-                                        </tbody>
-                                    </table>
+                                            <template x-if="typeof value !== 'boolean'">
+                                                <p class="text-white-dark break-all" x-text="value"></p>
+                                            </template>
+                                        </div>
+                                    </template>
                                 </div>
 
                                 <!-- Technologies -->
-                                <template x-if="results.platform_results.urlscan.technologies.length > 0">
-                                    <div class="mb-5">
-                                        <h6 class="font-bold mb-4">Technologies Used</h6>
-                                        <div class="flex flex-wrap gap-2">
-                                            <template x-for="tech in results.platform_results.urlscan.technologies" :key="tech">
-                                                <span class="badge badge-outline-info" x-text="tech"></span>
-                                            </template>
+                                <template x-if="results.platform_results.urlscan.technologies && results.platform_results.urlscan.technologies.length">
+                                    <div class="mb-6">
+                                        <h6 class="font-bold mb-4">Technologies</h6>
+                                        <div class="panel">
+                                            <div class="flex flex-wrap gap-2">
+                                                <template x-for="tech in results.platform_results.urlscan.technologies" :key="tech">
+                                                    <span class="px-2 py-1 bg-primary/10 text-primary rounded" x-text="tech"></span>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
                                 </template>
@@ -258,9 +272,16 @@
                                 <template x-if="results.platform_results.urlscan.screenshot_url">
                                     <div>
                                         <h6 class="font-bold mb-4">Screenshot</h6>
-                                        <img :src="results.platform_results.urlscan.screenshot_url" alt="URL Screenshot" class="max-w-full h-auto rounded-lg shadow-lg">
+                                        <div class="panel">
+                                            <img :src="results.platform_results.urlscan.screenshot_url" alt="Website Screenshot" class="w-full rounded-lg shadow-sm">
+                                        </div>
                                     </div>
                                 </template>
+                            </div>
+                        </template>
+                        <template x-if="!results.platform_results.urlscan">
+                            <div class="text-center text-gray-500 dark:text-gray-400">
+                                No data available from URLScan.io
                             </div>
                         </template>
                     </div>
@@ -269,74 +290,92 @@
                     <div x-show="tab === 'hybridanalysis'" x-cloak>
                         <template x-if="results.platform_results.hybridanalysis">
                             <div>
-                                <!-- Summary -->
-                                <h6 class="font-bold mb-4">Analysis Summary</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.hybridanalysis.summary" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Analysis Details -->
-                                <h6 class="font-bold mb-4">Analysis Details</h6>
-                                <div class="table-responsive mb-5">
-                                    <table class="table-hover">
-                                        <tbody>
-                                            <template x-for="(value, key) in results.platform_results.hybridanalysis.analysis" :key="key">
-                                                <tr>
-                                                    <td class="capitalize" x-text="key.replace('_', ' ')"></td>
-                                                    <td x-text="value"></td>
-                                                </tr>
-                                            </template>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <!-- Classification Tags -->
-                                <template x-if="results.platform_results.hybridanalysis.classification_tags.length > 0">
-                                    <div class="mb-5">
-                                        <h6 class="font-bold mb-4">Classification Tags</h6>
-                                        <div class="flex flex-wrap gap-2">
-                                            <template x-for="tag in results.platform_results.hybridanalysis.classification_tags" :key="tag">
-                                                <span class="badge badge-outline-danger" x-text="tag"></span>
-                                            </template>
+                                <!-- Basic Info -->
+                                <h6 class="font-bold mb-4">Basic Information</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <template x-for="(value, key) in results.platform_results.hybridanalysis.basic_info" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace(/_/g, ' ')"></h6>
+                                            <p class="text-white-dark break-all" x-text="value"></p>
                                         </div>
-                                    </div>
-                                </template>
+                                    </template>
+                                </div>
 
-                                <!-- Domains -->
-                                <template x-if="results.platform_results.hybridanalysis.domains.length > 0">
-                                    <div>
-                                        <h6 class="font-bold mb-4">Related Domains</h6>
-                                        <div class="table-responsive">
-                                            <table class="table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Domain</th>
-                                                        <th>IP</th>
-                                                        <th>Country</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <template x-for="domain in results.platform_results.hybridanalysis.domains" :key="domain.domain">
-                                                        <tr>
-                                                            <td x-text="domain.domain"></td>
-                                                            <td x-text="domain.ip || 'N/A'"></td>
-                                                            <td x-text="domain.country || 'N/A'"></td>
-                                                        </tr>
+                                <!-- Threat Info -->
+                                <h6 class="font-bold mb-4">Threat Information</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <template x-for="(value, key) in results.platform_results.hybridanalysis.threat_info" :key="key">
+                                        <div class="panel">
+                                            <h6 class="font-semibold capitalize mb-2" x-text="key.replace(/_/g, ' ')"></h6>
+                                            <template x-if="Array.isArray(value)">
+                                                <div class="flex flex-wrap gap-2">
+                                                    <template x-for="item in value" :key="item">
+                                                        <span class="px-2 py-1 bg-primary/10 text-primary rounded" x-text="item"></span>
                                                     </template>
-                                                </tbody>
-                                            </table>
+                                                </div>
+                                            </template>
+                                            <template x-if="!Array.isArray(value)">
+                                                <p class="text-white-dark break-all" x-text="value"></p>
+                                            </template>
                                         </div>
+                                    </template>
+                                </div>
+
+                                <!-- Network Info -->
+                                <h6 class="font-bold mb-4">Network Information</h6>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <!-- Statistics -->
+                                    <div class="panel">
+                                        <h6 class="font-semibold mb-2">Statistics</h6>
+                                        <ul class="list-inside space-y-2">
+                                            <template x-for="(value, key) in results.platform_results.hybridanalysis.network_info" :key="key">
+                                                <template x-if="!Array.isArray(value)">
+                                                    <li>
+                                                        <span class="font-medium capitalize" x-text="key.replace(/_/g, ' ')"></span>:
+                                                        <span x-text="value"></span>
+                                                    </li>
+                                                </template>
+                                            </template>
+                                        </ul>
                                     </div>
-                                </template>
+
+                                    <!-- Domains -->
+                                    <div class="panel" x-show="results.platform_results.hybridanalysis.network_info.domains && results.platform_results.hybridanalysis.network_info.domains.length">
+                                        <h6 class="font-semibold mb-2">Related Domains</h6>
+                                        <ul class="list-inside space-y-1">
+                                            <template x-for="domain in results.platform_results.hybridanalysis.network_info.domains" :key="domain">
+                                                <li class="text-white-dark break-all" x-text="domain"></li>
+                                            </template>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Hosts -->
+                                    <div class="panel" x-show="results.platform_results.hybridanalysis.network_info.hosts && results.platform_results.hybridanalysis.network_info.hosts.length">
+                                        <h6 class="font-semibold mb-2">Connected Hosts</h6>
+                                        <ul class="list-inside space-y-1">
+                                            <template x-for="host in results.platform_results.hybridanalysis.network_info.hosts" :key="host">
+                                                <li class="text-white-dark" x-text="host"></li>
+                                            </template>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Compromised Hosts -->
+                                    <div class="panel" x-show="results.platform_results.hybridanalysis.network_info.compromised_hosts && results.platform_results.hybridanalysis.network_info.compromised_hosts.length">
+                                        <h6 class="font-semibold mb-2 text-danger">Compromised Hosts</h6>
+                                        <ul class="list-inside space-y-1">
+                                            <template x-for="host in results.platform_results.hybridanalysis.network_info.compromised_hosts" :key="host">
+                                                <li class="text-danger" x-text="host"></li>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </template>
+                        <template x-if="!results.platform_results.hybridanalysis">
+                            <div class="text-center text-gray-500 dark:text-gray-400">
+                                No data available from Hybrid Analysis
                             </div>
                         </template>
                     </div>
