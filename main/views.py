@@ -875,22 +875,14 @@ def url_scan(request):
 def email_investigation(request):
     return render(request, 'threat/email_investigation/email_investigation.html')
 
-@login_required
 @csrf_exempt
 @require_http_methods(['POST'])
-@async_view
-async def analyze_email(request):
+def analyze_email(request):
     """
     API endpoint for analyzing emails.
     Expects a POST request with JSON body containing:
     {
-        "emailContent": "raw email content or headers",
-        "attachments": [
-            {
-                "name": "filename.ext",
-                "content": "base64 encoded content"
-            }
-        ]
+        "emailContent": "raw email content or headers"
     }
     """
     try:
@@ -900,62 +892,53 @@ async def analyze_email(request):
         
         if not email_content:
             logger.warning("No email content provided")
-            return JsonResponse({
-                'error': 'No email content provided',
-                'headers': {'headers': {}, 'received_chain': []},
-                'authentication': {'spf': 'neutral', 'dkim': 'neutral', 'dmarc': 'neutral'},
-                'urls': [],
-                'attachments': [],
-                'sender_ip': {'ip': '', 'analysis': {}},
-                'risk_assessment': {
-                    'threat_score': 0,
-                    'risk_level': 'unknown',
-                    'risk_factors': [],
-                    'indicators': {
-                        'authentication_failed': False,
-                        'suspicious_urls': 0,
-                        'malicious_attachments': 0,
-                        'suspicious_sender': False
-                    }
-                },
-                'timeline': [
-                    {'timestamp': datetime.now().isoformat(), 'event': 'Analysis failed', 'status': 'error', 'error': 'No email content provided'}
-                ]
-            })
+            return JsonResponse({'error': 'No email content provided'}, status=400)
 
-        attachments = []
-        # Process attachments if present
-        for attachment in data.get('attachments', []):
-            try:
-                name = attachment.get('name')
-                content = base64.b64decode(attachment.get('content'))
-                attachments.append((name, content))
-            except Exception as e:
-                logger.error(f"Error processing attachment {attachment.get('name')}: {str(e)}")
-                continue
-
+        # Initialize analyzer
         logger.info("Initializing analyzer")
-        # Initialize analyzer with user context
-        analyzer = EmailAnalyzer(request.user)
+        analyzer = EmailAnalyzer()
         
         try:
-            # Initialize scanners
-            logger.info("Initializing scanners")
-            await analyzer.initialize_scanners()
+            # Convert content to bytes and analyze
+            content = email_content.encode('utf-8')
+            results = analyzer.analyze_email(content, 'headers')
             
-            # Analyze email
-            logger.info("Starting email analysis")
-            results = await analyzer.analyze_email(email_content, attachments)
-            
-            # Close analyzer session
-            await analyzer.close()
+            # Format response
+            response_data = {
+                'headers': results.headers,
+                'authentication': {
+                    'spf': 'pass' if 'pass' in results.authentication['spf'].lower() else 
+                           'fail' if 'fail' in results.authentication['spf'].lower() else 'neutral',
+                    'dkim': 'pass' if results.authentication['dkim'] and 'fail' not in results.authentication['dkim'].lower() else 
+                           'fail' if 'fail' in results.authentication['dkim'].lower() else 'neutral',
+                    'dmarc': 'pass' if 'pass' in results.authentication['dmarc'].lower() else 
+                            'fail' if 'fail' in results.authentication['dmarc'].lower() else 'neutral'
+                },
+                'body': results.body,
+                'raw_email': {
+                    'headers': dict(results.headers.items()),
+                    'body': results.body,
+                    'attachments': results.attachments
+                },
+                'urls': [{'url': url, 'malicious': False} for url in results.iocs['urls']],
+                'attachments': results.attachments,
+                'iocs': {
+                    'urls': results.iocs['urls'],
+                    'ips': results.iocs['ips'],
+                    'hashes': results.iocs['hashes']
+                },
+                'risk_assessment': {
+                    'threat_score': results.threat_score,
+                    'risk_level': 'high' if results.threat_score > 70 else 'medium' if results.threat_score > 30 else 'low',
+                    'risk_factors': results.risk_factors
+                }
+            }
             
             logger.info("Analysis completed successfully")
-            return JsonResponse(results)
+            return JsonResponse(response_data)
             
         except Exception as e:
             logger.error(f"Error during email analysis: {str(e)}")
-            await analyzer.close()
             raise
             
     except json.JSONDecodeError as e:
@@ -984,10 +967,7 @@ async def analyze_email(request):
                     'malicious_attachments': 0,
                     'suspicious_sender': False
                 }
-            },
-            'timeline': [
-                {'timestamp': datetime.now().isoformat(), 'event': 'Analysis failed', 'status': 'error', 'error': str(e)}
-            ]
+            }
         })
 
 # Hash Analysis View

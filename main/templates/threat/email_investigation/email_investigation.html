@@ -64,364 +64,419 @@
             </div>
 
             <!-- Results Section -->
-            <div x-show="!loading && results" class="space-y-5 mt-10">
-                <!-- Quick Stats Dashboard -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Threat Score -->
-                    <div class="panel bg-gradient-to-r from-blue-500 to-blue-400 text-white">
-                        <div class="flex justify-between">
-                            <div>
-                                <h5 class="text-xl font-semibold mb-1">Threat Score</h5>
-                                <p class="text-3xl" x-text="results.risk_assessment.threat_score + '/100'"></p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-sm" x-text="results.risk_assessment.risk_level"></span>
-                            </div>
-                        </div>
+            <div x-show="results" class="mt-6">
+                <!-- Quick Stats -->
+                <div class="panel">
+                    <div class="flex items-center justify-between mb-5">
+                        <h5 class="font-semibold text-lg dark:text-white-light">Quick Stats</h5>
                     </div>
-
-                    <!-- Authentication Status -->
-                    <div class="panel">
-                        <h5 class="font-semibold mb-2">Authentication</h5>
-                        <div class="flex space-x-2">
-                            <span class="badge" :class="{
-                                'badge-outline-success': results.authentication.spf === 'pass',
-                                'badge-outline-danger': results.authentication.spf === 'fail',
-                                'badge-outline-warning': results.authentication.spf === 'neutral'
-                            }" x-text="results.authentication.spf"></span>
-                            <span class="badge" :class="{
-                                'badge-outline-success': results.authentication.dkim === 'pass',
-                                'badge-outline-danger': results.authentication.dkim === 'fail',
-                                'badge-outline-warning': results.authentication.dkim === 'neutral'
-                            }" x-text="results.authentication.dkim"></span>
-                            <span class="badge" :class="{
-                                'badge-outline-success': results.authentication.dmarc === 'pass',
-                                'badge-outline-danger': results.authentication.dmarc === 'fail',
-                                'badge-outline-warning': results.authentication.dmarc === 'neutral'
-                            }" x-text="results.authentication.dmarc"></span>
-                        </div>
-                    </div>
-
-                    <!-- Threats Detected -->
-                    <div class="panel">
-                        <h5 class="font-semibold mb-2">Threats Detected</h5>
-                        <div class="space-y-1">
-                            <p>
-                                <span class="text-danger" x-text="results.risk_assessment.indicators.suspicious_sender ? 1 : 0"></span> Suspicious IPs
-                            </p>
-                            <p>
-                                <span class="text-danger" x-text="results.risk_assessment.indicators.suspicious_urls"></span> Malicious URLs
-                            </p>
-                            <p>
-                                <span class="text-danger" x-text="results.risk_assessment.indicators.malicious_attachments"></span> Suspicious Attachments
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Risk Indicators -->
-                    <div class="panel">
-                        <h5 class="font-semibold mb-2">Risk Factors</h5>
-                        <div class="space-y-1">
-                            <template x-for="factor in results.risk_assessment.risk_factors" :key="factor">
-                                <div class="flex items-center text-danger">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                    <span x-text="factor"></span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <!-- Threat Score -->
+                        <div class="panel">
+                            <div class="flex items-center">
+                                <div :class="{
+                                    'text-success': results.risk_assessment.risk_level === 'low',
+                                    'text-warning': results.risk_assessment.risk_level === 'medium',
+                                    'text-danger': results.risk_assessment.risk_level === 'high'
+                                }">
+                                    <div class="text-3xl font-bold" x-text="results.risk_assessment.threat_score"></div>
+                                    <div class="text-sm font-semibold capitalize" x-text="results.risk_assessment.risk_level + ' Risk'"></div>
                                 </div>
-                            </template>
+                            </div>
+                        </div>
+
+                        <!-- Authentication -->
+                        <div class="panel">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">SPF:</span>
+                                    <span :class="{
+                                        'text-success': results.authentication.spf === 'pass',
+                                        'text-danger': results.authentication.spf === 'fail',
+                                        'text-warning': results.authentication.spf === 'neutral'
+                                    }" x-text="results.authentication.spf"></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">DKIM:</span>
+                                    <span :class="{
+                                        'text-success': results.authentication.dkim === 'pass',
+                                        'text-danger': results.authentication.dkim === 'fail',
+                                        'text-warning': results.authentication.dkim === 'neutral'
+                                    }" x-text="results.authentication.dkim"></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">DMARC:</span>
+                                    <span :class="{
+                                        'text-success': results.authentication.dmarc === 'pass',
+                                        'text-danger': results.authentication.dmarc === 'fail',
+                                        'text-warning': results.authentication.dmarc === 'neutral'
+                                    }" x-text="results.authentication.dmarc"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- IOCs -->
+                        <div class="panel">
+                            <div class="flex flex-col gap-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">URLs:</span>
+                                    <span x-text="results.iocs.urls.length"></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">IPs:</span>
+                                    <span x-text="results.iocs.ips.length"></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-semibold">Hashes:</span>
+                                    <span x-text="results.iocs.hashes.length"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Factors -->
+                        <div class="panel">
+                            <div class="flex flex-col gap-2">
+                                <template x-if="results.risk_factors && results.risk_factors.length > 0">
+                                    <div class="text-danger">
+                                        <template x-for="(factor, index) in results.risk_factors" :key="index">
+                                            <div class="mb-1" x-text="factor"></div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template x-if="!results.risk_factors || results.risk_factors.length === 0">
+                                    <div class="text-success">No risk factors detected</div>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Detailed Analysis Tabs -->
-                <div class="panel">
-                    <div class="mb-5 border-b border-[#ebedf2] dark:border-[#191e3a]">
-                        <div class="flex flex-wrap gap-2">
-                            <button type="button" 
-                                    class="p-3.5 py-2 -mb-[1px] hover:text-primary"
-                                    :class="{'text-primary !border-b !border-primary': activeTab === 'headerAnalysis',
-                                            'text-black dark:text-white-dark': activeTab !== 'headerAnalysis'}"
-                                    @click="activeTab = 'headerAnalysis'">
-                                Header Analysis
-                            </button>
-                            <button type="button"
-                                    class="p-3.5 py-2 -mb-[1px] hover:text-primary"
-                                    :class="{'text-primary !border-b !border-primary': activeTab === 'ipAnalysis',
-                                            'text-black dark:text-white-dark': activeTab !== 'ipAnalysis'}"
-                                    @click="activeTab = 'ipAnalysis'">
-                                IP Analysis
-                            </button>
-                            <button type="button"
-                                    class="p-3.5 py-2 -mb-[1px] hover:text-primary"
-                                    :class="{'text-primary !border-b !border-primary': activeTab === 'urlAnalysis',
-                                            'text-black dark:text-white-dark': activeTab !== 'urlAnalysis'}"
-                                    @click="activeTab = 'urlAnalysis'">
-                                URL Analysis
-                            </button>
-                            <button type="button"
-                                    class="p-3.5 py-2 -mb-[1px] hover:text-primary"
-                                    :class="{'text-primary !border-b !border-primary': activeTab === 'attachments',
-                                            'text-black dark:text-white-dark': activeTab !== 'attachments'}"
-                                    @click="activeTab = 'attachments'">
-                                Attachments
-                            </button>
-                            <button type="button"
-                                    class="p-3.5 py-2 -mb-[1px] hover:text-primary"
-                                    :class="{'text-primary !border-b !border-primary': activeTab === 'timeline',
-                                            'text-black dark:text-white-dark': activeTab !== 'timeline'}"
-                                    @click="activeTab = 'timeline'">
-                                Timeline
-                            </button>
+                <!-- Detailed Analysis -->
+                <div class="panel mt-6">
+                    <div class="mb-5">
+                        <div class="flex flex-col sm:flex-row items-center justify-between">
+                            <h5 class="font-semibold text-lg dark:text-white-light">Detailed Analysis</h5>
                         </div>
-                    </div>
-
-                    <!-- Header Analysis Tab -->
-                    <div x-show="activeTab === 'headerAnalysis'" class="p-4">
-                        <div class="space-y-4">
-                            <template x-for="(value, key) in results.headers.headers" :key="key">
-                                <div class="panel">
-                                    <h6 class="font-semibold mb-2" x-text="key"></h6>
-                                    <p class="text-sm break-all" x-text="value"></p>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- IP Analysis Tab -->
-                    <div x-show="activeTab === 'ipAnalysis'" class="p-4">
-                        <div class="panel">
-                            <template x-if="results.sender_ip">
-                                <div>
-                                    <h6 class="font-semibold mb-2">Sender IP</h6>
-                                    <p class="text-sm" x-text="results.sender_ip.ip"></p>
-                                    <div class="mt-2">
-                                        <span class="badge" :class="{
-                                            'badge-outline-success': results.sender_ip.reputation === 'clean',
-                                            'badge-outline-warning': results.sender_ip.reputation === 'suspicious',
-                                            'badge-outline-danger': results.sender_ip.reputation === 'malicious'
-                                        }" x-text="results.sender_ip.reputation"></span>
+                        <div class="mb-5">
+                            <div x-data="{ activeTab: 'headers' }">
+                                <ul class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] mb-5 whitespace-nowrap overflow-y-auto">
+                                    <li class="inline-block">
+                                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                            :class="{ '!border-primary text-primary': activeTab === 'headers' }"
+                                            @click="activeTab = 'headers'">
+                                            Headers
+                                        </a>
+                                    </li>
+                                    <li class="inline-block">
+                                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                            :class="{ '!border-primary text-primary': activeTab === 'body' }"
+                                            @click="activeTab = 'body'">
+                                            Body
+                                        </a>
+                                    </li>
+                                    <li class="inline-block">
+                                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                            :class="{ '!border-primary text-primary': activeTab === 'attachments' }"
+                                            @click="activeTab = 'attachments'">
+                                            Attachments
+                                        </a>
+                                    </li>
+                                    <li class="inline-block">
+                                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                            :class="{ '!border-primary text-primary': activeTab === 'iocs' }"
+                                            @click="activeTab = 'iocs'">
+                                            IOCs
+                                        </a>
+                                    </li>
+                                    <li class="inline-block">
+                                        <a href="javascript:;" class="flex gap-2 p-4 border-b border-transparent hover:border-primary hover:text-primary"
+                                            :class="{ '!border-primary text-primary': activeTab === 'raw' }"
+                                            @click="activeTab = 'raw'">
+                                            Raw Response
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                <!-- Headers Tab -->
+                                <div x-show="activeTab === 'headers'" x-transition>
+                                    <div class="table-responsive">
+                                        <table class="table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Header</th>
+                                                    <th>Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template x-for="(value, header) in results.headers" :key="header">
+                                                    <tr>
+                                                        <td class="whitespace-nowrap" x-text="header"></td>
+                                                        <td class="whitespace-pre-wrap" x-text="value"></td>
+                                                    </tr>
+                                                </template>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <template x-if="results.sender_ip.geolocation">
-                                        <div class="mt-4">
-                                            <h6 class="font-semibold mb-2">Geolocation</h6>
-                                            <p class="text-sm">
-                                                <span x-text="results.sender_ip.geolocation.city"></span>,
-                                                <span x-text="results.sender_ip.geolocation.region"></span>,
-                                                <span x-text="results.sender_ip.geolocation.country"></span>
-                                            </p>
+                                </div>
+
+                                <!-- Body Tab -->
+                                <div x-show="activeTab === 'body'" x-transition>
+                                    <div class="panel">
+                                        <template x-if="results.body && results.body.trim()">
+                                            <pre class="whitespace-pre-wrap p-4 bg-[#f8f9fa] dark:bg-[#1b2e4b] rounded-lg" x-text="results.body"></pre>
+                                        </template>
+                                        <template x-if="!results.body || !results.body.trim()">
+                                            <div class="text-center text-gray-500 p-4">No body content found</div>
+                                        </template>
+                                    </div>
+                                </div>
+
+                                <!-- Attachments Tab -->
+                                <div x-show="activeTab === 'attachments'" x-transition>
+                                    <div class="table-responsive">
+                                        <table class="table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Filename</th>
+                                                    <th>Type</th>
+                                                    <th>Size</th>
+                                                    <th>Hash</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <template x-for="attachment in results.attachments" :key="attachment.hash">
+                                                    <tr>
+                                                        <td x-text="attachment.filename"></td>
+                                                        <td x-text="attachment.type"></td>
+                                                        <td x-text="attachment.size"></td>
+                                                        <td class="font-mono text-xs" x-text="attachment.hash"></td>
+                                                    </tr>
+                                                </template>
+                                                <tr x-show="!results.attachments.length">
+                                                    <td colspan="4" class="text-center">No attachments found</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- IOCs Tab -->
+                                <div x-show="activeTab === 'iocs'" x-transition>
+                                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                        <!-- URLs -->
+                                        <div class="panel">
+                                            <h6 class="text-lg font-semibold mb-3">URLs</h6>
+                                            <div class="overflow-y-auto max-h-[300px]">
+                                                <ul class="list-disc pl-4">
+                                                    <template x-for="url in results.iocs.urls" :key="url">
+                                                        <li class="mb-2">
+                                                            <span class="break-all" x-text="url"></span>
+                                                        </li>
+                                                    </template>
+                                                    <li x-show="!results.iocs.urls.length" class="text-gray-500">
+                                                        No URLs found
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
 
-                    <!-- URL Analysis Tab -->
-                    <div x-show="activeTab === 'urlAnalysis'" class="p-4">
-                        <div class="space-y-4">
-                            <template x-for="url in results.urls" :key="url.url">
-                                <div class="panel">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <h6 class="font-semibold break-all" x-text="url.url"></h6>
-                                        <span class="badge" :class="{
-                                            'badge-outline-success': !url.malicious,
-                                            'badge-outline-danger': url.malicious
-                                        }" x-text="url.malicious ? 'Malicious' : 'Clean'"></span>
+                                        <!-- IPs -->
+                                        <div class="panel">
+                                            <h6 class="text-lg font-semibold mb-3">IPs</h6>
+                                            <div class="overflow-y-auto max-h-[300px]">
+                                                <ul class="list-disc pl-4">
+                                                    <template x-for="ip in results.iocs.ips" :key="ip">
+                                                        <li class="mb-2">
+                                                            <span class="font-mono" x-text="ip"></span>
+                                                        </li>
+                                                    </template>
+                                                    <li x-show="!results.iocs.ips.length" class="text-gray-500">
+                                                        No IPs found
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hashes -->
+                                        <div class="panel">
+                                            <h6 class="text-lg font-semibold mb-3">Hashes</h6>
+                                            <div class="overflow-y-auto max-h-[300px]">
+                                                <ul class="list-disc pl-4">
+                                                    <template x-for="hash in results.iocs.hashes" :key="hash">
+                                                        <li class="mb-2">
+                                                            <span class="font-mono text-xs break-all" x-text="hash"></span>
+                                                        </li>
+                                                    </template>
+                                                    <li x-show="!results.iocs.hashes.length" class="text-gray-500">
+                                                        No hashes found
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <template x-if="url.analysis">
-                                        <div class="mt-2 space-y-2">
-                                            <template x-for="(result, scanner) in url.analysis" :key="scanner">
-                                                <div class="text-sm">
-                                                    <span class="font-semibold" x-text="scanner + ': '"></span>
-                                                    <span x-text="JSON.stringify(result)"></span>
+                                </div>
+
+                                <!-- Raw Response Tab -->
+                                <div x-show="activeTab === 'raw'" x-transition>
+                                    <div class="panel">
+                                        <h6 class="text-lg font-semibold mb-3">Headers</h6>
+                                        <div class="table-responsive mb-6">
+                                            <table class="table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Header</th>
+                                                        <th>Value</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <template x-for="(value, header) in results.raw_email.headers" :key="header">
+                                                        <tr>
+                                                            <td class="whitespace-nowrap" x-text="header"></td>
+                                                            <td class="whitespace-pre-wrap" x-text="value"></td>
+                                                        </tr>
+                                                    </template>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <h6 class="text-lg font-semibold mb-3">Body</h6>
+                                        <pre class="whitespace-pre-wrap p-4 bg-[#f8f9fa] dark:bg-[#1b2e4b] rounded-lg mb-6" x-text="results.raw_email.body"></pre>
+
+                                        <template x-if="results.raw_email.attachments.length">
+                                            <div>
+                                                <h6 class="text-lg font-semibold mb-3">Attachments</h6>
+                                                <div class="table-responsive">
+                                                    <table class="table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Filename</th>
+                                                                <th>Type</th>
+                                                                <th>Size</th>
+                                                                <th>Hash</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <template x-for="attachment in results.raw_email.attachments" :key="attachment.hash">
+                                                                <tr>
+                                                                    <td x-text="attachment.filename"></td>
+                                                                    <td x-text="attachment.type"></td>
+                                                                    <td x-text="attachment.size"></td>
+                                                                    <td class="font-mono text-xs" x-text="attachment.hash"></td>
+                                                                </tr>
+                                                            </template>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </template>
-                                        </div>
-                                    </template>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Attachments Tab -->
-                    <div x-show="activeTab === 'attachments'" class="p-4">
-                        <div class="space-y-4">
-                            <template x-for="attachment in results.attachments" :key="attachment.hash">
-                                <div class="panel">
-                                    <div class="flex items-center justify-between mb-4">
-                                        <h6 class="text-lg font-bold" x-text="attachment.filename"></h6>
-                                        <span class="badge" :class="{
-                                            'badge-outline-success': attachment.verdict === 'clean',
-                                            'badge-outline-danger': attachment.verdict === 'malicious',
-                                            'badge-outline-warning': attachment.verdict === 'suspicious'
-                                        }" x-text="attachment.verdict"></span>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p><strong>Type:</strong> <span x-text="attachment.type"></span></p>
-                                            <p><strong>Size:</strong> <span x-text="attachment.size"></span></p>
-                                            <p><strong>MD5:</strong> <span x-text="attachment.md5"></span></p>
-                                            <p><strong>SHA256:</strong> <span x-text="attachment.sha256"></span></p>
-                                        </div>
-                                        <div>
-                                            <h6 class="font-semibold mb-2">Threat Intel Results</h6>
-                                            <template x-for="(result, source) in attachment.threat_intel" :key="source">
-                                                <div class="flex justify-between">
-                                                    <span x-text="source"></span>
-                                                    <span x-text="result"></span>
-                                                </div>
-                                            </template>
-                                        </div>
+                                            </div>
+                                        </template>
                                     </div>
                                 </div>
-                            </template>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Timeline Tab -->
-                    <div x-show="activeTab === 'timeline'" class="p-4">
-                        <div id="emailTimeline" class="h-96"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener("alpine:init", () => {
-        Alpine.data("emailAnalysis", () => ({
-            emailContent: "",
-            loading: false,
-            results: null,
-            activeTab: 'headerAnalysis',
-            
-            init() {
-                this.$watch('results', () => {
-                    if (this.results) {
-                        this.initializeVisualizations();
-                    }
-                });
-            },
-
-            clearForm() {
-                this.emailContent = "";
-                this.results = null;
-                this.loading = false;
-            },
-
-            handleFileUpload(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    this.processFile(file);
-                }
-            },
-
-            handleDrop(event) {
-                const file = event.dataTransfer.files[0];
-                if (file) {
-                    this.processFile(file);
-                }
-            },
-
-            dragOver(event) {
-                event.target.classList.add('border-primary');
-            },
-
-            dragLeave(event) {
-                event.target.classList.remove('border-primary');
-            },
-
-            async processFile(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.emailContent = e.target.result;
-                };
-                reader.readAsText(file);
-            },
-
-            async analyzeEmail() {
-                console.log('Starting email analysis...');
-                if (!this.emailContent) {
-                    console.log('No email content provided');
-                    return;
-                }
-
-                this.loading = true;
-                console.log('Sending request to backend...');
-                try {
-                    const requestData = {
-                        emailContent: this.emailContent,
-                        attachments: [] // TODO: Implement attachment handling
-                    };
-                    console.log('Request data:', requestData);
-
-                    const response = await fetch('/threat/email-investigation/analyze/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                        },
-                        body: JSON.stringify(requestData)
+    <script>
+        document.addEventListener("alpine:init", () => {
+            Alpine.data("emailAnalysis", () => ({
+                emailContent: "",
+                loading: false,
+                results: null,
+                activeTab: 'headers',
+                
+                init() {
+                    this.$watch('results', () => {
+                        if (this.results) {
+                            this.initializeVisualizations();
+                        }
                     });
+                },
 
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Failed to analyze email');
-                    }
-
-                    this.results = await response.json();
-                    console.log('Analysis results:', this.results);
-                    this.initializeVisualizations();
-                } catch (error) {
-                    console.error('Error:', error);
-                    // Show error to user
-                    const toast = window.$store.app.toast({
-                        message: error.message || 'An error occurred while analyzing the email',
-                        type: 'error'
-                    });
-                } finally {
+                clearForm() {
+                    this.emailContent = "";
+                    this.results = null;
                     this.loading = false;
+                },
+
+                handleFileUpload(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.processFile(file);
+                    }
+                },
+
+                handleDrop(event) {
+                    const file = event.dataTransfer.files[0];
+                    if (file) {
+                        this.processFile(file);
+                    }
+                },
+
+                dragOver(event) {
+                    event.target.classList.add('border-primary');
+                },
+
+                dragLeave(event) {
+                    event.target.classList.remove('border-primary');
+                },
+
+                async processFile(file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.emailContent = e.target.result;
+                    };
+                    reader.readAsText(file);
+                },
+
+                async analyzeEmail() {
+                    if (!this.emailContent) {
+                        const toast = window.$store.app.toast({
+                            message: 'Please provide email content',
+                            type: 'error'
+                        });
+                        return;
+                    }
+
+                    this.loading = true;
+                    try {
+                        const response = await fetch('/threat/email-investigation/analyze/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({
+                                emailContent: this.emailContent
+                            })
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Failed to analyze email');
+                        }
+
+                        this.results = await response.json();
+                        this.initializeVisualizations();
+                    } catch (error) {
+                        const toast = window.$store.app.toast({
+                            message: error.message || 'An error occurred while analyzing the email',
+                            type: 'error'
+                        });
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+
+                initializeVisualizations() {
+                    if (!this.results) return;
+                    
+                    // Initialize visualizations if needed
+                    // This is a placeholder for any D3.js or other visualization code
                 }
-            },
-
-            initializeVisualizations() {
-                // Initialize D3.js visualizations
-                this.initMessagePath();
-                this.initGeoMap();
-                this.initTimeline();
-            },
-
-            initMessagePath() {
-                // D3.js code for message path visualization
-            },
-
-            initGeoMap() {
-                // D3.js code for geographical map
-            },
-
-            initTimeline() {
-                // D3.js code for email timeline
-            },
-
-            async exportPDF() {
-                // PDF export logic
-            },
-
-            async exportCSV() {
-                // CSV export logic
-            },
-
-            async exportJSON() {
-                // JSON export logic
-            },
-
-            async exportIOC() {
-                // IOC export logic
-            }
-        }));
-    });
-</script>
+            }));
+        });
+    </script>
 {% endblock %}
