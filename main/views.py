@@ -1120,3 +1120,14 @@ async def analyze_url(request):
     except Exception as e:
         logger.error(f"Unexpected error in URL scan: {str(e)}")
         return JsonResponse({'error': 'Internal server error'}, status=500)
+
+@require_http_methods(["POST"])
+def refresh_threat_feeds(request):
+    """Refresh all threat feeds and return the processed data"""
+    try:
+        service = ThreatFeedService()
+        feeds = service.get_all_feeds()
+        processed_data = service.process_feeds(feeds)
+        return JsonResponse(processed_data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

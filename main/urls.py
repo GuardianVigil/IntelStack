@@ -130,6 +130,7 @@ urlpatterns = [
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
     path('threat/email-investigation/analyze/', views.analyze_email, name='analyze_email'),
+    path('api/threat-feeds/refresh/', views.refresh_threat_feeds, name='refresh_threat_feeds'),  # Added this line
     # Header Menu URLs
     path('hunting/', views.hunting, name='hunting'),
     path('threat-feed/', views.threat_feed, name='threat_feed'),
@@ -161,6 +162,7 @@ urlpatterns = [
     path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),
     path('feeds/alienvault-otx/', views.alienvault_otx, name='alienvault_otx'),
     path('feeds/ibm-xforce/', views.ibm_xforce, name='ibm_xforce'),
+    path('api/threat-feeds/refresh', views.refresh_threat_feeds, name='refresh_threat_feeds'),
     
     # Report URLs
     path('reports/investigation-history/', views.investigation_history, name='investigation_history'),

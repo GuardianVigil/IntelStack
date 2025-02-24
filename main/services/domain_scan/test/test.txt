@@ -1,1 +1,0 @@
-Enter the domain to check against Spamhaus DBL: 

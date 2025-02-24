@@ -4,152 +4,239 @@
 {% block content %}
 <div class="pt-5">
     <div class="mb-6 flex items-center justify-between">
-        <h5 class="text-lg font-semibold dark:text-white-light">Threat Intelligence Feeds</h5>
+        <h5 class="text-lg font-semibold dark:text-white-light">Threat Intelligence Feed</h5>
         <div class="flex gap-2">
-            <button class="btn btn-primary" onclick="refreshFeeds()">
+            <button class="btn btn-outline-primary" id="refreshFeed">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"/>
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
+                    <path d="M21 3v5h-5"></path>
                 </svg>
-                Refresh Feeds
+                Refresh Feed
             </button>
-            <button class="btn btn-outline-primary" onclick="addNewFeed()">Add New Feed</button>
         </div>
     </div>
 
-    <!-- Feed Categories -->
+    <!-- Statistics Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <div class="panel">
             <div class="flex flex-col p-5">
-                <div class="text-primary">
-                    <h5 class="text-lg font-semibold mb-1">Malware</h5>
-                    <div class="text-3xl font-bold">{{ stats.malware_count }}</div>
-                    <p class="mt-2">Active Indicators</p>
-                </div>
+                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="totalThreats">0</div>
+                <div class="text-white-dark">Total Threats</div>
             </div>
         </div>
         <div class="panel">
             <div class="flex flex-col p-5">
-                <div class="text-warning">
-                    <h5 class="text-lg font-semibold mb-1">Phishing</h5>
-                    <div class="text-3xl font-bold">{{ stats.phishing_count }}</div>
-                    <p class="mt-2">Active Campaigns</p>
-                </div>
+                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="malwareCount">0</div>
+                <div class="text-white-dark">Malware Detected</div>
             </div>
         </div>
         <div class="panel">
             <div class="flex flex-col p-5">
-                <div class="text-danger">
-                    <h5 class="text-lg font-semibold mb-1">APT</h5>
-                    <div class="text-3xl font-bold">{{ stats.apt_count }}</div>
-                    <p class="mt-2">Active Groups</p>
-                </div>
+                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="phishingCount">0</div>
+                <div class="text-white-dark">Phishing Campaigns</div>
             </div>
         </div>
         <div class="panel">
             <div class="flex flex-col p-5">
-                <div class="text-success">
-                    <h5 class="text-lg font-semibold mb-1">Vulnerabilities</h5>
-                    <div class="text-3xl font-bold">{{ stats.vuln_count }}</div>
-                    <p class="mt-2">Critical CVEs</p>
-                </div>
+                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="criticalCount">0</div>
+                <div class="text-white-dark">Critical Threats</div>
             </div>
         </div>
     </div>
 
-    <!-- Feed Content -->
-    <div class="panel">
-        <div class="mb-5">
-            <div class="flex items-center justify-between mb-5">
-                <h6 class="text-lg font-semibold">Active Feeds</h6>
-                <div class="flex items-center">
-                    <input type="text" class="form-input w-auto" placeholder="Search feeds...">
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Threat Feed Table -->
+        <div class="lg:col-span-2">
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Latest Threats</h5>
+                    <div class="flex flex-wrap items-center">
+                        <div class="flex items-center gap-2">
+                            <div class="relative">
+                                <input type="text" placeholder="Search..." class="form-input py-2 ltr:pr-8 rtl:pl-8" id="searchInput" />
+                                <button type="button" class="absolute ltr:right-1.5 rtl:left-1.5 top-1/2 -translate-y-1/2 hover:text-primary">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
+                                        <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <select id="sourceFilter" class="form-select">
+                                <option value="">All Sources</option>
+                                <option value="OTX">OTX</option>
+                                <option value="ThreatFox">ThreatFox</option>
+                                <option value="Pulsedive">Pulsedive</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Feed Filters -->
-            <div class="flex flex-wrap gap-2 mb-5">
-                <button class="btn btn-outline-primary active">All</button>
-                <button class="btn btn-outline-primary">Malware</button>
-                <button class="btn btn-outline-primary">Phishing</button>
-                <button class="btn btn-outline-primary">APT</button>
-                <button class="btn btn-outline-primary">Vulnerabilities</button>
-            </div>
-
-            <!-- Feed List -->
-            <div class="table-responsive">
-                <table class="table-striped">
-                    <thead>
-                        <tr>
-                            <th>Feed Name</th>
-                            <th>Category</th>
-                            <th>Provider</th>
-                            <th>Last Update</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for feed in feeds %}
-                        <tr>
-                            <td>
-                                <div class="flex items-center">
-                                    <div class="w-8 h-8 mr-2 flex items-center justify-center rounded-full bg-primary-light dark:bg-primary text-primary dark:text-primary-light">
-                                        {{ feed.name|slice:":1" }}
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold">{{ feed.name }}</p>
-                                        <p class="text-xs text-gray-500">{{ feed.description }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{ feed.category }}</td>
-                            <td>{{ feed.provider }}</td>
-                            <td>{{ feed.last_update }}</td>
-                            <td>
-                                <span class="badge {% if feed.status == 'active' %}bg-success{% else %}bg-danger{% endif %}">
-                                    {{ feed.status }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="flex gap-2">
-                                    <button class="btn btn-sm btn-outline-primary">View</button>
-                                    <button class="btn btn-sm btn-outline-success">Enable</button>
-                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table-striped">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Title</th>
+                                <th>Timestamp</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="threatTableBody">
+                            <!-- Threat entries will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Feed Details Modal -->
-    <div class="modal fade" id="feedDetailsModal" tabindex="-1" role="dialog" aria-labelledby="feedDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="feedDetailsModalLabel">Feed Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Indicators Panel -->
+        <div class="lg:col-span-1">
+            <div class="panel">
+                <div class="mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Threat Details</h5>
                 </div>
-                <div class="modal-body">
-                    <!-- Feed details content will be loaded here -->
+                <div id="threatDetails" class="space-y-4">
+                    <div class="p-4 bg-[#FAF8FF] dark:bg-[#1B2E4B] rounded-lg">
+                        <p class="text-white-dark">Select a threat to view details</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function refreshFeeds() {
-        // Implementation for refreshing feeds
+    // Sample data structure based on the threat feed
+    let currentThreats = [];
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchThreatFeed();
+        setupEventListeners();
+    });
+
+    function setupEventListeners() {
+        document.getElementById('refreshFeed').addEventListener('click', fetchThreatFeed);
+        document.getElementById('searchInput').addEventListener('input', filterThreats);
+        document.getElementById('sourceFilter').addEventListener('change', filterThreats);
     }
 
-    function addNewFeed() {
-        // Implementation for adding new feed
+    function fetchThreatFeed() {
+        // This should be replaced with actual API call
+        // For now, using sample data
+        fetch('/api/threats')
+            .then(response => response.json())
+            .then(data => {
+                currentThreats = data;
+                updateDashboard(data);
+                updateThreatTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching threats:', error);
+                showNotification('Error', 'Failed to fetch threat data', 'error');
+            });
+    }
+
+    function updateDashboard(threats) {
+        // Update statistics
+        document.getElementById('totalThreats').textContent = threats.length;
+        document.getElementById('malwareCount').textContent = threats.filter(t => t.title.toLowerCase().includes('malware')).length;
+        document.getElementById('phishingCount').textContent = threats.filter(t => t.title.toLowerCase().includes('phishing')).length;
+        document.getElementById('criticalCount').textContent = threats.filter(t => t.title.toLowerCase().includes('critical')).length;
+    }
+
+    function updateThreatTable(threats) {
+        const tbody = document.getElementById('threatTableBody');
+        tbody.innerHTML = '';
+
+        threats.forEach(threat => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <span class="badge ${getBadgeClass(threat.source)}">${threat.source}</span>
+                </td>
+                <td class="max-w-sm truncate">${threat.title}</td>
+                <td>${formatDate(threat.timestamp)}</td>
+                <td class="text-center">
+                    <button onclick="viewThreatDetails('${threat.id}')" class="btn btn-sm btn-outline-primary">
+                        View Details
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function viewThreatDetails(threatId) {
+        const threat = currentThreats.find(t => t.id === threatId);
+        if (!threat) return;
+
+        const detailsDiv = document.getElementById('threatDetails');
+        detailsDiv.innerHTML = `
+            <div class="space-y-4">
+                <div class="p-4 bg-[#FAF8FF] dark:bg-[#1B2E4B] rounded-lg">
+                    <h6 class="font-semibold mb-2">${threat.title}</h6>
+                    <p class="text-white-dark text-sm mb-3">${threat.description}</p>
+                    <div class="space-y-2">
+                        <p class="font-semibold">Indicators:</p>
+                        <div class="space-y-1">
+                            ${threat.indicators.map(indicator => `
+                                <div class="flex items-center justify-between gap-2 text-xs">
+                                    <span class="truncate">${indicator}</span>
+                                    <button onclick="copyToClipboard('${indicator}')" class="hover:text-primary">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function getBadgeClass(source) {
+        const classes = {
+            'OTX': 'bg-primary',
+            'ThreatFox': 'bg-success',
+            'Pulsedive': 'bg-warning'
+        };
+        return classes[source] || 'bg-info';
+    }
+
+    function formatDate(timestamp) {
+        return new Date(timestamp).toLocaleString();
+    }
+
+    function filterThreats() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const sourceFilter = document.getElementById('sourceFilter').value;
+
+        const filtered = currentThreats.filter(threat => {
+            const matchesSearch = threat.title.toLowerCase().includes(searchTerm) ||
+                                threat.description.toLowerCase().includes(searchTerm);
+            const matchesSource = !sourceFilter || threat.source === sourceFilter;
+            return matchesSearch && matchesSource;
+        });
+
+        updateThreatTable(filtered);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification('Success', 'Copied to clipboard', 'success');
+        });
+    }
+
+    function showNotification(title, message, type = 'info') {
+        // Implement your notification system here
+        console.log(`${title}: ${message}`);
     }
 </script>
 {% endblock %}

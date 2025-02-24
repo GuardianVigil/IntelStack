@@ -4,22 +4,22 @@
 {% block content %}
 
 <script defer src="{% static 'assets/js/apexcharts.js' %}"></script>
-<div x-data="sales">
+<div x-data="threatAnalysis">
     <ul class="flex space-x-2 rtl:space-x-reverse">
         <li>
             <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
         </li>
         <li class="before:content-['/'] ltr:before:mr-1 rtl:before:ml-1">
-            <span>Sales</span>
+            <span>Cybersecurity</span>
         </li>
     </ul>
 
     <div class="pt-5">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6 text-white">
-            <!-- Users Visit -->
+            <!-- Threat Trends Over Time -->
             <div class="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
                 <div class="flex justify-between">
-                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Users Visit</div>
+                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Threat Trends Over Time</div>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                         <a href="javascript:;" @click="toggle">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-5">
-                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> $170.46 </div>
+                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 170 </div>
                     <div class="badge bg-white/30">+ 2.35% </div>
                 </div>
                 <div class="flex items-center font-semibold mt-5">
@@ -47,10 +47,10 @@
                 </div>
             </div>
 
-            <!-- Sessions -->
+            <!-- Attack Types Breakdown -->
             <div class="panel bg-gradient-to-r from-violet-500 to-violet-400">
                 <div class="flex justify-between">
-                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Sessions</div>
+                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Attack Types Breakdown</div>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                         <a href="javascript:;" @click="toggle">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-5">
-                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 74,137 </div>
+                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 74 </div>
                     <div class="badge bg-white/30">- 2.35% </div>
                 </div>
                 <div class="flex items-center font-semibold mt-5">
@@ -80,10 +80,10 @@
                 </div>
             </div>
 
-            <!-- Time On-Site -->
+            <!-- Daily Security Events -->
             <div class="panel bg-gradient-to-r from-blue-500 to-blue-400">
                 <div class="flex justify-between">
-                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Time On-Site</div>
+                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Daily Security Events</div>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                         <a href="javascript:;" @click="toggle">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-5">
-                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 38,085 </div>
+                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 38 </div>
                     <div class="badge bg-white/30">+ 1.35% </div>
                 </div>
                 <div class="flex items-center font-semibold mt-5">
@@ -112,10 +112,10 @@
                 </div>
             </div>
 
-            <!-- Bounce Rate -->
+            <!-- Incidents by Severity -->
             <div class="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400">
                 <div class="flex justify-between">
-                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Bounce Rate</div>
+                    <div class="ltr:mr-1 rtl:ml-1 text-md font-semibold">Incidents by Severity</div>
                     <div x-data="dropdown" @click.outside="open = false" class="dropdown">
                         <a href="javascript:;" @click="toggle">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 hover:opacity-80 opacity-70">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="flex items-center mt-5">
-                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 49.10% </div>
+                    <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 49 </div>
                     <div class="badge bg-white/30">- 0.35% </div>
                 </div>
                 <div class="flex items-center font-semibold mt-5">
@@ -147,44 +147,47 @@
         <div class="grid xl:grid-cols-3 gap-6 mb-6">
             <div class="panel h-full xl:col-span-2">
                 <div class="flex items-center dark:text-white-light mb-5">
-                    <h5 class="font-semibold text-lg">Revenue</h5>
-                    <div x-data="dropdown" @click.outside="open = false" class="dropdown ltr:ml-auto rtl:mr-auto">
-                        <a href="javascript:;" @click="toggle">
+                    <h5 class="font-semibold text-lg">Threat Analysis</h5>
+                    <div class="dropdown ltr:ml-auto rtl:mr-auto">
+                        <a href="javascript:;">
                             <svg class="w-5 h-5 text-black/70 dark:text-white/70 hover:!text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
-                                <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5" />
+                                <circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
+                                <circle opacity="0.5" cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
+                                <circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5"/>
                             </svg>
                         </a>
-                        <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:right-0 rtl:left-0">
-                            <li><a href="javascript:;" @click="toggle">Weekly</a></li>
-                            <li><a href="javascript:;" @click="toggle">Monthly</a></li>
-                            <li><a href="javascript:;" @click="toggle">Yearly</a></li>
-                        </ul>
                     </div>
                 </div>
-                <p class="text-lg dark:text-white-light/90">Total Profit <span class="text-primary ml-2">$10,840</span></p>
+                <p class="text-lg dark:text-white-light/90">Total Threats <span class="text-primary ml-2">10,840</span></p>
                 <div class="relative overflow-hidden">
-                    <div x-ref="revenueChart" class="bg-white dark:bg-black rounded-lg">
-                        <!-- loader -->
-                        <div class="min-h-[325px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                            <span class="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                        </div>
-                    </div>
+                    <div id="threat-trends-chart" style="min-height: 325px;"></div>
                 </div>
             </div>
 
             <div class="panel h-full">
                 <div class="flex items-center mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Sales By Category</h5>
+                    <h5 class="font-semibold text-lg dark:text-white-light">Attack Types Breakdown</h5>
                 </div>
                 <div class="overflow-hidden">
-                    <div x-ref="salesByCategory" class="bg-white dark:bg-black rounded-lg">
-                        <!-- loader -->
-                        <div class="min-h-[353px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
-                            <span class="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
-                        </div>
-                    </div>
+                    <div id="attack-types-chart" style="min-height: 350px;"></div>
+                </div>
+            </div>
+
+            <div class="panel h-full p-0">
+                <div class="flex items-center justify-between w-full p-5 absolute">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Daily Security Events</h5>
+                </div>
+                <div class="overflow-hidden">
+                    <div id="daily-events-chart" style="min-height: 350px;"></div>
+                </div>
+            </div>
+
+            <div class="panel h-full">
+                <div class="flex items-center mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Incidents by Severity</h5>
+                </div>
+                <div class="overflow-hidden">
+                    <div id="incident-severity-chart" style="min-height: 350px;"></div>
                 </div>
             </div>
         </div>
@@ -192,7 +195,7 @@
         <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
             <div class="panel h-full sm:col-span-2 xl:col-span-1">
                 <div class="flex items-center mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Daily Sales <span class="block text-white-dark text-sm font-normal">Go to columns for details.</span></h5>
+                    <h5 class="font-semibold text-lg dark:text-white-light">Daily Threats <span class="block text-white-dark text-sm font-normal">Go to columns for details.</span></h5>
                     <div class="ltr:ml-auto rtl:mr-auto relative">
                         <div class="w-11 h-11 text-warning bg-[#ffeccb] dark:bg-warning dark:text-[#ffeccb] grid place-content-center rounded-full">
                             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -203,7 +206,7 @@
                     </div>
                 </div>
                 <div class="overflow-hidden">
-                    <div x-ref="dailySales" class="bg-white dark:bg-black rounded-lg">
+                    <div x-ref="dailyThreats" class="bg-white dark:bg-black rounded-lg">
                         <!-- loader -->
                         <div class="min-h-[175px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
                             <span class="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
@@ -299,20 +302,17 @@
                     <div class="relative">
                         <div class="text-success dark:text-success-light bg-success-light dark:bg-success w-11 h-11 rounded-lg flex items-center justify-center">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2 3L2.26491 3.0883C3.58495 3.52832 4.24497 3.74832 4.62248 4.2721C5 4.79587 5 5.49159 5 6.88304V9.5C5 12.3284 5 13.7426 5.87868 14.6213C6.75736 15.5 8.17157 15.5 11 15.5H19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <path opacity="0.5" d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z" stroke="currentColor" stroke-width="1.5" />
-                                <path opacity="0.5" d="M16.5 18.0001C17.3284 18.0001 18 18.6716 18 19.5001C18 20.3285 17.3284 21.0001 16.5 21.0001C15.6716 21.0001 15 20.3285 15 19.5001C15 18.6716 15.6716 18.0001 16.5 18.0001Z" stroke="currentColor" stroke-width="1.5" />
-                                <path opacity="0.5" d="M11 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                <path d="M5 6H16.4504C18.5054 6 19.5328 6 19.9775 6.67426C20.4221 7.34853 20.0173 8.29294 19.2078 10.1818L18.7792 11.1818C18.4013 12.0636 18.2123 12.5045 17.8366 12.7523C17.4609 13 16.9812 13 16.0218 13H5" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M12 6V18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M15 9.5C15 8.11929 13.6569 7 12 7C10.3431 7 9 8.11929 9 9.5C9 10.8807 10.3431 12 12 12C13.6569 12 15 13.1193 15 14.5C15 15.8807 13.6569 17 12 17C10.3431 17 9 15.8807 9 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
                             </svg>
                         </div>
                     </div>
                     <h5 class="font-semibold text-2xl ltr:text-right rtl:text-left dark:text-white-light">
                         3,192
-                        <span class="block text-sm font-normal">Total Orders</span>
+                        <span class="block text-sm font-normal">Total Threats</span>
                     </h5>
                 </div>
-                <div x-ref="totalOrders" class="bg-transparent rounded-lg overflow-hidden">
+                <div x-ref="totalThreats" class="bg-transparent rounded-lg overflow-hidden">
                     <!-- loader -->
                     <div class="min-h-[290px] grid place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] ">
                         <span class="animate-spin border-2 border-black dark:border-white !border-l-transparent  rounded-full w-5 h-5 inline-flex"></span>
@@ -326,414 +326,116 @@
 <!-- statistics -->
 <script>
     document.addEventListener("alpine:init", () => {
-        Alpine.data("sales", () => ({
+        Alpine.data("threatAnalysis", () => ({
             init() {
-                isDark = this.$store.app.theme === "dark" || this.$store.app.isDarkMode ? true : false;
-                isRtl = this.$store.app.rtlClass === "rtl" ? true : false;
-
-                const revenueChart = null;
-                const salesByCategory = null;
-                const dailySales = null;
-                const totalOrders = null;
-
-                // revenue
-                setTimeout(() => {
-                    this.revenueChart = new ApexCharts(this.$refs.revenueChart, this.revenueChartOptions)
-                    this.$refs.revenueChart.innerHTML = "";
-                    this.revenueChart.render()
-
-                    // sales by category
-                    this.salesByCategory = new ApexCharts(this.$refs.salesByCategory, this.salesByCategoryOptions)
-                    this.$refs.salesByCategory.innerHTML = "";
-                    this.salesByCategory.render()
-
-                    // daily sales
-                    this.dailySales = new ApexCharts(this.$refs.dailySales, this.dailySalesOptions)
-                    this.$refs.dailySales.innerHTML = "";
-                    this.dailySales.render()
-
-                    // total orders
-                    this.totalOrders = new ApexCharts(this.$refs.totalOrders, this.totalOrdersOptions)
-                    this.$refs.totalOrders.innerHTML = "";
-                    this.totalOrders.render()
-                }, 300);
-
-                this.$watch('$store.app.theme', () => {
-                    isDark = this.$store.app.theme === "dark" || this.$store.app.isDarkMode ? true : false;
-
-                    this.revenueChart.updateOptions(this.revenueChartOptions);
-                    this.salesByCategory.updateOptions(this.salesByCategoryOptions);
-                    this.dailySales.updateOptions(this.dailySalesOptions);
-                    this.totalOrders.updateOptions(this.totalOrdersOptions);
+                this.$nextTick(() => {
+                    this.generateCharts();
                 });
-
-                this.$watch('$store.app.rtlClass', () => {
-                    isRtl = this.$store.app.rtlClass === "rtl" ? true : false;
-                    this.revenueChart.updateOptions(this.revenueChartOptions);
-                });
-
             },
+            generateCharts() {
+                // Threat Trends Over Time
+                const threatTrends = new ApexCharts(
+                    document.querySelector("#threat-trends-chart"),
+                    this.threatTrendsOptions()
+                );
+                threatTrends.render();
 
-            // revenue
-            get revenueChartOptions() {
+                // Attack Types Breakdown
+                const attackTypes = new ApexCharts(
+                    document.querySelector("#attack-types-chart"),
+                    this.attackTypesOptions()
+                );
+                attackTypes.render();
+
+                // Daily Security Events
+                const dailyEvents = new ApexCharts(
+                    document.querySelector("#daily-events-chart"),
+                    this.dailyEventsOptions()
+                );
+                dailyEvents.render();
+
+                // Incidents by Severity
+                const incidentSeverity = new ApexCharts(
+                    document.querySelector("#incident-severity-chart"),
+                    this.incidentSeverityOptions()
+                );
+                incidentSeverity.render();
+            },
+            threatTrendsOptions() {
                 return {
-                    series: [{
-                            name: 'Income',
-                            data: [16800, 16800, 15500, 17800, 15500, 17000, 19000, 16000, 15000, 17000, 14000, 17000]
-                        },
-                        {
-                            name: 'Expenses',
-                            data: [16500, 17500, 16200, 17300, 16000, 19500, 16000, 17000, 16000, 19000, 18000, 19000]
-                        }
-                    ],
                     chart: {
-                        height: 325,
-                        type: "area",
-                        fontFamily: 'Nunito, sans-serif',
+                        type: 'line',
+                        height: 350,
                         zoom: {
                             enabled: false
-                        },
-                        toolbar: {
-                            show: false
-                        },
+                        }
                     },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        curve: 'smooth',
-                        width: 2,
-                        lineCap: 'square'
-                    },
-                    dropShadow: {
-                        enabled: true,
-                        opacity: 0.2,
-                        blur: 10,
-                        left: -7,
-                        top: 22
-                    },
-                    colors: isDark ? ['#2196f3', '#e7515a'] : ['#1b55e2', '#e7515a'],
-                    markers: {
-                        discrete: [{
-                                seriesIndex: 0,
-                                dataPointIndex: 6,
-                                fillColor: '#1b55e2',
-                                strokeColor: 'transparent',
-                                size: 7
-                            },
-                            {
-                                seriesIndex: 1,
-                                dataPointIndex: 5,
-                                fillColor: '#e7515a',
-                                strokeColor: 'transparent',
-                                size: 7
-                            },
-                        ],
-                    },
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    series: [{
+                        name: 'Threats Detected',
+                        data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+                    }],
                     xaxis: {
-                        axisBorder: {
-                            show: false
-                        },
-                        axisTicks: {
-                            show: false
-                        },
-                        crosshairs: {
-                            show: true
-                        },
-                        labels: {
-                            offsetX: isRtl ? 2 : 0,
-                            offsetY: 5,
-                            style: {
-                                fontSize: '12px',
-                                cssClass: 'apexcharts-xaxis-title'
-                            }
-                        },
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
                     },
-                    yaxis: {
-                        tickAmount: 7,
-                        labels: {
-                            formatter: (value) => {
-                                return value / 1000 + 'K';
-                            },
-                            offsetX: isRtl ? -30 : -10,
-                            offsetY: 0,
-                            style: {
-                                fontSize: '12px',
-                                cssClass: 'apexcharts-yaxis-title'
-                            },
-                        },
-                        opposite: isRtl ? true : false,
-                    },
-                    grid: {
-                        borderColor: isDark ? '#191e3a' : '#e0e6ed',
-                        strokeDashArray: 5,
-                        xaxis: {
-                            lines: {
-                                show: true
-                            }
-                        },
-                        yaxis: {
-                            lines: {
-                                show: false
-                            }
-                        },
-                        padding: {
-                            top: 0,
-                            right: 0,
-                            bottom: 0,
-                            left: 0
-                        }
-                    },
-                    legend: {
-                        position: 'top',
-                        horizontalAlign: 'right',
-                        fontSize: '16px',
-                        markers: {
-                            width: 10,
-                            height: 10,
-                            offsetX: -2,
-                        },
-                        itemMargin: {
-                            horizontal: 10,
-                            vertical: 5
-                        },
-                    },
-                    tooltip: {
-                        marker: {
-                            show: true
-                        },
-                        x: {
-                            show: false
-                        }
-                    },
-                    fill: {
-                        type: 'gradient',
-                        gradient: {
-                            shadeIntensity: 1,
-                            inverseColors: !1,
-                            opacityFrom: isDark ? 0.19 : 0.28,
-                            opacityTo: 0.05,
-                            stops: isDark ? [100, 100] : [45, 100],
-                        },
-                    },
-                }
-            },
-
-            // sales by category
-            get salesByCategoryOptions() {
-                return {
-                    series: [985, 737, 270],
-                    chart: {
-                        type: 'donut',
-                        height: 460,
-                        fontFamily: 'Nunito, sans-serif',
-                    },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 25,
-                        colors: isDark ? '#0e1726' : '#fff'
-                    },
-                    colors: isDark ? ['#5c1ac3', '#e2a03f', '#e7515a', '#e2a03f'] : ['#e2a03f', '#5c1ac3', '#e7515a'],
-                    legend: {
-                        position: 'bottom',
-                        horizontalAlign: 'center',
-                        fontSize: '14px',
-                        markers: {
-                            width: 10,
-                            height: 10,
-                            offsetX: -2,
-                        },
-                        height: 50,
-                        offsetY: 20,
-                    },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                size: '65%',
-                                background: 'transparent',
-                                labels: {
-                                    show: true,
-                                    name: {
-                                        show: true,
-                                        fontSize: '29px',
-                                        offsetY: -10
-                                    },
-                                    value: {
-                                        show: true,
-                                        fontSize: '26px',
-                                        color: isDark ? '#bfc9d4' : undefined,
-                                        offsetY: 16,
-                                        formatter: (val) => {
-                                            return val;
-                                        },
-                                    },
-                                    total: {
-                                        show: true,
-                                        label: 'Total',
-                                        color: '#888ea8',
-                                        fontSize: '29px',
-                                        formatter: (w) => {
-                                            return w.globals.seriesTotals.reduce(function(a, b) {
-                                                return a + b;
-                                            }, 0);
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                    labels: ['Apparel', 'Sports', 'Others'],
-                    states: {
-                        hover: {
-                            filter: {
-                                type: 'none',
-                                value: 0.15,
-                            }
-                        },
-                        active: {
-                            filter: {
-                                type: 'none',
-                                value: 0.15,
-                            }
-                        },
+                    colors: ['#3b82f6'],
+                    title: {
+                        text: 'Threat Trends Over Time',
+                        align: 'left'
                     }
-                }
+                };
             },
-
-            // daily sales
-            get dailySalesOptions() {
+            attackTypesOptions() {
                 return {
-                    series: [{
-                            name: 'Sales',
-                            data: [44, 55, 41, 67, 22, 43, 21]
-                        },
-                        {
-                            name: 'Last Week',
-                            data: [13, 23, 20, 8, 13, 27, 33]
-                        },
-                    ],
                     chart: {
-                        height: 160,
+                        type: 'pie',
+                        height: 350
+                    },
+                    labels: ['Phishing', 'Malware', 'DDoS', 'Brute Force', 'Insider Threat'],
+                    series: [44, 55, 13, 43, 22],
+                    colors: ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6'],
+                    title: {
+                        text: 'Attack Types Breakdown',
+                        align: 'left'
+                    }
+                };
+            },
+            dailyEventsOptions() {
+                return {
+                    chart: {
                         type: 'bar',
-                        fontFamily: 'Nunito, sans-serif',
-                        toolbar: {
-                            show: false
-                        },
-                        stacked: true,
-                        stackType: '100%'
+                        height: 350
                     },
-                    dataLabels: {
-                        enabled: false
-                    },
-                    stroke: {
-                        show: true,
-                        width: 1
-                    },
-                    colors: ['#e2a03f', '#e0e6ed'],
-                    responsive: [{
-                        breakpoint: 480,
-                        options: {
-                            legend: {
-                                position: 'bottom',
-                                offsetX: -10,
-                                offsetY: 0
-                            }
-                        }
+                    series: [{
+                        name: 'Security Events',
+                        data: [30, 40, 45, 50, 49, 60, 70, 91, 125]
                     }],
                     xaxis: {
-                        labels: {
-                            show: false
-                        },
-                        categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
+                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
                     },
-                    yaxis: {
-                        show: false
-                    },
-                    fill: {
-                        opacity: 1
-                    },
-                    plotOptions: {
-                        bar: {
-                            horizontal: false,
-                            columnWidth: '25%'
-                        }
-                    },
-                    legend: {
-                        show: false
-                    },
-                    grid: {
-                        show: false,
-                        xaxis: {
-                            lines: {
-                                show: false
-                            }
-                        },
-                        padding: {
-                            top: 10,
-                            right: -20,
-                            bottom: -20,
-                            left: -20
-                        },
-                    },
-                }
+                    colors: ['#3b82f6'],
+                    title: {
+                        text: 'Daily Security Events',
+                        align: 'left'
+                    }
+                };
             },
-
-            // total orders
-            get totalOrdersOptions() {
+            incidentSeverityOptions() {
                 return {
-                    series: [{
-                        name: 'Sales',
-                        data: [28, 40, 36, 52, 38, 60, 38, 52, 36, 40]
-                    }],
                     chart: {
-                        height: 290,
-                        type: "area",
-                        fontFamily: 'Nunito, sans-serif',
-                        sparkline: {
-                            enabled: true
-                        }
+                        type: 'radar',
+                        height: 350
                     },
-                    stroke: {
-                        curve: 'smooth',
-                        width: 2
-                    },
-                    colors: isDark ? ['#00ab55'] : ['#00ab55'],
-                    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-                    yaxis: {
-                        min: 0,
-                        show: false
-                    },
-                    grid: {
-                        padding: {
-                            top: 125,
-                            right: 0,
-                            bottom: 0,
-                            left: 0
-                        }
-                    },
-                    fill: {
-                        opacity: 1,
-                        type: 'gradient',
-                        gradient: {
-                            type: 'vertical',
-                            shadeIntensity: 1,
-                            inverseColors: !1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.05,
-                            stops: [100, 100],
-                        },
-                    },
-                    tooltip: {
-                        x: {
-                            show: false
-                        },
-                    },
-                }
+                    series: [{
+                        name: 'Incidents',
+                        data: [80, 50, 30, 40, 100, 20],
+                    }],
+                    labels: ['Critical', 'High', 'Medium', 'Low', 'Info', 'False Positive'],
+                    colors: ['#3b82f6'],
+                    title: {
+                        text: 'Incidents by Severity',
+                        align: 'left'
+                    }
+                };
             }
         }));
     });
