@@ -2,241 +2,251 @@
 {% load static %}
 
 {% block content %}
-<div class="pt-5">
-    <div class="mb-6 flex items-center justify-between">
-        <h5 class="text-lg font-semibold dark:text-white-light">Threat Intelligence Feed</h5>
-        <div class="flex gap-2">
-            <button class="btn btn-outline-primary" id="refreshFeed">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path>
-                    <path d="M21 3v5h-5"></path>
+<div class="animate__animated p-6" :class="[$store.app.animation]">
+    <!-- Title and Refresh Section -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Threat Intelligence Feed</h2>
+        <div class="flex items-center gap-3">
+
+            <button id="refreshBtn" class="btn btn-primary gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <path d="M21 2v6h-6"></path>
+                    <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                    <path d="M3 22v-6h6"></path>
+                    <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
                 </svg>
                 Refresh Feed
             </button>
         </div>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="totalThreats">0</div>
-                <div class="text-white-dark">Total Threats</div>
+        <div class="panel bg-gradient-to-r from-blue-500/20 to-blue-400/20 border-0">
+            <div class="flex justify-between">
+                <div class="text-md font-semibold">Total Threats</div>
+            </div>
+            <div class="flex items-center mt-5">
+                <div class="text-3xl font-bold" id="totalThreats">0</div>
             </div>
         </div>
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="malwareCount">0</div>
-                <div class="text-white-dark">Malware Detected</div>
+        <div class="panel bg-gradient-to-r from-red-500/20 to-red-400/20 border-0">
+            <div class="flex justify-between">
+                <div class="text-md font-semibold">Critical Threats</div>
+            </div>
+            <div class="flex items-center mt-5">
+                <div class="text-3xl font-bold" id="criticalThreats">0</div>
             </div>
         </div>
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="phishingCount">0</div>
-                <div class="text-white-dark">Phishing Campaigns</div>
+        <div class="panel bg-gradient-to-r from-amber-500/20 to-amber-400/20 border-0">
+            <div class="flex justify-between">
+                <div class="text-md font-semibold">Malware</div>
+            </div>
+            <div class="flex items-center mt-5">
+                <div class="text-3xl font-bold" id="malwareThreats">0</div>
             </div>
         </div>
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <div class="text-[#0E1726] dark:text-white-light text-2xl font-semibold mb-2" id="criticalCount">0</div>
-                <div class="text-white-dark">Critical Threats</div>
+        <div class="panel bg-gradient-to-r from-purple-500/20 to-purple-400/20 border-0">
+            <div class="flex justify-between">
+                <div class="text-md font-semibold">Phishing</div>
+            </div>
+            <div class="flex items-center mt-5">
+                <div class="text-3xl font-bold" id="phishingThreats">0</div>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Threat Feed Table -->
-        <div class="lg:col-span-2">
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Latest Threats</h5>
-                    <div class="flex flex-wrap items-center">
-                        <div class="flex items-center gap-2">
-                            <div class="relative">
-                                <input type="text" placeholder="Search..." class="form-input py-2 ltr:pr-8 rtl:pl-8" id="searchInput" />
-                                <button type="button" class="absolute ltr:right-1.5 rtl:left-1.5 top-1/2 -translate-y-1/2 hover:text-primary">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                        <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
-                                        <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                            <select id="sourceFilter" class="form-select">
-                                <option value="">All Sources</option>
-                                <option value="OTX">OTX</option>
-                                <option value="ThreatFox">ThreatFox</option>
-                                <option value="Pulsedive">Pulsedive</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table-striped">
-                        <thead>
-                            <tr>
-                                <th>Source</th>
-                                <th>Title</th>
-                                <th>Timestamp</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="threatTableBody">
-                            <!-- Threat entries will be populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <!-- Threat Feed Table -->
+    <div class="panel">
+        <div class="flex items-center justify-between mb-5">
+            <h5 class="font-semibold text-lg dark:text-white-light">Latest Threats</h5>
         </div>
-
-        <!-- Indicators Panel -->
-        <div class="lg:col-span-1">
-            <div class="panel">
-                <div class="mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Threat Details</h5>
-                </div>
-                <div id="threatDetails" class="space-y-4">
-                    <div class="p-4 bg-[#FAF8FF] dark:bg-[#1B2E4B] rounded-lg">
-                        <p class="text-white-dark">Select a threat to view details</p>
-                    </div>
-                </div>
-            </div>
+        <div class="table-responsive">
+            <table class="table-striped">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Timestamp</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="threatFeedTable">
+                    <!-- Threat data will be populated here -->
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-{% endblock %}
-
 {% block scripts %}
 <script>
-    // Sample data structure based on the threat feed
-    let currentThreats = [];
-    
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchThreatFeed();
-        setupEventListeners();
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const refreshBtn = document.getElementById('refreshBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const threatFeedTable = document.getElementById('threatFeedTable');
+    const totalThreats = document.getElementById('totalThreats');
+    const criticalThreats = document.getElementById('criticalThreats');
+    const malwareThreats = document.getElementById('malwareThreats');
+    const phishingThreats = document.getElementById('phishingThreats');
 
-    function setupEventListeners() {
-        document.getElementById('refreshFeed').addEventListener('click', fetchThreatFeed);
-        document.getElementById('searchInput').addEventListener('input', filterThreats);
-        document.getElementById('sourceFilter').addEventListener('change', filterThreats);
+    // Function to update the stats
+    function updateStats(stats) {
+        totalThreats.textContent = stats.total || 0;
+        criticalThreats.textContent = stats.critical || 0;
+        malwareThreats.textContent = stats.malware || 0;
+        phishingThreats.textContent = stats.phishing || 0;
     }
 
-    function fetchThreatFeed() {
-        // This should be replaced with actual API call
-        // For now, using sample data
-        fetch('/api/threats')
-            .then(response => response.json())
-            .then(data => {
-                currentThreats = data;
-                updateDashboard(data);
-                updateThreatTable(data);
-            })
-            .catch(error => {
-                console.error('Error fetching threats:', error);
-                showNotification('Error', 'Failed to fetch threat data', 'error');
-            });
+    // Function to format the indicators
+    function formatIndicators(indicators) {
+        if (!indicators || indicators.length === 0) return 'None';
+        return indicators.slice(0, 3).map(indicator => 
+            `<span class="badge badge-outline-info mb-1">${indicator}</span>`
+        ).join('<br>') + (indicators.length > 3 ? '<br><span class="text-info">+ ' + (indicators.length - 3) + ' more</span>' : '');
     }
 
-    function updateDashboard(threats) {
-        // Update statistics
-        document.getElementById('totalThreats').textContent = threats.length;
-        document.getElementById('malwareCount').textContent = threats.filter(t => t.title.toLowerCase().includes('malware')).length;
-        document.getElementById('phishingCount').textContent = threats.filter(t => t.title.toLowerCase().includes('phishing')).length;
-        document.getElementById('criticalCount').textContent = threats.filter(t => t.title.toLowerCase().includes('critical')).length;
-    }
-
-    function updateThreatTable(threats) {
-        const tbody = document.getElementById('threatTableBody');
-        tbody.innerHTML = '';
-
-        threats.forEach(threat => {
+    // Function to update the table
+    function updateTable(threats) {
+        threatFeedTable.innerHTML = '';
+        threats.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>
-                    <span class="badge ${getBadgeClass(threat.source)}">${threat.source}</span>
-                </td>
-                <td class="max-w-sm truncate">${threat.title}</td>
-                <td>${formatDate(threat.timestamp)}</td>
+                <td><span class="badge ${item.source === 'OTX' ? 'badge-outline-primary' : 'badge-outline-success'}">${item.source}</span></td>
+                <td class="font-medium">${item.title}</td>
+                <td><span class="badge badge-outline-${item.type.toLowerCase() === 'critical' ? 'danger' : 'warning'}">${item.type}</span></td>
+                <td class="max-w-md"><div class="truncate" title="${item.description}">${item.description}</div></td>
+                <td>${new Date(item.timestamp).toLocaleString()}</td>
                 <td class="text-center">
-                    <button onclick="viewThreatDetails('${threat.id}')" class="btn btn-sm btn-outline-primary">
-                        View Details
-                    </button>
+                    <div class="flex items-center justify-center gap-2">
+                        <button class="btn btn-sm btn-outline-info" onclick="showDetails('${btoa(JSON.stringify(item))}')">
+                            Details
+                        </button>
+                    </div>
                 </td>
             `;
-            tbody.appendChild(row);
+            threatFeedTable.appendChild(row);
         });
     }
 
-    function viewThreatDetails(threatId) {
-        const threat = currentThreats.find(t => t.id === threatId);
-        if (!threat) return;
+    // Function to refresh the feed
+    function refreshFeed() {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<svg class="animate-spin w-4 h-4 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Refreshing...';
 
-        const detailsDiv = document.getElementById('threatDetails');
-        detailsDiv.innerHTML = `
-            <div class="space-y-4">
-                <div class="p-4 bg-[#FAF8FF] dark:bg-[#1B2E4B] rounded-lg">
-                    <h6 class="font-semibold mb-2">${threat.title}</h6>
-                    <p class="text-white-dark text-sm mb-3">${threat.description}</p>
-                    <div class="space-y-2">
-                        <p class="font-semibold">Indicators:</p>
-                        <div class="space-y-1">
-                            ${threat.indicators.map(indicator => `
-                                <div class="flex items-center justify-between gap-2 text-xs">
-                                    <span class="truncate">${indicator}</span>
-                                    <button onclick="copyToClipboard('${indicator}')" class="hover:text-primary">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                        </svg>
-                                    </button>
+        fetch('/refresh-threat-feeds/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            updateStats(data.stats);
+            updateTable(data.threats);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to refresh threat feed: ' + error.message);
+        })
+        .finally(() => {
+            refreshBtn.disabled = false;
+            refreshBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg> Refresh Feed';
+        });
+    }
+
+    // Function to export data
+    function exportData() {
+        const rows = Array.from(threatFeedTable.getElementsByTagName('tr'));
+        const csvContent = rows.map(row => {
+            const cells = Array.from(row.getElementsByTagName('td'));
+            return cells.map(cell => `"${cell.textContent.trim()}"`).join(',');
+        }).join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', `threat_feed_${new Date().toISOString()}.csv`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    // Function to show threat details
+    window.showDetails = function(encodedData) {
+        const item = JSON.parse(atob(encodedData));
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 z-50 overflow-y-auto';
+        modal.innerHTML = `
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">${item.title}</h3>
+                                <div class="mt-4">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">${item.description}</p>
+                                    <div class="mt-4">
+                                        <h4 class="text-md font-medium text-gray-900 dark:text-white mb-2">Indicators:</h4>
+                                        <div class="space-y-1">
+                                            ${item.indicators.map(indicator => 
+                                                `<div class="text-sm text-gray-500 dark:text-gray-400 break-all bg-gray-100 dark:bg-gray-700 p-2 rounded">${indicator}</div>`
+                                            ).join('')}
+                                        </div>
+                                    </div>
                                 </div>
-                            `).join('')}
+                            </div>
                         </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" class="btn btn-outline-danger" onclick="this.closest('.fixed').remove()">
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
         `;
+        document.body.appendChild(modal);
     }
 
-    function getBadgeClass(source) {
-        const classes = {
-            'OTX': 'bg-primary',
-            'ThreatFox': 'bg-success',
-            'Pulsedive': 'bg-warning'
-        };
-        return classes[source] || 'bg-info';
+    // Function to get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
     }
 
-    function formatDate(timestamp) {
-        return new Date(timestamp).toLocaleString();
-    }
+    // Event listeners
+    refreshBtn.addEventListener('click', refreshFeed);
+    exportBtn.addEventListener('click', exportData);
 
-    function filterThreats() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const sourceFilter = document.getElementById('sourceFilter').value;
-
-        const filtered = currentThreats.filter(threat => {
-            const matchesSearch = threat.title.toLowerCase().includes(searchTerm) ||
-                                threat.description.toLowerCase().includes(searchTerm);
-            const matchesSource = !sourceFilter || threat.source === sourceFilter;
-            return matchesSearch && matchesSource;
-        });
-
-        updateThreatTable(filtered);
-    }
-
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            showNotification('Success', 'Copied to clipboard', 'success');
-        });
-    }
-
-    function showNotification(title, message, type = 'info') {
-        // Implement your notification system here
-        console.log(`${title}: ${message}`);
-    }
+    // Initial load
+    refreshFeed();
+});
 </script>
+{% endblock %}
 {% endblock %}

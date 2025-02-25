@@ -1121,13 +1121,40 @@ async def analyze_url(request):
         logger.error(f"Unexpected error in URL scan: {str(e)}")
         return JsonResponse({'error': 'Internal server error'}, status=500)
 
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+import logging
+from .services.threat_feed.threat_feed import ThreatFeedService
+
+logger = logging.getLogger(__name__)
+
+@login_required
+@csrf_exempt
 @require_http_methods(["POST"])
 def refresh_threat_feeds(request):
     """Refresh all threat feeds and return the processed data"""
     try:
         service = ThreatFeedService()
         feeds = service.get_all_feeds()
-        processed_data = service.process_feeds(feeds)
-        return JsonResponse(processed_data)
+        threats = service.process_feeds(feeds)
+        
+        # Calculate stats
+        stats = {
+            'total': len(threats),
+            'malware': sum(1 for t in threats if t.get('type') == 'Malware'),
+            'phishing': sum(1 for t in threats if t.get('type') == 'Phishing'),
+            'apt': sum(1 for t in threats if t.get('type') == 'APT'),
+            'botnet': sum(1 for t in threats if t.get('type') == 'Botnet'),
+            'critical': sum(1 for t in threats if t.get('severity') == 'Critical')
+        }
+        
+        return JsonResponse({
+            'threats': threats,
+            'stats': stats
+        })
     except Exception as e:
+        logger.error(f"Error refreshing threat feeds: {str(e)}", exc_info=True)
         return JsonResponse({'error': str(e)}, status=500)

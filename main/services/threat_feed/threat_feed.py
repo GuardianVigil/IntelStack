@@ -1,9 +1,13 @@
 import requests
 import json
 import time
+import os
+import logging
 from datetime import datetime
 from django.conf import settings
 from main.models import APIKey
+
+logger = logging.getLogger(__name__)
 
 class ThreatFeedService:
     def __init__(self):
@@ -92,6 +96,42 @@ class ThreatFeedService:
 
     def get_all_feeds(self):
         """Fetch all threat feeds"""
+        try:
+            # For development/testing, load from test file
+            test_file_path = 'main/services/threat_feed/test/threat_feed.txt'
+            if os.path.exists(test_file_path):
+                with open(test_file_path, 'r') as f:
+                    test_data = f.read()
+                    # Parse the test data
+                    sections = test_data.split('\n\n')
+                    threats = []
+                    current_section = None
+                    
+                    for section in sections:
+                        if section.startswith('Testing OTX:'):
+                            try:
+                                # Extract JSON data
+                                json_str = section[section.find('['):].strip()
+                                otx_data = json.loads(json_str)
+                                threats.extend(otx_data)
+                            except json.JSONDecodeError as e:
+                                logger.error(f"Error parsing OTX test data: {e}")
+                    
+                    return {
+                        'otx': {'results': threats},
+                        'threatfox': {'data': []},
+                        'pulsedive': []
+                    }
+
+        except Exception as e:
+            logger.error(f"Error loading test data: {e}", exc_info=True)
+            return {
+                'otx': {'results': []},
+                'threatfox': {'data': []},
+                'pulsedive': []
+            }
+
+        # If no test data or in production, fetch from APIs
         return {
             'otx': self.fetch_otx_feeds(),
             'threatfox': self.fetch_threatfox_feeds(),
@@ -100,71 +140,140 @@ class ThreatFeedService:
 
     def process_feeds(self, feeds):
         """Process and format the feeds for frontend display"""
-        stats = {
-            'malware_count': 0,
-            'phishing_count': 0,
-            'apt_count': 0,
-            'vuln_count': 0
-        }
-        
-        processed_feeds = []
+        processed_data = []
         
         # Process OTX feeds
-        if 'otx' in feeds and not isinstance(feeds['otx'], dict) or 'error' not in feeds['otx']:
-            for pulse in feeds['otx'].get('results', []):
-                feed_type = 'malware'
-                if 'APT' in pulse.get('tags', []):
-                    feed_type = 'apt'
-                    stats['apt_count'] += 1
-                elif 'Phishing' in pulse.get('tags', []):
-                    feed_type = 'phishing'
-                    stats['phishing_count'] += 1
-                else:
-                    stats['malware_count'] += 1
-                
-                processed_feeds.append({
-                    'name': pulse.get('name', ''),
-                    'description': pulse.get('description', ''),
-                    'category': feed_type,
-                    'provider': 'AlienVault OTX',
-                    'last_update': pulse.get('modified'),
-                    'status': 'active'
-                })
-        
+        if 'otx' in feeds and isinstance(feeds['otx'], dict):
+            results = feeds['otx'].get('results', [])
+            if isinstance(results, list):
+                for item in results:
+                    # Handle test data format
+                    if isinstance(item, dict) and 'source' in item and item['source'] == 'OTX':
+                        threat = {
+                            'id': item.get('id', ''),
+                            'source': item['source'],
+                            'title': item.get('title', ''),
+                            'description': item.get('description', ''),
+                            'indicators': item.get('indicators', []),
+                            'timestamp': item.get('timestamp', ''),
+                            'type': self._determine_threat_type(item.get('title', '').split()),
+                            'severity': 'High' if 'critical' in item.get('title', '').lower() else 'Medium'
+                        }
+                        processed_data.append(threat)
+                    else:
+                        # Handle regular OTX API response format
+                        threat = {
+                            'id': item.get('id', ''),
+                            'source': 'OTX',
+                            'title': item.get('name', ''),
+                            'description': item.get('description', ''),
+                            'indicators': [i['indicator'] for i in item.get('indicators', [])],
+                            'timestamp': item.get('modified', ''),
+                            'type': self._determine_threat_type(item.get('tags', [])),
+                            'severity': self._calculate_severity(item)
+                        }
+                        processed_data.append(threat)
+
         # Process ThreatFox feeds
-        if 'threatfox' in feeds and not isinstance(feeds['threatfox'], dict) or 'error' not in feeds['threatfox']:
+        if 'threatfox' in feeds and isinstance(feeds['threatfox'], dict):
             for ioc in feeds['threatfox'].get('data', []):
-                stats['malware_count'] += 1
-                processed_feeds.append({
-                    'name': ioc.get('malware', ''),
-                    'description': ioc.get('threat_type', ''),
-                    'category': 'malware',
-                    'provider': 'ThreatFox',
-                    'last_update': datetime.fromtimestamp(ioc.get('last_seen', 0)).strftime('%Y-%m-%d %H:%M:%S'),
-                    'status': 'active'
-                })
-        
+                if not isinstance(ioc, dict):
+                    continue
+                threat = {
+                    'id': str(ioc.get('id', '')),
+                    'source': 'ThreatFox',
+                    'title': f"{ioc.get('malware', '')} - {ioc.get('threat_type', '')}",
+                    'description': f"IOC Type: {ioc.get('ioc_type', '')}\nThreat Type: {ioc.get('threat_type', '')}",
+                    'indicators': [ioc.get('ioc', '')],
+                    'timestamp': datetime.fromtimestamp(ioc.get('first_seen_utc', 0)).isoformat(),
+                    'type': 'Malware',
+                    'severity': self._calculate_severity_from_confidence(ioc.get('confidence_level', 0))
+                }
+                processed_data.append(threat)
+
         # Process Pulsedive feeds
         if 'pulsedive' in feeds and isinstance(feeds['pulsedive'], list):
             for feed in feeds['pulsedive']:
-                feed_type = feed.get('category', 'malware').lower()
-                if feed_type == 'phishing':
-                    stats['phishing_count'] += 1
-                elif feed_type == 'vulnerability':
-                    stats['vuln_count'] += 1
-                else:
-                    stats['malware_count'] += 1
-                
-                processed_feeds.append({
-                    'name': feed.get('feed', ''),
+                if not isinstance(feed, dict):
+                    continue
+                threat = {
+                    'id': str(feed.get('iid', '')),
+                    'source': 'Pulsedive',
+                    'title': feed.get('name', ''),
                     'description': feed.get('description', ''),
-                    'category': feed_type,
-                    'provider': 'Pulsedive',
-                    'last_update': feed.get('stamp_updated', ''),
-                    'status': 'active'
-                })
+                    'indicators': [feed.get('indicator', '')],
+                    'timestamp': feed.get('stamp_updated', ''),
+                    'type': self._map_pulsedive_type(feed.get('type', '')),
+                    'severity': self._map_pulsedive_risk(feed.get('risk', ''))
+                }
+                processed_data.append(threat)
+
+        return processed_data
+
+    def _determine_threat_type(self, tags):
+        """Determine threat type based on tags"""
+        if isinstance(tags, str):
+            tags = [tags]
+            
+        tags = [t.upper() for t in tags]
         
-        return {
-            'feeds': processed_feeds,
-            'stats': stats
+        if any('APT' in t for t in tags):
+            return 'APT'
+        elif any('PHISH' in t for t in tags):
+            return 'Phishing'
+        elif any('MALWARE' in t for t in tags):
+            return 'Malware'
+        elif any('BOTNET' in t for t in tags):
+            return 'Botnet'
+        return 'Unknown'
+
+    def _calculate_severity(self, pulse):
+        """Calculate severity based on pulse data"""
+        # Check for critical keywords in tags
+        critical_keywords = ['critical', 'high-risk', 'apt', 'zero-day', 'ransomware']
+        tags = [tag.lower() for tag in pulse.get('tags', [])]
+        
+        if any(keyword in tags for keyword in critical_keywords):
+            return 'Critical'
+            
+        # Check number of indicators
+        indicator_count = len(pulse.get('indicators', []))
+        if indicator_count > 20:
+            return 'High'
+        elif indicator_count > 10:
+            return 'Medium'
+            
+        return 'Low'
+
+    def _calculate_severity_from_confidence(self, confidence):
+        """Calculate severity based on confidence level"""
+        if confidence >= 80:
+            return 'Critical'
+        elif confidence >= 60:
+            return 'High'
+        elif confidence >= 40:
+            return 'Medium'
+        return 'Low'
+
+    def _map_pulsedive_type(self, ptype):
+        """Map Pulsedive threat types to our categories"""
+        type_mapping = {
+            'malware': 'Malware',
+            'phishing': 'Phishing',
+            'apt': 'APT',
+            'exploit': 'Malware',
+            'botnet': 'Malware',
+            'ransomware': 'Malware'
         }
+        return type_mapping.get(str(ptype).lower(), 'Malware')
+
+    def _map_pulsedive_risk(self, risk):
+        """Map Pulsedive risk levels to our severity levels"""
+        risk_mapping = {
+            'critical': 'Critical',
+            'high': 'High',
+            'medium': 'Medium',
+            'low': 'Low',
+            'none': 'Low'
+        }
+        return risk_mapping.get(str(risk).lower(), 'Medium')

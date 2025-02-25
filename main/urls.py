@@ -130,10 +130,11 @@ urlpatterns = [
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
     path('threat/email-investigation/analyze/', views.analyze_email, name='analyze_email'),
-    path('api/threat-feeds/refresh/', views.refresh_threat_feeds, name='refresh_threat_feeds'),  # Added this line
+    
     # Header Menu URLs
     path('hunting/', views.hunting, name='hunting'),
     path('threat-feed/', views.threat_feed, name='threat_feed'),
+    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),
     path('sandbox/', views.sandbox, name='sandbox'),
     path('mitre-attack/', views.mitre, name='mitre'),
 
@@ -176,4 +177,5 @@ urlpatterns = [
     
     # Domain Reputation URLs
     path('services/domain-scan/', include('main.services.domain_scan.urls')),
+    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),
 ]
