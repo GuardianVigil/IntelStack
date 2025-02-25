@@ -29,3 +29,4 @@ whitenoise
 ratelimit
 
 OTXv2
+bs4
