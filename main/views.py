@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -23,7 +23,8 @@ from .services.hash_scan.hash_analysis import HashAnalysisService
 from .services.url_scan.platforms.domain_info import get_domain_info
 from .services.url_scan.urlscan import URLScanner
 from .services.email_scan.email_analyzer import EmailAnalyzer
-from datetime import datetime
+from .services.threat_feed.threat_feed import ThreatFeedService
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -1012,6 +1013,85 @@ async def analyze_hash(request):
             status=500
         )
 
+
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
+@require_http_methods(["POST"])
+def refresh_threat_feeds(request):
+    """Endpoint to refresh threat feeds"""
+    try:
+        logger.info("Refreshing threat feeds")
+        service = ThreatFeedService()
+        result = service.refresh_feeds()  # Use refresh_feeds which handles cache clearing
+        
+        if result is None:
+            logger.error("ThreatFeedService.refresh_feeds returned None")
+            return JsonResponse({
+                'error': 'Failed to fetch threat feeds',
+                'threats': [],
+                'stats': {
+                    'total': 0,
+                    'today': 0,
+                    'trend': 0,
+                    'critical': 0,
+                    'high': 0,
+                    'malware': 0,
+                    'sources': {'otx': False, 'threatfox': False, 'pulsedive': False}
+                },
+                'message': 'An error occurred while fetching threat feeds.'
+            }, status=500)
+        
+        # Log the result structure for debugging
+        logger.debug(f"Refresh threat feeds result keys: {result.keys()}")
+        
+        # Add a message if no API keys are configured
+        if not result.get('threats') and not result.get('active_platforms'):
+            result['message'] = 'No API keys configured. Please configure API keys in settings.'
+            logger.warning("No API keys configured for threat feeds")
+        else:
+            logger.info(f"Successfully refreshed {len(result.get('threats', []))} threats from {len(result.get('active_platforms', []))} platforms")
+            
+        return JsonResponse(result)
+    except KeyError as e:
+        logger.error(f"KeyError in refresh_threat_feeds view: {str(e)}", exc_info=True)
+        # Log the actual data structure that caused the KeyError
+        if 'result' in locals():
+            logger.error(f"Result structure that caused KeyError: {result.keys() if isinstance(result, dict) else type(result)}")
+        
+        return JsonResponse({
+            'error': f"Data structure error: {str(e)}",
+            'threats': [],
+            'stats': {
+                'total': 0,
+                'today': 0,
+                'trend': 0,
+                'critical': 0,
+                'high': 0,
+                'malware': 0,
+                'sources': {'otx': False, 'threatfox': False, 'pulsedive': False}
+            },
+            'message': 'An error occurred while processing threat feed data. Please check API configurations.'
+        }, status=500)
+    except Exception as e:
+        logger.error(f"Error in refresh_threat_feeds view: {str(e)}", exc_info=True)
+        return JsonResponse({
+            'error': str(e),
+            'threats': [],
+            'stats': {
+                'total': 0,
+                'today': 0,
+                'trend': 0,
+                'critical': 0,
+                'high': 0,
+                'malware': 0,
+                'sources': {'otx': False, 'threatfox': False, 'pulsedive': False}
+            },
+            'message': 'An error occurred while fetching threat feeds. Please try again.'
+        }, status=500)
+
+
+
 # Threat Feed Views
 @login_required
 def virustotal(request):
@@ -1120,41 +1200,3 @@ async def analyze_url(request):
     except Exception as e:
         logger.error(f"Unexpected error in URL scan: {str(e)}")
         return JsonResponse({'error': 'Internal server error'}, status=500)
-
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
-import logging
-from .services.threat_feed.threat_feed import ThreatFeedService
-
-logger = logging.getLogger(__name__)
-
-@login_required
-@csrf_exempt
-@require_http_methods(["POST"])
-def refresh_threat_feeds(request):
-    """Refresh all threat feeds and return the processed data"""
-    try:
-        service = ThreatFeedService()
-        feeds = service.get_all_feeds()
-        threats = service.process_feeds(feeds)
-        
-        # Calculate stats
-        stats = {
-            'total': len(threats),
-            'malware': sum(1 for t in threats if t.get('type') == 'Malware'),
-            'phishing': sum(1 for t in threats if t.get('type') == 'Phishing'),
-            'apt': sum(1 for t in threats if t.get('type') == 'APT'),
-            'botnet': sum(1 for t in threats if t.get('type') == 'Botnet'),
-            'critical': sum(1 for t in threats if t.get('severity') == 'Critical')
-        }
-        
-        return JsonResponse({
-            'threats': threats,
-            'stats': stats
-        })
-    except Exception as e:
-        logger.error(f"Error refreshing threat feeds: {str(e)}", exc_info=True)
-        return JsonResponse({'error': str(e)}, status=500)

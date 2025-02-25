@@ -134,7 +134,7 @@ urlpatterns = [
     # Header Menu URLs
     path('hunting/', views.hunting, name='hunting'),
     path('threat-feed/', views.threat_feed, name='threat_feed'),
-    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),
+    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),  # Single entry for refresh endpoint
     path('sandbox/', views.sandbox, name='sandbox'),
     path('mitre-attack/', views.mitre, name='mitre'),
 
@@ -163,7 +163,7 @@ urlpatterns = [
     path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),
     path('feeds/alienvault-otx/', views.alienvault_otx, name='alienvault_otx'),
     path('feeds/ibm-xforce/', views.ibm_xforce, name='ibm_xforce'),
-    path('api/threat-feeds/refresh', views.refresh_threat_feeds, name='refresh_threat_feeds'),
+    # Removing duplicate refresh-threat-feeds endpoint
     
     # Report URLs
     path('reports/investigation-history/', views.investigation_history, name='investigation_history'),
@@ -177,5 +177,4 @@ urlpatterns = [
     
     # Domain Reputation URLs
     path('services/domain-scan/', include('main.services.domain_scan.urls')),
-    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),
 ]
