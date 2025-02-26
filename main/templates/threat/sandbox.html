@@ -2,235 +2,197 @@
 {% load static %}
 
 {% block content %}
-<div class="pt-5">
-    <div class="mb-6 flex items-center justify-between">
-        <h5 class="text-lg font-semibold dark:text-white-light">Malware Sandbox Analysis</h5>
-        <div class="flex gap-2">
-            <button class="btn btn-primary" onclick="showUploadModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                Submit Sample
+<div class="animate__animated p-6" :class="[$store.app.animation]">
+    <!-- Header Section -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Sandbox Analysis</h2>
+        <div class="flex items-center gap-3">
+            <button id="historyBtn" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 20v-6m0 0V8m0 6h6m-6 0H6"></path></svg>
+                Analysis History
             </button>
         </div>
     </div>
 
-    <!-- Analysis Options -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    <!-- File Upload Section -->
+    <div class="panel mb-5">
+        <div class="flex items-center justify-between mb-5">
+            <h5 class="font-semibold text-lg dark:text-white-light">Submit Sample for Analysis</h5>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="upload-container border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center cursor-pointer hover:border-primary transition-all" id="dropZone">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p class="text-gray-600 dark:text-gray-400 mb-2">Drag and drop files here or click to upload</p>
+                <p class="text-xs text-gray-500 dark:text-gray-500">Maximum file size: 100MB</p>
+                <input type="file" id="fileInput" class="hidden">
+            </div>
+            <div class="flex flex-col justify-between">
+                <div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Analysis Type</label>
+                        <select id="analysisType" class="form-select">
+                            <option value="auto">Auto-detect Environment</option>
+                            <option value="windows">Windows Sandbox</option>
+                            <option value="linux">Linux Sandbox</option>
+                            <option value="macos">macOS Sandbox</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Analysis Duration (minutes)</label>
+                        <input type="number" id="duration" class="form-input" value="5" min="1" max="60">
+                    </div>
+                </div>
+                <button id="submitAnalysis" class="btn btn-primary w-full">
+                    Start Analysis
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Results Section -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+        <!-- Quick Stats -->
         <div class="panel">
-            <div class="flex flex-col p-5">
-                <h6 class="text-lg font-semibold mb-5">File Analysis</h6>
-                <div class="flex flex-col gap-4">
-                    <button class="btn btn-outline-primary" onclick="showUploadModal('file')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                            <polyline points="13 2 13 9 20 9"></polyline>
-                        </svg>
-                        Analyze File
-                    </button>
-                    <p class="text-xs text-gray-500">Upload suspicious files for analysis</p>
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
+                <span id="threatScore" class="badge bg-danger rounded-full">85</span>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center">
+                    <div class="w-1/2">File Type</div>
+                    <div class="w-1/2 text-right" id="fileType">PE32 Executable</div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-1/2">File Size</div>
+                    <div class="w-1/2 text-right" id="fileSize">2.4 MB</div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-1/2">SHA256</div>
+                    <div class="w-1/2 text-right font-mono text-xs" id="sha256">d4c8...3f1e</div>
                 </div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <h6 class="text-lg font-semibold mb-5">URL Analysis</h6>
-                <div class="flex flex-col gap-4">
-                    <button class="btn btn-outline-primary" onclick="showUploadModal('url')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                        </svg>
-                        Analyze URL
-                    </button>
-                    <p class="text-xs text-gray-500">Analyze suspicious URLs and websites</p>
-                </div>
+        <!-- Behavioral Analysis -->
+        <div class="panel xl:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Behavioral Analysis</h5>
             </div>
-        </div>
-
-        <div class="panel">
-            <div class="flex flex-col p-5">
-                <h6 class="text-lg font-semibold mb-5">Network Analysis</h6>
-                <div class="flex flex-col gap-4">
-                    <button class="btn btn-outline-primary" onclick="showUploadModal('pcap')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 ltr:mr-2 rtl:ml-2">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                        Analyze PCAP
-                    </button>
-                    <p class="text-xs text-gray-500">Analyze network traffic captures</p>
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="panel bg-primary/10 border-0">
+                        <div class="text-primary text-xl font-semibold" id="processCount">12</div>
+                        <div class="text-sm">Processes</div>
+                    </div>
+                    <div class="panel bg-warning/10 border-0">
+                        <div class="text-warning text-xl font-semibold" id="networkCount">8</div>
+                        <div class="text-sm">Network Connections</div>
+                    </div>
+                    <div class="panel bg-success/10 border-0">
+                        <div class="text-success text-xl font-semibold" id="fileCount">23</div>
+                        <div class="text-sm">File Operations</div>
+                    </div>
+                    <div class="panel bg-danger/10 border-0">
+                        <div class="text-danger text-xl font-semibold" id="registryCount">15</div>
+                        <div class="text-sm">Registry Changes</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Recent Analysis -->
+    <!-- Detailed Analysis Tabs -->
     <div class="panel">
         <div class="mb-5">
-            <div class="flex items-center justify-between mb-5">
-                <h6 class="text-lg font-semibold">Recent Analysis</h6>
-                <div class="flex items-center gap-2">
-                    <select class="form-select w-auto">
-                        <option value="all">All Types</option>
-                        <option value="file">Files</option>
-                        <option value="url">URLs</option>
-                        <option value="pcap">PCAPs</option>
-                    </select>
-                    <input type="text" class="form-input w-auto" placeholder="Search analysis...">
-                </div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table-striped">
-                    <thead>
-                        <tr>
-                            <th>Submission Time</th>
-                            <th>Type</th>
-                            <th>Sample</th>
-                            <th>Risk Score</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for analysis in analyses %}
-                        <tr>
-                            <td>{{ analysis.submission_time }}</td>
-                            <td>
-                                <span class="badge {% if analysis.type == 'file' %}bg-info{% elif analysis.type == 'url' %}bg-warning{% else %}bg-success{% endif %}">
-                                    {{ analysis.type }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="flex items-center">
-                                    <span class="font-semibold">{{ analysis.name }}</span>
-                                    {% if analysis.md5 %}
-                                    <span class="text-xs text-gray-500 ml-2">{{ analysis.md5 }}</span>
-                                    {% endif %}
-                                </div>
-                            </td>
-                            <td>
-                                <div class="flex items-center">
-                                    <div class="w-20 bg-gray-200 rounded-full h-2.5 mr-2">
-                                        <div class="h-2.5 rounded-full {% if analysis.risk_score >= 80 %}bg-danger{% elif analysis.risk_score >= 60 %}bg-warning{% else %}bg-success{% endif %}"
-                                             style="width: {{ analysis.risk_score }}%"></div>
-                                    </div>
-                                    <span>{{ analysis.risk_score }}</span>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge {% if analysis.status == 'completed' %}bg-success{% elif analysis.status == 'failed' %}bg-danger{% else %}bg-warning{% endif %}">
-                                    {{ analysis.status }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="flex gap-2">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="viewReport('{{ analysis.id }}')">View Report</button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteAnalysis('{{ analysis.id }}')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]">
+                <li class="tab-item active">
+                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        Process Tree
+                    </button>
+                </li>
+                <li class="tab-item">
+                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        Network Activity
+                    </button>
+                </li>
+                <li class="tab-item">
+                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        File System
+                    </button>
+                </li>
+                <li class="tab-item">
+                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        Registry
+                    </button>
+                </li>
+                <li class="tab-item">
+                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        MITRE ATT&CK
+                    </button>
+                </li>
+            </ul>
         </div>
-    </div>
-
-    <!-- Upload Modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Submit Sample for Analysis</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="uploadForm" class="space-y-5">
-                        <div class="flex flex-col">
-                            <label for="analysisType">Analysis Type</label>
-                            <select id="analysisType" class="form-select" onchange="updateUploadForm()">
-                                <option value="file">File Analysis</option>
-                                <option value="url">URL Analysis</option>
-                                <option value="pcap">PCAP Analysis</option>
-                            </select>
-                        </div>
-
-                        <div id="fileUpload" class="flex flex-col">
-                            <label for="sampleFile">Sample File</label>
-                            <input type="file" id="sampleFile" class="form-input" accept="*/*">
-                        </div>
-
-                        <div id="urlInput" class="flex flex-col hidden">
-                            <label for="urlToAnalyze">URL to Analyze</label>
-                            <input type="url" id="urlToAnalyze" class="form-input" placeholder="https://example.com">
-                        </div>
-
-                        <div class="flex flex-col">
-                            <label for="analysisOptions">Analysis Options</label>
-                            <div class="space-y-2">
-                                <label class="inline-flex">
-                                    <input type="checkbox" class="form-checkbox" checked>
-                                    <span class="text-sm">Static Analysis</span>
-                                </label>
-                                <label class="inline-flex">
-                                    <input type="checkbox" class="form-checkbox" checked>
-                                    <span class="text-sm">Dynamic Analysis</span>
-                                </label>
-                                <label class="inline-flex">
-                                    <input type="checkbox" class="form-checkbox">
-                                    <span class="text-sm">Network Analysis</span>
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitAnalysis()">Submit</button>
-                </div>
-            </div>
+        <div class="tab-content min-h-[300px]">
+            <!-- Content will be dynamically loaded -->
         </div>
     </div>
 </div>
+
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-    function showUploadModal(type = 'file') {
-        const modal = new bootstrap.Modal(document.getElementById('uploadModal'));
-        document.getElementById('analysisType').value = type;
-        updateUploadForm();
-        modal.show();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dropzone
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
 
-    function updateUploadForm() {
-        const type = document.getElementById('analysisType').value;
-        const fileUpload = document.getElementById('fileUpload');
-        const urlInput = document.getElementById('urlInput');
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-primary');
+    });
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-primary');
+    });
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-primary');
+        const files = e.dataTransfer.files;
+        handleFiles(files);
+    });
 
-        if (type === 'url') {
-            fileUpload.classList.add('hidden');
-            urlInput.classList.remove('hidden');
-        } else {
-            fileUpload.classList.remove('hidden');
-            urlInput.classList.add('hidden');
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+        if (files.length > 0) {
+            // Handle file upload logic
+            const file = files[0];
+            // Add your file validation and upload logic here
         }
     }
 
-    function submitAnalysis() {
-        // Implementation for submitting analysis
-    }
+    // Tab switching logic
+    const tabItems = document.querySelectorAll('.tab-item');
+    tabItems.forEach(item => {
+        item.addEventListener('click', () => {
+            tabItems.forEach(tab => tab.classList.remove('active'));
+            item.classList.add('active');
+            // Add your tab content switching logic here
+        });
+    });
 
-    function viewReport(analysisId) {
-        // Implementation for viewing analysis report
-    }
+    // Initialize other event listeners
+    document.getElementById('historyBtn').addEventListener('click', () => {
+        // Show history modal logic
+    });
 
-    function deleteAnalysis(analysisId) {
-        // Implementation for deleting analysis
-    }
+    document.getElementById('submitAnalysis').addEventListener('click', () => {
+        // Submit analysis logic
+    });
+});
 </script>
 {% endblock %}
