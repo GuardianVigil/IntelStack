@@ -2,29 +2,29 @@
 {% load static %}
 
 {% block content %}
+<!-- Add CSS -->
+<link rel="stylesheet" href="{% static 'assets/css/highlight.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/file-upload-with-preview.min.css' %}">
+<script src="{% static 'assets/js/file-upload-with-preview.iife.js' %}"></script>
+
 <div class="animate__animated p-6" :class="[$store.app.animation]">
     <!-- Header Section -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Sandbox Analysis</h2>
-        <div class="flex items-center gap-3">
-            <button id="historyBtn" class="btn btn-outline-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 20v-6m0 0V8m0 6h6m-6 0H6"></path></svg>
-                Analysis History
-            </button>
-        </div>
+        <h2 class="text-2xl font-bold">Sandbox Analysis</h2>
     </div>
 
-    <!-- File Upload Section -->
-    <div class="panel mb-5">
+    <!-- Simple File Upload Section -->
+    <div class="panel p-4 mb-5">
         <div class="flex items-center justify-between mb-5">
             <h5 class="font-semibold text-lg dark:text-white-light">Submit Sample for Analysis</h5>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="upload-container border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center cursor-pointer hover:border-primary transition-all" id="dropZone">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                <p class="text-gray-600 dark:text-gray-400 mb-2">Drag and drop files here or click to upload</p>
-                <p class="text-xs text-gray-500 dark:text-gray-500">Maximum file size: 100MB</p>
-                <input type="file" id="fileInput" class="hidden">
+            <!-- Simple file input -->
+            <div class="border-2 border-dashed border-gray-300 p-4 text-center">
+                <p class="text-sm text-gray-500 mb-3">Accepted files: .exe, .dll, .pdf, .doc, .docx, .xls, .xlsx</p>
+                <p class="text-sm text-gray-500 mb-3">Maximum file size: 32MB</p>
+                <input type="file" id="fileInput" class="mb-2" accept=".exe,.dll,.pdf,.doc,.docx,.xls,.xlsx">
+                <div id="fileInfo" class="text-sm text-gray-500 mt-2"></div>
             </div>
             <div class="flex flex-col justify-between">
                 <div>
@@ -37,14 +37,8 @@
                             <option value="macos">macOS Sandbox</option>
                         </select>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Analysis Duration (minutes)</label>
-                        <input type="number" id="duration" class="form-input" value="5" min="1" max="60">
-                    </div>
                 </div>
-                <button id="submitAnalysis" class="btn btn-primary w-full">
-                    Start Analysis
-                </button>
+                <button id="submitBtn" class="btn btn-primary w-full">Start Analysis</button>
             </div>
         </div>
     </div>
@@ -60,15 +54,15 @@
             <div class="space-y-4">
                 <div class="flex items-center">
                     <div class="w-1/2">File Type</div>
-                    <div class="w-1/2 text-right" id="fileType">PE32 Executable</div>
+                    <div class="w-1/2 text-right" id="fileType">No file selected</div>
                 </div>
                 <div class="flex items-center">
                     <div class="w-1/2">File Size</div>
-                    <div class="w-1/2 text-right" id="fileSize">2.4 MB</div>
+                    <div class="w-1/2 text-right" id="fileSize">-</div>
                 </div>
                 <div class="flex items-center">
                     <div class="w-1/2">SHA256</div>
-                    <div class="w-1/2 text-right font-mono text-xs" id="sha256">d4c8...3f1e</div>
+                    <div class="w-1/2 text-right font-mono text-xs" id="sha256">-</div>
                 </div>
             </div>
         </div>
@@ -81,19 +75,19 @@
             <div class="space-y-4">
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div class="panel bg-primary/10 border-0">
-                        <div class="text-primary text-xl font-semibold" id="processCount">12</div>
+                        <div class="text-primary text-xl font-semibold" id="processCount">0</div>
                         <div class="text-sm">Processes</div>
                     </div>
                     <div class="panel bg-warning/10 border-0">
-                        <div class="text-warning text-xl font-semibold" id="networkCount">8</div>
+                        <div class="text-warning text-xl font-semibold" id="networkCount">0</div>
                         <div class="text-sm">Network Connections</div>
                     </div>
                     <div class="panel bg-success/10 border-0">
-                        <div class="text-success text-xl font-semibold" id="fileCount">23</div>
+                        <div class="text-success text-xl font-semibold" id="fileCount">0</div>
                         <div class="text-sm">File Operations</div>
                     </div>
                     <div class="panel bg-danger/10 border-0">
-                        <div class="text-danger text-xl font-semibold" id="registryCount">15</div>
+                        <div class="text-danger text-xl font-semibold" id="registryCount">0</div>
                         <div class="text-sm">Registry Changes</div>
                     </div>
                 </div>
@@ -137,62 +131,68 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize dropzone
-    const dropZone = document.getElementById('dropZone');
+document.addEventListener("DOMContentLoaded", () => {
+    const MAX_FILE_SIZE = 32 * 1024 * 1024; // 32MB in bytes
     const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
 
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('border-primary');
-    });
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('border-primary');
-    });
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('border-primary');
-        const files = e.dataTransfer.files;
-        handleFiles(files);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-        handleFiles(e.target.files);
-    });
-
-    function handleFiles(files) {
-        if (files.length > 0) {
-            // Handle file upload logic
-            const file = files[0];
-            // Add your file validation and upload logic here
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            if (file.size > MAX_FILE_SIZE) {
+                alert('File size exceeds 32MB limit');
+                this.value = '';
+                fileInfo.textContent = '';
+                return;
+            }
+            fileInfo.textContent = `Selected: ${file.name} (${formatFileSize(file.size)})`;
+        } else {
+            fileInfo.textContent = '';
         }
-    }
+    });
 
-    // Tab switching logic
-    const tabItems = document.querySelectorAll('.tab-item');
-    tabItems.forEach(item => {
-        item.addEventListener('click', () => {
-            tabItems.forEach(tab => tab.classList.remove('active'));
-            item.classList.add('active');
-            // Add your tab content switching logic here
+    // Handle form submission
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files.length) {
+            alert('Please select a file first');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('analysisType', document.getElementById('analysisType').value);
+
+        // Update UI
+        document.getElementById('fileType').textContent = fileInput.files[0].type || 'Unknown';
+        document.getElementById('fileSize').textContent = formatFileSize(fileInput.files[0].size);
+        
+        // Add API call
+        fetch('/api/sandbox/analyze', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Analysis started:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to start analysis');
         });
     });
-
-    // Initialize other event listeners
-    document.getElementById('historyBtn').addEventListener('click', () => {
-        // Show history modal logic
-    });
-
-    document.getElementById('submitAnalysis').addEventListener('click', () => {
-        // Submit analysis logic
-    });
 });
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
 </script>
 {% endblock %}
