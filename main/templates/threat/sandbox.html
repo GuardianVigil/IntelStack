@@ -123,6 +123,7 @@
             <!-- Content will be dynamically loaded -->
         </div>
     </div>
+    <div id="resultsSection" class="hidden"></div>
 </div>
 {% endblock %}
 
@@ -168,6 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Create FormData from the form
         const formData = new FormData(this);
+        // Add a flag to indicate this is an AJAX request
+        formData.append('ajax', '1');
         
         console.log("Submitting form via AJAX to:", this.action);
         
@@ -177,7 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
-            }
+            },
+            // Prevent redirect
+            redirect: 'error'
         })
         .then(response => {
             console.log("Response received:", response.status);
@@ -188,50 +193,185 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             console.log('Analysis results:', data);
+            console.log('Results structure:', JSON.stringify(data));
             
-            // Reset button state
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Start Analysis';
-            
-            // Update UI with results
-            if (data.status === 'completed') {
-                const results = data.results;
-                
-                // Update threat score
-                const threatScore = document.getElementById('threatScore');
-                threatScore.textContent = results.quick_analysis.threat_score;
-                
-                // Update file info
-                document.getElementById('fileType').textContent = results.quick_analysis.file_type || 'Unknown';
-                document.getElementById('fileSize').textContent = formatFileSize(results.quick_analysis.file_size || 0);
-                document.getElementById('sha256').textContent = results.quick_analysis.sha256;
-                
-                // Update behavior counts
-                document.getElementById('processCount').textContent = results.behavior_summary.process_count || 0;
-                document.getElementById('networkCount').textContent = results.behavior_summary.network_count || 0;
-                document.getElementById('fileCount').textContent = results.behavior_summary.file_count || 0;
-                document.getElementById('registryCount').textContent = results.behavior_summary.registry_count || 0;
-            } else if (data.error) {
-                alert('Analysis error: ' + data.error);
+            // Check if there's an error
+            if (data.error) {
+                console.error('Error from server:', data.error);
+                displayError(data.error);
+                return;
             }
+            
+            // Check if results exist
+            if (!data.results) {
+                console.error('No results property in response:', data);
+                displayError('Invalid response format from server');
+                return;
+            }
+            
+            console.log('About to display results:', data.results);
+            // Display results
+            displayResults(data.results);
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to start analysis: ' + error.message);
-            
-            // Reset button state
+            displayError(error.message);
+        })
+        .finally(() => {
+            // Re-enable submit button
             submitBtn.disabled = false;
             submitBtn.textContent = 'Start Analysis';
         });
     });
-});
 
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
+    // Function to display error message
+    function displayError(message) {
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.innerHTML = `
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Analysis Error</h5>
+                </div>
+                <div class="mb-5">
+                    <div class="alert alert-danger">${message}</div>
+                </div>
+            </div>
+        `;
+        resultsSection.classList.remove('hidden');
+    }
+
+    // Function to display loading message
+    function displayLoading() {
+        const resultsSection = document.getElementById('resultsSection');
+        resultsSection.innerHTML = `
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Analyzing File</h5>
+                </div>
+                <div class="mb-5">
+                    <div class="alert alert-info">
+                        <p>Your file is being analyzed by VirusTotal. This process may take up to 10 minutes for larger files.</p>
+                        <p class="mt-2">The system will check for results every 30 seconds, up to a maximum of 20 attempts.</p>
+                        <div class="flex justify-center mt-4">
+                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        resultsSection.classList.remove('hidden');
+    }
+
+    // Update the submit button click handler to show loading message
+    submitBtn.addEventListener('click', function() {
+        if (document.getElementById('fileInput').files.length) {
+            displayLoading();
+        }
+    });
+
+    // Function to display analysis results
+    function displayResults(results) {
+        console.log("Displaying results:", results);
+        const resultsSection = document.getElementById('resultsSection');
+        
+        // Create HTML for the results
+        let html = `
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+            <!-- Quick Stats -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
+                </div>
+                <div class="mb-5">
+                    <div class="flex items-center justify-center">
+                        <div class="radial-progress text-primary" style="--value:${results.quick_analysis.threat_score}; --size:10rem;">
+                            <span class="text-2xl font-bold">${results.quick_analysis.threat_score}%</span>
+                        </div>
+                    </div>
+                    <div class="mt-5">
+                        <div class="flex justify-between mb-1">
+                            <p class="text-white-dark">File Type</p>
+                            <p class="font-semibold">${results.quick_analysis.file_type || 'Unknown'}</p>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <p class="text-white-dark">File Size</p>
+                            <p class="font-semibold">${formatFileSize(results.quick_analysis.file_size || 0)}</p>
+                        </div>
+                        <div class="flex justify-between">
+                            <p class="text-white-dark">SHA256</p>
+                            <p class="font-semibold text-xs break-all">${results.quick_analysis.sha256}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavior Summary -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Behavior Summary</h5>
+                </div>
+                <div class="mb-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="panel bg-primary/10 p-4 rounded-md">
+                            <h6 class="text-center font-semibold">Processes</h6>
+                            <p class="text-center text-3xl mt-2">${results.behavior_summary.process_count || 0}</p>
+                        </div>
+                        <div class="panel bg-info/10 p-4 rounded-md">
+                            <h6 class="text-center font-semibold">Network</h6>
+                            <p class="text-center text-3xl mt-2">${results.behavior_summary.network_count || 0}</p>
+                        </div>
+                        <div class="panel bg-success/10 p-4 rounded-md">
+                            <h6 class="text-center font-semibold">Files</h6>
+                            <p class="text-center text-3xl mt-2">${results.behavior_summary.file_count || 0}</p>
+                        </div>
+                        <div class="panel bg-warning/10 p-4 rounded-md">
+                            <h6 class="text-center font-semibold">Registry</h6>
+                            <p class="text-center text-3xl mt-2">${results.behavior_summary.registry_count || 0}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detection Stats -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Detection Stats</h5>
+                </div>
+                <div class="mb-5">
+                    <div class="flex flex-col">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-white-dark">Malicious</span>
+                            <span class="font-semibold text-danger">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.malicious : 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-white-dark">Suspicious</span>
+                            <span class="font-semibold text-warning">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.suspicious : 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-white-dark">Undetected</span>
+                            <span class="font-semibold text-success">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.undetected : 'N/A'}</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white-dark">Total Scans</span>
+                            <span class="font-semibold">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.total_scans : 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        resultsSection.innerHTML = html;
+        resultsSection.classList.remove('hidden');
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+});
 </script>
 {% endblock %}

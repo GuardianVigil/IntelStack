@@ -130,12 +130,12 @@ urlpatterns = [
     path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
     path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
     path('threat/email-investigation/analyze/', views.analyze_email, name='analyze_email'),
-    
+    path('sandbox/', views.sandbox, name='sandbox'),
+    path('api/sandbox/analyze/', views.handle_sandbox_analysis, name='sandbox_analyze'),  # Add trailing slash
     # Header Menu URLs
     path('hunting/', views.hunting, name='hunting'),
     path('threat-feed/', views.threat_feed, name='threat_feed'),
     path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),  # Single entry for refresh endpoint
-    path('sandbox/', views.sandbox, name='sandbox'),
     path('mitre-attack/', views.mitre, name='mitre'),
 
     # Reports URLs
@@ -157,7 +157,7 @@ urlpatterns = [
     # API Endpoints
     path('api/analyze-ip/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
     path('api/analyze-hash/', views.analyze_hash, name='analyze_hash'),
-
+    
     # Threat Feed URLs
     path('feeds/virustotal/', views.virustotal, name='virustotal'),
     path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),

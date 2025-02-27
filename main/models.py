@@ -86,6 +86,36 @@ class APIKey(models.Model):
             self.key = None
         super().save(*args, **kwargs)
 
+class SandboxAnalysis(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('analyzing', 'Analyzing'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('timeout', 'Timeout')
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file_name = models.CharField(max_length=255)
+    file_size = models.IntegerField()
+    file_type = models.CharField(max_length=50)
+    sha256_hash = models.CharField(max_length=64, null=True, blank=True)
+    analysis_id = models.CharField(max_length=255, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    result = models.JSONField(null=True, blank=True)
+    error_message = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Sandbox Analysis'
+        verbose_name_plural = 'Sandbox Analyses'
+
+    def __str__(self):
+        return f"Analysis {self.analysis_id} - {self.file_name} ({self.status})"
+
 class ProviderSettings(models.Model):
     """Model to store provider API keys and settings."""
     

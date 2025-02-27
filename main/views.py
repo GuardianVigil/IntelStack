@@ -723,22 +723,15 @@ def threat_feed(request):
     return render(request, 'threat/feed.html', context)
 
 @login_required
+@ensure_csrf_cookie
 def sandbox(request):
-    context = {
-        'analyses': [
-            {
-                'id': '1',
-                'submission_time': '2025-02-02 10:00:00',
-                'type': 'file',
-                'name': 'suspicious.exe',
-                'md5': 'd41d8cd98f00b204e9800998ecf8427e',
-                'risk_score': 85,
-                'status': 'completed'
-            },
-            # Add more sample analyses
-        ]
-    }
-    return render(request, 'threat/sandbox.html', context)
+    if request.method == 'POST':
+        # Handle file upload and analysis
+        from .services.sandbox.sandbox import handle_sandbox_analysis
+        return handle_sandbox_analysis(request)
+    
+    # GET request - render the sandbox page
+    return render(request, 'threat/sandbox.html')
 
 @login_required
 def mitre(request):
@@ -1200,3 +1193,112 @@ async def analyze_url(request):
     except Exception as e:
         logger.error(f"Unexpected error in URL scan: {str(e)}")
         return JsonResponse({'error': 'Internal server error'}, status=500)
+
+@login_required
+@require_http_methods(["POST"])
+@csrf_exempt
+def handle_sandbox_analysis(request):
+    """
+    Handle file upload for sandbox analysis
+    """
+    try:
+        # Check if this is an AJAX request - check multiple headers
+        is_ajax = (
+            request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+            request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' or
+            request.GET.get('ajax') == '1' or
+            request.POST.get('ajax') == '1'
+        )
+        
+        print(f"Is AJAX request: {is_ajax}")
+        print(f"Request headers: {dict(request.headers)}")
+        
+        if 'file' not in request.FILES:
+            if is_ajax:
+                return JsonResponse({'error': 'No file provided'}, status=400)
+            else:
+                from django.contrib import messages
+                messages.error(request, 'No file provided')
+                return redirect('sandbox')
+        
+        file = request.FILES['file']
+        
+        # Check file size (32MB limit)
+        if file.size > 32 * 1024 * 1024:
+            if is_ajax:
+                return JsonResponse({'error': 'File size exceeds 32MB limit'}, status=400)
+            else:
+                from django.contrib import messages
+                messages.error(request, 'File size exceeds 32MB limit')
+                return redirect('sandbox')
+            
+        from .services.sandbox.sandbox import analyze_file
+        
+        # Get analysis results
+        analysis_results = analyze_file(file)
+        
+        # Check for errors in the analysis results
+        if isinstance(analysis_results, dict) and 'error' in analysis_results:
+            if is_ajax:
+                return JsonResponse({
+                    'error': analysis_results['error']
+                }, status=500)
+            else:
+                from django.contrib import messages
+                messages.error(request, analysis_results['error'])
+                return redirect('sandbox')
+        
+        # Ensure the response has the expected structure for the frontend
+        formatted_results = {
+            'status': 'completed',
+            'results': {
+                'quick_analysis': {
+                    'threat_score': analysis_results.get('quick_analysis', {}).get('threat_score', 0),
+                    'file_type': analysis_results.get('quick_analysis', {}).get('file_type', 'Unknown'),
+                    'file_size': analysis_results.get('quick_analysis', {}).get('file_size', 0),
+                    'sha256': analysis_results.get('quick_analysis', {}).get('sha256', 'N/A'),
+                    'detection_stats': analysis_results.get('quick_analysis', {}).get('detection_stats', {
+                        'malicious': 0,
+                        'suspicious': 0,
+                        'undetected': 0,
+                        'total_scans': 0
+                    })
+                },
+                'behavior_summary': {
+                    'process_count': analysis_results.get('behavior_summary', {}).get('process_count', 0),
+                    'network_count': analysis_results.get('behavior_summary', {}).get('network_count', 0),
+                    'file_count': analysis_results.get('behavior_summary', {}).get('file_count', 0),
+                    'registry_count': analysis_results.get('behavior_summary', {}).get('registry_count', 0)
+                },
+                'detailed_analysis': analysis_results.get('detailed_analysis', {})
+            }
+        }
+        
+        # Log the formatted results for debugging
+        print("Final response to be sent to frontend:")
+        import json
+        print(json.dumps(formatted_results, indent=2))
+        logger.debug(f"Formatted sandbox results: {formatted_results}")
+        
+        # For AJAX requests, return JSON response
+        if is_ajax:
+            return JsonResponse(formatted_results)
+        else:
+            # For regular form submissions, redirect back to the sandbox page
+            from django.contrib import messages
+            messages.success(request, 'File analysis completed successfully')
+            from django.shortcuts import redirect
+            return redirect('sandbox')
+        
+    except Exception as e:
+        logger.error(f"Error in sandbox analysis: {str(e)}")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'error': 'An error occurred during analysis',
+                'details': str(e)
+            }, status=500)
+        else:
+            from django.contrib import messages
+            messages.error(request, f'An error occurred during analysis: {str(e)}')
+            from django.shortcuts import redirect
+            return redirect('sandbox')
