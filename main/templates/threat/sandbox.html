@@ -18,28 +18,21 @@
         <div class="flex items-center justify-between mb-5">
             <h5 class="font-semibold text-lg dark:text-white-light">Submit Sample for Analysis</h5>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Simple file input -->
-            <div class="border-2 border-dashed border-gray-300 p-4 text-center">
-                <p class="text-sm text-gray-500 mb-3">Accepted files: .exe, .dll, .pdf, .doc, .docx, .xls, .xlsx</p>
-                <p class="text-sm text-gray-500 mb-3">Maximum file size: 32MB</p>
-                <input type="file" id="fileInput" class="mb-2" accept=".exe,.dll,.pdf,.doc,.docx,.xls,.xlsx">
-                <div id="fileInfo" class="text-sm text-gray-500 mt-2"></div>
-            </div>
-            <div class="flex flex-col justify-between">
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-2">Analysis Type</label>
-                        <select id="analysisType" class="form-select">
-                            <option value="auto">Auto-detect Environment</option>
-                            <option value="windows">Windows Sandbox</option>
-                            <option value="linux">Linux Sandbox</option>
-                            <option value="macos">macOS Sandbox</option>
-                        </select>
-                    </div>
+        <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+            <!-- Form for file submission -->
+            <form id="sandboxForm" method="post" enctype="multipart/form-data" action="{% url 'sandbox_analyze' %}">
+                {% csrf_token %}
+                <!-- Simple file input -->
+                <div class="border-2 border-dashed border-gray-300 p-4 text-center">
+                    <p class="text-sm text-gray-500 mb-3">Accepted files: .exe, .dll, .pdf, .doc, .docx, .xls, .xlsx</p>
+                    <p class="text-sm text-gray-500 mb-3">Maximum file size: 32MB</p>
+                    <input type="file" id="fileInput" name="file" class="mb-2" accept=".exe,.dll,.pdf,.doc,.docx,.xls,.xlsx">
+                    <div id="fileInfo" class="text-sm text-gray-500 mt-2"></div>
                 </div>
-                <button id="submitBtn" class="btn btn-primary w-full">Start Analysis</button>
-            </div>
+                <div class="flex flex-col justify-between mt-4">
+                    <button type="submit" id="submitBtn" class="btn btn-primary w-full">Start Analysis</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -49,7 +42,7 @@
         <div class="panel">
             <div class="flex items-center justify-between mb-5">
                 <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
-                <span id="threatScore" class="badge bg-danger rounded-full">85</span>
+                <span id="threatScore" class="badge bg-danger rounded-full">0</span>
             </div>
             <div class="space-y-4">
                 <div class="flex items-center">
@@ -139,6 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const MAX_FILE_SIZE = 32 * 1024 * 1024; // 32MB in bytes
     const fileInput = document.getElementById('fileInput');
     const fileInfo = document.getElementById('fileInfo');
+    const sandboxForm = document.getElementById('sandboxForm');
+    const submitBtn = document.getElementById('submitBtn');
 
     fileInput.addEventListener('change', function() {
         const file = this.files[0];
@@ -156,33 +151,77 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Handle form submission
-    document.getElementById('submitBtn').addEventListener('click', function() {
+    sandboxForm.addEventListener('submit', function(e) {
+        // Prevent the default form submission
+        e.preventDefault();
+        console.log("Form submission prevented");
+        
         const fileInput = document.getElementById('fileInput');
         if (!fileInput.files.length) {
             alert('Please select a file first');
             return;
         }
 
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-        formData.append('analysisType', document.getElementById('analysisType').value);
-
-        // Update UI
-        document.getElementById('fileType').textContent = fileInput.files[0].type || 'Unknown';
-        document.getElementById('fileSize').textContent = formatFileSize(fileInput.files[0].size);
+        // Update UI to show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Analyzing...';
         
-        // Add API call
-        fetch('/api/sandbox/analyze', {
+        // Create FormData from the form
+        const formData = new FormData(this);
+        
+        console.log("Submitting form via AJAX to:", this.action);
+        
+        // Submit the form using fetch API
+        fetch(this.action, {
             method: 'POST',
-            body: formData
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log("Response received:", response.status);
+            if (!response.ok) {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            console.log('Analysis started:', data);
+            console.log('Analysis results:', data);
+            
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Start Analysis';
+            
+            // Update UI with results
+            if (data.status === 'completed') {
+                const results = data.results;
+                
+                // Update threat score
+                const threatScore = document.getElementById('threatScore');
+                threatScore.textContent = results.quick_analysis.threat_score;
+                
+                // Update file info
+                document.getElementById('fileType').textContent = results.quick_analysis.file_type || 'Unknown';
+                document.getElementById('fileSize').textContent = formatFileSize(results.quick_analysis.file_size || 0);
+                document.getElementById('sha256').textContent = results.quick_analysis.sha256;
+                
+                // Update behavior counts
+                document.getElementById('processCount').textContent = results.behavior_summary.process_count || 0;
+                document.getElementById('networkCount').textContent = results.behavior_summary.network_count || 0;
+                document.getElementById('fileCount').textContent = results.behavior_summary.file_count || 0;
+                document.getElementById('registryCount').textContent = results.behavior_summary.registry_count || 0;
+            } else if (data.error) {
+                alert('Analysis error: ' + data.error);
+            }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Failed to start analysis');
+            alert('Failed to start analysis: ' + error.message);
+            
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Start Analysis';
         });
     });
 });
