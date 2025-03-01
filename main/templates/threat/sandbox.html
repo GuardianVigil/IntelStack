@@ -106,6 +106,9 @@
                 </div>
             </div>
 
+            
+
+
             <!-- Behavioral Analysis Panel -->
             <div class="panel xl:col-span-2">
                 <div class="flex items-center justify-between mb-5">
@@ -156,6 +159,41 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Scan Statistics Panel -->
+        <div class="panel xl:col-span-2">
+            <div class="flex items-center justify-between mb-5">
+                <h5 class="font-semibold text-lg dark:text-white-light">Scan Statistics</h5>
+            </div>
+            {% if results.summary.stats %}
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div class="panel bg-danger/10 border-0">
+                    <div class="text-danger text-xl font-semibold">
+                        {{ results.summary.stats.malicious }}
+                    </div>
+                    <div class="text-sm">Malicious</div>
+                </div>
+                <div class="panel bg-warning/10 border-0">
+                    <div class="text-warning text-xl font-semibold">
+                        {{ results.summary.stats.suspicious }}
+                    </div>
+                    <div class="text-sm">Suspicious</div>
+                </div>
+                <div class="panel bg-success/10 border-0">
+                    <div class="text-success text-xl font-semibold">
+                        {{ results.summary.stats.undetected }}
+                    </div>
+                    <div class="text-sm">Undetected</div>
+                </div>
+                <div class="panel bg-info/10 border-0">
+                    <div class="text-info text-xl font-semibold">
+                        {{ results.summary.stats.type_unsupported|default:0 }}
+                    </div>
+                    <div class="text-sm">Unsupported</div>
+                </div>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Detailed Analysis Tabs -->
