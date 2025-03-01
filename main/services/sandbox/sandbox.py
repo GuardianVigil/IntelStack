@@ -167,11 +167,74 @@ class SandboxAnalyzer:
         if not behavior:
             # Continue even if behavior summary fails, just log the error
             logger.warning("Failed to get behavior summary, continuing with partial results")
-            behavior = {"data": {"attributes": {}}}
+            behavior = {"data": {}}
 
         # Prepare final results
         try:
             results["success"] = True
+            
+            # Initialize processed behavior data structure
+            processed_behavior = {
+                "processes": [],
+                "network_http": [],
+                "files": [],
+                "registry": [],
+                "mitre_attack": []
+            }
+            
+            # Extract MITRE ATT&CK techniques
+            if "mitre_attack_techniques" in behavior.get("data", {}):
+                processed_behavior["mitre_attack"] = behavior["data"]["mitre_attack_techniques"]
+            
+            # Extract file operations
+            if "files_written" in behavior.get("data", {}):
+                for file_path in behavior["data"]["files_written"]:
+                    processed_behavior["files"].append({
+                        "path": file_path,
+                        "operation": "write"
+                    })
+            
+            if "files_deleted" in behavior.get("data", {}):
+                for file_path in behavior["data"]["files_deleted"]:
+                    processed_behavior["files"].append({
+                        "path": file_path,
+                        "operation": "delete"
+                    })
+            
+            # Extract registry operations
+            if "registry_keys_opened" in behavior.get("data", {}):
+                for reg_key in behavior["data"]["registry_keys_opened"]:
+                    processed_behavior["registry"].append({
+                        "key": reg_key,
+                        "operation": "open",
+                        "value": ""
+                    })
+            
+            # Extract network operations
+            if "ip_traffic" in behavior.get("data", {}):
+                for traffic in behavior["data"]["ip_traffic"]:
+                    processed_behavior["network_http"].append({
+                        "url": f"{traffic.get('destination_ip')}:{traffic.get('destination_port')}",
+                        "method": traffic.get('transport_layer_protocol', 'Unknown'),
+                        "host": traffic.get('destination_ip', '')
+                    })
+            
+            # Extract process information
+            if "processes_created" in behavior.get("data", {}):
+                for i, cmd in enumerate(behavior["data"]["processes_created"]):
+                    processed_behavior["processes"].append({
+                        "pid": i + 1000,  # Generate a fake PID since we don't have the actual one
+                        "name": cmd.split('/')[-1] if '/' in cmd else cmd.split('\\')[-1] if '\\' in cmd else cmd,
+                        "command_line": cmd
+                    })
+            elif "processes_tree" in behavior.get("data", {}):
+                for process in behavior["data"]["processes_tree"]:
+                    processed_behavior["processes"].append({
+                        "pid": process.get("process_id", "Unknown"),
+                        "name": process.get("name", "").replace('"', ''),
+                        "command_line": process.get("name", "")
+                    })
+            
             results["results"] = {
                 "summary": {
                     "threat_score": self._calculate_threat_score(report),
@@ -186,7 +249,7 @@ class SandboxAnalyzer:
                         "md5": report["meta"]["file_info"].get("md5", "")
                     }
                 },
-                "behavior": behavior.get("data", {}).get("attributes", {}),
+                "behavior": processed_behavior,
                 "scan_results": report["data"]["attributes"].get("results", {})
             }
             

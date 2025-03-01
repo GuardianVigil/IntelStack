@@ -114,19 +114,43 @@
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div class="panel bg-primary/10 border-0">
-                            <div class="text-primary text-xl font-semibold">{{ results.behavior.processes|length }}</div>
+                            <div class="text-primary text-xl font-semibold">
+                                {% if results.behavior.processes %}
+                                    {{ results.behavior.processes|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
                             <div class="text-sm">Processes</div>
                         </div>
                         <div class="panel bg-warning/10 border-0">
-                            <div class="text-warning text-xl font-semibold">{{ results.behavior.network|length }}</div>
+                            <div class="text-warning text-xl font-semibold">
+                                {% if results.behavior.network_http %}
+                                    {{ results.behavior.network_http|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
                             <div class="text-sm">Network Connections</div>
                         </div>
                         <div class="panel bg-success/10 border-0">
-                            <div class="text-success text-xl font-semibold">{{ results.behavior.files|length }}</div>
+                            <div class="text-success text-xl font-semibold">
+                                {% if results.behavior.files %}
+                                    {{ results.behavior.files|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
                             <div class="text-sm">File Operations</div>
                         </div>
                         <div class="panel bg-danger/10 border-0">
-                            <div class="text-danger text-xl font-semibold">{{ results.behavior.registry|length }}</div>
+                            <div class="text-danger text-xl font-semibold">
+                                {% if results.behavior.registry %}
+                                    {{ results.behavior.registry|length }}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </div>
                             <div class="text-sm">Registry Changes</div>
                         </div>
                     </div>
@@ -137,30 +161,30 @@
         <!-- Detailed Analysis Tabs -->
         <div class="panel">
             <div class="mb-5">
-                <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]">
+                <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]" id="analysisTabsNav">
                     <li class="tab-item active">
-                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        <button type="button" onclick="showTab('processTree')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
                             Process Tree
                         </button>
                     </li>
                     <li class="tab-item">
-                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        <button type="button" onclick="showTab('networkActivity')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
                             Network Activity
                         </button>
                     </li>
                     <li class="tab-item">
-                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        <button type="button" onclick="showTab('fileOperations')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
                             File System
                         </button>
                     </li>
                     <li class="tab-item">
-                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                        <button type="button" onclick="showTab('registryActivity')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
                             Registry
                         </button>
                     </li>
                     <li class="tab-item">
-                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                            MITRE ATT&CK
+                        <button type="button" onclick="showTab('scanResults')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            Scan Results
                         </button>
                     </li>
                 </ul>
@@ -169,19 +193,138 @@
             <!-- Tab Content -->
             <div class="p-4">
                 <div id="processTree" class="tab-content active">
-                    <!-- Process tree content -->
+                    {% if results.behavior.processes %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">PID</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Process Name</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Command Line</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for process in results.behavior.processes %}
+                                        <tr>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ process.pid }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ process.name }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] font-mono text-xs">{{ process.command_line }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No process information available.</p>
+                    {% endif %}
                 </div>
                 <div id="networkActivity" class="tab-content hidden">
-                    <!-- Network activity content -->
+                    {% if results.behavior.network_http %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">URL</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Method</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Host</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for connection in results.behavior.network_http %}
+                                        <tr>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] font-mono text-xs">{{ connection.url }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ connection.method }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ connection.host }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No network activity detected.</p>
+                    {% endif %}
                 </div>
                 <div id="fileOperations" class="tab-content hidden">
-                    <!-- File operations content -->
+                    {% if results.behavior.files %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Path</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Operation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for file in results.behavior.files %}
+                                        <tr>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] font-mono text-xs">{{ file.path }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ file.operation }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No file operations detected.</p>
+                    {% endif %}
                 </div>
                 <div id="registryActivity" class="tab-content hidden">
-                    <!-- Registry activity content -->
+                    {% if results.behavior.registry %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Key</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Operation</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for reg in results.behavior.registry %}
+                                        <tr>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] font-mono text-xs">{{ reg.key }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ reg.operation }}</td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ reg.value }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No registry activity detected.</p>
+                    {% endif %}
                 </div>
-                <div id="mitreAttack" class="tab-content hidden">
-                    <!-- MITRE ATT&CK content -->
+                <div id="scanResults" class="tab-content hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Engine</th>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Result</th>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for engine, data in results.scan_results.items %}
+                                    <tr class="{% if data.category == 'malicious' %}bg-danger/10{% elif data.category == 'suspicious' %}bg-warning/10{% endif %}">
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ engine }}</td>
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                            {% if data.result %}
+                                                {{ data.result }}
+                                            {% else %}
+                                                Clean
+                                            {% endif %}
+                                        </td>
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                            <span class="badge {% if data.category == 'malicious' %}bg-danger{% elif data.category == 'suspicious' %}bg-warning{% else %}bg-success{% endif %} rounded-full">
+                                                {{ data.category }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -189,8 +332,40 @@
     {% endif %}
 </div>
 
+<script>
+    // Function to show the selected tab
+    function showTab(tabId) {
+        // Hide all tab content
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(tab => {
+            tab.classList.add('hidden');
+            tab.classList.remove('active');
+        });
+        
+        // Show the selected tab
+        const selectedTab = document.getElementById(tabId);
+        if (selectedTab) {
+            selectedTab.classList.remove('hidden');
+            selectedTab.classList.add('active');
+        }
+        
+        // Update active tab button
+        document.querySelectorAll('#analysisTabsNav .tab-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Find the button that triggered this and set its parent li as active
+        const buttons = document.querySelectorAll('#analysisTabsNav button');
+        for (let i = 0; i < buttons.length; i++) {
+            if (buttons[i].getAttribute('onclick').includes(tabId)) {
+                buttons[i].parentElement.classList.add('active');
+                break;
+            }
+        }
+    }
+</script>
+
 {% endblock %}
 
 {% block scripts %}
-<!-- No JavaScript needed for basic form functionality -->
 {% endblock %}
