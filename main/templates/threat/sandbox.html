@@ -161,20 +161,25 @@
         <!-- Detailed Analysis Tabs -->
         <div class="panel">
             <div class="mb-5">
-                <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]" id="analysisTabsNav">
+                <ul id="analysisTabsNav" class="sm:flex font-semibold border-b border-[#ebedf2] dark:border-[#191e3a] gap-2 overflow-y-auto whitespace-nowrap">
                     <li class="tab-item active">
+                        <button type="button" onclick="showTab('scanResults')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            Scan Results
+                        </button>
+                    </li>
+                    <li class="tab-item">
                         <button type="button" onclick="showTab('processTree')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
                             Process Tree
                         </button>
                     </li>
                     <li class="tab-item">
                         <button type="button" onclick="showTab('networkActivity')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                            Network Activity
+                            Network
                         </button>
                     </li>
                     <li class="tab-item">
                         <button type="button" onclick="showTab('fileOperations')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                            File System
+                            Files
                         </button>
                     </li>
                     <li class="tab-item">
@@ -183,16 +188,50 @@
                         </button>
                     </li>
                     <li class="tab-item">
-                        <button type="button" onclick="showTab('scanResults')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                            Scan Results
+                        <button type="button" onclick="showTab('mitreAttack')" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            MITRE ATT&CK
                         </button>
                     </li>
+                    
+                    
                 </ul>
             </div>
             
             <!-- Tab Content -->
             <div class="p-4">
-                <div id="processTree" class="tab-content active">
+                <div id="scanResults" class="tab-content">
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Engine</th>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Result</th>
+                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for engine, data in results.scan_results.items %}
+                                    <tr class="{% if data.category == 'malicious' %}bg-danger/10{% elif data.category == 'suspicious' %}bg-warning/10{% endif %}">
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ engine }}</td>
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                            {% if data.result %}
+                                                {{ data.result }}
+                                            {% else %}
+                                                Clean
+                                            {% endif %}
+                                        </td>
+                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                            <span class="badge {% if data.category == 'malicious' %}bg-danger{% elif data.category == 'suspicious' %}bg-warning{% else %}bg-success{% endif %} rounded-full">
+                                                {{ data.category }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="processTree" class="tab-content hidden">
                     {% if results.behavior.processes %}
                         <div class="overflow-x-auto">
                             <table class="w-full table-auto">
@@ -294,37 +333,59 @@
                         <p class="text-gray-500">No registry activity detected.</p>
                     {% endif %}
                 </div>
-                <div id="scanResults" class="tab-content hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full table-auto">
-                            <thead>
-                                <tr>
-                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Engine</th>
-                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Result</th>
-                                    <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Category</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for engine, data in results.scan_results.items %}
-                                    <tr class="{% if data.category == 'malicious' %}bg-danger/10{% elif data.category == 'suspicious' %}bg-warning/10{% endif %}">
-                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">{{ engine }}</td>
-                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
-                                            {% if data.result %}
-                                                {{ data.result }}
-                                            {% else %}
-                                                Clean
-                                            {% endif %}
-                                        </td>
-                                        <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
-                                            <span class="badge {% if data.category == 'malicious' %}bg-danger{% elif data.category == 'suspicious' %}bg-warning{% else %}bg-success{% endif %} rounded-full">
-                                                {{ data.category }}
-                                            </span>
-                                        </td>
+                <div id="mitreAttack" class="tab-content hidden">
+                    {% if results.behavior.mitre_attack %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">ID</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Description</th>
+                                        <th class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a] text-left">Severity</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {% for technique in results.behavior.mitre_attack %}
+                                        <tr>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                                <a href="https://attack.mitre.org/techniques/{{ technique.id }}" target="_blank" class="text-primary hover:underline">
+                                                    {{ technique.id }}
+                                                </a>
+                                            </td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                                {% if technique.signature_description %}
+                                                    {{ technique.signature_description }}
+                                                {% elif technique.description %}
+                                                    {{ technique.description }}
+                                                {% else %}
+                                                    No description available
+                                                {% endif %}
+                                            </td>
+                                            <td class="border-b border-[#ebedf2] p-2 dark:border-[#191e3a]">
+                                                {% if technique.severity %}
+                                                    {% if technique.severity == "IMPACT_SEVERITY_INFO" %}
+                                                        <span class="px-2 py-1 rounded-full bg-blue-500 text-white text-xs">Info</span>
+                                                    {% elif technique.severity == "IMPACT_SEVERITY_LOW" %}
+                                                        <span class="px-2 py-1 rounded-full bg-green-500 text-white text-xs">Low</span>
+                                                    {% elif technique.severity == "IMPACT_SEVERITY_MEDIUM" %}
+                                                        <span class="px-2 py-1 rounded-full bg-yellow-500 text-white text-xs">Medium</span>
+                                                    {% elif technique.severity == "IMPACT_SEVERITY_HIGH" %}
+                                                        <span class="px-2 py-1 rounded-full bg-red-500 text-white text-xs">High</span>
+                                                    {% elif technique.severity == "IMPACT_SEVERITY_CRITICAL" %}
+                                                        <span class="px-2 py-1 rounded-full bg-gray-800 text-white text-xs">Critical</span>
+                                                    {% else %}
+                                                        {{ technique.severity }}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500">No MITRE ATT&CK techniques detected.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -333,36 +394,29 @@
 </div>
 
 <script>
-    // Function to show the selected tab
+    // Function to show a specific tab
     function showTab(tabId) {
-        // Hide all tab content
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach(tab => {
-            tab.classList.add('hidden');
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+        
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab-item').forEach(tab => {
             tab.classList.remove('active');
         });
         
-        // Show the selected tab
-        const selectedTab = document.getElementById(tabId);
-        if (selectedTab) {
-            selectedTab.classList.remove('hidden');
-            selectedTab.classList.add('active');
-        }
+        // Show the selected tab content
+        document.getElementById(tabId).classList.remove('hidden');
         
-        // Update active tab button
-        document.querySelectorAll('#analysisTabsNav .tab-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        
-        // Find the button that triggered this and set its parent li as active
-        const buttons = document.querySelectorAll('#analysisTabsNav button');
-        for (let i = 0; i < buttons.length; i++) {
-            if (buttons[i].getAttribute('onclick').includes(tabId)) {
-                buttons[i].parentElement.classList.add('active');
-                break;
-            }
-        }
+        // Add active class to the selected tab
+        document.querySelector(`button[onclick="showTab('${tabId}')"]`).parentElement.classList.add('active');
     }
+    
+    // Initialize tabs - show Scan Results tab by default
+    document.addEventListener('DOMContentLoaded', function() {
+        showTab('scanResults');
+    });
 </script>
 
 {% endblock %}

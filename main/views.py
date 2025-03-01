@@ -1272,10 +1272,15 @@ def sandbox_analyze(request):
         logger.info(f"Response structure: {json.dumps(results, default=str)[:500]}...")
         
         # Render the template with results
-        return render(request, 'threat/sandbox.html', {
-            'results': results['results'],
-            'has_api_key': True
-        })
+        try:
+            return render(request, 'threat/sandbox.html', {
+                'results': results['results'],
+                'has_api_key': True
+            })
+        except Exception as e:
+            logger.error(f"Error in sandbox analysis: {str(e)}", exc_info=True)
+            messages.error(request, f"Error displaying results: {str(e)}")
+            return redirect('sandbox')
 
     except Exception as e:
         logger.error(f"Error in sandbox analysis: {str(e)}", exc_info=True)

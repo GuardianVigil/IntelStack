@@ -183,8 +183,11 @@ class SandboxAnalyzer:
             }
             
             # Extract MITRE ATT&CK techniques
-            if "mitre_attack_techniques" in behavior.get("data", {}):
-                processed_behavior["mitre_attack"] = behavior["data"]["mitre_attack_techniques"]
+            try:
+                if "mitre_attack_techniques" in behavior.get("data", {}):
+                    processed_behavior["mitre_attack"] = behavior["data"]["mitre_attack_techniques"]
+            except Exception as e:
+                logger.error(f"Error extracting MITRE ATT&CK data: {str(e)}")
             
             # Extract file operations
             if "files_written" in behavior.get("data", {}):
