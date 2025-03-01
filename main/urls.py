@@ -132,6 +132,14 @@ urlpatterns = [
     path('settings/api-configuration/', views.api_configuration, name='api_configuration'),
     path('settings/user-profile/', views.user_profile, name='user_profile'),
     path('settings/security-settings/', views.security_settings, name='security_settings'),
+    # Add this line under the Settings URLs section
+    path('settings/load-api-keys/', views.load_api_keys, name='load_api_keys'),
+    # Add this line under the Settings URLs section, right after load_api_keys
+    path('settings/save-api-key/', views.save_api_key, name='save_api_key'),
+    # Add this line under the Settings URLs section, right after save_api_key
+    path('settings/test-api-key/', views.test_api_key, name='test_api_key'),
+    # Add this line under the Settings URLs section, right after test_api_key
+    path('settings/delete-api-key/', views.delete_api_key, name='delete_api_key'),
     
     # Domain Reputation URLs
     path('services/domain-scan/', include('main.services.domain_scan.urls')),
