@@ -4,10 +4,9 @@
 {% block content %}
 <!-- Add CSS -->
 <link rel="stylesheet" href="{% static 'assets/css/highlight.min.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/file-upload-with-preview.min.css' %}">
 <script src="{% static 'assets/js/file-upload-with-preview.iife.js' %}"></script>
 
-<div class="animate__animated p-6" :class="[$store.app.animation]">
+<div class="animate__animated p-6" :class="[$store.app.animation]" x-data="sandboxAnalysis">
     <!-- Header Section -->
     <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <h2 class="text-2xl font-bold">Sandbox Analysis</h2>
@@ -20,351 +19,251 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
             <!-- Form for file submission -->
-            <form id="sandboxForm" method="post" enctype="multipart/form-data" action="{% url 'sandbox_analyze' %}">
+            <form method="post" action="/sandbox/analyze/" enctype="multipart/form-data" x-on:submit.prevent="analyzeSample" id="sandboxForm">
                 {% csrf_token %}
                 <!-- Simple file input -->
                 <div class="border-2 border-dashed border-gray-300 p-4 text-center">
-                    <p class="text-sm text-gray-500 mb-3">Accepted files: .exe, .dll, .pdf, .doc, .docx, .xls, .xlsx</p>
-                    <p class="text-sm text-gray-500 mb-3">Maximum file size: 32MB</p>
-                    <input type="file" id="fileInput" name="file" class="mb-2" accept=".exe,.dll,.pdf,.doc,.docx,.xls,.xlsx">
-                    <div id="fileInfo" class="text-sm text-gray-500 mt-2"></div>
+                    <div class="grid grid-cols-3 gap-2 mb-4 text-xs text-gray-500">
+                        <div>
+                            <p class="font-semibold mb-1">Executables & Libraries</p>
+                            <p>.exe, .dll, .sys, .ocx</p>
+                            <p>.scr, .cpl, .drv</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Documents</p>
+                            <p>.pdf, .doc(x), .xls(x)</p>
+                            <p>.ppt(x), .rtf, .odt</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Archives</p>
+                            <p>.zip, .rar, .7z</p>
+                            <p>.tar, .gz, .iso</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Scripts</p>
+                            <p>.js, .vbs, .ps1</p>
+                            <p>.bat, .cmd, .hta</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Email & Office</p>
+                            <p>.eml, .msg, .dot(m)</p>
+                            <p>.xlt(m), .pot(m)</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Web Files</p>
+                            <p>.html, .htm, .php</p>
+                            <p>.asp(x), .jsp, .xml</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Other Web</p>
+                            <p>.css, .svg, .swf</p>
+                            <p>.shtml, .rss, .xhtml</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold mb-1">Other</p>
+                            <p>.jar, .msi, .reg</p>
+                            <p>.vbe, .jse, .wsh</p>
+                        </div>
+                    </div>
+                    <div class="custom-file-container">
+                        <label class="custom-file-container__custom-file mb-4">
+                            <input type="file" name="file" class="custom-file-container__custom-file__custom-file-input" @change="handleFileChange" accept=".exe,.dll,.sys,.ocx,.scr,.cpl,.drv,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rtf,.odt,.zip,.rar,.7z,.tar,.gz,.iso,.js,.vbs,.ps1,.bat,.cmd,.hta,.jar,.msi,.reg,.eml,.msg,.html,.htm,.php,.asp,.aspx,.jsp,.xml">
+                            <span class="custom-file-container__custom-file__custom-file-control"></span>
+                        </label>
+                    </div>
                 </div>
-                <div class="flex flex-col justify-between mt-4">
-                    <button type="submit" id="submitBtn" class="btn btn-primary w-full">Start Analysis</button>
+                <div class="flex justify-center mt-6">
+                    <!-- Button with improved visibility -->
+                    <button type="submit" id="submitBtn" class="btn btn-primary w-full" style="color: white !important; font-weight: 500; padding: 0.75rem 1rem; background-color: #4361ee; border-radius: 0.375rem; cursor: pointer; display: inline-block;">
+                        Start Analysis
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Analysis Results Section -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+    <div id="resultsSection" x-show="results" x-cloak>
         <!-- Quick Stats -->
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
+            <!-- Quick Stats Panel -->
+            <div class="panel">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
+                    <span id="threatScore" class="badge bg-danger rounded-full">0</span>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="w-1/2">File Type</div>
+                        <div class="w-1/2 text-right" id="fileType">No file selected</div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-1/2">File Size</div>
+                        <div class="w-1/2 text-right" id="fileSize">-</div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-1/2">SHA256</div>
+                        <div class="w-1/2 text-right font-mono text-xs" id="sha256">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavioral Analysis Panel -->
+            <div class="panel xl:col-span-2">
+                <div class="flex items-center justify-between mb-5">
+                    <h5 class="font-semibold text-lg dark:text-white-light">Behavioral Analysis</h5>
+                </div>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="panel bg-primary/10 border-0">
+                            <div class="text-primary text-xl font-semibold" id="processCount">0</div>
+                            <div class="text-sm">Processes</div>
+                        </div>
+                        <div class="panel bg-warning/10 border-0">
+                            <div class="text-warning text-xl font-semibold" id="networkCount">0</div>
+                            <div class="text-sm">Network Connections</div>
+                        </div>
+                        <div class="panel bg-success/10 border-0">
+                            <div class="text-success text-xl font-semibold" id="fileCount">0</div>
+                            <div class="text-sm">File Operations</div>
+                        </div>
+                        <div class="panel bg-danger/10 border-0">
+                            <div class="text-danger text-xl font-semibold" id="registryCount">0</div>
+                            <div class="text-sm">Registry Changes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Analysis Tabs -->
         <div class="panel">
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
-                <span id="threatScore" class="badge bg-danger rounded-full">0</span>
+            <div class="mb-5">
+                <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]">
+                    <li class="tab-item active">
+                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            Process Tree
+                        </button>
+                    </li>
+                    <li class="tab-item">
+                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            Network Activity
+                        </button>
+                    </li>
+                    <li class="tab-item">
+                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            File System
+                        </button>
+                    </li>
+                    <li class="tab-item">
+                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            Registry
+                        </button>
+                    </li>
+                    <li class="tab-item">
+                        <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
+                            MITRE ATT&CK
+                        </button>
+                    </li>
+                </ul>
             </div>
-            <div class="space-y-4">
-                <div class="flex items-center">
-                    <div class="w-1/2">File Type</div>
-                    <div class="w-1/2 text-right" id="fileType">No file selected</div>
-                </div>
-                <div class="flex items-center">
-                    <div class="w-1/2">File Size</div>
-                    <div class="w-1/2 text-right" id="fileSize">-</div>
-                </div>
-                <div class="flex items-center">
-                    <div class="w-1/2">SHA256</div>
-                    <div class="w-1/2 text-right font-mono text-xs" id="sha256">-</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Behavioral Analysis -->
-        <div class="panel xl:col-span-2">
-            <div class="flex items-center justify-between mb-5">
-                <h5 class="font-semibold text-lg dark:text-white-light">Behavioral Analysis</h5>
-            </div>
-            <div class="space-y-4">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="panel bg-primary/10 border-0">
-                        <div class="text-primary text-xl font-semibold" id="processCount">0</div>
-                        <div class="text-sm">Processes</div>
-                    </div>
-                    <div class="panel bg-warning/10 border-0">
-                        <div class="text-warning text-xl font-semibold" id="networkCount">0</div>
-                        <div class="text-sm">Network Connections</div>
-                    </div>
-                    <div class="panel bg-success/10 border-0">
-                        <div class="text-success text-xl font-semibold" id="fileCount">0</div>
-                        <div class="text-sm">File Operations</div>
-                    </div>
-                    <div class="panel bg-danger/10 border-0">
-                        <div class="text-danger text-xl font-semibold" id="registryCount">0</div>
-                        <div class="text-sm">Registry Changes</div>
-                    </div>
-                </div>
+            
+            <!-- Tab Content -->
+            <div class="p-4">
+                <div id="processTree" class="tab-content active"></div>
+                <div id="networkActivity" class="tab-content hidden"></div>
+                <div id="fileOperations" class="tab-content hidden"></div>
+                <div id="registryActivity" class="tab-content hidden"></div>
+                <div id="mitreAttack" class="tab-content hidden"></div>
             </div>
         </div>
     </div>
-
-    <!-- Detailed Analysis Tabs -->
-    <div class="panel">
-        <div class="mb-5">
-            <ul class="flex flex-wrap border-b border-[#ebedf2] dark:border-[#191e3a]">
-                <li class="tab-item active">
-                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                        Process Tree
-                    </button>
-                </li>
-                <li class="tab-item">
-                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                        Network Activity
-                    </button>
-                </li>
-                <li class="tab-item">
-                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                        File System
-                    </button>
-                </li>
-                <li class="tab-item">
-                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                        Registry
-                    </button>
-                </li>
-                <li class="tab-item">
-                    <button type="button" class="p-3.5 py-2 -mb-[1px] block border border-transparent hover:text-primary dark:hover:text-primary">
-                        MITRE ATT&CK
-                    </button>
-                </li>
-            </ul>
-        </div>
-        <div class="tab-content min-h-[300px]">
-            <!-- Content will be dynamically loaded -->
-        </div>
-    </div>
-    <div id="resultsSection" class="hidden"></div>
 </div>
+
 {% endblock %}
 
 {% block scripts %}
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const MAX_FILE_SIZE = 32 * 1024 * 1024; // 32MB in bytes
-    const fileInput = document.getElementById('fileInput');
-    const fileInfo = document.getElementById('fileInfo');
-    const sandboxForm = document.getElementById('sandboxForm');
+// Add this at the top to ensure the button works even if Alpine.js has issues
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
     const submitBtn = document.getElementById('submitBtn');
-
-    fileInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            if (file.size > MAX_FILE_SIZE) {
-                alert('File size exceeds 32MB limit');
-                this.value = '';
-                fileInfo.textContent = '';
-                return;
-            }
-            fileInfo.textContent = `Selected: ${file.name} (${formatFileSize(file.size)})`;
-        } else {
-            fileInfo.textContent = '';
-        }
-    });
-
-    // Handle form submission
-    sandboxForm.addEventListener('submit', function(e) {
-        // Prevent the default form submission
-        e.preventDefault();
-        console.log("Form submission prevented");
+    const form = document.getElementById('sandboxForm');
+    
+    if (submitBtn && form) {
+        console.log('Button and form found, attaching event listener');
         
-        const fileInput = document.getElementById('fileInput');
-        if (!fileInput.files.length) {
-            alert('Please select a file first');
-            return;
-        }
-
-        // Update UI to show loading state
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Analyzing...';
+        // Ensure the button is visible
+        submitBtn.style.display = 'inline-block';
+        submitBtn.style.color = 'white';
+        submitBtn.style.backgroundColor = '#4361ee';
         
-        // Create FormData from the form
-        const formData = new FormData(this);
-        // Add a flag to indicate this is an AJAX request
-        formData.append('ajax', '1');
-        
-        console.log("Submitting form via AJAX to:", this.action);
-        
-        // Submit the form using fetch API
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            // Prevent redirect
-            redirect: 'error'
-        })
-        .then(response => {
-            console.log("Response received:", response.status);
-            if (!response.ok) {
-                throw new Error(`Server responded with status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Analysis results:', data);
-            console.log('Results structure:', JSON.stringify(data));
+        submitBtn.addEventListener('click', function(e) {
+            console.log('Button clicked');
+            e.preventDefault();
             
-            // Check if there's an error
-            if (data.error) {
-                console.error('Error from server:', data.error);
-                displayError(data.error);
+            const fileInput = form.querySelector('input[type="file"]');
+            if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+                alert('Please select a file first');
                 return;
             }
             
-            // Check if results exist
-            if (!data.results) {
-                console.error('No results property in response:', data);
-                displayError('Invalid response format from server');
-                return;
-            }
+            // Show loading state
+            submitBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-5 w-5 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Processing...';
+            submitBtn.disabled = true;
             
-            console.log('About to display results:', data.results);
-            // Display results
-            displayResults(data.results);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            displayError(error.message);
-        })
-        .finally(() => {
-            // Re-enable submit button
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Start Analysis';
+            const formData = new FormData(form);
+            
+            console.log('Submitting form to /sandbox/analyze/');
+            
+            fetch('/sandbox/analyze/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    // Update UI elements with results
+                    document.getElementById('threatScore').textContent = data.results.summary.threat_score;
+                    document.getElementById('fileType').textContent = data.results.file_info.type;
+                    document.getElementById('fileSize').textContent = formatFileSize(data.results.file_info.size);
+                    document.getElementById('sha256').textContent = data.results.file_info.hashes.sha256;
+                    
+                    // Update behavior counts
+                    const behavior = data.results.behavior;
+                    document.getElementById('processCount').textContent = behavior.processes?.length || 0;
+                    document.getElementById('networkCount').textContent = behavior.network?.length || 0;
+                    document.getElementById('fileCount').textContent = behavior.files?.length || 0;
+                    document.getElementById('registryCount').textContent = behavior.registry?.length || 0;
+                    
+                    // Show results section
+                    document.getElementById('resultsSection').style.display = 'block';
+                } else {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Error: ${error.message}`);
+            })
+            .finally(() => {
+                // Reset button
+                submitBtn.innerHTML = 'Start Analysis';
+                submitBtn.disabled = false;
+            });
         });
-    });
-
-    // Function to display error message
-    function displayError(message) {
-        const resultsSection = document.getElementById('resultsSection');
-        resultsSection.innerHTML = `
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Analysis Error</h5>
-                </div>
-                <div class="mb-5">
-                    <div class="alert alert-danger">${message}</div>
-                </div>
-            </div>
-        `;
-        resultsSection.classList.remove('hidden');
     }
-
-    // Function to display loading message
-    function displayLoading() {
-        const resultsSection = document.getElementById('resultsSection');
-        resultsSection.innerHTML = `
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Analyzing File</h5>
-                </div>
-                <div class="mb-5">
-                    <div class="alert alert-info">
-                        <p>Your file is being analyzed by VirusTotal. This process may take up to 10 minutes for larger files.</p>
-                        <p class="mt-2">The system will check for results every 30 seconds, up to a maximum of 20 attempts.</p>
-                        <div class="flex justify-center mt-4">
-                            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        resultsSection.classList.remove('hidden');
-    }
-
-    // Update the submit button click handler to show loading message
-    submitBtn.addEventListener('click', function() {
-        if (document.getElementById('fileInput').files.length) {
-            displayLoading();
-        }
-    });
-
-    // Function to display analysis results
-    function displayResults(results) {
-        console.log("Displaying results:", results);
-        const resultsSection = document.getElementById('resultsSection');
-        
-        // Create HTML for the results
-        let html = `
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-            <!-- Quick Stats -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Quick Analysis</h5>
-                </div>
-                <div class="mb-5">
-                    <div class="flex items-center justify-center">
-                        <div class="radial-progress text-primary" style="--value:${results.quick_analysis.threat_score}; --size:10rem;">
-                            <span class="text-2xl font-bold">${results.quick_analysis.threat_score}%</span>
-                        </div>
-                    </div>
-                    <div class="mt-5">
-                        <div class="flex justify-between mb-1">
-                            <p class="text-white-dark">File Type</p>
-                            <p class="font-semibold">${results.quick_analysis.file_type || 'Unknown'}</p>
-                        </div>
-                        <div class="flex justify-between mb-1">
-                            <p class="text-white-dark">File Size</p>
-                            <p class="font-semibold">${formatFileSize(results.quick_analysis.file_size || 0)}</p>
-                        </div>
-                        <div class="flex justify-between">
-                            <p class="text-white-dark">SHA256</p>
-                            <p class="font-semibold text-xs break-all">${results.quick_analysis.sha256}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Behavior Summary -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Behavior Summary</h5>
-                </div>
-                <div class="mb-5">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="panel bg-primary/10 p-4 rounded-md">
-                            <h6 class="text-center font-semibold">Processes</h6>
-                            <p class="text-center text-3xl mt-2">${results.behavior_summary.process_count || 0}</p>
-                        </div>
-                        <div class="panel bg-info/10 p-4 rounded-md">
-                            <h6 class="text-center font-semibold">Network</h6>
-                            <p class="text-center text-3xl mt-2">${results.behavior_summary.network_count || 0}</p>
-                        </div>
-                        <div class="panel bg-success/10 p-4 rounded-md">
-                            <h6 class="text-center font-semibold">Files</h6>
-                            <p class="text-center text-3xl mt-2">${results.behavior_summary.file_count || 0}</p>
-                        </div>
-                        <div class="panel bg-warning/10 p-4 rounded-md">
-                            <h6 class="text-center font-semibold">Registry</h6>
-                            <p class="text-center text-3xl mt-2">${results.behavior_summary.registry_count || 0}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detection Stats -->
-            <div class="panel">
-                <div class="flex items-center justify-between mb-5">
-                    <h5 class="font-semibold text-lg dark:text-white-light">Detection Stats</h5>
-                </div>
-                <div class="mb-5">
-                    <div class="flex flex-col">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-white-dark">Malicious</span>
-                            <span class="font-semibold text-danger">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.malicious : 'N/A'}</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-white-dark">Suspicious</span>
-                            <span class="font-semibold text-warning">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.suspicious : 'N/A'}</span>
-                        </div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-white-dark">Undetected</span>
-                            <span class="font-semibold text-success">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.undetected : 'N/A'}</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-white-dark">Total Scans</span>
-                            <span class="font-semibold">${results.quick_analysis.detection_stats ? results.quick_analysis.detection_stats.total_scans : 'N/A'}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
-        
-        resultsSection.innerHTML = html;
-        resultsSection.classList.remove('hidden');
-    }
-
+    
     function formatFileSize(bytes) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -372,6 +271,105 @@ document.addEventListener("DOMContentLoaded", () => {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
+});
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('sandboxAnalysis', () => ({
+        fileInfo: '',
+        hasFile: false,
+        isLoading: false,
+        results: null,
+        error: null,
+        
+        handleFileChange(event) {
+            console.log('File selected in Alpine.js');
+            const file = event.target.files[0];
+            if (file) {
+                this.hasFile = true;
+                this.fileInfo = file.name + ' (' + this.formatFileSize(file.size) + ')';
+            } else {
+                this.hasFile = false;
+                this.fileInfo = '';
+            }
+        },
+
+        analyzeSample(event) {
+            console.log('Alpine.js analyzeSample called');
+            event.preventDefault();
+            
+            if (this.isLoading) {
+                return; // Prevent multiple submissions
+            }
+            
+            const form = event.target;
+            const fileInput = form.querySelector('input[type="file"]');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+
+            this.isLoading = true;
+            this.error = null;
+            this.results = null;
+
+            const formData = new FormData(form);
+            
+            // Use the correct endpoint URL
+            console.log('Alpine.js submitting to /sandbox/analyze/');
+            fetch('/sandbox/analyze/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data); // Debug: Log the response data
+                
+                if (data.success) {
+                    this.results = data.results;
+                    // Update UI elements with results
+                    document.getElementById('threatScore').textContent = data.results.summary.threat_score;
+                    document.getElementById('fileType').textContent = data.results.file_info.type;
+                    document.getElementById('fileSize').textContent = this.formatFileSize(data.results.file_info.size);
+                    document.getElementById('sha256').textContent = data.results.file_info.hashes.sha256;
+                    
+                    // Update behavior counts
+                    const behavior = data.results.behavior;
+                    document.getElementById('processCount').textContent = behavior.processes?.length || 0;
+                    document.getElementById('networkCount').textContent = behavior.network?.length || 0;
+                    document.getElementById('fileCount').textContent = behavior.files?.length || 0;
+                    document.getElementById('registryCount').textContent = behavior.registry?.length || 0;
+                } else {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.error = error.message;
+                alert(`Error: ${this.error}`);
+            })
+            .finally(() => {
+                this.isLoading = false;
+            });
+        },
+
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    }));
 });
 </script>
 {% endblock %}
