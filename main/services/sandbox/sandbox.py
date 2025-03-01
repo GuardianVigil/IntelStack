@@ -3,38 +3,19 @@ import json
 import time
 import logging
 import requests
-from datetime import datetime
 from typing import Dict, Any, Optional
 
 # Set up logging
 logger = logging.getLogger(__name__)
 
 class SandboxAnalyzer:
-    def __init__(self, api_key: str, debug_output_dir: str):
-        """Initialize the SandboxAnalyzer with VirusTotal API key and debug output directory."""
+    def __init__(self, api_key: str):
+        """Initialize the SandboxAnalyzer with VirusTotal API key."""
         self.api_key = api_key
         self.api_url = "https://www.virustotal.com/api/v3"
-        self.debug_output_dir = debug_output_dir
         self.headers = {"x-apikey": self.api_key}
         
-        # Ensure debug directory exists
-        os.makedirs(self.debug_output_dir, exist_ok=True)
-        logger.info(f"SandboxAnalyzer initialized with debug output dir: {debug_output_dir}")
-
-    def _save_debug_output(self, data: Dict[str, Any], prefix: str = "virustotal") -> None:
-        """Save debug output to a file."""
-        try:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"{prefix}_debug_{timestamp}.txt"
-            filepath = os.path.join(self.debug_output_dir, filename)
-            
-            os.makedirs(self.debug_output_dir, exist_ok=True)
-            with open(filepath, 'w') as f:
-                json.dump(data, f, indent=4)
-            
-            logger.info(f"Debug output saved to {filepath}")
-        except Exception as e:
-            logger.error(f"Failed to save debug output: {str(e)}")
+        logger.info("SandboxAnalyzer initialized")
 
     def upload_file(self, file_path: str) -> Optional[str]:
         """Upload a file to VirusTotal and return the analysis ID."""
@@ -49,16 +30,13 @@ class SandboxAnalyzer:
                 )
                 response.raise_for_status()
                 data = response.json()
-                self._save_debug_output(data, "upload")
                 logger.info(f"File uploaded successfully. Analysis ID: {data['data']['id']}")
                 return data["data"]["id"]
         except requests.exceptions.RequestException as e:
             logger.error(f"API request error during upload: {str(e)}")
-            self._save_debug_output({"error": str(e), "type": "request_error"}, "upload_error")
             return None
         except Exception as e:
             logger.error(f"Unexpected error during upload: {str(e)}")
-            self._save_debug_output({"error": str(e), "type": "unexpected_error"}, "upload_error")
             return None
 
     def get_analysis_report(self, analysis_id: str, max_attempts: int = 20, wait_time: int = 30) -> Optional[Dict]:
@@ -80,8 +58,6 @@ class SandboxAnalyzer:
                 response.raise_for_status()
                 data = response.json()
                 
-                self._save_debug_output(data, f"analysis_attempt_{attempt + 1}")
-                
                 status = data["data"]["attributes"]["status"]
                 logger.info(f"Analysis status: {status}")
                 
@@ -95,11 +71,9 @@ class SandboxAnalyzer:
                     
             except requests.exceptions.RequestException as e:
                 logger.error(f"API request error during analysis: {str(e)}")
-                self._save_debug_output({"error": str(e), "type": "request_error"}, f"analysis_error_{attempt + 1}")
                 return None
             except Exception as e:
                 logger.error(f"Unexpected error during analysis: {str(e)}")
-                self._save_debug_output({"error": str(e), "type": "unexpected_error"}, f"analysis_error_{attempt + 1}")
                 return None
                 
         logger.warning(f"Analysis did not complete after {max_attempts} attempts")
@@ -115,16 +89,13 @@ class SandboxAnalyzer:
             )
             response.raise_for_status()
             data = response.json()
-            self._save_debug_output(data, "behavior")
             logger.info("Behavior summary retrieved successfully")
             return data
         except requests.exceptions.RequestException as e:
             logger.error(f"API request error during behavior summary: {str(e)}")
-            self._save_debug_output({"error": str(e), "type": "request_error"}, "behavior_error")
             return None
         except Exception as e:
             logger.error(f"Unexpected error during behavior summary: {str(e)}")
-            self._save_debug_output({"error": str(e), "type": "unexpected_error"}, "behavior_error")
             return None
 
     def analyze_file(self, file_path: str) -> Dict[str, Any]:
@@ -256,8 +227,6 @@ class SandboxAnalyzer:
                 "scan_results": report["data"]["attributes"].get("results", {})
             }
             
-            # Save the final results for debugging
-            self._save_debug_output(results, "final_results")
             logger.info("Analysis completed successfully")
             
             return results

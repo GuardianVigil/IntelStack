@@ -1229,16 +1229,7 @@ def sandbox_analyze(request):
         logger.info(f"Processing file: {uploaded_file.name}, Size: {uploaded_file.size} bytes")
         
         from .services.sandbox.sandbox import SandboxAnalyzer
-        debug_dir = os.path.join(settings.BASE_DIR, 'main', 'services', 'sandbox', 'debug_output')
-        os.makedirs(debug_dir, exist_ok=True)
-        
-        # Ensure debug directory is writable
-        if not os.access(debug_dir, os.W_OK):
-            logger.error(f"Debug directory {debug_dir} is not writable")
-            messages.error(request, 'Server configuration error: Debug directory is not writable')
-            return redirect('sandbox')
-            
-        analyzer = SandboxAnalyzer(api_key, debug_dir)
+        analyzer = SandboxAnalyzer(api_key)
         
         # Log before analysis
         logger.info(f"Starting analysis for file: {uploaded_file.name}")
