@@ -15,6 +15,8 @@ import ipaddress
 import logging
 import json
 import base64
+import os
+import math
 import requests
 from asgiref.sync import async_to_sync, sync_to_async
 from .models import APIKey
@@ -967,7 +969,6 @@ def analyze_email(request):
 # Hash Analysis View
 @csrf_exempt
 @require_http_methods(["POST"])
-@require_http_methods(["POST"])
 async def analyze_hash(request):
     """
     API endpoint for analyzing file hashes.
@@ -1196,109 +1197,99 @@ async def analyze_url(request):
 
 @login_required
 @require_http_methods(["POST"])
-@csrf_exempt
-def handle_sandbox_analysis(request):
-    """
-    Handle file upload for sandbox analysis
-    """
+def sandbox_analyze(request):
+    """Handle file upload and analysis in sandbox."""
+    if not request.FILES.get('file'):
+        messages.error(request, 'No file uploaded')
+        return redirect('sandbox')
+
+    uploaded_file = request.FILES['file']
+    
     try:
-        # Check if this is an AJAX request - check multiple headers
-        is_ajax = (
-            request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
-            request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest' or
-            request.GET.get('ajax') == '1' or
-            request.POST.get('ajax') == '1'
-        )
+        api_key_obj = APIKey.objects.get(platform='virustotal', user=request.user)
+        api_key = api_key_obj.api_key
+        if not api_key:
+            messages.error(request, 'VirusTotal API key is invalid. Please reconfigure it in API Configuration.')
+            return redirect('sandbox')
+    except APIKey.DoesNotExist:
+        messages.error(request, 'VirusTotal API key not configured. Please add it in API Configuration.')
+        return redirect('sandbox')
+
+    temp_dir = os.path.join(settings.BASE_DIR, 'temp')
+    os.makedirs(temp_dir, exist_ok=True)
+    temp_path = os.path.join(temp_dir, uploaded_file.name)
+
+    try:
+        # Save the uploaded file to a temporary location
+        with open(temp_path, 'wb+') as destination:
+            for chunk in uploaded_file.chunks():
+                destination.write(chunk)
+
+        # Log the file details for debugging
+        logger.info(f"Processing file: {uploaded_file.name}, Size: {uploaded_file.size} bytes")
         
-        print(f"Is AJAX request: {is_ajax}")
-        print(f"Request headers: {dict(request.headers)}")
+        from .services.sandbox.sandbox import SandboxAnalyzer
+        debug_dir = os.path.join(settings.BASE_DIR, 'main', 'services', 'sandbox', 'debug_output')
+        os.makedirs(debug_dir, exist_ok=True)
         
-        if 'file' not in request.FILES:
-            if is_ajax:
-                return JsonResponse({'error': 'No file provided'}, status=400)
-            else:
-                from django.contrib import messages
-                messages.error(request, 'No file provided')
-                return redirect('sandbox')
-        
-        file = request.FILES['file']
-        
-        # Check file size (32MB limit)
-        if file.size > 32 * 1024 * 1024:
-            if is_ajax:
-                return JsonResponse({'error': 'File size exceeds 32MB limit'}, status=400)
-            else:
-                from django.contrib import messages
-                messages.error(request, 'File size exceeds 32MB limit')
-                return redirect('sandbox')
+        # Ensure debug directory is writable
+        if not os.access(debug_dir, os.W_OK):
+            logger.error(f"Debug directory {debug_dir} is not writable")
+            messages.error(request, 'Server configuration error: Debug directory is not writable')
+            return redirect('sandbox')
             
-        from .services.sandbox.sandbox import analyze_file
+        analyzer = SandboxAnalyzer(api_key, debug_dir)
         
-        # Get analysis results
-        analysis_results = analyze_file(file)
+        # Log before analysis
+        logger.info(f"Starting analysis for file: {uploaded_file.name}")
         
-        # Check for errors in the analysis results
-        if isinstance(analysis_results, dict) and 'error' in analysis_results:
-            if is_ajax:
-                return JsonResponse({
-                    'error': analysis_results['error']
-                }, status=500)
+        results = analyzer.analyze_file(temp_path)
+        
+        # Log after analysis
+        logger.info(f"Analysis completed for file: {uploaded_file.name}")
+        
+        # Clean up the temporary file
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+
+        if not results.get('success'):
+            messages.error(request, results.get('error', 'Analysis failed or timed out'))
+            return redirect('sandbox')
+
+        # Format file size for display
+        if 'results' in results and 'file_info' in results['results'] and 'size' in results['results']['file_info']:
+            size_bytes = results['results']['file_info']['size']
+            if size_bytes == 0:
+                formatted_size = '0 Bytes'
             else:
-                from django.contrib import messages
-                messages.error(request, analysis_results['error'])
-                return redirect('sandbox')
+                k = 1024
+                sizes = ['Bytes', 'KB', 'MB', 'GB']
+                i = int(math.floor(math.log(size_bytes) / math.log(k)))
+                formatted_size = f"{round(size_bytes / (k ** i), 2)} {sizes[i]}"
+            results['results']['file_info']['size_formatted'] = formatted_size
+
+        # Log the response structure for debugging
+        logger.info(f"Response structure: {json.dumps(results, default=str)[:500]}...")
         
-        # Ensure the response has the expected structure for the frontend
-        formatted_results = {
-            'status': 'completed',
-            'results': {
-                'quick_analysis': {
-                    'threat_score': analysis_results.get('quick_analysis', {}).get('threat_score', 0),
-                    'file_type': analysis_results.get('quick_analysis', {}).get('file_type', 'Unknown'),
-                    'file_size': analysis_results.get('quick_analysis', {}).get('file_size', 0),
-                    'sha256': analysis_results.get('quick_analysis', {}).get('sha256', 'N/A'),
-                    'detection_stats': analysis_results.get('quick_analysis', {}).get('detection_stats', {
-                        'malicious': 0,
-                        'suspicious': 0,
-                        'undetected': 0,
-                        'total_scans': 0
-                    })
-                },
-                'behavior_summary': {
-                    'process_count': analysis_results.get('behavior_summary', {}).get('process_count', 0),
-                    'network_count': analysis_results.get('behavior_summary', {}).get('network_count', 0),
-                    'file_count': analysis_results.get('behavior_summary', {}).get('file_count', 0),
-                    'registry_count': analysis_results.get('behavior_summary', {}).get('registry_count', 0)
-                },
-                'detailed_analysis': analysis_results.get('detailed_analysis', {})
-            }
-        }
-        
-        # Log the formatted results for debugging
-        print("Final response to be sent to frontend:")
-        import json
-        print(json.dumps(formatted_results, indent=2))
-        logger.debug(f"Formatted sandbox results: {formatted_results}")
-        
-        # For AJAX requests, return JSON response
-        if is_ajax:
-            return JsonResponse(formatted_results)
-        else:
-            # For regular form submissions, redirect back to the sandbox page
-            from django.contrib import messages
-            messages.success(request, 'File analysis completed successfully')
-            from django.shortcuts import redirect
-            return redirect('sandbox')
-        
+        # Render the template with results
+        return render(request, 'threat/sandbox.html', {
+            'results': results['results'],
+            'has_api_key': True
+        })
+
     except Exception as e:
-        logger.error(f"Error in sandbox analysis: {str(e)}")
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({
-                'error': 'An error occurred during analysis',
-                'details': str(e)
-            }, status=500)
-        else:
-            from django.contrib import messages
-            messages.error(request, f'An error occurred during analysis: {str(e)}')
-            from django.shortcuts import redirect
-            return redirect('sandbox')
+        logger.error(f"Error in sandbox analysis: {str(e)}", exc_info=True)
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
+        messages.error(request, f'Analysis failed: {str(e)}')
+        return redirect('sandbox')
+
+@login_required
+def sandbox_view(request):
+    """Render the sandbox analysis page."""
+    # Get VirusTotal API key status
+    has_api_key = APIKey.objects.filter(platform='virustotal', user=request.user).exists()
+    
+    return render(request, 'threat/sandbox.html', {
+        'has_api_key': has_api_key
+    })

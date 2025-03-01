@@ -100,72 +100,30 @@ urlpatterns = [
     path('pages/error503/', views.pages_error503, name='pages_error503'),
     path('pages/maintenence/', views.pages_maintenence, name='pages_maintenence'),
 
-    path('users/profile/', views.users_profile, name='users_profile'),
-    path('users/user-account-settings/', views.users_user_account_settings, name='users_user_account_settings'),
+    # Header Menu URLs
+    path('sandbox/', views.sandbox_view, name='sandbox'),
+    path('sandbox/analyze/', views.sandbox_analyze, name='sandbox_analyze'),
+    path('hunting/', views.hunting, name='hunting'),
+    path('threat-feed/', views.threat_feed, name='threat_feed'),
+    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),
+    path('mitre-attack/', views.mitre, name='mitre'),
 
-    path('auth/boxed-signin/', views.auth_boxed_signin, name='auth_boxed_signin'),
-    path('auth/boxed-signup/', views.auth_boxed_signup, name='auth_boxed_signup'),
-    path('auth/boxed-lockscreen/', views.auth_boxed_lockscreen, name='auth_boxed_lockscreen'),
-    path('auth/boxed-password-reset/', views.auth_boxed_password_reset, name='auth_boxed_password_reset'),
-    path('auth/cover-login/', views.auth_cover_login, name='cover_login'),
-    path('auth/cover-register/', views.auth_cover_register, name='cover_register'),
-    path('auth/cover-lockscreen/', views.auth_cover_lockscreen, name='cover_lockscreen'),
-    path('auth/cover-password-reset/', views.auth_cover_password_reset , name='cover_password_reset'),
-
-    path('charts/', views.charts, name='charts'),
-    path('widgets/', views.widgets, name='widgets'),
-    path('font-icons/', views.font_icons, name='font_icons'),
-    path('dragndrop/', views.dragndrop, name='dragndrop'),
-    path('tables/', views.tables, name='tables'), 
+    # Threat Intelligence URLs
+    path('threat/', include([
+        path('ip-analysis/', views.ip_analysis, name='ip_analysis'),
+        path('ip-analysis/analyze/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
+        path('hash-analysis/', views.hash_analysis, name='hash_analysis'),
+        path('api/threat/hash-analysis/', views.analyze_hash, name='analyze_hash_api'),
+        path('domain-reputation/', views.domain_reputation, name='domain_reputation'),
+        path('email-investigation/', views.email_investigation, name='email_investigation'),
+        path('email-investigation/analyze/', views.analyze_email, name='analyze_email'),
+    ])),
 
     # URL Scan URLs
     path('threat/url-scan/', views.url_scan, name='url_scan'),
     path('api/url-scan/analyze/', views.analyze_url, name='analyze_url'),
 
-    # Threat Intelligence URLs
-    path('threat/ip-analysis/', views.ip_analysis, name='ip_analysis'),
-    path('threat/ip-analysis/analyze/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
-    path('threat/hash-analysis/', views.hash_analysis, name='hash_analysis'),
-    path('api/threat/hash-analysis/', views.analyze_hash, name='analyze_hash_api'),  # Match the frontend URL
-    path('threat/domain-reputation/', views.domain_reputation, name='domain_reputation'),
-    path('threat/email-investigation/', views.email_investigation, name='email_investigation'),
-    path('threat/email-investigation/analyze/', views.analyze_email, name='analyze_email'),
-    path('sandbox/', views.sandbox, name='sandbox'),
-    path('api/sandbox/analyze/', views.handle_sandbox_analysis, name='sandbox_analyze'),  # Add trailing slash
-    # Header Menu URLs
-    path('hunting/', views.hunting, name='hunting'),
-    path('threat-feed/', views.threat_feed, name='threat_feed'),
-    path('refresh-threat-feeds/', views.refresh_threat_feeds, name='refresh_threat_feeds'),  # Single entry for refresh endpoint
-    path('mitre-attack/', views.mitre, name='mitre'),
-
     # Reports URLs
-    path('reports/investigation-history/', views.investigation_history, name='investigation_history'),
-    path('reports/threat-reports/', views.threat_reports, name='threat_reports'),
-    path('reports/export-findings/', views.export_findings, name='export_findings'),
-    
-    # Settings URLs
-    path('settings/api-configuration/', views.api_configuration, name='api_configuration'),
-    path('settings/api-configuration/save/', views.save_api_key, name='save_api_key'),
-    path('settings/api-configuration/load/', views.load_api_keys, name='load_api_keys'),
-    path('settings/api-configuration/test/', views.test_api_key, name='test_api_key'),
-    path('settings/api-configuration/delete/', views.delete_api_key, name='delete_api_key'),
-
-    # Documentation URLs
-    path('docs/', views.docs_home, name='docs_home'),
-    path('docs/<str:article_path>/', views.docs_article, name='docs_article'),
-
-    # API Endpoints
-    path('api/analyze-ip/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
-    path('api/analyze-hash/', views.analyze_hash, name='analyze_hash'),
-    
-    # Threat Feed URLs
-    path('feeds/virustotal/', views.virustotal, name='virustotal'),
-    path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),
-    path('feeds/alienvault-otx/', views.alienvault_otx, name='alienvault_otx'),
-    path('feeds/ibm-xforce/', views.ibm_xforce, name='ibm_xforce'),
-    # Removing duplicate refresh-threat-feeds endpoint
-    
-    # Report URLs
     path('reports/investigation-history/', views.investigation_history, name='investigation_history'),
     path('reports/threat-reports/', views.threat_reports, name='threat_reports'),
     path('reports/export-findings/', views.export_findings, name='export_findings'),
@@ -177,4 +135,39 @@ urlpatterns = [
     
     # Domain Reputation URLs
     path('services/domain-scan/', include('main.services.domain_scan.urls')),
+
+    # API Endpoints
+    path('api/analyze-ip/<str:ip_address>/', views.analyze_ip_api, name='analyze_ip_api'),
+    path('api/analyze-hash/', views.analyze_hash, name='analyze_hash'),
+    
+    # Threat Feed URLs
+    path('feeds/virustotal/', views.virustotal, name='virustotal'),
+    path('feeds/abuseipdb/', views.abuseipdb, name='abuseipdb'),
+    path('feeds/alienvault-otx/', views.alienvault_otx, name='alienvault_otx'),
+    path('feeds/ibm-xforce/', views.ibm_xforce, name='ibm_xforce'),
+
+    # Documentation URLs
+    path('docs/', views.docs_home, name='docs_home'),
+    path('docs/<str:article_path>/', views.docs_article, name='docs_article'),
+
+    # Users URLs
+    path('users/profile/', views.users_profile, name='users_profile'),
+    path('users/user-account-settings/', views.users_user_account_settings, name='users_user_account_settings'),
+
+    # Auth URLs
+    path('auth/boxed-signin/', views.auth_boxed_signin, name='auth_boxed_signin'),
+    path('auth/boxed-signup/', views.auth_boxed_signup, name='auth_boxed_signup'),
+    path('auth/boxed-lockscreen/', views.auth_boxed_lockscreen, name='auth_boxed_lockscreen'),
+    path('auth/boxed-password-reset/', views.auth_boxed_password_reset, name='auth_boxed_password_reset'),
+    path('auth/cover-login/', views.auth_cover_login, name='cover_login'),
+    path('auth/cover-register/', views.auth_cover_register, name='cover_register'),
+    path('auth/cover-lockscreen/', views.auth_cover_lockscreen, name='cover_lockscreen'),
+    path('auth/cover-password-reset/', views.auth_cover_password_reset , name='cover_password_reset'),
+
+    # Charts URLs
+    path('charts/', views.charts, name='charts'),
+    path('widgets/', views.widgets, name='widgets'),
+    path('font-icons/', views.font_icons, name='font_icons'),
+    path('dragndrop/', views.dragndrop, name='dragndrop'),
+    path('tables/', views.tables, name='tables'), 
 ]
