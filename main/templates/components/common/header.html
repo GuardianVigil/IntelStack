@@ -87,6 +87,14 @@
                 </div>
 
                 <div class="flex items-center space-x-2">
+                    <!-- Customizer button -->
+                    <a href="javascript:;" class="relative block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="$store.app.showCustomizer = true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                            <path opacity="0.5" d="M13.7654 2.15224C13.3978 2 12.9319 2 12 2C11.0681 2 10.6022 2 10.2346 2.15224C9.74457 2.35523 9.35522 2.74458 9.15223 3.23463C9.05957 3.45834 9.0233 3.7185 9.00911 4.09799C8.98826 4.65568 8.70226 5.17189 8.21894 5.45093C7.73564 5.72996 7.14559 5.71954 6.65219 5.45876C6.31645 5.2813 6.07301 5.18262 5.83294 5.15102C5.30704 5.08178 4.77518 5.22429 4.35436 5.5472C4.03874 5.78938 3.80577 6.1929 3.33983 6.99993C2.87389 7.80697 2.64092 8.21048 2.58899 8.60491C2.51976 9.1308 2.66227 9.66266 2.98518 10.0835C3.13256 10.2756 3.3397 10.437 3.66119 10.639C4.1338 10.936 4.43789 11.4419 4.43786 12C4.43783 12.5581 4.13375 13.0639 3.66118 13.3608C3.33965 13.5629 3.13248 13.7244 2.98508 13.9165C2.66217 14.3373 2.51966 14.8691 2.5889 15.395C2.64082 15.7894 2.87379 16.193 3.33973 17C3.80568 17.807 4.03865 18.2106 4.35426 18.4527C4.77508 18.7756 5.30694 18.9181 5.83284 18.8489C6.07289 18.8173 6.31632 18.7186 6.65204 18.5412C7.14547 18.2804 7.73556 18.27 8.2189 18.549C8.70224 18.8281 8.98826 19.3443 9.00911 19.9021C9.02331 20.2815 9.05957 20.5417 9.15223 20.7654C9.35522 21.2554 9.74457 21.6448 10.2346 21.8478C10.6022 22 11.0681 22 12 22C12.9319 22 13.3978 22 13.7654 21.8478C14.2554 21.6448 14.6448 21.2554 14.8477 20.7654" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </a>
+                    <!-- Theme toggle buttons -->
                     <a href="javascript:;" x-cloak x-show="$store.app.theme === 'light'" href="javascript:;" class="flex items-center p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="$store.app.toggleTheme('dark')">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5" />
@@ -116,76 +124,6 @@
                     </a>
                 </div>
 
-                <div class="dropdown" x-data="dropdown" @click.outside="open = false">
-                    <a href="javascript:;" class="relative block p-2 rounded-full bg-white-light/40 dark:bg-dark/40 hover:text-primary hover:bg-white-light/90 dark:hover:bg-dark/60" @click="toggle">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19.0001 9.7041V9C19.0001 5.13401 15.8661 2 12.0001 2C8.13407 2 5.00006 5.13401 5.00006 9V9.7041C5.00006 10.5491 4.74995 11.3752 4.28123 12.0783L3.13263 13.8012C2.08349 15.3749 2.88442 17.5139 4.70913 18.0116C9.48258 19.3134 14.5175 19.3134 19.291 18.0116C21.1157 17.5139 21.9166 15.3749 20.8675 13.8012L19.7189 12.0783C19.2502 11.3752 19.0001 10.5491 19.0001 9.7041Z" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M7.5 19C8.15503 20.7478 9.92246 22 12 22C14.0775 22 15.845 20.7478 16.5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                            <path d="M12 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                        </svg>
-
-                        <span class="flex absolute w-3 h-3 ltr:right-0 rtl:left-0 top-0">
-                            <span class="animate-ping absolute ltr:-left-[3px] rtl:-right-[3px] -top-[3px] inline-flex h-full w-full rounded-full bg-success/50 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full w-[6px] h-[6px] bg-success"></span>
-                        </span>
-                    </a>
-                    <ul x-cloak x-show="open" x-transition x-transition.duration.300ms class="ltr:-right-2 rtl:-left-2 top-11 !py-0 text-dark dark:text-white-dark w-[300px] sm:w-[350px] divide-y dark:divide-white/10">
-                        <li>
-                            <div class="flex items-center px-4 py-2 justify-between font-semibold hover:!bg-transparent">
-                                <h4 class="text-lg">Notification</h4>
-                                <template x-if="notifications.length">
-                                    <span class="badge bg-primary/80" x-text="notifications.length + 'New'"></span>
-                                </template>
-                            </div>
-                        </li>
-                        <template x-for="notification in notifications">
-                            <li class=" dark:text-white-light/90 ">
-                                <div class="flex items-center px-4 py-2 group" @click.self="toggle">
-                                    <div class="grid place-content-center rounded">
-                                        <div class="w-12 h-12 relative">
-                                            <img class="w-12 h-12 rounded-full object-cover" :src="`{% static 'assets/images' %}/${notification.profile}`" alt="image" />
-                                            <span class="bg-success w-2 h-2 rounded-full block absolute right-[6px] bottom-0"></span>
-                                        </div>
-                                    </div>
-                                    <div class="ltr:pl-3 rtl:pr-3 flex flex-auto">
-                                        <div class="ltr:pr-3 rtl:pl-3">
-                                            <h6 x-html="notification.message"></h6>
-                                            <span class="text-xs block font-normal dark:text-gray-500" x-text="notification.time"></span>
-                                        </div>
-                                        <button type="button" class="ltr:ml-auto rtl:mr-auto text-neutral-300 hover:text-danger opacity-0 group-hover:opacity-100" @click="removeNotification(notification.id)">
-                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle opacity="0.5" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" />
-                                                <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </li>
-                        </template>
-                        <template x-if="notifications.length">
-                            <li>
-                                <div class="p-4">
-                                    <button class="btn btn-primary block w-full btn-small" @click="toggle">Read All
-                                        Notifications</button>
-                                </div>
-                            </li>
-                        </template>
-                        <template x-if="!notifications.length">
-                            <li>
-                                <div class="!grid place-content-center hover:!bg-transparent text-lg min-h-[200px]">
-                                    <div class="mx-auto ring-4 ring-primary/30 rounded-full mb-4 text-primary">
-                                        <svg width="40" height="40" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path opacity="0.5" d="M20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10Z" fill="currentColor" />
-                                            <path d="M10 4.25C10.4142 4.25 10.75 4.58579 10.75 5V11C10.75 11.4142 10.4142 11.75 10 11.75C9.58579 11.75 9.25 11.4142 9.25 11V5C9.25 4.58579 9.58579 4.25 10 4.25Z" fill="currentColor" />
-                                            <path d="M10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44772 13 9 13.4477 9 14C9 14.5523 9.44772 15 10 15Z" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                    No data available.
-                                </div>
-                            </li>
-                        </template>
-                    </ul>
-                </div>
                 <div class="dropdown flex-shrink-0" x-data="dropdown" @click.outside="open = false">
                     <a href="javascript:;" class="relative group" @click="toggle()">
                         <span><img class="w-9 h-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="{% static 'assets/images/user-profile.jpeg' %}" alt="image" /></span>
@@ -197,8 +135,7 @@
                                     <img class="rounded-md w-10 h-10 object-cover" src="{% static 'assets/images/user-profile.jpeg' %}" alt="image" />
                                 </div>
                                 <div class="ltr:pl-4 rtl:pr-4 truncate">
-                                    <h4 class="text-base">John Doe<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>
-                                    </h4>
+                                    <h4 class="text-base">John Doe<span class="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span></h4>
                                     <a class="text-black/60  hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;">johndoe@gmail.com</a>
                                 </div>
                             </div>
@@ -248,553 +185,117 @@
 
         <!-- horizontal menu -->
         <ul class="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-[#0e1726] text-black dark:text-white-dark">
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
+            <li class="menu nav-item">
+                <a href="/" class="nav-link group">
                     <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path opacity="0.5" d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z" fill="currentColor" />
-                            <path d="M9 17.25C8.58579 17.25 8.25 17.5858 8.25 18C8.25 18.4142 8.58579 18.75 9 18.75H15C15.4142 18.75 15.75 18.4142 15.75 18C15.75 17.5858 15.4142 17.25 15 17.25H9Z" fill="currentColor" />
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.5" d="M2 12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274C22 8.77128 22 9.91549 22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039Z" fill="currentColor"/>
+                            <path d="M9 17.25C8.58579 17.25 8.25 17.5858 8.25 18C8.25 18.4142 8.58579 18.75 9 18.75H15C15.4142 18.75 15.75 18.4142 15.75 18C15.75 17.5858 15.4142 17.25 15 17.25H9Z" fill="currentColor"/>
                         </svg>
                         <span class="px-1">Dashboard</span>
                     </div>
+                </a>
+            </li>
+
+            <li class="menu nav-item">
+                <button type="button" class="nav-link group" @click="activeDropdown === 'ioc-investigation' ? activeDropdown = null : activeDropdown = 'ioc-investigation'">
+                    <div class="flex items-center">
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.5" d="M11 15.9697C11 16.5196 11.4477 16.9672 11.9975 16.9672H12.0025C12.5523 16.9672 13 16.5196 13 15.9697C13 15.4199 12.5523 14.9723 12.0025 14.9723H11.9975C11.4477 14.9723 11 15.4199 11 15.9697Z" fill="currentColor"/>
+                            <path d="M12 9.00195C11.4477 9.00195 11 9.44967 11 9.99951V13.9995C11 14.5493 11.4477 14.997 12 14.997C12.5523 14.997 13 14.5493 13 13.9995V9.99951C13 9.44967 12.5523 9.00195 12 9.00195Z" fill="currentColor"/>
+                        </svg>
+                        <span class="px-1">IOC Investigation</span>
+                    </div>
                     <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                </a>
+                </button>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="/">Sales</a>
-                    </li>
-                    <li>
-                        <a href="/analytics">Analytics</a>
-                    </li>
-                    <li>
-                        <a href="/finance">Finance</a>
-                    </li>
-                    <li>
-                        <a href="/crypto">Crypto</a>
-                    </li>
+                    <li><a href="{% url 'ip_analysis' %}">IP Analysis</a></li>
+                    <li><a href="{% url 'hash_analysis' %}">Hash Analysis</a></li>
+                    <li><a href="{% url 'domain_reputation' %}">Domain Reputation</a></li>
+                    <li><a href="{% url 'url_scan' %}">URL Scan</a></li>
+                    <li><a href="{% url 'email_investigation' %}">Email Investigation</a></li>
                 </ul>
             </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
+
+            <li class="menu nav-item">
+                <button type="button" class="nav-link group" @click="activeDropdown === 'threat-feeds' ? activeDropdown = null : activeDropdown = 'threat-feeds'">
                     <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <g opacity="0.5">
-                                <path d="M14 2.75C15.9068 2.75 17.2615 2.75159 18.2892 2.88976C19.2952 3.02503 19.8749 3.27869 20.2981 3.7019C20.7213 4.12511 20.975 4.70476 21.1102 5.71085C21.2484 6.73851 21.25 8.09318 21.25 10C21.25 10.4142 21.5858 10.75 22 10.75C22.4142 10.75 22.75 10.4142 22.75 10V9.94359C22.75 8.10583 22.75 6.65019 22.5969 5.51098C22.4392 4.33856 22.1071 3.38961 21.3588 2.64124C20.6104 1.89288 19.6614 1.56076 18.489 1.40314C17.3498 1.24997 15.8942 1.24998 14.0564 1.25H14C13.5858 1.25 13.25 1.58579 13.25 2C13.25 2.41421 13.5858 2.75 14 2.75Z" fill="currentColor" />
-                                <path d="M9.94358 1.25H10C10.4142 1.25 10.75 1.58579 10.75 2C10.75 2.41421 10.4142 2.75 10 2.75C8.09318 2.75 6.73851 2.75159 5.71085 2.88976C4.70476 3.02503 4.12511 3.27869 3.7019 3.7019C3.27869 4.12511 3.02503 4.70476 2.88976 5.71085C2.75159 6.73851 2.75 8.09318 2.75 10C2.75 10.4142 2.41421 10.75 2 10.75C1.58579 10.75 1.25 10.4142 1.25 10V9.94358C1.24998 8.10583 1.24997 6.65019 1.40314 5.51098C1.56076 4.33856 1.89288 3.38961 2.64124 2.64124C3.38961 1.89288 4.33856 1.56076 5.51098 1.40314C6.65019 1.24997 8.10583 1.24998 9.94358 1.25Z" fill="currentColor" />
-                                <path d="M22 13.25C22.4142 13.25 22.75 13.5858 22.75 14V14.0564C22.75 15.8942 22.75 17.3498 22.5969 18.489C22.4392 19.6614 22.1071 20.6104 21.3588 21.3588C20.6104 22.1071 19.6614 22.4392 18.489 22.5969C17.3498 22.75 15.8942 22.75 14.0564 22.75H14C13.5858 22.75 13.25 22.4142 13.25 22C13.25 21.5858 13.5858 21.25 14 21.25C15.9068 21.25 17.2615 21.2484 18.2892 21.1102C19.2952 20.975 19.8749 20.7213 20.2981 20.2981C20.7213 19.8749 20.975 19.2952 21.1102 18.2892C21.2484 17.2615 21.25 15.9068 21.25 14C21.25 13.5858 21.5858 13.25 22 13.25Z" fill="currentColor" />
-                                <path d="M2.75 14C2.75 13.5858 2.41421 13.25 2 13.25C1.58579 13.25 1.25 13.5858 1.25 14V14.0564C1.24998 15.8942 1.24997 17.3498 1.40314 18.489C1.56076 19.6614 1.89288 20.6104 2.64124 21.3588C3.38961 22.1071 4.33856 22.4392 5.51098 22.5969C6.65019 22.75 8.10583 22.75 9.94359 22.75H10C10.4142 22.75 10.75 22.4142 10.75 22C10.75 21.5858 10.4142 21.25 10 21.25C8.09318 21.25 6.73851 21.2484 5.71085 21.1102C4.70476 20.975 4.12511 20.7213 3.7019 20.2981C3.27869 19.8749 3.02503 19.2952 2.88976 18.2892C2.75159 17.2615 2.75 15.9068 2.75 14Z" fill="currentColor" />
-                            </g>
-                            <path d="M5.52721 5.52721C5 6.05442 5 6.90294 5 8.6C5 9.73137 5 10.2971 5.35147 10.6485C5.70294 11 6.26863 11 7.4 11H8.6C9.73137 11 10.2971 11 10.6485 10.6485C11 10.2971 11 9.73137 11 8.6V7.4C11 6.26863 11 5.70294 10.6485 5.35147C10.2971 5 9.73137 5 8.6 5C6.90294 5 6.05442 5 5.52721 5.52721Z" fill="currentColor" />
-                            <path d="M5.52721 18.4728C5 17.9456 5 17.0971 5.35147 16.3515C5.70294 15.606 6.26863 15 7.4 15H8.6C9.73137 15 10.2971 15 10.6485 15.3515C11 15.606 11 16.0971 11 16.6V18.6C11 19.7314 11 20.2971 10.6485 20.6485C10.2971 20.75 9.73138 20.75 8.60002 20.75C6.90298 20.75 6.05441 20.75 5.52721 18.4728Z" fill="currentColor" />
-                            <path d="M13 7.4C13 6.26863 13 5.70294 13.3515 5.35147C13.7029 5 14.2686 5 15.4 5C17.0971 5 17.9456 5 18.4728 5.52721C19 6.05442 19 6.90294 19 8.6C19 9.73137 19 10.2971 18.6485 10.6485C18.2971 11 17.7314 11 16.6 11H15.4C14.2686 11 13.7029 11 13.3515 10.6485C13 10.2971 13 9.73137 13 8.6V7.4Z" fill="currentColor" />
-                            <path d="M13.3515 18.6485C13 18.2971 13 17.7314 13 16.6V15.4C13 14.2686 13 13.7029 13.3515 13.3515C13.7029 13 14.2686 13 15.4 13H16.6C17.7314 13 18.2971 13 18.6485 13.3515C19 13.7029 19 14.2686 19 15.4C19 17.0971 19 17.9456 18.4728 18.4728C17.9456 19 17.0971 19 15.4 19C14.2687 19 13.7029 19 13.3515 18.6485Z" fill="currentColor" />
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
+                            <path opacity="0.5" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="currentColor"/>
                         </svg>
-                        <span class="px-1">Apps</span>
+                        <span class="px-1">Threat Feeds</span>
                     </div>
                     <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                </a>
+                </button>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="/apps/chat">Chat</a>
-                    </li>
-                    <li>
-                        <a href="/apps/mailbox">Mailbox</a>
-                    </li>
-                    <li>
-                        <a href="/apps/todolist">Todo List</a>
-                    </li>
-                    <li>
-                        <a href="/apps/notes">Notes</a>
-                    </li>
-                    <li>
-                        <a href="/apps/scrumboard">Scrumboard</a>
-                    </li>
-                    <li>
-                        <a href="/apps/contacts">Contacts</a>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Invoice
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/apps/invoice/list">List</a>
-                            </li>
-                            <li>
-                                <a href="/apps/invoice/preview">Preview</a>
-                            </li>
-                            <li>
-                                <a href="/apps/invoice/add">Add</a>
-                            </li>
-                            <li>
-                                <a href="/apps/invoice/edit">Edit</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/apps/calendar">Calendar</a>
-                    </li>
+                    <li><a href="{% url 'virustotal' %}">VirusTotal</a></li>
+                    <li><a href="{% url 'abuseipdb' %}">AbuseIPDB</a></li>
+                    <li><a href="{% url 'alienvault_otx' %}">AlienVault OTX</a></li>
+                    <li><a href="{% url 'ibm_xforce' %}">IBM X-Force</a></li>
                 </ul>
             </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
+
+            <li class="menu nav-item">
+                <button type="button" class="nav-link group" @click="activeDropdown === 'reports' ? activeDropdown = null : activeDropdown = 'reports'">
                     <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path d="M8.42229 20.6181C10.1779 21.5395 11.0557 22.0001 12 22.0001V12.0001L2.63802 7.07275C2.62423 7.09491 2.6107 7.11727 2.5974 7.13986C2 8.15436 2 9.41678 2 11.9416V12.0586C2 14.5834 2 15.8459 2.5974 16.8604C3.19479 17.8749 4.27063 18.4395 6.42229 19.5686L8.42229 20.6181Z" fill="currentColor" />
-                            <path opacity="0.7" d="M17.5774 4.43152L15.5774 3.38197C13.8218 2.46066 12.944 2 11.9997 2C11.0554 2 10.1776 2.46066 8.42197 3.38197L6.42197 4.43152C4.31821 5.53552 3.24291 6.09982 2.6377 7.07264L11.9997 12L21.3617 7.07264C20.7564 6.09982 19.6811 5.53552 17.5774 4.43152Z" fill="currentColor" />
-                            <path opacity="0.5" d="M21.4026 7.13986C21.3893 7.11727 21.3758 7.09491 21.362 7.07275L12 12.0001V22.0001C12 22.4142 11.5858 22.75 11 22.75C10.4142 22.75 10 22.4142 10 22C10 21.5858 10.4142 21.25 11 21.25C11.5858 21.25 12 21.5858 12 22V12.0001L21.362 7.07275C21.3758 7.09491 21.3893 7.11727 21.4026 7.13986Z" fill="currentColor" />
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.5" d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 17.7712 21 19.6569 19.8284 20.8284C18.6569 22 16.7712 22 13 22H11C7.22876 22 5.34315 22 4.17157 20.8284C3 19.6569 3 17.7712 3 14V10Z" fill="currentColor"/>
                         </svg>
-                        <span class="px-1">Components</span>
+                        <span class="px-1">Reports</span>
                     </div>
                     <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                </a>
+                </button>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="/components/tabs">Tabs</a>
-                    </li>
-                    <li>
-                        <a href="/components/accordions">Accordions</a>
-                    </li>
-                    <li>
-                        <a href="/components/modals">Modals</a>
-                    </li>
-                    <li>
-                        <a href="/components/cards">Cards</a>
-                    </li>
-                    <li>
-                        <a href="/components/carousel">Carousel</a>
-                    </li>
-                    <li>
-                        <a href="/components/countdown">Countdown</a>
-                    </li>
-                    <li>
-                        <a href="/components/counter">Counter</a>
-                    </li>
-                    <li>
-                        <a href="/components/sweetalert">Sweet Alerts</a>
-                    </li>
-                    <li>
-                        <a href="/components/timeline">Timeline</a>
-                    </li>
-                    <li>
-                        <a href="/components/notifications">Notifications</a>
-                    </li>
-                    <li>
-                        <a href="/components/media-object">Media Object</a>
-                    </li>
-                    <li>
-                        <a href="/components/list-group">List Group</a>
-                    </li>
-                    <li>
-                        <a href="/components/pricing-table">Pricing Tables</a>
-                    </li>
-                    <li>
-                        <a href="/components/lightbox">Lightbox</a>
-                    </li>
+                    <li><a href="{% url 'investigation_history' %}">Investigation History</a></li>
+                    <li><a href="{% url 'threat_reports' %}">Threat Reports</a></li>
+                    <li><a href="{% url 'export_findings' %}">Export Findings</a></li>
                 </ul>
             </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
+
+            <li class="menu nav-item">
+                <button type="button" class="nav-link group" @click="activeDropdown === 'settings' ? activeDropdown = null : activeDropdown = 'settings'">
                     <div class="flex items-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.73167 5.77133L5.66953 9.91436C4.3848 11.6526 3.74244 12.5217 4.09639 13.205C4.10225 13.2164 4.10829 13.2276 4.1145 13.2387C4.48945 13.9117 5.59888 13.9117 7.81775 13.9117C9.05079 13.9117 9.6673 13.9117 10.054 14.2754L10.074 14.2946L13.946 9.72466L13.926 9.70541C13.5474 9.33386 13.5474 8.74151 13.5474 7.55682V7.24712C13.5474 3.96249 13.5474 2.32018 12.6241 2.03721C11.7007 1.75425 10.711 3.09327 8.73167 5.77133Z" fill="currentColor"></path>
-                            <path opacity="0.5" d="M10.4527 16.4432L10.4527 16.7528C10.4527 20.0374 10.4527 21.6798 11.376 21.9627C12.2994 22.2457 13.2891 20.9067 15.2685 18.2286L18.3306 14.0856C19.6154 12.3474 20.2577 11.4783 19.9038 10.7949C19.8979 10.7836 19.8919 10.7724 19.8857 10.7613C19.5107 10.0883 18.4013 10.0883 16.1824 10.0883C14.9494 10.0883 14.3329 10.0883 13.9462 9.72461L10.0742 14.2946C10.4528 14.6661 10.4527 15.2585 10.4527 16.4432Z" fill="currentColor"></path>
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+                            <path opacity="0.5" d="M13.7654 2.15224C13.3978 2 12.9319 2 12 2C11.0681 2 10.6022 2 10.2346 2.15224C9.74457 2.35523 9.35522 2.74458 9.15223 3.23463C9.05957 3.45834 9.0233 3.7185 9.00911 4.09799C8.98826 4.65568 8.70226 5.17189 8.21894 5.45093C7.73564 5.72996 7.14559 5.71954 6.65219 5.45876C6.31645 5.2813 6.07301 5.18262 5.83294 5.15102C5.30704 5.08178 4.77518 5.22429 4.35436 5.5472C4.03874 5.78938 3.80577 6.1929 3.33983 6.99993C2.87389 7.80697 2.64092 8.21048 2.58899 8.60491C2.51976 9.1308 2.66227 9.66266 2.98518 10.0835C3.13256 10.2756 3.3397 10.437 3.66119 10.639C4.1338 10.936 4.43789 11.4419 4.43786 12C4.43783 12.5581 4.13375 13.0639 3.66118 13.3608C3.33965 13.5629 3.13248 13.7244 2.98508 13.9165C2.66217 14.3373 2.51966 14.8691 2.58889 15.395C2.64082 15.7894 2.87379 16.193 3.33973 17C3.80568 17.807 4.03865 18.2106 4.35426 18.4527C4.77508 18.7756 5.30694 18.9181 5.83284 18.8489C6.07289 18.8173 6.31632 18.7186 6.65204 18.5412C7.14547 18.2804 7.73556 18.27 8.2189 18.549C8.70224 18.8281 8.98826 19.3443 9.00911 19.9021C9.02331 20.2815 9.05957 20.5417 9.15223 20.7654C9.35522 21.2554 9.74457 21.6448 10.2346 21.8478C10.6022 22 11.0681 22 12 22C12.9319 22 13.3978 22 13.7654 21.8478C14.2554 21.6448 14.6448 21.2554 14.8477 20.7654" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
-                        <span class="px-1">Elements</span>
+                        <span class="px-1">Settings</span>
                     </div>
                     <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </div>
-                </a>
+                </button>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="/elements/alerts">Alerts</a>
-                    </li>
-                    <li>
-                        <a href="/elements/avatar">Avatar</a>
-                    </li>
-                    <li>
-                        <a href="/elements/badges">Badges</a>
-                    </li>
-                    <li>
-                        <a href="/elements/breadcrumbs">Breadcrumbs</a>
-                    </li>
-                    <li>
-                        <a href="/elements/buttons">Buttons</a>
-                    </li>
-                    <li>
-                        <a href="/elements/buttons-group">Button Groups</a>
-                    </li>
-                    <li>
-                        <a href="/elements/color-library">Color Library</a>
-                    </li>
-                    <li>
-                        <a href="/elements/dropdown">Dropdown</a>
-                    </li>
-                    <li>
-                        <a href="/elements/infobox">Infobox</a>
-                    </li>
-                    <li>
-                        <a href="/elements/jumbotron">Jumbotron</a>
-                    </li>
-                    <li>
-                        <a href="/elements/loader">Loader</a>
-                    </li>
-                    <li>
-                        <a href="/elements/pagination">Pagination</a>
-                    </li>
-                    <li>
-                        <a href="/elements/popovers">Popovers</a>
-                    </li>
-                    <li>
-                        <a href="/elements/progress-bar">Progress Bar</a>
-                    </li>
-                    <li>
-                        <a href="/elements/search">Search</a>
-                    </li>
-                    <li>
-                        <a href="/elements/tooltips">Tooltips</a>
-                    </li>
-                    <li>
-                        <a href="/elements/treeview">Treeview</a>
-                    </li>
-                    <li>
-                        <a href="/elements/typography">Typography</a>
-                    </li>
+                    <li><a href="{% url 'api_configuration' %}">API Configuration</a></li>
+                    <li><a href="{% url 'user_profile' %}">User Profile</a></li>
+                    <li><a href="{% url 'security_settings' %}">Security Settings</a></li>
                 </ul>
             </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
+
+            <li class="menu nav-item">
+                <a href="/docs" class="nav-link group">
                     <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path opacity="0.5" d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 15.8856 21 16.8284 20.4142 17.4142C19.8284 18 18.8856 18 17 18H7C5.11438 18 4.17157 18 3.58579 17.4142C3 16.8284 3 15.8856 3 14V10Z" fill="currentColor" />
-                            <path d="M16.5189 16.5013C16.6939 16.3648 16.8526 16.2061 17.1701 15.8886L21.1275 11.9312C21.2231 11.8356 21.1793 11.6708 21.0515 11.6264C20.5844 11.4644 19.9767 11.1601 19.4083 10.5917C18.8399 10.0233 18.5356 9.41561 18.3736 8.94849C18.3292 8.82066 18.1644 8.77687 18.0688 8.87254L14.1114 12.8299C13.7939 13.1474 13.6352 13.3061 13.4987 13.4811C13.3377 13.6876 13.1996 13.9109 13.087 14.1473C12.9915 14.3476 12.9205 14.5606 12.7786 14.9865L12.5951 15.5368L12.3034 16.4118L12.0299 17.2323C11.9601 17.4419 12.0146 17.6729 12.1708 17.8292C12.3271 17.9854 12.5581 18.0399 12.7677 17.9701L13.5882 17.6966L14.4632 17.4049L15.0135 17.2214L15.0136 17.2214C15.4394 17.0795 15.6524 17.0085 15.8527 16.913C16.0891 16.8004 16.3124 16.6623 16.5189 16.5013Z" fill="currentColor" />
-                            <path d="M22.3665 10.6922C23.2112 9.84754 23.2112 8.47812 22.3665 7.63348C21.5219 6.78884 20.1525 6.78884 19.3078 7.63348L19.1806 7.76071C19.0578 7.88348 19.0022 8.05496 19.0329 8.22586C19.0522 8.33336 19.0879 8.49053 19.153 8.67807C19.2831 9.05314 19.5288 9.54549 19.9917 10.0083C20.4545 10.4712 20.9469 10.7169 21.3219 10.847C21.5095 10.9121 21.6666 10.9478 21.7741 10.9671C21.945 10.9978 22.1165 10.9422 22.2393 10.8194L22.3665 10.6922Z" fill="currentColor" />
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25 9C7.25 8.58579 7.58579 8.25 8 8.25H14.5C14.9142 8.25 15.25 8.58579 15.25 9C15.25 9.41421 14.9142 9.75 14.5 9.75H8C7.58579 9.75 7.25 9.41421 7.25 9ZM7.25 13C7.25 12.5858 7.58579 12.25 8 12.25H11C11.4142 12.25 11.75 12.5858 11.75 13C11.75 13.4142 11.4142 13.75 11 13.75H8C7.58579 13.75 7.25 13.4142 7.25 13ZM7.25 17C7.25 16.5858 7.58579 16.25 8 16.25H9.5C9.91421 16.25 10.25 16.5858 10.25 17C10.25 17.4142 9.91421 17.75 9.5 17.75H8C7.58579 17.75 7.25 17.4142 7.25 17Z" fill="currentColor" />
+                        <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.5" d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 17.7712 21 19.6569 19.8284 20.8284C18.6569 22 16.7712 22 13 22H11C7.22876 22 5.34315 22 4.17157 20.8284C3 19.6569 3 17.7712 3 14V10Z" fill="currentColor"/>
                         </svg>
-                        <span class="px-1">Tables</span>
-                    </div>
-                    <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                        <span class="px-1">Knowledge Base</span>
                     </div>
                 </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/tables">Tables</a>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Data Tables
-                            <div class="ltr:ml-auto rtl:mr-auto  rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/datatables/basic">Basic</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/advanced">Advanced</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/skin">Skin</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/order-sorting">Order Sorting</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/multi-column">Multi Column</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/multiple-tables">Multiple Tables</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/alt-pagination">Alt. Pagination</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/checkbox">Checkbox</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/range-search">Range Search</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/export">Export</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/sticky-header">Sticky Header</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/clone-header">Clone Header</a>
-                            </li>
-                            <li>
-                                <a href="/datatables/column-chooser">Column Chooser</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
-                    <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path opacity="0.5" d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 15.8856 21 16.8284 20.4142 17.4142C19.8284 18 18.8856 18 17 18H7C5.11438 18 4.17157 18 3.58579 17.4142C3 16.8284 3 15.8856 3 14V10Z" fill="currentColor" />
-                            <path d="M16.5189 16.5013C16.6939 16.3648 16.8526 16.2061 17.1701 15.8886L21.1275 11.9312C21.2231 11.8356 21.1793 11.6708 21.0515 11.6264C20.5844 11.4644 19.9767 11.1601 19.4083 10.5917C18.8399 10.0233 18.5356 9.41561 18.3736 8.94849C18.3292 8.82066 18.1644 8.77687 18.0688 8.87254L14.1114 12.8299C13.7939 13.1474 13.6352 13.3061 13.4987 13.4811C13.3377 13.6876 13.1996 13.9109 13.087 14.1473C12.9915 14.3476 12.9205 14.5606 12.7786 14.9865L12.5951 15.5368L12.3034 16.4118L12.0299 17.2323C11.9601 17.4419 12.0146 17.6729 12.1708 17.8292C12.3271 17.9854 12.5581 18.0399 12.7677 17.9701L13.5882 17.6966L14.4632 17.4049L15.0135 17.2214L15.0136 17.2214C15.4394 17.0795 15.6524 17.0085 15.8527 16.913C16.0891 16.8004 16.3124 16.6623 16.5189 16.5013Z" fill="currentColor" />
-                            <path d="M22.3665 10.6922C23.2112 9.84754 23.2112 8.47812 22.3665 7.63348C21.5219 6.78884 20.1525 6.78884 19.3078 7.63348L19.1806 7.76071C19.0578 7.88348 19.0022 8.05496 19.0329 8.22586C19.0522 8.33336 19.0879 8.49053 19.153 8.67807C19.2831 9.05314 19.5288 9.54549 19.9917 10.0083C20.4545 10.4712 20.9469 10.7169 21.3219 10.847C21.5095 10.9121 21.6666 10.9478 21.7741 10.9671C21.945 10.9978 22.1165 10.9422 22.2393 10.8194L22.3665 10.6922Z" fill="currentColor" />
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.25 9C7.25 8.58579 7.58579 8.25 8 8.25H14.5C14.9142 8.25 15.25 8.58579 15.25 9C15.25 9.41421 14.9142 9.75 14.5 9.75H8C7.58579 9.75 7.25 9.41421 7.25 9ZM7.25 13C7.25 12.5858 7.58579 12.25 8 12.25H11C11.4142 12.25 11.75 12.5858 11.75 13C11.75 13.4142 11.4142 13.75 11 13.75H8C7.58579 13.75 7.25 13.4142 7.25 13ZM7.25 17C7.25 16.5858 7.58579 16.25 8 16.25H9.5C9.91421 16.25 10.25 16.5858 10.25 17C10.25 17.4142 9.91421 17.75 9.5 17.75H8C7.58579 17.75 7.25 17.4142 7.25 17Z" fill="currentColor" />
-                        </svg>
-                        <span class="px-1">Forms</span>
-                    </div>
-                    <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/forms/basic">Basic</a>
-                    </li>
-                    <li>
-                        <a href="/forms/input-group">Input Group</a>
-                    </li>
-                    <li>
-                        <a href="/forms/layouts">Layouts</a>
-                    </li>
-                    <li>
-                        <a href="/forms/validation">Validation</a>
-                    </li>
-                    <li>
-                        <a href="/forms/input-mask">Input Mask</a>
-                    </li>
-                    <li>
-                        <a href="/forms/select2">Select2</a>
-                    </li>
-                    <li>
-                        <a href="/forms/touchspin">TouchSpin</a>
-                    </li>
-                    <li>
-                        <a href="/forms/checkbox-radio">Checkbox & Radio</a>
-                    </li>
-                    <li>
-                        <a href="/forms/switches">Switches</a>
-                    </li>
-                    <li>
-                        <a href="/forms/wizards">Wizards</a>
-                    </li>
-                    <li>
-                        <a href="/forms/file-upload">File Upload</a>
-                    </li>
-                    <li>
-                        <a href="/forms/quill-editor">Quill Editor</a>
-                    </li>
-                    <li>
-                        <a href="/forms/markdown-editor">Markdown Editor</a>
-                    </li>
-                    <li>
-                        <a href="/forms/date-picker">Date & Range Picker</a>
-                    </li>
-                    <li>
-                        <a href="/forms/clipboard">Clipboard</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
-                    <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path opacity="0.5" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z" fill="currentColor" />
-                        </svg>
-                        <span class="px-1">Pages</span>
-                    </div>
-                    <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </a>
-                <ul class="sub-menu">
-                    <li class="relative">
-                        <a href="javascript:;">Users
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/users/profile">Profile</a>
-                            </li>
-                            <li>
-                                <a href="/users/user-account-settings">Account Settings</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/pages/knowledge-base">Knowledge Base</a>
-                    </li>
-                    <li>
-                        <a href="/pages/contact-us-boxed" target="_blank">Contact Us Boxed</a>
-                    </li>
-                    <li>
-                        <a href="/pages/contact-us-cover" target="_blank">Contact Us Cover</a>
-                    </li>
-                    <li>
-                        <a href="/pages/faq">Faq</a>
-                    </li>
-                    <li>
-                        <a href="/pages/coming-soon-boxed" target="_blank">Coming Soon Boxed</a>
-                    </li>
-                    <li>
-                        <a href="/pages/coming-soon-cover" target="_blank">Coming Soon Cover</a>
-                    </li>
-                    <li>
-                        <a href="/pages/maintenence" target="_blank">Maintanence</a>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Error
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/pages/error404" target="_blank">404</a>
-                            </li>
-                            <li>
-                                <a href="/pages/error500" target="_blank">500</a>
-                            </li>
-                            <li>
-                                <a href="/pages/error503" target="_blank">503</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Login
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/auth/cover-login" target="_blank">Login Cover</a>
-                            </li>
-                            <li>
-                                <a href="/auth/boxed-signin" target="_blank">Login Boxed</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Register
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/auth/cover-register" target="_blank">Register Cover</a>
-                            </li>
-                            <li>
-                                <a href="/auth/boxed-signup" target="_blank">Register Boxed</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Password Recovery
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/auth/cover-password-reset" target="_blank">Recover ID Cover</a>
-                            </li>
-                            <li>
-                                <a href="/auth/boxed-password-reset" target="_blank">Recover ID Boxed</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="relative">
-                        <a href="javascript:;">Lockscreen
-                            <div class="ltr:ml-auto rtl:mr-auto rtl:rotate-180">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </div>
-                        </a>
-                        <ul class="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                            <li>
-                                <a href="/auth/cover-lockscreen" target="_blank">Unlock Cover</a>
-                            </li>
-                            <li>
-                                <a href="/auth/boxed-lockscreen" target="_blank">Unlock Boxed</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li class="menu nav-item relative">
-                <a href="javascript:;" class="nav-link">
-                    <div class="flex items-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="shrink-0">
-                            <path opacity="0.5" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z" fill="currentColor" />
-                        </svg>
-                        <span class="px-1">More</span>
-                    </div>
-                    <div class="right_arrow">
-                        <svg class="w-4 h-4 rotate-90" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                </a>
-                <ul class="sub-menu">
-                    <li>
-                        <a href="/dragndrop">Drag and Drop</a>
-                    </li>
-                    <li>
-                        <a href="/charts">Charts</a>
-                    </li>
-                    <li>
-                        <a href="/font-icons">Font Icons</a>
-                    </li>
-                    <li>
-                        <a href="/widgets">Widgets</a>
-                    </li>
-                    <li>
-                        <a href="" target="_blank">Documentation</a>
-                    </li>
-                </ul>
             </li>
         </ul>
     </div>
@@ -818,38 +319,7 @@
                         }
                     }
                 }
-            },
-
-            notifications: [{
-                    id: 1,
-                    profile: 'user-profile.jpeg',
-                    message: '<strong class="text-sm mr-1">John Doe</strong>invite you to <strong>Prototyping</strong>',
-                    time: '45 min ago',
-                },
-                {
-                    id: 2,
-                    profile: 'profile-34.jpeg',
-                    message: '<strong class="text-sm mr-1">Adam Nolan</strong>mentioned you to <strong>UX Basics</strong>',
-                    time: '9h Ago',
-                },
-                {
-                    id: 3,
-                    profile: 'profile-16.jpeg',
-                    message: '<strong class="text-sm mr-1">Anna Morgan</strong>Upload a file',
-                    time: '9h Ago',
-                }
-            ],
-
-
-
-
-            removeNotification(value) {
-                this.notifications = this.notifications.filter((d) => d.id !== value);
-            },
-
-            removeMessage(value) {
-                this.messages = this.messages.filter((d) => d.id !== value);
-            },
+            }
         }));
     });
 </script>
