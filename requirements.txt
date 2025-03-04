@@ -4,8 +4,8 @@ django-redis>=5.2.0
 hiredis>=2.2.1
 
 # Async and threading
-aiohttp>=3.8.4
-asyncio>=3.4.3
+aiohttp
+asyncio
 
 # Django and core dependencies
 Django>=4.2
