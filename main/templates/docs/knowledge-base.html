@@ -128,8 +128,8 @@
         </div>
         <div class="relative">
             <div class="text-center">
-                <h1 class="mb-4 text-4xl font-bold text-white dark:text-gray-100">Stack Documentation</h1>
-                <p class="mb-8 text-lg text-white dark:text-gray-300">Everything you need to know about Stack - from setup to advanced features.</p>
+                <h1 class="mb-4 text-4xl font-bold text-white dark:text-gray-100">IntelStack Documentation</h1>
+                <p class="mb-8 text-lg text-white dark:text-gray-300">Complete guide to IntelStack - An advanced threat intelligence and security analysis platform</p>
             </div>
                 <div
                     class="mb-2 flex gap-1 text-end text-base leading-5 sm:flex-col xl:text-xl"
@@ -188,1057 +188,344 @@
                 </div>
                 <div class="flex items-center justify-center gap-2 sm:gap-5">
                     <a href="javascript:;" class="duration-300 hover:underline">
-                        Sales</a
+                        Threat Intelligence</a
                     >
                     <a href="javascript:;" class="duration-300 hover:underline">
-                        Charts</a
+                        IOC Scanning</a
                     >
                     <a href="javascript:;" class="duration-300 hover:underline">
-                        Finance</a
+                        Sandbox Analysis</a
                     >
                     <a href="javascript:;" class="duration-300 hover:underline">
-                        Trending</a
+                        API Integration</a
                     >
                 </div>
             </div>
         </div>
     </div>
+
     <div class="container mx-auto px-4 py-8">
-        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <li
-                class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
-                :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'general'}"
-                @click="activeTab = 'general'"
-            >
-                <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        opacity="0.5"
-                        d="M13.3332 2.6665H18.6665C23.6948 2.6665 26.209 2.6665 27.7711 4.2286C29.3332 5.7907 29.3332 8.30486 29.3332 13.3332V14.6665C29.3332 15.402 29.3332 16.7324 29.3245 17.3332H2.67519C2.6665 16.7324 2.6665 15.402 2.6665 14.6665V13.3332C2.6665 8.30486 2.6665 5.7907 4.2286 4.2286C5.7907 2.6665 8.30486 2.6665 13.3332 2.6665Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M10.646 23.3335C6.86021 23.3335 4.96734 23.3335 3.79125 22.1619C3.02926 21.4029 2.76097 20.344 2.6665 18.6668V17.3335H29.3332V18.6668C29.2387 20.344 28.9704 21.4029 28.2084 22.1619C27.0323 23.3335 25.1395 23.3335 21.3537 23.3335H17.0037V28.6668H21.3537C21.9081 28.6668 22.3576 29.1145 22.3576 29.6668C22.3576 30.2191 21.9081 30.6668 21.3537 30.6668H10.646C10.0916 30.6668 9.64212 30.2191 9.64212 29.6668C9.64212 29.1145 10.0916 28.6668 10.646 28.6668H14.996V23.3335H10.646Z"
-                        fill="currentColor"
-                    />
-                </svg>
-
-                <h5 class="font-bold text-black dark:text-white">General</h5>
-            </li>
-            <li
-                class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
-                :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'quick-support'}"
-                @click="activeTab = 'quick-support'"
-            >
-                <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <circle
-                        cx="15.9998"
-                        cy="7.99984"
-                        r="5.33333"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.5"
-                        d="M26.6668 23.3335C26.6668 26.6472 26.6668 29.3335 16.0002 29.3335C5.3335 29.3335 5.3335 26.6472 5.3335 23.3335C5.3335 20.0198 10.1091 17.3335 16.0002 17.3335C21.8912 17.3335 26.6668 20.0198 26.6668 23.3335Z"
-                        fill="currentColor"
-                    />
-                </svg>
-
-                <h5 class="font-bold text-black dark:text-white">
-                    Quick Support
-                </h5>
-            </li>
-            <li
-                class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
-                :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'free-updates'}"
-                @click="activeTab = 'free-updates'"
-            >
-                <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M11.2296 27.4907C13.5704 28.7191 14.7408 29.3333 15.9998 29.3333V16L3.51719 9.43018C3.49882 9.45971 3.48077 9.48953 3.46303 9.51965C2.6665 10.8723 2.6665 12.5555 2.6665 15.922V16.078C2.6665 19.4444 2.6665 21.1277 3.46303 22.4803C4.25956 23.833 5.69401 24.5858 8.5629 26.0913L11.2296 27.4907Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.7"
-                        d="M23.4367 5.90853L20.77 4.50913C18.4292 3.28071 17.2588 2.6665 15.9997 2.6665C14.7407 2.6665 13.5703 3.28071 11.2295 4.50912L8.56279 5.90853C5.75778 7.38053 4.32404 8.13292 3.51709 9.43002L15.9997 15.9998L28.4824 9.43002C27.6754 8.13292 26.2417 7.38054 23.4367 5.90853Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.5"
-                        d="M28.5368 9.51965C28.5191 9.48953 28.501 9.45971 28.4826 9.43018L16 16V29.3333C17.259 29.3333 18.4294 28.7191 20.7703 27.4907L23.4369 26.0913C26.3058 24.5858 27.7403 23.833 28.5368 22.4803C29.3333 21.1277 29.3333 19.4444 29.3333 16.078V15.922C29.3333 12.5555 29.3333 10.8723 28.5368 9.51965Z"
-                        fill="currentColor"
-                    />
-                </svg>
-
-                <h5 class="font-bold text-black dark:text-white">
-                    Free Updates
-                </h5>
-            </li>
-            <li
-                class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
-                :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'pricing'}"
-                @click="activeTab = 'pricing'"
-            >
-                <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        opacity="0.5"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M29.3332 15.9998C29.3332 23.3636 23.3636 29.3332 15.9998 29.3332C8.63604 29.3332 2.6665 23.3636 2.6665 15.9998C2.6665 8.63604 8.63604 2.6665 15.9998 2.6665C23.3636 2.6665 29.3332 8.63604 29.3332 15.9998Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M17 8C17 7.44772 16.5523 7 16 7C15.4477 7 15 7.44772 15 8V8.42231C12.8261 8.81156 11 10.4448 11 12.6667C11 15.2229 13.417 17 16 17C17.8353 17 19 18.2076 19 19.3333C19 20.459 17.8353 21.6667 16 21.6667C14.1647 21.6667 13 20.459 13 19.3333C13 18.781 12.5523 18.3333 12 18.3333C11.4477 18.3333 11 18.781 11 19.3333C11 21.5552 12.8261 23.1884 15 23.5777V24C15 24.5523 15.4477 25 16 25C16.5523 25 17 24.5523 17 24V23.5777C19.1739 23.1884 21 21.5552 21 19.3333C21 16.7771 18.583 15 16 15C14.1647 15 13 13.7924 13 12.6667C13 11.541 14.1647 10.3333 16 10.3333C17.8353 10.3333 19 11.541 19 12.6667C19 13.219 19.4477 13.6667 20 13.6667C20.5523 13.6667 21 13.219 21 12.6667C21 10.4448 19.1739 8.81156 17 8.42231V8Z"
-                        fill="currentColor"
-                    />
-                </svg>
-
-                <h5 class="font-bold text-black dark:text-white">Pricing</h5>
-            </li>
-            <li
-                class="group flex min-w-[120px] cursor-pointer flex-col items-center justify-center gap-4 rounded-md px-8 py-2.5 text-center text-[#506690] duration-300 hover:bg-white hover:text-primary dark:hover:bg-[#1B2E4B]"
-                :class="{'bg-white text-primary dark:bg-[#1B2E4B]' : activeTab === 'hosting'}"
-                @click="activeTab = 'hosting'"
-            >
-                <svg
-                    width="32"
-                    height="32"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                        d="M9.33317 18.6667C8.78089 18.6667 8.33317 19.1144 8.33317 19.6667C8.33317 20.219 8.78089 20.6667 9.33317 20.6667C9.88546 20.6667 10.3332 20.219 10.3332 19.6667C10.3332 19.1144 9.88546 18.6667 9.33317 18.6667Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M2.6665 19.6667C2.6665 15.9848 5.65127 13 9.33317 13H22.6665C26.3484 13 29.3332 15.9848 29.3332 19.6667C29.3332 23.3486 26.3484 26.3333 22.6665 26.3333H9.33317C5.65127 26.3333 2.6665 23.3486 2.6665 19.6667ZM6.33317 19.6667C6.33317 18.0098 7.67632 16.6667 9.33317 16.6667C10.99 16.6667 12.3332 18.0098 12.3332 19.6667C12.3332 21.3235 10.99 22.6667 9.33317 22.6667C7.67632 22.6667 6.33317 21.3235 6.33317 19.6667ZM15.9998 18.6667C15.4476 18.6667 14.9998 19.1144 14.9998 19.6667C14.9998 20.219 15.4476 20.6667 15.9998 20.6667H24.6665C25.2188 20.6667 25.6665 20.219 25.6665 19.6667C25.6665 19.1144 25.2188 18.6667 24.6665 18.6667H15.9998Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.5"
-                        d="M7.29157 26.0146L5.80916 28.4853C5.52501 28.9589 5.67858 29.5732 6.15216 29.8573C6.62574 30.1415 7.24 29.9879 7.52415 29.5143L9.43285 26.3331H9.33339C8.62118 26.3331 7.93505 26.2215 7.29157 26.0146Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.5"
-                        d="M22.5674 26.3331L24.4761 29.5143C24.7602 29.9879 25.3745 30.1415 25.8481 29.8573C26.3217 29.5732 26.4752 28.9589 26.1911 28.4853L24.7087 26.0146C24.0652 26.2215 23.3791 26.3331 22.6668 26.3331H22.5674Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.4"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M21.9996 4.6665C19.3611 4.6665 17.0971 6.28026 16.1454 8.57849C15.934 9.08875 15.3491 9.33108 14.8388 9.11977C14.3286 8.90845 14.0862 8.3235 14.2975 7.81324C15.5481 4.7937 18.5242 2.6665 21.9996 2.6665C25.475 2.6665 28.4512 4.7937 29.7017 7.81324C29.913 8.3235 29.6707 8.90845 29.1604 9.11977C28.6502 9.33108 28.0652 9.08875 27.8539 8.57849C26.9021 6.28026 24.6382 4.6665 21.9996 4.6665Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        opacity="0.7"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M22.0008 8C20.6377 8 19.4845 8.90993 19.1204 10.1576C18.9657 10.6878 18.4105 10.9921 17.8803 10.8374C17.3501 10.6827 17.0457 10.1275 17.2005 9.59735C17.8068 7.51959 19.725 6 22.0008 6C24.2765 6 26.1948 7.51959 26.8011 9.59735C26.9558 10.1275 26.6514 10.6827 26.1212 10.8374C25.5911 10.9921 25.0359 10.6878 24.8811 10.1576C24.5171 8.90993 23.3639 8 22.0008 8Z"
-                        fill="currentColor"
-                    />
-                    <path
-                        d="M23.3332 10.3333C23.3332 11.0697 22.7362 11.6667 21.9998 11.6667C21.2635 11.6667 20.6665 11.0697 20.6665 10.3333C20.6665 9.59695 21.2635 9 21.9998 9C22.7362 9 23.3332 9.59695 23.3332 10.3333Z"
-                        fill="currentColor"
-                    />
-                </svg>
-
-                <h5 class="font-bold text-black dark:text-white">Hosting</h5>
-            </li>
-        </ul>
-    </div>
-    <h3 class="mb-8 text-center text-xl font-semibold md:text-2xl">
-        Some common <span class="text-primary">questions</span>
-    </h3>
-    <div class="container mx-auto px-4 py-8">
-        {% for section in sections %}
         <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
-            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">{{ section.title }}</h2>
-            <p class="mb-6 text-gray-600 dark:text-gray-400">{{ section.description }}</p>
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">What is IntelStack?</h2>
+            <p class="mb-6 text-gray-600 dark:text-gray-400">
+                IntelStack is an advanced security analysis platform built with Django that integrates multiple security tools and services for comprehensive threat detection and analysis. The platform combines real-time threat intelligence, IOC scanning, and sandbox analysis to provide security teams with actionable insights.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 border rounded">
+                    <h4 class="font-bold mb-2">Threat Intelligence</h4>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li>Real-time threat feed integration</li>
+                        <li>OSINT data collection</li>
+                        <li>Automated indicator extraction</li>
+                        <li>Threat correlation engine</li>
+                    </ul>
+                </div>
+                <div class="p-4 border rounded">
+                    <h4 class="font-bold mb-2">IOC Scanning</h4>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li>File hash analysis</li>
+                        <li>Domain/URL reputation</li>
+                        <li>IP reputation checking</li>
+                        <li>Email analysis</li>
+                    </ul>
+                </div>
+                <div class="p-4 border rounded">
+                    <h4 class="font-bold mb-2">Sandbox Analysis</h4>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li>Isolated file analysis</li>
+                        <li>Behavioral detection</li>
+                        <li>Network traffic analysis</li>
+                        <li>Automated reporting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Architecture & Technology Stack</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Core Technologies</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Backend: Django 4.1 with Python 3.8+</li>
+                        <li>Frontend: TailwindCSS, Alpine.js</li>
+                        <li>Database: SQLite3 (configurable)</li>
+                        <li>Cache: Redis</li>
+                        <li>Static Files: WhiteNoise</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Project Structure</h3>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <pre class="text-sm">
+Stack/
+├── main/                 # Main application
+│   ├── services/        # Core security services
+│   ├── templates/       # HTML templates
+│   └── views.py         # View controllers
+├── vristo/              # Project configuration
+├── staticfiles/         # Static assets
+└── vristoDjango/       # Frontend components
+                    </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Security Services</h2>
             
-            <ul class="space-y-3">
-                {% for article in section.articles %}
-                <li>
-                    <a href="{{ article.url }}" class="flex items-center text-primary hover:text-primary-dark">
-                        <span class="mr-2">→</span>
-                        {{ article.title }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">IP Analysis Service</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Geolocation data</li>
+                    <li>ASN information</li>
+                    <li>Reputation scoring</li>
+                    <li>Blacklist checking</li>
+                    <li>Active threat detection</li>
+                    <li>Port scanning detection</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Domain & URL Analysis</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>WHOIS information</li>
+                    <li>SSL certificate analysis</li>
+                    <li>DNS records investigation</li>
+                    <li>Malicious URL detection</li>
+                    <li>Phishing site detection</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">File Analysis</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Hash reputation checking</li>
+                    <li>File type detection</li>
+                    <li>Malware scanning</li>
+                    <li>YARA rule matching</li>
+                    <li>Behavioral analysis</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Email Analysis</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Header analysis</li>
+                    <li>SPF/DKIM verification</li>
+                    <li>Attachment scanning</li>
+                    <li>Phishing detection</li>
+                    <li>Sender reputation</li>
+                </ul>
+            </div>
         </div>
-        {% endfor %}
-            <div
-                class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark"
-            >
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Integration & API</h2>
+            <div class="space-y-6">
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 1}"
-                        x-on:click="active === 1 ? active = null : active = 1"
-                    >
-                        <span>How to install VRISTO Admin</span>
-                        <template x-if="active !== 1">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 1">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 1" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
+                    <h3 class="text-xl font-semibold mb-3">API Authentication</h3>
+                    <p class="mb-4">The platform uses encrypted API keys stored in the database. Example usage:</p>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <code>
+                        POST /api/v1/scan/ip
+                        Authorization: Bearer {API_KEY}
+                        Content-Type: application/json
+
+                        {
+                            "ip": "8.8.8.8",
+                            "analysis_type": "full"
+                        }
+                        </code>
                     </div>
                 </div>
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 2}"
-                        x-on:click="active === 2 ? active = null : active = 2"
-                    >
-                        <span> Where can I subscribe to your newsletter?</span>
-                        <template x-if="active !== 2">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 2">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 2" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Available Services</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>/api/v1/scan/ip - IP reputation & analysis</li>
+                        <li>/api/v1/scan/domain - Domain/URL scanning</li>
+                        <li>/api/v1/scan/file - File analysis & sandbox</li>
+                        <li>/api/v1/scan/email - Email security analysis</li>
+                        <li>/api/v1/intel/feed - Access threat intelligence</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Security Features</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Authentication & Authorization</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Django's built-in authentication</li>
+                        <li>Session-based user management</li>
+                        <li>Role-based access control</li>
+                        <li>API key encryption</li>
+                        <li>CSRF protection</li>
+                    </ul>
                 </div>
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 3}"
-                        x-on:click="active === 3 ? active = null : active = 3"
-                    >
-                        <span>How to install VRISTO Admin</span>
-                        <template x-if="active !== 3">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 3">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 3" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
-                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Data Security</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Encrypted storage for sensitive data</li>
+                        <li>Secure file handling</li>
+                        <li>Rate limiting</li>
+                        <li>Input validation</li>
+                        <li>XSS protection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Getting Started</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">System Requirements</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Python 3.8 or higher</li>
+                        <li>Docker (for sandbox environment)</li>
+                        <li>Minimum 2GB RAM</li>
+                        <li>5GB storage space</li>
+                    </ul>
                 </div>
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 5}"
-                        x-on:click="active === 5 ? active = null : active = 5"
-                    >
-                        <span>How to install VRISTO Admin</span>
-                        <template x-if="active !== 5">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 5">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 5" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
+                    <h3 class="text-xl font-semibold mb-3">Installation Steps</h3>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <code>
+                            git clone https://github.com/your-repo/intelstack<br>
+                            cd intelstack<br>
+                            pip install -r requirements.txt<br>
+                            python manage.py setup
+                        </code>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="rounded-md bg-white dark:bg-black" x-data="{ active: 1 }">
-            <div
-                class="border-b border-white-light p-6 text-[22px] font-bold dark:border-dark dark:text-white"
-            >
-                Quick support & Free update
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Core Features</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Threat Intelligence Module</h3>
+                <p class="mb-4">Comprehensive threat intelligence gathering and analysis capabilities:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Real-time threat data collection</li>
+                    <li>Automated indicator extraction</li>
+                    <li>Threat correlation and analysis</li>
+                    <li>Custom threat feed integration</li>
+                    <li>Automated reporting and alerts</li>
+                </ul>
             </div>
-            <div
-                class="divide-y divide-white-light px-6 py-4.5 dark:divide-dark"
-            >
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">IOC Scanning</h3>
+                <p class="mb-4">Advanced scanning capabilities for detecting Indicators of Compromise:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>File hash analysis</li>
+                    <li>URL/Domain reputation checking</li>
+                    <li>IP address analysis</li>
+                    <li>YARA rule integration</li>
+                    <li>Custom detection rules</li>
+                </ul>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4">Sandbox Analysis</h3>
+                <p class="mb-4">Secure environment for analyzing suspicious content:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Isolated analysis environment</li>
+                    <li>Dynamic file analysis</li>
+                    <li>Network traffic monitoring</li>
+                    <li>Behavior analysis</li>
+                    <li>Automated report generation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">API Integration</h2>
+            <div class="space-y-6">
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 1}"
-                        x-on:click="active === 1 ? active = null : active = 1"
-                    >
-                        <span>How to use Browser Sync</span>
-                        <template x-if="active !== 1">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 1">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 1" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
+                    <h3 class="text-xl font-semibold mb-3">API Authentication</h3>
+                    <p class="mb-4">Secure your API requests using API keys:</p>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <code>
+                            curl -X GET https://api.intelstack.com/v1/scan \<br>
+                            -H "Authorization: Bearer YOUR_API_KEY" \<br>
+                            -H "Content-Type: application/json"
+                        </code>
                     </div>
                 </div>
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 2}"
-                        x-on:click="active === 2 ? active = null : active = 2"
-                    >
-                        <span> Sidebar not rendering CSS</span>
-                        <template x-if="active !== 2">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 2">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 2" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
+                    <h3 class="text-xl font-semibold mb-3">Available Endpoints</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>/api/v1/scan - Submit files/URLs for scanning</li>
+                        <li>/api/v1/intel - Access threat intelligence data</li>
+                        <li>/api/v1/sandbox - Submit samples for sandbox analysis</li>
+                        <li>/api/v1/reports - Generate and retrieve analysis reports</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Configuration Guide</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-3">Environment Setup</h3>
+                    <p class="mb-4">Configure your environment variables:</p>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <code>
+                            INTELSTACK_API_KEY=your_api_key<br>
+                            SANDBOX_ENABLED=true<br>
+                            THREAT_FEEDS=["feed1", "feed2"]<br>
+                            LOG_LEVEL=INFO
+                        </code>
                     </div>
                 </div>
                 <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 3}"
-                        x-on:click="active === 3 ? active = null : active = 3"
-                    >
-                        <span>Connect with us Personally</span>
-                        <template x-if="active !== 3">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 3">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 3" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div
-                        class="flex cursor-pointer items-center justify-between gap-10 px-2.5 py-2 text-base font-semibold hover:bg-primary-light hover:text-primary dark:text-white dark:hover:bg-[#1B2E4B] dark:hover:text-primary"
-                        :class="{'bg-primary-light dark:bg-[#1B2E4B] !text-primary' : active === 5}"
-                        x-on:click="active === 5 ? active = null : active = 5"
-                    >
-                        <span>Compilation Issue</span>
-                        <template x-if="active !== 5">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12.75 9C12.75 8.58579 12.4142 8.25 12 8.25C11.5858 8.25 11.25 8.58579 11.25 9L11.25 11.25H9C8.58579 11.25 8.25 11.5858 8.25 12C8.25 12.4142 8.58579 12.75 9 12.75H11.25V15C11.25 15.4142 11.5858 15.75 12 15.75C12.4142 15.75 12.75 15.4142 12.75 15L12.75 12.75H15C15.4142 12.75 15.75 12.4142 15.75 12C15.75 11.5858 15.4142 11.25 15 11.25H12.75V9Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                        <template x-if="active === 5">
-                            <span class="shrink-0">
-                                <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        opacity="0.5"
-                                        d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                        fill="currentColor"
-                                    />
-                                    <path
-                                        d="M15.75 12C15.75 12.4142 15.4142 12.75 15 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H15C15.4142 11.25 15.75 11.5858 15.75 12Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </span>
-                        </template>
-                    </div>
-                    <div x-cloak x-show="active === 5" x-collapse>
-                        <div class="px-1 py-3 font-semibold text-white-dark">
-                            <p>
-                                Anim pariatur cliche reprehenderit, enim eiusmod
-                                high life accusamus terry richardson ad squid. 3
-                                wolf moon officia aute, non cupidatat skateboard
-                                dolor brunch. Food truck quinoa nesciunt laborum
-                                eiusmod. Brunch 3 wolf moon tempor, sunt aliqua
-                                put a bird on it squid single-origin coffee
-                                nulla assumenda shoreditch et. Nihil anim
-                                keffiyeh helvetica, craft beer labore wes
-                                anderson cred nesciunt sapiente ea proident. Ad
-                                vegan excepteur butcher vice lomo. Leggings
-                                occaecat craft beer farm-to-table, raw denim
-                                aesthetic synth nesciunt you probably haven't
-                                heard of them accusamus labore sustainable VHS.
-                            </p>
-                        </div>
+                    <h3 class="text-xl font-semibold mb-3">Custom Rules</h3>
+                    <p>Learn how to create and implement custom detection rules:</p>
+                    <div class="bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <code>
+                            rule suspicious_behavior {<br>
+                            &nbsp;&nbsp;strings:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;$pattern = "malicious_pattern"<br>
+                            &nbsp;&nbsp;condition:<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;$pattern<br>
+                            }
+                        </code>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="panel mt-10 text-center md:mt-20">
-        <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">
-            Still need help?
-        </h3>
-        <div class="text-lg font-medium text-white-dark">
-            Our specialists are always happy to help. Contact us during standard
-            business hours or email us24/7 and we'll get back to you.
-        </div>
-        <div
-            class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6"
-        >
-            <button type="button" class="btn btn-primary">Contact Us</button>
-            <button type="button" class="btn btn-primary">
-                Visit our community
-            </button>
-        </div>
-    </div>
-    <div
-        class="mt-10 flex flex-col-reverse items-center justify-between gap-5 rounded-md bg-gradient-to-tl from-[rgba(234,241,255,0.44)] to-[rgba(234,241,255,0.96)] px-6 py-2.5 dark:from-[rgba(14,23,38,0.44)] dark:to-[#0E1726] md:flex-row lg:mt-20 xl:px-16"
-    >
-        <div class="flex-1 py-3.5 text-center md:text-start">
-            <h3 class="mb-2 text-xl font-bold dark:text-white md:text-2xl">
-                Didn’t find any solutions?
-            </h3>
-            <div class="text-lg font-medium text-white-dark">
-                Loaded with awesome features like documentation, knowledge base
-                forum, domain transfer, affiliates etc.
-            </div>
-            <div class="mt-8 flex justify-center md:justify-start lg:mt-16">
-                <button type="button" class="btn btn-primary">
-                    Raise support tickets
-                </button>
-            </div>
-        </div>
-        <div class="w-52 max-w-xs lg:w-full">
-            <img
-                src="{% static 'assets/images/knowledge/find-solution.svg' %}"
-                alt="find-solution"
-                class="w-full object-cover rtl:rotate-y-180 dark:brightness-[2.59] dark:grayscale-[83%]"
-            />
-        </div>
-    </div>
-    <div class="mt-10">
-        <h3 class="mb-6 text-xl font-bold md:text-3xl">Popular Topics</h3>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <div
-                class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black"
-            >
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <img
-                        src="{% static 'assets/images/knowledge/image-1.jpg' %}"
-                        alt="..."
-                        class="w-full object-cover"
-                    />
+
+        <div class="mb-8 rounded-lg bg-white p-6 shadow-md dark:bg-black">
+            <h2 class="mb-4 text-2xl font-bold text-gray-800 dark:text-white">Troubleshooting</h2>
+            <div class="space-y-4">
+                <div class="p-4 border rounded">
+                    <h4 class="font-bold mb-2">Common Issues</h4>
+                    <ul class="list-disc pl-6">
+                        <li>API Connection Problems</li>
+                        <li>Sandbox Environment Errors</li>
+                        <li>Scanning Timeout Issues</li>
+                    </ul>
                 </div>
-                <h5 class="text-xl dark:text-white">
-                    Excessive sugar is harmful
-                </h5>
-                <div class="flex">
-                    <div
-                        class="me-4 overflow-hidden rounded-full bg-white-dark"
-                    >
-                        <img
-                            src="{% static 'assets/images/profile-1.jpeg' %}"
-                            class="h-11 w-11 object-cover"
-                            alt="profile1"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">
-                            Alma Clark
-                        </h4>
-                        <p>06 May</p>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black"
-            >
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <img
-                        src="{% static 'assets/images/knowledge/image-2.jpg' %}"
-                        alt="..."
-                        class="w-full object-cover"
-                    />
-                </div>
-                <h5 class="text-xl dark:text-white">Creative Photography</h5>
-                <div class="flex">
-                    <div
-                        class="me-4 overflow-hidden rounded-full bg-white-dark"
-                    >
-                        <img
-                            src="{% static 'assets/images/profile-2.jpeg' %}"
-                            class="h-11 w-11 object-cover"
-                            alt="profile1"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">
-                            Alma Clark
-                        </h4>
-                        <p>06 May</p>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black"
-            >
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <img
-                        src="{% static 'assets/images/knowledge/image-3.jpg' %}"
-                        alt="..."
-                        class="w-full object-cover"
-                    />
-                </div>
-                <h5 class="text-xl dark:text-white">Plan your next trip</h5>
-                <div class="flex">
-                    <div
-                        class="me-4 overflow-hidden rounded-full bg-white-dark"
-                    >
-                        <img
-                            src="{% static 'assets/images/profile-3.jpeg' %}"
-                            class="h-11 w-11 object-cover"
-                            alt="profile1"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">
-                            Alma Clark
-                        </h4>
-                        <p>06 May</p>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black"
-            >
-                <div class="max-h-56 overflow-hidden rounded-md">
-                    <img
-                        src="{% static 'assets/images/knowledge/image-4.jpg' %}"
-                        alt="..."
-                        class="w-full object-cover"
-                    />
-                </div>
-                <h5 class="text-xl dark:text-white">My latest Vlog</h5>
-                <div class="flex">
-                    <div
-                        class="me-4 overflow-hidden rounded-full bg-white-dark"
-                    >
-                        <img
-                            src="{% static 'assets/images/profile-4.jpeg' %}"
-                            class="h-11 w-11 object-cover"
-                            alt="profile1"
-                        />
-                    </div>
-                    <div class="flex-1">
-                        <h4 class="mb-1.5 font-semibold dark:text-white">
-                            Alma Clark
-                        </h4>
-                        <p>06 May</p>
-                    </div>
+                <div class="p-4 border rounded">
+                    <h4 class="font-bold mb-2">Error Codes</h4>
+                    <ul class="list-disc pl-6">
+                        <li>ERR_001: API Authentication Failed</li>
+                        <li>ERR_002: Sandbox Initialization Error</li>
+                        <li>ERR_003: Scan Timeout</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mt-10 lg:mt-16" x-data="modal">
-        <h3 class="mb-6 text-xl font-bold md:text-3xl">
-            Popular Video Tutorial
-        </h3>
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-            <template x-for="(item, i) in items" :key="i">
-                <div
-                    class="space-y-5 rounded-md border border-white-light bg-white p-5 shadow-[0px_0px_2px_0px_rgba(145,158,171,0.20),0px_12px_24px_-4px_rgba(145,158,171,0.12)] dark:border-[#1B2E4B] dark:bg-black"
-                >
-                    <div
-                        class="relative h-[340px] overflow-hidden rounded-md group"
-                    >
-                        <img
-                            :src="item.src"
-                            alt="video tutorial"
-                            class="h-full w-full object-cover cursor-pointer"
-                            @click="toggle"
-                        />
-                        <button
-                            type="button"
-                            class="absolute left-1/2 top-1/2 grid h-[62px] w-[62px] -translate-x-1/2 -translate-y-1/2 place-content-center rounded-full text-white duration-300 group-hover:scale-110"
-                            @click="toggle"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-[62px] w-[62px]"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22ZM13.0261 9.27496C12.7888 9.10835 12.5201 8.93601 12.2419 8.76684C11.1695 8.1147 10.6333 7.78863 10.1524 8.14964C9.6715 8.51065 9.62779 9.2664 9.54038 10.7779C9.51566 11.2053 9.5 11.6244 9.5 12C9.5 12.3757 9.51566 12.7947 9.54038 13.2222C9.62779 14.7337 9.6715 15.4894 10.1524 15.8504C10.6333 16.2115 11.1695 15.8854 12.2419 15.2333C12.5201 15.0641 12.7888 14.8917 13.0261 14.7251C13.2966 14.5352 13.5909 14.3073 13.8876 14.0652C14.9625 13.1884 15.5 12.7499 15.5 12C15.5 11.2502 14.9625 10.8117 13.8876 9.93485C13.5909 9.69278 13.2966 9.46488 13.0261 9.27496Z"
-                                    fill="currentColor"
-                                />
-                            </svg>
-                        </button>
-                        <div
-                            class="absolute bottom-0 left-0 w-full bg-white/30 px-5 py-[22px] text-center text-xl text-white backdrop-blur-[5px]"
-                        >
-                            Excessive sugar is harmful
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </div>
-        <div
-            class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
-            :class="open && '!block'"
-        >
-            <div
-                class="flex min-h-screen items-start justify-center px-4"
-                @click.self="open = false"
-            >
-                <div
-                    x-show="open"
-                    x-transition
-                    x-transition.duration.300
-                    class="my-8 w-full max-w-3xl overflow-hidden"
-                >
-                    <div class="text-right">
-                        <button
-                            type="button"
-                            class="text-white-dark hover:text-dark"
-                            @click="toggle"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24px"
-                                height="24px"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="1.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="h-6 w-6"
-                            >
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
-                    </div>
-                    <iframe
-                        src="https://www.youtube.com/embed/tgbNymZ7vqY"
-                        class="h-[250px] w-full md:h-[550px]"
-                    ></iframe>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <script>
     document.addEventListener('alpine:init', () => {

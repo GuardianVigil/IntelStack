@@ -4757,3 +4757,368 @@ WARNING 2025-02-12 22:32:55,083 base_scanner 89291 126569509029568 greynoise rat
 WARNING 2025-02-12 22:32:55,084 greynoise 89291 126569509029568 GreyNoise rate limit hit, disabling further requests
 INFO 2025-02-12 22:32:55,357 crowdsec 89291 126569509029568 CrowdSec raw response: {'ip': '192.42.116.195', 'reputation': 'malicious', 'ip_range': '192.42.116.0/22', 'background_noise': 'high', 'confidence': 'high', 'background_noise_score': 10, 'ip_range_score': 5, 'as_name': 'SURF B.V.', 'as_num': 1101, 'ip_range_24': '192.42.116.0/24', 'ip_range_24_reputation': 'malicious', 'ip_range_24_score': 5, 'location': {'country': 'NL', 'city': None, 'latitude': 52.3824, 'longitude': 4.8995}, 'reverse_dns': '5.tor-exit.nothingtohide.nl', 'behaviors': [{'name': 'http:bruteforce', 'label': 'HTTP Bruteforce', 'description': 'IP has been reported for performing a HTTP brute force attack (either generic HTTP probing or applicative related brute force).', 'references': []}, {'name': 'http:scan', 'label': 'HTTP Scan', 'description': 'IP has been reported for performing actions related to HTTP vulnerability scanning and discovery.', 'references': []}, {'name': 'http:dos', 'label': 'HTTP DoS', 'description': 'IP has been reported trying to perform denial of service attacks.', 'references': []}, {'name': 'http:crawl', 'label': 'HTTP Crawl', 'description': 'IP has been reported for performing aggressive crawling of web applications.', 'references': []}, {'name': 'http:spam', 'label': 'Web form spam', 'description': 'IP has been reported trying to perform spam via web forms/forums.', 'references': []}, {'name': 'http:exploit', 'label': 'HTTP Exploit', 'description': 'IP has been reported for attempting to exploit a vulnerability in a web application.', 'references': []}, {'name': 'windows:bruteforce', 'label': 'SMB/RDP bruteforce', 'description': 'IP has been reported for performing brute force on Windows (samba, remote desktop) services.', 'references': []}, {'name': 'generic:exploit', 'label': 'Exploitation attempt', 'description': 'IP has been reported trying to exploit known vulnerability/CVE on unspecified protocols.', 'references': []}], 'history': {'first_seen': '2022-12-18T18:30:00+00:00', 'last_seen': '2025-02-12T19:00:00+00:00', 'full_age': 789, 'days_age': 788}, 'classifications': {'false_positives': [], 'classifications': [{'name': 'profile:spoofed_user_agent', 'label': 'Spoofed User Agent', 'description': 'IP uses rapidly changing user agents.', 'references': []}, {'name': 'proxy:tor', 'label': 'TOR exit node', 'description': 'IP is being flagged as a TOR exit node.', 'references': []}, {'name': 'crowdsec:ai_vpn_proxy', 'label': 'VPN or Proxy', 'description': 'IP is identified as a VPN or a Proxy by CrowdSec AI Detection Algorithm.', 'references': []}, {'name': 'profile:insecure_services', 'label': 'Dangerous Services Exposed', 'description': "IP exposes dangerous services (VNC, Telnet, RDP), possibly due to a misconfiguration or because it's a honeypot.", 'references': []}, {'name': 'profile:many_services', 'label': 'Many Services Exposed', 'description': "IP exposes many open ports, possibly due to a misconfiguration or because it's a honeypot.", 'references': []}, {'name': 'community-blocklist', 'label': 'CrowdSec Community Blocklist', 'description': 'IP belongs to the CrowdSec Community Blocklist'}]}, 'attack_details': [{'name': 'crowdsecurity/http-bf-wordpress_bf_xmlrpc', 'label': 'WP XMLRPC bruteforce', 'description': 'Detect WordPress bruteforce on XML-RPC endpoint', 'references': []}, {'name': 'crowdsecurity/http-probing', 'label': 'HTTP Probing', 'description': 'Detect site scanning/probing from a single ip', 'references': []}, {'name': 'crowdsecurity/http-bf-wordpress_bf', 'label': 'WordPress Bruteforce', 'description': 'Detect WordPress bruteforce on admin interface', 'references': []}, {'name': 'crowdsecurity/nginx-req-limit-exceeded', 'label': 'Nginx request limit exceeded', 'description': "Detects IPs which violate nginx's user set request limit.", 'references': []}, {'name': 'crowdsecurity/http-wordpress_wpconfig', 'label': 'Access to WordPress wp-config.php', 'description': 'Detect WordPress probing: variations around wp-config.php by wpscan', 'references': []}, {'name': 'LePresidente/http-generic-403-bf', 'label': 'HTTP Bruteforce', 'description': 'Detect generic 403 Forbidden (Authorization) error brute force', 'references': []}, {'name': 'crowdsecurity/http-cve-probing', 'label': 'HTTP CVE Probing', 'description': 'Detect generic HTTP cve probing', 'references': []}, {'name': 'crowdsecurity/wordpress_wpconfig_scan', 'label': 'Wordpress wpconfig scan', 'description': 'Detect WordPress wpconfig scan', 'references': []}, {'name': 'crowdsecurity/fortinet-cve-2022-40684', 'label': 'Fortinet CVE-2022-40684', 'description': 'Detect cve-2022-40684 exploitation attempts', 'references': []}, {'name': 'crowdsecurity/http-crawl-non_statics', 'label': 'Aggressive Crawl', 'description': 'Detect aggressive crawl on non static resources', 'references': []}, {'name': 'crowdsecurity/CVE-2022-26134', 'label': 'Confluence CVE-2022-26134', 'description': 'Detect CVE-2022-26134 exploits', 'references': []}, {'name': 'crowdsecurity/http-xss-probbing', 'label': 'XSS Attempt', 'description': 'A scenario that detects XSS probing with minimal false positives', 'references': []}, {'name': 'crowdsecurity/wordpress_plugins_fingerprint', 'label': 'Wordpress Plugin Fingerprint', 'description': 'Detect WordPress plugins fingerprint', 'references': []}, {'name': 'crowdsecurity/http-open-proxy', 'label': 'HTTP Open Proxy Probing', 'description': 'Detect scan for open proxy', 'references': []}, {'name': 'crowdsecurity/http-bad-user-agent', 'label': 'Bad User Agent', 'description': 'Detect usage of bad User Agent', 'references': []}, {'name': 'crowdsecurity/http-sensitive-files', 'label': 'Access to sensitive files over HTTP', 'description': 'Detect attempt to access to sensitive files (.log, .db ..) or folders (.git)', 'references': []}, {'name': 'crowdsecurity/http-path-traversal-probing', 'label': 'HTTP Path Traversal Exploit', 'description': 'Detect path traversal attempt', 'references': []}, {'name': 'crowdsecurity/http-wordpress-scan', 'label': 'WordPress Vuln Hunting', 'description': 'Detect WordPress scan: vuln hunting', 'references': []}, {'name': 'crowdsecurity/CVE-2024-27956', 'label': 'ValvePress - SQLi', 'description': 'ValvePress SQLi (CVE-2024-27956)', 'references': []}, {'name': 'crowdsecurity/http-dos-invalid-http-versions', 'label': 'HTTP DOS with invalid HTTP version', 'description': 'Detect DoS tools using invalid HTTP versions', 'references': []}, {'name': 'crowdsecurity/CVE-2024-4577', 'label': 'PHP/XAMPP - Windows RCE', 'description': 'PHP/XAMPP - RCE (CVE-2024-4577)', 'references': []}, {'name': 'crowdsecurity/generic-env', 'label': '.env file Scanner', 'description': "Detect unauthorized access to '.env' file", 'references': []}, {'name': 'crowdsecurity/http-admin-interface-probing', 'label': 'HTTP Admin Interface Probing', 'description': 'Detect generic HTTP admin interface probing', 'references': []}, {'name': 'crowdsecurity/windows-bf', 'label': 'Windows Bruteforce', 'description': 'Detect windows auth bruteforce', 'references': []}, {'name': 'crowdsecurity/http-dos-swithcing-ua', 'label': 'HTTP DOS with varying UA', 'description': 'Detect DoS tools switching user-agent too fast', 'references': []}, {'name': 'crowdsecurity/suricata-major-severity', 'label': 'Suricata Severity 1 Event', 'description': 'Detect exploit attempts via emerging threat rules', 'references': []}], 'target_countries': {'US': 37, 'DE': 15, 'FR': 10, 'NL': 8, 'RU': 6, 'JP': 5, 'PL': 5, 'GB': 4, 'CA': 3, 'SG': 2}, 'mitre_techniques': [{'name': 'T1595', 'label': 'Active Scanning', 'description': 'Adversaries may execute active reconnaissance scans to gather information that can be used during targeting.', 'references': []}, {'name': 'T1110', 'label': 'Brute Force', 'description': 'Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.', 'references': []}, {'name': 'T1190', 'label': 'Exploit Public-Facing Application', 'description': 'Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network.', 'references': []}, {'name': 'T1548', 'label': 'Abuse Elevation Control Mechanism', 'description': 'Adversaries may circumvent mechanisms designed to control elevate privileges to gain higher-level permissions.', 'references': []}, {'name': 'T1498', 'label': 'Network Denial of Service', 'description': 'Adversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users.', 'references': []}, {'name': 'T1589', 'label': 'Gather Victim Identity Information', 'description': "Adversaries may gather information about the victim's identity that can be used during targeting.", 'references': []}], 'cves': ['CVE-2024-27956', 'CVE-2024-4577', 'CVE-2022-26134', 'CVE-2022-40684'], 'scores': {'overall': {'aggressiveness': 5, 'threat': 4, 'trust': 5, 'anomaly': 3, 'total': 5}, 'last_day': {'aggressiveness': 5, 'threat': 3, 'trust': 5, 'anomaly': 3, 'total': 4}, 'last_week': {'aggressiveness': 5, 'threat': 3, 'trust': 5, 'anomaly': 3, 'total': 4}, 'last_month': {'aggressiveness': 5, 'threat': 3, 'trust': 5, 'anomaly': 3, 'total': 4}}, 'references': [{'name': 'list:crowdsec_intelligence_blocklist', 'label': 'CrowdSec Intelligence Blocklist', 'description': "CrowdSec's main blocklist, containing the most aggressive IPs identified as attacking our network. It is a core anti-bot, mass attack list you should subscribe to in priority.", 'references': []}, {'name': 'list:crowdsec_hosting_blocklist', 'label': 'Hosting Services Attackers', 'description': 'Contains IPs frequently attacking hosting providers. If you operate a web hosting service, block these IPs to reduce security alerts, establish a safer perimeter, and minimize downtime to better serve your customers.', 'references': []}, {'name': 'list:otx-webscanners', 'label': 'OTX Web Scanners List', 'description': "OTX AlienVault web scanners pulse. This list contains web scanners based on HTTP code response 404, which means that the IP trying to access a resource doesn't exist.", 'references': ['https://otx.alienvault.com/pulse/5a7e3e70c44e7b48947593a7']}, {'name': 'list:crowdsec_high_background_noise', 'label': 'High Background Noise', 'description': 'Contains IPs considered internet background noise, identified as malicious or potential threats. Blocking these IPs can reduce further your alert volume and save infrastructure resources.', 'references': []}, {'name': 'list:crowdsec_ai_vpn_proxy', 'label': 'Extended AI-Detected VPN/Proxy', 'description': 'This list includes IPs classified as anonymization services, often involved in repeated attacks. These IPs are from lesser-known, easily controlled proxies or VPNs, not from major providers.', 'references': []}, {'name': 'list:crowdsec_cve_2024_4577', 'label': 'CrowdSec CVE-2024-4577', 'description': 'CrowdSec aggregated a list of IPs targeting CVE-2024-4577', 'references': ['https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2024-4577']}, {'name': 'list:crowdsec_windows', 'label': 'Windows Attackers', 'description': 'Contains IPs that have been mainly reported for attacking Windows. Proactively block these IPs to protect your Windows systems and establish an overall safer perimeter.', 'references': []}]}
 ERROR 2025-02-12 22:33:36,396 base_scanner 89291 126569509029568 alienvault unexpected error: 
+INFO 2025-03-04 15:36:44,630 autoreload 13308 21084 Watching for file changes with StatReloader
+INFO 2025-03-04 15:36:45,402 cache 13308 21084 Successfully connected to Redis
+INFO 2025-03-04 15:39:36,708 autoreload 13308 21084 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 15:39:37,238 autoreload 12604 19760 Watching for file changes with StatReloader
+INFO 2025-03-04 15:39:37,705 cache 12604 19760 Successfully connected to Redis
+INFO 2025-03-04 15:39:43,273 autoreload 532 20092 Watching for file changes with StatReloader
+INFO 2025-03-04 15:39:43,688 cache 532 20092 Successfully connected to Redis
+INFO 2025-03-04 15:40:16,179 views 532 16576 Refreshing threat feeds
+WARNING 2025-03-04 15:40:16,183 threat_feed 532 16576 No threat feeds available - no API keys configured
+WARNING 2025-03-04 15:40:16,184 views 532 16576 No API keys configured for threat feeds
+WARNING 2025-03-04 15:42:11,842 log 532 14396 Forbidden (CSRF token from POST incorrect.): /login/
+INFO 2025-03-04 15:45:30,273 autoreload 532 20092 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 15:45:30,808 autoreload 7180 23480 Watching for file changes with StatReloader
+INFO 2025-03-04 15:45:31,349 cache 7180 23480 Successfully connected to Redis
+INFO 2025-03-04 15:45:50,965 autoreload 17312 13384 Watching for file changes with StatReloader
+INFO 2025-03-04 15:45:51,436 cache 17312 13384 Successfully connected to Redis
+INFO 2025-03-04 15:54:47,047 autoreload 17312 13384 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 15:54:47,652 autoreload 5924 21540 Watching for file changes with StatReloader
+INFO 2025-03-04 15:54:48,125 cache 5924 21540 Successfully connected to Redis
+INFO 2025-03-04 15:55:18,767 autoreload 5924 21540 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 15:55:19,263 autoreload 8992 18600 Watching for file changes with StatReloader
+INFO 2025-03-04 15:55:19,728 cache 8992 18600 Successfully connected to Redis
+INFO 2025-03-04 15:55:52,644 autoreload 8992 18600 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 15:55:53,190 autoreload 3716 4276 Watching for file changes with StatReloader
+INFO 2025-03-04 15:55:53,643 cache 3716 4276 Successfully connected to Redis
+INFO 2025-03-04 15:55:58,930 autoreload 3716 4276 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 15:55:59,413 autoreload 8628 5624 Watching for file changes with StatReloader
+INFO 2025-03-04 15:55:59,837 cache 8628 5624 Successfully connected to Redis
+INFO 2025-03-04 15:58:09,636 autoreload 8628 5624 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 15:58:10,252 autoreload 21124 12220 Watching for file changes with StatReloader
+INFO 2025-03-04 15:58:10,761 cache 21124 12220 Successfully connected to Redis
+INFO 2025-03-04 15:58:23,181 autoreload 21124 12220 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 15:58:23,672 autoreload 7600 20380 Watching for file changes with StatReloader
+INFO 2025-03-04 15:58:24,144 cache 7600 20380 Successfully connected to Redis
+INFO 2025-03-04 16:05:06,402 autoreload 7600 20380 C:\Users\dharm\Documents\GitHub\Stack\main\views.py changed, reloading.
+INFO 2025-03-04 16:05:06,960 autoreload 7184 12532 Watching for file changes with StatReloader
+INFO 2025-03-04 16:05:07,452 cache 7184 12532 Successfully connected to Redis
+INFO 2025-03-04 16:05:08,719 autoreload 7184 12532 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 16:05:09,219 autoreload 10180 21880 Watching for file changes with StatReloader
+INFO 2025-03-04 16:05:09,682 cache 10180 21880 Successfully connected to Redis
+ERROR 2025-03-04 16:19:45,501 log 10180 2296 Internal Server Error: /docs/getting-started/
+Traceback (most recent call last):
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\main\views.py", line 101, in docs_article
+    html_content = markdown.markdown(content)
+                   ^^^^^^^^
+NameError: name 'markdown' is not defined
+INFO 2025-03-04 16:25:33,825 autoreload 11144 6484 Watching for file changes with StatReloader
+INFO 2025-03-04 16:25:34,286 cache 11144 6484 Successfully connected to Redis
+ERROR 2025-03-04 16:38:28,773 log 11144 4532 Internal Server Error: /docs/setup/
+Traceback (most recent call last):
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\main\views.py", line 93, in docs_article
+    return render(request, 'docs/404.html')
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: docs/404.html
+ERROR 2025-03-04 16:49:50,652 log 11144 16264 Internal Server Error: /docs/setup/
+Traceback (most recent call last):
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\main\views.py", line 93, in docs_article
+    return render(request, 'docs/404.html')
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: docs/404.html
+ERROR 2025-03-04 16:51:37,324 log 11144 3156 Internal Server Error: /docs/threat-intel/
+Traceback (most recent call last):
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\main\views.py", line 93, in docs_article
+    return render(request, 'docs/404.html')
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: docs/404.html
+INFO 2025-03-04 17:13:32,344 views 11144 12604 Refreshing threat feeds
+INFO 2025-03-04 17:13:32,349 threat_feed 11144 12604 Fetching OTX feeds
+INFO 2025-03-04 17:13:34,246 threat_feed 11144 12604 Successfully fetched 5 OTX threats
+INFO 2025-03-04 17:13:34,246 threat_feed 11144 12604 Fetching ThreatFox feeds
+INFO 2025-03-04 17:13:35,447 threat_feed 11144 12604 Successfully fetched 518 ThreatFox threats
+INFO 2025-03-04 17:13:35,448 threat_feed 11144 12604 Fetching Pulsedive feeds
+ERROR 2025-03-04 17:13:40,891 threat_feed 11144 12604 Error fetching Pulsedive feed 5: 429 Client Error: Too Many Requests for url: https://pulsedive.com/api/info.php?fid=5&pretty=1&key=54589826af335f275e53017ee18944d76891662c8d77c0f11be174aae133e930
+INFO 2025-03-04 17:13:40,892 threat_feed 11144 12604 Successfully fetched 4 Pulsedive threats
+INFO 2025-03-04 17:13:40,894 threat_feed 11144 12604 Caching 527 threats from 3 active platforms
+INFO 2025-03-04 17:13:40,903 views 11144 12604 Successfully refreshed 527 threats from 3 platforms
+INFO 2025-03-04 17:13:45,650 views 11144 12604 Refreshing threat feeds
+INFO 2025-03-04 17:13:45,654 threat_feed 11144 12604 Fetching OTX feeds
+INFO 2025-03-04 17:13:47,775 threat_feed 11144 12604 Successfully fetched 5 OTX threats
+INFO 2025-03-04 17:13:47,776 threat_feed 11144 12604 Fetching ThreatFox feeds
+INFO 2025-03-04 17:13:48,869 threat_feed 11144 12604 Successfully fetched 518 ThreatFox threats
+INFO 2025-03-04 17:13:48,870 threat_feed 11144 12604 Fetching Pulsedive feeds
+INFO 2025-03-04 17:13:55,270 threat_feed 11144 12604 Successfully fetched 5 Pulsedive threats
+INFO 2025-03-04 17:13:55,272 threat_feed 11144 12604 Caching 528 threats from 3 active platforms
+INFO 2025-03-04 17:13:55,282 views 11144 12604 Successfully refreshed 528 threats from 3 platforms
+INFO 2025-03-04 17:13:59,991 views 11144 12604 Refreshing threat feeds
+INFO 2025-03-04 17:13:59,996 threat_feed 11144 12604 Fetching OTX feeds
+INFO 2025-03-04 17:14:01,953 threat_feed 11144 12604 Successfully fetched 5 OTX threats
+INFO 2025-03-04 17:14:01,954 threat_feed 11144 12604 Fetching ThreatFox feeds
+INFO 2025-03-04 17:14:02,996 threat_feed 11144 12604 Successfully fetched 518 ThreatFox threats
+INFO 2025-03-04 17:14:02,996 threat_feed 11144 12604 Fetching Pulsedive feeds
+INFO 2025-03-04 17:14:09,629 threat_feed 11144 12604 Successfully fetched 5 Pulsedive threats
+INFO 2025-03-04 17:14:09,631 threat_feed 11144 12604 Caching 528 threats from 3 active platforms
+INFO 2025-03-04 17:14:09,641 views 11144 12604 Successfully refreshed 528 threats from 3 platforms
+INFO 2025-03-04 17:16:40,499 ip_analysis 11144 1648 Retrieved key for platform alienvault: success (preview: 74a4***)
+INFO 2025-03-04 17:16:40,499 ip_analysis 11144 1648 Retrieved key for platform pulsedive: success (preview: 5458***)
+INFO 2025-03-04 17:16:40,499 ip_analysis 11144 1648 Retrieved key for platform threatfox: success (preview: c3e6***)
+INFO 2025-03-04 17:16:40,500 ip_analysis 11144 1648 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-03-04 17:16:40,500 ip_analysis 11144 1648 Retrieved key for platform hybrid_analysis: success (preview: tyqr***)
+INFO 2025-03-04 17:16:40,500 ip_analysis 11144 1648 Retrieved key for platform filescan: success (preview: grmK***)
+INFO 2025-03-04 17:16:40,500 ip_analysis 11144 1648 Retrieved key for platform virustotal: success (preview: 1f63***)
+INFO 2025-03-04 17:16:40,500 ip_analysis 11144 1648 Retrieved key for platform abuseipdb: success (preview: fe5f***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform urlscan: success (preview: f91b***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform securitytrails: success (preview: XPCe***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform greynoise: success (preview: hzTj***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform crowdsec: success (preview: QXRr***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform malwarebazaar: success (preview: da6d***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform urlhaus: success (preview: da6d***)
+INFO 2025-03-04 17:16:40,501 ip_analysis 11144 1648 Retrieved key for platform spamhaus: success (preview: aDFD***)
+INFO 2025-03-04 17:16:40,502 ip_analysis 11144 1648 Retrieved key for platform ipinfo: success (preview: e94d***)
+INFO 2025-03-04 17:16:40,502 ip_analysis 11144 1648 Retrieved key for platform cloudmersive: success (preview: 3193***)
+INFO 2025-03-04 17:16:40,502 ip_analysis 11144 1648 Retrieved key for platform metadefender: success (preview: 9387***)
+INFO 2025-03-04 17:16:40,502 ip_analysis 11144 1648 Retrieved key for platform ibm_xforce: success (preview: 53eb***)
+INFO 2025-03-04 17:16:40,504 crowdsec 11144 14048 CrowdSec request - URL: https://cti.api.crowdsec.net/v2/smoke/206.168.34.38, Key Preview: QXRr***
+INFO 2025-03-04 17:16:40,506 ipinfo 11144 14048 IPInfo request - URL: https://ipinfo.io/206.168.34.38/json?token=<hidden>, Key Preview: e94d***
+INFO 2025-03-04 17:16:40,638 ipinfo 11144 14048 IPInfo basic info response: {'ip': '206.168.34.38', 'hostname': 'unused-space.coop.net', 'city': 'Chicago', 'region': 'Illinois', 'country': 'US', 'loc': '41.8500,-87.6500', 'org': 'AS398324 Censys, Inc.', 'postal': '60666', 'timezone': 'America/Chicago'}
+INFO 2025-03-04 17:16:41,307 crowdsec 11144 14048 CrowdSec raw response: {'ip': '206.168.34.38', 'reputation': 'malicious', 'ip_range': '206.168.32.0/22', 'background_noise': 'high', 'confidence': 'high', 'background_noise_score': 10, 'ip_range_score': 5, 'as_name': 'CENSYS-ARIN-01', 'as_num': 398324, 'ip_range_24': '206.168.34.0/24', 'ip_range_24_reputation': 'malicious', 'ip_range_24_score': 5, 'location': {'country': 'US', 'city': None, 'latitude': 37.751, 'longitude': -97.822}, 'reverse_dns': 'unused-space.coop.net', 'behaviors': [{'name': 'http:scan', 'label': 'HTTP Scan', 'description': 'IP has been reported for performing actions related to HTTP vulnerability scanning and discovery.', 'references': []}, {'name': 'tcp:scan', 'label': 'TCP Scan', 'description': 'IP has been reported for performing TCP port scanning.', 'references': []}, {'name': 'generic:scan', 'label': 'Scan attempt', 'description': 'IP has been reported trying to scan or gather information', 'references': []}, {'name': 'ssh:bruteforce', 'label': 'SSH Bruteforce', 'description': 'IP has been reported for performing brute force on ssh services.', 'references': []}, {'name': 'pop3/imap:bruteforce', 'label': 'POP3/IMAP Bruteforce', 'description': 'IP has been reported for performing a POP3/IMAP brute force attack.', 'references': []}, {'name': 'generic:exploit', 'label': 'Exploitation attempt', 'description': 'IP has been reported trying to exploit known vulnerability/CVE on unspecified protocols.', 'references': []}, {'name': 'http:dos', 'label': 'HTTP DoS', 'description': 'IP has been reported trying to perform denial of service attacks.', 'references': []}], 'history': {'first_seen': '2024-03-29T03:00:00+00:00', 'last_seen': '2025-03-04T03:45:00+00:00', 'full_age': 341, 'days_age': 340}, 'classifications': {'false_positives': [], 'classifications': [{'name': 'community-blocklist', 'label': 'CrowdSec Community Blocklist', 'description': 'IP belongs to the CrowdSec Community Blocklist'}]}, 'attack_details': [{'name': 'crowdsecurity/http-bad-user-agent', 'label': 'Bad User Agent', 'description': 'Detect usage of bad User Agent', 'references': []}, {'name': 'crowdsecurity/iptables-scan-multi_ports', 'label': 'TCP Port Scan', 'description': 'Detect aggressive portscans', 'references': []}, {'name': 'crowdsecurity/postfix-non-smtp-command', 'label': 'Postfix Non-SMTP Command', 'description': 'Detect scanning of postfix service through non-SMTP commands', 'references': []}, {'name': 'crowdsecurity/endlessh-bf', 'label': 'Endlessh Bruteforce', 'description': 'Detect SSH bruteforce caught by Endlessh', 'references': []}, {'name': 'firewallservices/pf-scan-multi_ports', 'label': 'PF Scan Multi Ports', 'description': 'Detect aggressive portscans (pf)', 'references': []}, {'name': 'crowdsecurity/dovecot-spam', 'label': 'Dovecot Bruteforce', 'description': 'detect errors on dovecot', 'references': []}, {'name': 'crowdsecurity/suricata-high-medium-severity', 'label': 'Suricata Severity 2 Event', 'description': 'Detect exploit attempts via emerging threat rules', 'references': []}, {'name': 'crowdsecurity/http-open-proxy', 'label': 'HTTP Open Proxy Probing', 'description': 'Detect scan for open proxy', 'references': []}, {'name': 'crowdsecurity/http-dos-invalid-http-versions', 'label': 'HTTP DOS with invalid HTTP version', 'description': 'Detect DoS tools using invalid HTTP versions', 'references': []}, {'name': 'crowdsecurity/suricata-major-severity', 'label': 'Suricata Severity 1 Event', 'description': 'Detect exploit attempts via emerging threat rules', 'references': []}], 'target_countries': {'DE': 31, 'US': 25, 'FR': 22, 'NL': 5, 'GB': 3, 'CA': 3, 'SG': 2, 'IT': 2, 'FI': 2, 'RU': 1}, 'mitre_techniques': [{'name': 'T1110', 'label': 'Brute Force', 'description': 'Adversaries may use brute force techniques to gain access to accounts when passwords are unknown or when password hashes are obtained.', 'references': []}, {'name': 'T1595', 'label': 'Active Scanning', 'description': 'Adversaries may execute active reconnaissance scans to gather information that can be used during targeting.', 'references': []}, {'name': 'T1018', 'label': 'Remote System Discovery', 'description': 'Adversaries may attempt to get a listing of other systems by IP address, hostname, or other logical identifier on a network that may be used for Lateral Movement from the current system.', 'references': []}, {'name': 'T1046', 'label': 'Network Service Discovery', 'description': 'Adversaries may attempt to get a listing of services running on remote hosts and local network infrastructure devices, including those that may be vulnerable to remote software exploitation.', 'references': []}, {'name': 'T1190', 'label': 'Exploit Public-Facing Application', 'description': 'Adversaries may attempt to exploit a weakness in an Internet-facing host or system to initially access a network.', 'references': []}, {'name': 'T1498', 'label': 'Network Denial of Service', 'description': 'Adversaries may perform Network Denial of Service (DoS) attacks to degrade or block the availability of targeted resources to users.', 'references': []}], 'cves': [], 'scores': {'overall': {'aggressiveness': 5, 'threat': 2, 'trust': 5, 'anomaly': 0, 'total': 4}, 'last_day': {'aggressiveness': 5, 'threat': 2, 'trust': 5, 'anomaly': 0, 'total': 4}, 'last_week': {'aggressiveness': 5, 'threat': 2, 'trust': 5, 'anomaly': 0, 'total': 4}, 'last_month': {'aggressiveness': 5, 'threat': 2, 'trust': 5, 'anomaly': 0, 'total': 4}}, 'references': [{'name': 'list:crowdsec_intelligence_blocklist', 'label': 'CrowdSec Intelligence Blocklist', 'description': "CrowdSec's main blocklist, containing the most aggressive IPs identified as attacking our network. It is a core anti-bot, mass attack list you should subscribe to in priority.", 'references': []}, {'name': 'list:crowdsec_mssp_blocklist', 'label': 'MSSP Attackers', 'description': 'Contains IPs identified as frequent attackers of MSSPs. Proactively blocking these IPs enhances threat mitigation capabilities, allowing MSSPs to stay ahead of potential security breaches.', 'references': []}, {'name': 'list:crowdsec_ecommerce_or_retail_blocklist', 'label': 'Retail and Ecommerce Attackers', 'description': 'Contains IPs frequently attacking the retail or ecommerce sector. Block these IPs to reduce security alerts, establish a safer perimeter, and minimize downtime to better serve your customers.', 'references': []}, {'name': 'list:crowdsec_high_background_noise', 'label': 'High Background Noise', 'description': 'Contains IPs considered internet background noise, identified as malicious or potential threats. Blocking these IPs can reduce further your alert volume and save infrastructure resources.', 'references': []}, {'name': 'list:otx-georgs-honeypot', 'label': "OTX Georg's Honeypot List", 'description': 'OTX AlienVault (georgs honeypot) pulse. This list contains bad IPs that attacked exposed services on honeypots.', 'references': ['https://otx.alienvault.com/pulse/606d75c11c08ff94089a9430']}]}
+ERROR 2025-03-04 17:17:12,979 base_scanner 11144 14048 alienvault unexpected error: 
+INFO 2025-03-04 17:19:23,351 urlscan_io 11144 11108 URLScan.io scan submitted with UUID: 8b5dea67-a57d-42ca-a312-cda6e256d41e
+ERROR 2025-03-04 17:19:38,839 base_scanner 11144 11108 HTTP error in _make_request: HTTP error 404: Not Found, url='https://urlscan.io/api/v1/result/8b5dea67-a57d-42ca-a312-cda6e256d41e/'
+INFO 2025-03-04 17:19:38,840 urlscan_io 11144 11108 URLScan.io result not ready (attempt 1/12), waiting 15 seconds...
+INFO 2025-03-04 17:19:56,761 virustotal 11144 11108 VirusTotal scan submitted with ID: u-48cfabceda7c552d2f9f5f24cdf9caebef90eaaad791723b12258e83e4d1a838-1741130396
+INFO 2025-03-04 17:20:00,852 views 11144 19640 Received email analysis request
+INFO 2025-03-04 17:20:00,854 views 11144 19640 Initializing analyzer
+INFO 2025-03-04 17:20:00,862 views 11144 19640 Analysis completed successfully
+INFO 2025-03-04 17:20:12,034 virustotal 11144 11108 VirusTotal analysis not ready (attempt 1/12), waiting 15 seconds...
+INFO 2025-03-04 17:21:11,291 views 11144 1648 Processing file: virus.bat, Size: 68 bytes
+INFO 2025-03-04 17:21:11,310 sandbox 11144 1648 SandboxAnalyzer initialized
+INFO 2025-03-04 17:21:11,310 views 11144 1648 Starting analysis for file: virus.bat
+INFO 2025-03-04 17:21:11,310 sandbox 11144 1648 Starting analysis for file: C:\Users\dharm\Documents\GitHub\Stack\temp\virus.bat
+INFO 2025-03-04 17:21:11,310 sandbox 11144 1648 Uploading file: C:\Users\dharm\Documents\GitHub\Stack\temp\virus.bat
+INFO 2025-03-04 17:21:12,009 sandbox 11144 1648 File uploaded successfully. Analysis ID: NDRkODg2MTJmZWE4YThmMzZkZTgyZTEyNzhhYmIwMmY6MTc0MTEzMDQ0Nw==
+INFO 2025-03-04 17:21:12,010 sandbox 11144 1648 Getting analysis report for ID: NDRkODg2MTJmZWE4YThmMzZkZTgyZTEyNzhhYmIwMmY6MTc0MTEzMDQ0Nw==
+INFO 2025-03-04 17:21:12,010 sandbox 11144 1648 Attempt 1/20 to get analysis report
+INFO 2025-03-04 17:21:12,649 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:21:12,649 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:21:42,650 sandbox 11144 1648 Attempt 2/20 to get analysis report
+INFO 2025-03-04 17:21:43,334 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:21:43,335 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:22:13,335 sandbox 11144 1648 Attempt 3/20 to get analysis report
+INFO 2025-03-04 17:22:13,623 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:22:13,624 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:22:43,625 sandbox 11144 1648 Attempt 4/20 to get analysis report
+INFO 2025-03-04 17:22:43,964 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:22:43,964 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:23:13,965 sandbox 11144 1648 Attempt 5/20 to get analysis report
+INFO 2025-03-04 17:23:14,422 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:23:14,423 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:23:44,424 sandbox 11144 1648 Attempt 6/20 to get analysis report
+INFO 2025-03-04 17:23:44,802 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:23:44,803 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:24:14,804 sandbox 11144 1648 Attempt 7/20 to get analysis report
+INFO 2025-03-04 17:24:15,096 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:24:15,097 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:24:45,098 sandbox 11144 1648 Attempt 8/20 to get analysis report
+INFO 2025-03-04 17:24:45,645 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:24:45,646 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:25:15,647 sandbox 11144 1648 Attempt 9/20 to get analysis report
+INFO 2025-03-04 17:25:16,184 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:25:16,185 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:25:46,186 sandbox 11144 1648 Attempt 10/20 to get analysis report
+INFO 2025-03-04 17:25:46,542 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:25:46,543 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:26:16,544 sandbox 11144 1648 Attempt 11/20 to get analysis report
+INFO 2025-03-04 17:26:16,846 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:26:16,847 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:26:46,848 sandbox 11144 1648 Attempt 12/20 to get analysis report
+INFO 2025-03-04 17:26:47,103 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:26:47,104 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:27:17,105 sandbox 11144 1648 Attempt 13/20 to get analysis report
+INFO 2025-03-04 17:27:17,409 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:27:17,409 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:27:47,410 sandbox 11144 1648 Attempt 14/20 to get analysis report
+INFO 2025-03-04 17:27:47,677 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:27:47,678 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:28:17,680 sandbox 11144 1648 Attempt 15/20 to get analysis report
+INFO 2025-03-04 17:28:17,968 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:28:17,968 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:28:47,969 sandbox 11144 1648 Attempt 16/20 to get analysis report
+INFO 2025-03-04 17:28:48,294 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:28:48,295 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:29:18,296 sandbox 11144 1648 Attempt 17/20 to get analysis report
+INFO 2025-03-04 17:29:18,644 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:29:18,645 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:29:48,646 sandbox 11144 1648 Attempt 18/20 to get analysis report
+INFO 2025-03-04 17:29:48,894 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:29:48,895 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:30:18,896 sandbox 11144 1648 Attempt 19/20 to get analysis report
+INFO 2025-03-04 17:30:19,170 sandbox 11144 1648 Analysis status: queued
+INFO 2025-03-04 17:30:19,170 sandbox 11144 1648 Analysis not complete yet. Waiting 30 seconds before next attempt...
+INFO 2025-03-04 17:30:49,171 sandbox 11144 1648 Attempt 20/20 to get analysis report
+INFO 2025-03-04 17:30:49,543 sandbox 11144 1648 Analysis status: queued
+WARNING 2025-03-04 17:30:49,543 sandbox 11144 1648 Analysis did not complete after 20 attempts
+ERROR 2025-03-04 17:30:49,544 sandbox 11144 1648 Failed to get analysis report from VirusTotal
+INFO 2025-03-04 17:30:49,544 views 11144 1648 Analysis completed for file: virus.bat
+INFO 2025-03-04 17:30:52,640 views 11144 1648 Refreshing threat feeds
+INFO 2025-03-04 17:30:52,643 threat_feed 11144 1648 Fetching OTX feeds
+INFO 2025-03-04 17:30:54,887 threat_feed 11144 1648 Successfully fetched 5 OTX threats
+INFO 2025-03-04 17:30:54,888 threat_feed 11144 1648 Fetching ThreatFox feeds
+INFO 2025-03-04 17:30:57,124 threat_feed 11144 1648 Successfully fetched 517 ThreatFox threats
+INFO 2025-03-04 17:30:57,124 threat_feed 11144 1648 Fetching Pulsedive feeds
+INFO 2025-03-04 17:31:03,718 threat_feed 11144 1648 Successfully fetched 5 Pulsedive threats
+INFO 2025-03-04 17:31:03,720 threat_feed 11144 1648 Caching 527 threats from 3 active platforms
+INFO 2025-03-04 17:31:03,728 views 11144 1648 Successfully refreshed 527 threats from 3 platforms
+INFO 2025-03-04 19:06:16,560 autoreload 11144 6484 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:06:17,363 autoreload 3996 10972 Watching for file changes with StatReloader
+INFO 2025-03-04 19:06:18,015 cache 3996 10972 Successfully connected to Redis
+INFO 2025-03-04 19:07:01,223 autoreload 3996 10972 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:07:02,001 autoreload 11424 24548 Watching for file changes with StatReloader
+INFO 2025-03-04 19:07:02,543 cache 11424 24548 Successfully connected to Redis
+INFO 2025-03-04 19:17:46,692 autoreload 11424 24548 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:17:47,419 autoreload 20660 8276 Watching for file changes with StatReloader
+INFO 2025-03-04 19:17:48,090 cache 20660 8276 Successfully connected to Redis
+ERROR 2025-03-04 19:17:52,066 log 20660 15864 Internal Server Error: /threat/hash-analysis/
+Traceback (most recent call last):
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 60, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\dharm\Documents\GitHub\Stack\main\views.py", line 552, in hash_analysis
+    return render(request, 'threat/hash_analysis/hash_analysis.html')
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\loader_tags.py", line 210, in render
+    return template.render(context)
+           ~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 173, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\base.py", line 969, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\dharm\Documents\GitHub\Stack\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'email_investigation' not found. 'email_investigation' is not a valid view function or pattern name.
+INFO 2025-03-04 19:17:59,917 autoreload 20660 8276 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:18:00,888 autoreload 9756 20628 Watching for file changes with StatReloader
+INFO 2025-03-04 19:18:01,474 cache 9756 20628 Successfully connected to Redis
+INFO 2025-03-04 19:18:34,728 autoreload 9756 20628 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:18:35,400 autoreload 24040 18076 Watching for file changes with StatReloader
+INFO 2025-03-04 19:18:35,918 cache 24040 18076 Successfully connected to Redis
+INFO 2025-03-04 19:24:21,559 autoreload 24040 18076 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:24:22,294 autoreload 21224 8028 Watching for file changes with StatReloader
+INFO 2025-03-04 19:24:22,980 cache 21224 8028 Successfully connected to Redis
+INFO 2025-03-04 19:24:38,161 views 21224 20380 Refreshing threat feeds
+INFO 2025-03-04 19:24:38,189 threat_feed 21224 20380 Fetching OTX feeds
+INFO 2025-03-04 19:24:39,904 threat_feed 21224 20380 Successfully fetched 5 OTX threats
+INFO 2025-03-04 19:24:39,906 threat_feed 21224 20380 Fetching ThreatFox feeds
+INFO 2025-03-04 19:24:41,646 threat_feed 21224 20380 Successfully fetched 531 ThreatFox threats
+INFO 2025-03-04 19:24:41,647 threat_feed 21224 20380 Fetching Pulsedive feeds
+ERROR 2025-03-04 19:24:47,439 threat_feed 21224 20380 Error fetching Pulsedive feed 5: 429 Client Error: Too Many Requests for url: https://pulsedive.com/api/info.php?fid=5&pretty=1&key=54589826af335f275e53017ee18944d76891662c8d77c0f11be174aae133e930
+INFO 2025-03-04 19:24:47,441 threat_feed 21224 20380 Successfully fetched 4 Pulsedive threats
+INFO 2025-03-04 19:24:47,443 threat_feed 21224 20380 Caching 540 threats from 3 active platforms
+INFO 2025-03-04 19:24:47,486 views 21224 20380 Successfully refreshed 540 threats from 3 platforms
+INFO 2025-03-04 19:25:37,377 autoreload 21224 8028 C:\Users\dharm\Documents\GitHub\Stack\main\urls.py changed, reloading.
+INFO 2025-03-04 19:25:38,196 autoreload 13908 8420 Watching for file changes with StatReloader
+INFO 2025-03-04 19:25:38,845 cache 13908 8420 Successfully connected to Redis
+ERROR 2025-03-04 19:25:46,834 hash_analysis 13908 22436 Error in analyze_hash: [Errno 2] No such file or directory: '/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt'
+ERROR 2025-03-04 19:25:46,835 views 13908 22436 Failed to analyze hash: [Errno 2] No such file or directory: '/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt'
+ERROR 2025-03-04 19:25:46,836 log 13908 20576 Internal Server Error: /api/threat/hash-analysis/
+ERROR 2025-03-04 19:25:49,864 hash_analysis 13908 22428 Error in analyze_hash: [Errno 2] No such file or directory: '/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt'
+ERROR 2025-03-04 19:25:49,865 views 13908 22428 Failed to analyze hash: [Errno 2] No such file or directory: '/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt'
+ERROR 2025-03-04 19:25:49,866 log 13908 20576 Internal Server Error: /api/threat/hash-analysis/
+INFO 2025-03-04 19:30:09,679 autoreload 13908 8420 C:\Users\dharm\Documents\GitHub\Stack\main\services\hash_scan\hash_analysis.py changed, reloading.
+INFO 2025-03-04 19:30:10,362 autoreload 23200 13084 Watching for file changes with StatReloader
+INFO 2025-03-04 19:30:11,092 cache 23200 13084 Successfully connected to Redis
+INFO 2025-03-04 19:30:20,851 hash_analysis 23200 9504 Creating client for threatfox
+INFO 2025-03-04 19:30:20,853 hash_analysis 23200 9504 Analyzing hash on threatfox
+INFO 2025-03-04 19:30:20,854 threatfox_hash 23200 9504 ThreatFox analyzing hash: 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37
+ERROR 2025-03-04 19:30:21,210 base 23200 9504 Request failed for threatfox: Cannot connect to host threatfox-api.abuse.ch:443 ssl:True [SSLCertVerificationError: (5, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)')]
+INFO 2025-03-04 19:30:21,212 threatfox_hash 23200 9504 ThreatFox raw response: {'error': "Request failed: Cannot connect to host threatfox-api.abuse.ch:443 ssl:True [SSLCertVerificationError: (5, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)')]"}
+WARNING 2025-03-04 19:30:21,214 threatfox_hash 23200 9504 ThreatFox error: Request failed: Cannot connect to host threatfox-api.abuse.ch:443 ssl:True [SSLCertVerificationError: (5, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)')]
+INFO 2025-03-04 19:30:21,216 hash_analysis 23200 9504 Creating client for virustotal
+INFO 2025-03-04 19:30:21,218 hash_analysis 23200 9504 Analyzing hash on virustotal
+INFO 2025-03-04 19:30:21,220 virustotal_hash 23200 9504 VirusTotal: Analyzing hash 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37
+INFO 2025-03-04 19:30:21,707 virustotal_hash 23200 9504 VirusTotal: Got response for hash 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37
+INFO 2025-03-04 19:30:21,710 hash_analysis 23200 9504 Creating client for hybrid_analysis
+INFO 2025-03-04 19:30:21,711 hash_analysis 23200 9504 Analyzing hash on hybrid_analysis
+INFO 2025-03-04 19:30:22,727 hash_analysis 23200 9504 Creating client for filescan
+INFO 2025-03-04 19:30:22,730 hash_analysis 23200 9504 Analyzing hash on filescan
+INFO 2025-03-04 19:30:23,775 filescan_hash 23200 9504 No results found for hash 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37 in FileScan
+INFO 2025-03-04 19:30:23,778 hash_analysis 23200 9504 Creating client for malwarebazaar
+INFO 2025-03-04 19:30:23,780 hash_analysis 23200 9504 Analyzing hash on malwarebazaar
+ERROR 2025-03-04 19:30:24,205 malwarebazaar_hash 23200 9504 Error in MalwareBazaar: Cannot connect to host mb-api.abuse.ch:443 ssl:True [SSLCertVerificationError: (5, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1020)')]
+INFO 2025-03-04 19:30:24,245 hash_analysis 23200 9504 Creating client for metadefender
+INFO 2025-03-04 19:30:24,247 hash_analysis 23200 9504 Analyzing hash on metadefender
+INFO 2025-03-04 19:30:24,248 metadefender_hash 23200 9504 MetaDefender: Analyzing hash 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37
+INFO 2025-03-04 19:30:24,917 metadefender_hash 23200 9504 MetaDefender: Got response for hash 9787a08d36f0fa3cfaac98ad7b1c7e1cd0f734dd357c9c6fd48568b631ecec37
+INFO 2025-03-04 19:31:11,678 autoreload 23200 13084 C:\Users\dharm\Documents\GitHub\Stack\main\services\hash_scan\hash_analysis.py changed, reloading.
+INFO 2025-03-04 19:31:12,390 autoreload 12216 10464 Watching for file changes with StatReloader
+INFO 2025-03-04 19:31:12,984 cache 12216 10464 Successfully connected to Redis

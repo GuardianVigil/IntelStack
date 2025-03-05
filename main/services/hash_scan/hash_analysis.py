@@ -47,57 +47,51 @@ class HashAnalysisService:
                 }
             }
 
-            # Open data file for logging responses
-            with open('/home/Agile/code/Vristo/main/services/hash_scan/platforms/data.txt', 'w') as f:
-                f.write(f"Hash Analysis Results for: {file_hash}\n{'='*50}\n\n")
-                
-                # Process each platform
-                for platform, api_key in api_keys.items():
-                    if not api_key:
-                        continue
+            # Process each platform
+            for platform, api_key in api_keys.items():
+                if not api_key:
+                    continue
 
-                    try:
-                        platform_result = await self._analyze_platform(platform, api_key, file_hash)
-                        
-                        if platform_result:
-                            # Format the platform data
-                            formatted_result = format_platform_data(platform, platform_result)
-                            results['platforms'][platform] = formatted_result
-                            
-                            # Log the complete response
-                            f.write(f"\n{platform.upper()} RESPONSE:\n{'-'*30}\n")
-                            f.write(json.dumps(platform_result, indent=2))
-                            f.write("\n\n")
-                            
-                            # Extract file info from platform results
-                            if platform == 'virustotal' and 'scan_results' in platform_result:
-                                vt_results = platform_result['scan_results']
-                                results['file_info'].update({
-                                    'type': vt_results.get('file_type'),
-                                    'size': vt_results.get('size'),
-                                    'first_seen': datetime.fromtimestamp(vt_results.get('first_seen', 0)).isoformat() if vt_results.get('first_seen') else None,
-                                    'last_seen': datetime.fromtimestamp(vt_results.get('last_seen', 0)).isoformat() if vt_results.get('last_seen') else None
-                                })
-                            elif platform == 'hybrid_analysis' and not results['file_info'].get('type'):
-                                results['file_info'].update({
-                                    'type': platform_result.get('type'),
-                                    'size': platform_result.get('size'),
-                                    'first_seen': platform_result.get('submitted_at'),
-                                    'last_seen': platform_result.get('last_multi_scan')
-                                })
-                            elif platform == 'malwarebazaar' and 'data' in platform_result:
-                                mb_data = platform_result['data'][0] if platform_result['data'] else {}
-                                if not results['file_info'].get('type'):
-                                    results['file_info'].update({
-                                        'type': mb_data.get('file_type'),
-                                        'size': mb_data.get('file_size'),
-                                        'first_seen': mb_data.get('first_seen'),
-                                        'last_seen': mb_data.get('last_seen')
-                                    })
+                try:
+                    platform_result = await self._analyze_platform(platform, api_key, file_hash)
                     
-                    except Exception as e:
-                        results['platforms'][platform] = {'error': str(e)}
-                        f.write(f"\n{platform.upper()} ERROR:\n{'-'*30}\n{str(e)}\n\n")
+                    if platform_result:
+                        # Format the platform data
+                        formatted_result = format_platform_data(platform, platform_result)
+                        results['platforms'][platform] = formatted_result
+                        
+                        # Log platform response for debugging
+                        logger.debug(f"{platform.upper()} RESPONSE: {json.dumps(platform_result)}")
+                        
+                        # Extract file info from platform results
+                        if platform == 'virustotal' and 'scan_results' in platform_result:
+                            vt_results = platform_result['scan_results']
+                            results['file_info'].update({
+                                'type': vt_results.get('file_type'),
+                                'size': vt_results.get('size'),
+                                'first_seen': datetime.fromtimestamp(vt_results.get('first_seen', 0)).isoformat() if vt_results.get('first_seen') else None,
+                                'last_seen': datetime.fromtimestamp(vt_results.get('last_seen', 0)).isoformat() if vt_results.get('last_seen') else None
+                            })
+                        elif platform == 'hybrid_analysis' and not results['file_info'].get('type'):
+                            results['file_info'].update({
+                                'type': platform_result.get('type'),
+                                'size': platform_result.get('size'),
+                                'first_seen': platform_result.get('submitted_at'),
+                                'last_seen': platform_result.get('last_multi_scan')
+                            })
+                        elif platform == 'malwarebazaar' and 'data' in platform_result:
+                            mb_data = platform_result['data'][0] if platform_result['data'] else {}
+                            if not results['file_info'].get('type'):
+                                results['file_info'].update({
+                                    'type': mb_data.get('file_type'),
+                                    'size': mb_data.get('file_size'),
+                                    'first_seen': mb_data.get('first_seen'),
+                                    'last_seen': mb_data.get('last_seen')
+                                })
+                
+                except Exception as e:
+                    results['platforms'][platform] = {'error': str(e)}
+                    logger.error(f"{platform.upper()} ERROR: {str(e)}")
 
             # Calculate overall metrics
             self._calculate_overall_metrics(results)
@@ -283,16 +277,14 @@ class HashAnalysisService:
             total_engines += 1
 
         # Process MalwareBazaar results
-        if "malwarebazaar" in results["platforms"]:
-            mb_data = results["platforms"]["malwarebazaar"]
-            if mb_data.get("data"):
-                mb_result = mb_data["data"][0]
-                if mb_result.get("signature"):
-                    threat_metrics["malware_families"].add(mb_result["signature"])
-                if mb_result.get("tags"):
-                    threat_metrics["threat_categories"].update(mb_result["tags"])
-                platform_scores.append(100)  # If result exists, it's malicious
-                total_engines += 1
+        if "malwarebazaar" in results["platforms"] and results["platforms"]["malwarebazaar"].get("data"):
+            mb_data = results["platforms"]["malwarebazaar"]["data"][0]
+            if mb_data.get("signature"):
+                threat_metrics["malware_families"].add(mb_data["signature"])
+            if mb_data.get("tags"):
+                threat_metrics["threat_categories"].update(mb_data["tags"])
+            platform_scores.append(100)  # If result exists, it's malicious
+            total_engines += 1
 
         # Process ThreatFox results
         if "threatfox" in results["platforms"]:

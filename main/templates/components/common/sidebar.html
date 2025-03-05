@@ -62,37 +62,7 @@
                     </ul>
                 </li>
 
-                <li class="menu nav-item">
-                    <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'threat-feeds' }" @click="activeDropdown === 'threat-feeds' ? activeDropdown = null : activeDropdown = 'threat-feeds'">
-                        <div class="flex items-center">
-                            <svg class="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
-                                <path opacity="0.5" d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="currentColor"/>
-                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" fill="currentColor"/>
-                            </svg>
-                            <span class="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Threat Feeds</span>
-                        </div>
-                        <div class="rtl:rotate-180" :class="{ '!rotate-90': activeDropdown === 'threat-feeds' }">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                    </button>
-                    <ul x-cloak x-show="activeDropdown === 'threat-feeds'" x-collapse class="sub-menu text-gray-500">
-                        <li>
-                            <a href="{% url 'virustotal' %}">VirusTotal</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'abuseipdb' %}">AbuseIPDB</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'alienvault_otx' %}">AlienVault OTX</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'ibm_xforce' %}">IBM X-Force</a>
-                        </li>
-                    </ul>
-                </li>
+
 
                 <li class="menu nav-item">
                     <button type="button" class="nav-link group" :class="{ 'active': activeDropdown === 'reports' }" @click="activeDropdown === 'reports' ? activeDropdown = null : activeDropdown = 'reports'">
@@ -112,14 +82,17 @@
                         </div>
                     </button>
                     <ul x-cloak x-show="activeDropdown === 'reports'" x-collapse class="sub-menu text-gray-500">
-                        <li>
+                        <li class="flex items-center justify-between">
                             <a href="{% url 'investigation_history' %}">Investigation History</a>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full ml-2">Coming Soon</span>
                         </li>
-                        <li>
+                        <li class="flex items-center justify-between">
                             <a href="{% url 'threat_reports' %}">Threat Reports</a>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full ml-2">Coming Soon</span>
                         </li>
-                        <li>
+                        <li class="flex items-center justify-between">
                             <a href="{% url 'export_findings' %}">Export Findings</a>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full ml-2">Coming Soon</span>
                         </li>
                     </ul>
                 </li>
@@ -145,12 +118,7 @@
                         <li>
                             <a href="{% url 'api_configuration' %}">API Configuration</a>
                         </li>
-                        <li>
-                            <a href="{% url 'user_profile' %}">User Profile</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'security_settings' %}">Security Settings</a>
-                        </li>
+
                     </ul>
                 </li>
 
