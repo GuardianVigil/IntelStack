@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  intelstack:
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../db.sqlite3:/app/db.sqlite3
+      - ../storage:/app/storage
+      - ../staticfiles:/app/staticfiles
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY:-default_secret_key_change_in_production}
+      - DJANGO_SETTINGS_MODULE=vristo.settings
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME:-admin}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL:-admin@example.com}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD:-admin123}
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

@@ -1025,3 +1025,11 @@ def change_password_view(request):
     except Exception as e:
         messages.error(request, 'Error updating password. Please try again.')
         return redirect('user_profile')
+
+# Health check endpoint for Docker
+def health_check(request):
+    """
+    Simple health check endpoint for Docker.
+    Returns a 200 OK response if the application is running.
+    """
+    return JsonResponse({"status": "ok"}, status=200)

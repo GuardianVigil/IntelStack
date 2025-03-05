@@ -48,6 +48,9 @@ urlpatterns = [
     # Domain Reputation URLs
     path('services/domain-scan/', include('main.services.domain_scan.urls')),
 
+    # Health check endpoint for Docker
+    path('health/', views.health_check, name='health_check'),
+    
     # API Endpoints
     path('api/threat/', include([
         path('hash-analysis/', views.analyze_hash, name='analyze_hash_api'),  # Fixed API endpoint

@@ -222,3 +222,62 @@ For support:
 - Open an issue at: https://github.com/GuardianVigil/IntelStack/issues
 - Email: support@guardianvigil.com
 - Documentation: https://docs.guardianvigil.com/intelstack
+
+## 🐳 Docker Deployment
+
+### Using Docker Compose (Recommended)
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/GuardianVigil/IntelStack.git
+   cd IntelStack
+   ```
+
+2. **Start with Docker Compose**:
+   ```bash
+   docker-compose -f Docker/docker-compose.yml up -d
+   ```
+   This will:
+   - Build the Docker image with Alpine Linux
+   - Set up Redis in the same container
+   - Run database migrations
+   - Start the application
+
+3. **Access the application**:
+   - Web interface: http://localhost:8000
+   - Admin panel: http://localhost:8000/admin
+
+### Environment Variables
+
+You can customize the deployment with environment variables:
+
+```bash
+# Example: Setting admin credentials
+DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=secure_password docker-compose -f Docker/docker-compose.yml up -d
+```
+
+Available variables:
+- `DJANGO_SUPERUSER_USERNAME`: Admin username (default: admin)
+- `DJANGO_SUPERUSER_EMAIL`: Admin email (default: admin@example.com)
+- `DJANGO_SUPERUSER_PASSWORD`: Admin password (default: admin123)
+- `SECRET_KEY`: Django secret key
+- `DEBUG`: Set to True for development mode
+
+### Data Persistence
+
+The Docker setup preserves your data through volume mounts:
+- Database: `db.sqlite3`
+- Storage: `storage/` directory
+- Static files: `staticfiles/` directory
+
+### Custom Docker Build
+
+To build and push your own image:
+
+```bash
+# Build the image
+docker build -t yourusername/intelstack:latest -f Docker/Dockerfile .
+
+# Push to Docker Hub
+docker push yourusername/intelstack:latest
+```
