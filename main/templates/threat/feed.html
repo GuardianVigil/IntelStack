@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${formatDate(item.timestamp)}</td>
                 <td class="text-center">
                     <div class="flex items-center justify-center gap-2">
-                        <button class="btn btn-sm btn-outline-info" onclick="showDetails('${btoa(JSON.stringify(item))}')">
+                        <button class="btn btn-sm btn-outline-info" onclick="showDetails('${safeEncode(item)}')">
                             Details
                         </button>
                     </div>
@@ -328,16 +328,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const sourceFilter = elements.sourceFilter.value;
         const severityFilter = elements.severityFilter.value;
 
-        filteredThreats = allThreats.filter(threat => {
-            const matchesSearch = !searchTerm || 
-                threat.title.toLowerCase().includes(searchTerm) ||
-                threat.description.toLowerCase().includes(searchTerm) ||
-                threat.indicators.some(i => i.toLowerCase().includes(searchTerm));
-            const matchesSource = !sourceFilter || threat.source === sourceFilter;
-            const matchesSeverity = !severityFilter || threat.severity === severityFilter;
+        // Initialize filteredThreats with all threats if no filters are active
+        if (!searchTerm && !sourceFilter && !severityFilter) {
+            filteredThreats = [...allThreats];
+        } else {
+            filteredThreats = allThreats.filter(threat => {
+                const matchesSearch = !searchTerm || 
+                    threat.title.toLowerCase().includes(searchTerm) ||
+                    threat.description.toLowerCase().includes(searchTerm) ||
+                    threat.indicators.some(i => i.toLowerCase().includes(searchTerm));
+                const matchesSource = !sourceFilter || threat.source === sourceFilter;
+                const matchesSeverity = !severityFilter || threat.severity === severityFilter;
 
-            return matchesSearch && matchesSource && matchesSeverity;
-        });
+                return matchesSearch && matchesSource && matchesSeverity;
+            });
+        }
 
         // Sort threats
         filteredThreats.sort((a, b) => {
@@ -380,7 +385,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             if (data.message) {
-                // Show message banner if no API keys configured
                 const warningDiv = document.getElementById('apiKeyWarning');
                 warningDiv.innerHTML = `
                     <div class="flex items-center">
@@ -393,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             allThreats = data.threats || [];
+            filteredThreats = [...allThreats]; // Initialize filteredThreats with all threats
             
             // Update source filters
             const sources = [...new Set(allThreats.map(t => t.source))];
@@ -408,8 +413,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${severities.map(s => `<option value="${s}">${s}</option>`).join('')}
             `;
             
-            // Apply filters and update table
-            filterThreats();
+            updateTable(); // Update table directly
+            updateStats(allThreats); // Update stats with all threats
             showNotification('success', 'Threat feed refreshed successfully');
         })
         .catch(error => {
@@ -485,6 +490,11 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         document.body.appendChild(modal);
     };
+
+    // Helper function to safely encode data for btoa
+    function safeEncode(obj) {
+        return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+    }
 
     // Function to copy indicators
     window.copyIndicators = function(encodedIndicators) {
