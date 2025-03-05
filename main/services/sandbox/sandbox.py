@@ -40,14 +40,9 @@ class SandboxAnalyzer:
             return None
 
     def get_analysis_report(self, analysis_id: str, max_attempts: int = 20, wait_time: int = 30) -> Optional[Dict]:
-        """Get the analysis report from VirusTotal, waiting for completion.
-        
-        Args:
-            analysis_id: The ID of the analysis to retrieve
-            max_attempts: Maximum number of attempts to fetch the report (default: 20)
-            wait_time: Time to wait between attempts in seconds (default: 30)
-        """
+        """Get the analysis report from VirusTotal, waiting for completion."""
         logger.info(f"Getting analysis report for ID: {analysis_id}")
+        
         for attempt in range(max_attempts):
             try:
                 logger.info(f"Attempt {attempt + 1}/{max_attempts} to get analysis report")
@@ -55,8 +50,22 @@ class SandboxAnalyzer:
                     f"{self.api_url}/analyses/{analysis_id}",
                     headers=self.headers
                 )
+                
+                # Handle rate limiting
+                if response.status_code == 429:
+                    retry_after = int(response.headers.get('Retry-After', wait_time))
+                    logger.warning(f"Rate limited. Waiting {retry_after} seconds...")
+                    time.sleep(retry_after)
+                    continue
+                    
                 response.raise_for_status()
                 data = response.json()
+                
+                # Validate response structure
+                if not isinstance(data, dict) or "data" not in data:
+                    logger.error("Invalid response format from VirusTotal")
+                    time.sleep(wait_time)
+                    continue
                 
                 status = data["data"]["attributes"]["status"]
                 logger.info(f"Analysis status: {status}")
@@ -64,14 +73,18 @@ class SandboxAnalyzer:
                 if status == "completed":
                     logger.info("Analysis completed successfully")
                     return data
-                
-                if attempt < max_attempts - 1:
-                    logger.info(f"Analysis not complete yet. Waiting {wait_time} seconds before next attempt...")
+                elif status == "queued" or status == "in-progress":
+                    logger.info(f"Analysis {status}, waiting...")
                     time.sleep(wait_time)
+                    continue
+                else:
+                    logger.error(f"Unexpected analysis status: {status}")
+                    return None
                     
             except requests.exceptions.RequestException as e:
                 logger.error(f"API request error during analysis: {str(e)}")
-                return None
+                time.sleep(wait_time)
+                continue
             except Exception as e:
                 logger.error(f"Unexpected error during analysis: {str(e)}")
                 return None
