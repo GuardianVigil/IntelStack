@@ -223,61 +223,66 @@ For support:
 - Email: support@guardianvigil.com
 - Documentation: https://docs.guardianvigil.com/intelstack
 
-## 🐳 Docker Deployment
+## 🐳 Docker Installation
 
-### Using Docker Compose (Recommended)
+IntelStack is available as a Docker image for easy deployment. You can either pull the pre-built image from Docker Hub or build it yourself.
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/GuardianVigil/IntelStack.git
-   cd IntelStack
-   ```
+### Option 1: Pull from Docker Hub
 
-2. **Start with Docker Compose**:
-   ```bash
-   docker-compose -f Docker/docker-compose.yml up -d
-   ```
-   This will:
-   - Build the Docker image with Alpine Linux
-   - Set up Redis in the same container
-   - Run database migrations
-   - Start the application
+```bash
+# Pull the image
+docker pull guardianvigil/intelstack:latest
 
-3. **Access the application**:
-   - Web interface: http://localhost:8000
-   - Admin panel: http://localhost:8000/admin
+# Run the container
+docker run -d -p 8000:8000 \
+  -e SECRET_KEY=your_secret_key \
+  -e DJANGO_SUPERUSER_USERNAME=admin \
+  -e DJANGO_SUPERUSER_EMAIL=admin@example.com \
+  -e DJANGO_SUPERUSER_PASSWORD=your_password \
+  guardianvigil/intelstack:latest
+```
+
+### Option 2: Build Locally
+
+1. Clone the repository:
+```bash
+git clone https://github.com/GuardianVigil/IntelStack.git
+cd IntelStack
+```
+
+2. Build and run using Docker Compose:
+```bash
+cd Docker
+docker-compose up -d --build
+```
 
 ### Environment Variables
 
-You can customize the deployment with environment variables:
+The following environment variables can be configured:
 
-```bash
-# Example: Setting admin credentials
-DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=secure_password docker-compose -f Docker/docker-compose.yml up -d
-```
-
-Available variables:
-- `DJANGO_SUPERUSER_USERNAME`: Admin username (default: admin)
-- `DJANGO_SUPERUSER_EMAIL`: Admin email (default: admin@example.com)
-- `DJANGO_SUPERUSER_PASSWORD`: Admin password (default: admin123)
+- `DEBUG`: Set to False in production (default: False)
 - `SECRET_KEY`: Django secret key
-- `DEBUG`: Set to True for development mode
+- `DJANGO_SETTINGS_MODULE`: Django settings module (default: vristo.settings)
+- `REDIS_HOST`: Redis host (default: localhost)
+- `REDIS_PORT`: Redis port (default: 6379)
+- `REDIS_DB`: Redis database number (default: 0)
+- `DJANGO_SUPERUSER_USERNAME`: Admin username
+- `DJANGO_SUPERUSER_EMAIL`: Admin email
+- `DJANGO_SUPERUSER_PASSWORD`: Admin password
 
-### Data Persistence
+### Volumes
 
-The Docker setup preserves your data through volume mounts:
-- Database: `db.sqlite3`
-- Storage: `storage/` directory
-- Static files: `staticfiles/` directory
+The container uses the following volumes:
+- `/app/storage`: For persistent storage
+- `/app/staticfiles`: For static files
 
-### Custom Docker Build
+### Accessing the Application
 
-To build and push your own image:
+Once running, access the application at:
+- Web Interface: `http://localhost:8000`
+- Admin Interface: `http://localhost:8000/admin`
 
-```bash
-# Build the image
-docker build -t yourusername/intelstack:latest -f Docker/Dockerfile .
+### Docker Hub Repository
 
-# Push to Docker Hub
-docker push yourusername/intelstack:latest
-```
+The official Docker image is available at:
+[guardianvigil/intelstack](https://hub.docker.com/r/guardianvigil/intelstack)
