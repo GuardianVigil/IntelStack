@@ -44,6 +44,7 @@ main/services/url_scan/test/virus.py
 main/services/url_scan/test/whois.py
 encryption.key
 logs/stack.log
+encryption.key
 
 # Ignore logs directory
 /logs/
