@@ -42,16 +42,18 @@ RUN python3 -m venv /app/venv
 RUN /app/venv/bin/pip install --upgrade pip && \
     /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
+# Copy configuration files first
+COPY Docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY Docker/redis.conf /etc/redis.conf
+
 # Copy the project files
 COPY . /app/
 
-# Make entrypoint script executable
+# Copy and make entrypoint script executable (do this LAST)
 COPY Docker/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-
-# Copy configuration files
-COPY Docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY Docker/redis.conf /etc/redis.conf
+# Fix line endings and make executable
+RUN sed -i 's/\r$//' /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
 
 # Create an encryption key if it doesn't exist
 RUN if [ ! -f /app/encryption.key ]; then \
