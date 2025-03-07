@@ -220,8 +220,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support:
 - Open an issue at: https://github.com/GuardianVigil/IntelStack/issues
-- Email: support@guardianvigil.com
-- Documentation: https://docs.guardianvigil.com/intelstack
+
 
 ## 🐳 Docker Installation
 
