@@ -181,7 +181,19 @@ if __name__ == "__main__":
 
         # Create directories
         os.makedirs("storage/screenshots", exist_ok=True)
-        # Removed logs directory creation
+
+        # Generate encryption key if not exists
+        key_path = os.path.join(os.getcwd(), "encryption.key")
+        if not os.path.exists(key_path):
+            print_colored("Generating encryption key...", "GREEN")
+            try:
+                from cryptography.fernet import Fernet
+                key = Fernet.generate_key()
+                with open(key_path, 'wb') as key_file:
+                    key_file.write(key)
+            except Exception as e:
+                print_colored(f"Error generating encryption key: {e}", "RED")
+                sys.exit(1)
 
         # Create and activate venv
         try:
