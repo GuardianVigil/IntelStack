@@ -1,287 +1,274 @@
-# IntelStack - Enterprise Threat Intelligence Platform
+# 🛡️ IntelStack - Threat Intelligence & Security Operations Platform
+
+<p align="center">
+  <img src="static/assets/images/logo.png" alt="IntelStack Logo" width="200"/>
+</p>
 
 IntelStack is an advanced threat intelligence and security analysis platform by GuardianVigil that empowers security teams with comprehensive threat detection, analysis, and response capabilities.
 
-## 🎯 Why IntelStack?
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#docker-deployment">Docker</a> •
+  <a href="#troubleshooting">Troubleshooting</a> •
+  <a href="#contact">Contact</a>
+</p>
 
-- **Unified Threat Intelligence**: Consolidate multiple security feeds into a single, actionable platform
-- **Time & Resource Efficiency**: Reduce investigation time by up to 60% with automated analysis
-- **Cost-Effective**: Single platform for multiple security services, reducing subscription costs
-- **Enterprise-Ready**: Built for scale with multi-user support and role-based access
-- **Automated Analysis**: Reduce manual effort with automated threat correlation
-- **Compliance Ready**: Built-in reporting for security compliance requirements
+## 🌟 Features
 
-## 🎓 Use Cases
+IntelStack is a powerful security operations platform that integrates multiple threat intelligence sources and analysis tools into a unified interface. The platform provides security analysts with comprehensive capabilities for threat detection, investigation, and response.
 
-### Security Operations
-- Rapid threat investigation and response
-- Automated IOC enrichment
-- Real-time threat monitoring
-- Incident response automation
+### 🔍 Threat Intelligence & Analysis
 
-### Threat Intelligence
-- Malware analysis and classification
-- Domain and URL reputation checking
-- IP address investigation
-- File hash verification
+#### 🔹 IP Analysis
+- Multi-source IP reputation checking
+- Geolocation data with visual mapping
+- Historical threat intelligence data
+- Network infrastructure insights
+- Comprehensive threat scoring
+- Integration with VirusTotal, AbuseIPDB, and other threat intelligence platforms
 
-### Compliance & Reporting
-- Automated compliance reporting
-- Threat intelligence feeds
-- Custom report generation
-- Audit trail maintenance
+#### 🔹 Domain Reputation
+- Domain reputation scoring across multiple platforms
+- WHOIS information retrieval
+- SSL certificate analysis
+- Associated infrastructure mapping
+- DNS record analysis and history
+- Integration with VirusTotal, AlienVault, Pulsedive, and SecurityTrails
 
-## 🚀 Core Features
+#### 🔹 URL Scanning
+- URL safety verification
+- Phishing detection
+- Malicious content identification
+- Screenshot capture and analysis
+- Redirect chain analysis
+- Integration with VirusTotal, URLScan.io, and Hybrid Analysis
 
-### Analysis Capabilities
-- **Hash Analysis**
-  - File reputation checking
-  - Malware detection
-  - YARA rules support
-  - Cross-platform verification
-  
-- **IP Analysis**
-  - Reputation assessment
-  - Threat intelligence correlation
-  - Geographic tracking
-  - Network behavior analysis
-  
-- **URL & Domain Analysis**
-  - Real-time scanning
-  - Screenshot capture
-  - SSL certificate validation
-  - Domain reputation tracking
+#### 🔹 Hash Analysis
+- File hash reputation checking
+- Malware family identification
+- Detection ratio across antivirus engines
+- File metadata extraction
+- YARA rule matching
+- Support for MD5, SHA-1, and SHA-256 hash formats
 
-### Security Features
-- **Advanced API Management**
-  - Encrypted storage using Fernet
-  - Per-user API key isolation
-  - Automatic key rotation
-  - Usage monitoring and quotas
+#### 🔹 Email Investigation
+- Email header analysis
+- Attachment scanning
+- Sender reputation checking
+- Phishing indicators detection
+- SPF, DKIM, and DMARC validation
+- Support for .eml and .msg file formats
 
-- **Platform Security**
-  - Multi-level caching strategy
-  - Rate limiting protection
-  - Cross-site request forgery protection
-  - Secure data transmission
+#### 🔹 Sandbox Analysis
+- Secure file detonation environment
+- Behavioral analysis of suspicious files
+- Network traffic monitoring
+- Registry and file system changes tracking
+- MITRE ATT&CK mapping of observed behaviors
+- Support for multiple file types (executables, documents, scripts, archives)
 
-### Monitoring & Reporting
-- **Real-time Monitoring**
-  - Live threat detection
-  - Automated alerts
-  - Customizable dashboards
-  - Performance metrics
+#### 🔹 MITRE ATT&CK Framework
+- Comprehensive tactics and techniques reference
+- Threat actor group profiles
+- Technique relationships and dependencies
+- Mitigation recommendations
+- Interactive ATT&CK matrix
+- Support for Enterprise, Mobile, and ICS frameworks
 
-- **Comprehensive Reporting**
-  - Standardized report formats
-  - Visual data representation
-  - Export capabilities
-  - Scheduled reporting
+#### 🔹 Threat Hunting
+- IOC search across your environment
+- Custom query builders
+- Saved hunt templates
+- Scheduled hunts with alerting
+- Historical hunt results
+
+### 📊 Intelligence Management
+
+- Threat intelligence feed aggregation
+- Indicator management and enrichment
+- Custom intelligence source integration
+- Automated indicator scoring
+- Intelligence sharing capabilities
+
+### 🔄 Workflow Automation
+
+- Customizable analysis workflows
+- Automated enrichment of indicators
+- Playbook-based response actions
+- Integration with ticketing systems
+- Alert triage automation
+
+### � Integrations
+
+- Support for major threat intelligence platforms
+- SIEM integration capabilities
+- Endpoint security tool connections
+- Custom API integrations
+- Webhook support for notifications
 
 ## 📋 Prerequisites
 
-### System Requirements
-- CPU: 2+ cores recommended
-- RAM: 4GB minimum, 8GB recommended
-- Storage: 20GB minimum
-- OS: Linux (recommended), Windows, macOS
-
-### Software Requirements
 - Python 3.8+
 - Redis Server 6.0+
-- PostgreSQL 12+ (recommended)
-- Node.js 14+ and npm
+- Modern web browser (Chrome, Firefox, Edge recommended)
 
-## 🔧 Quick Start
+## � Installation
 
-1. **System Preparation**:
-   ```bash
-   # Linux (Ubuntu/Debian)
-   sudo apt update
-   sudo apt install python3.8 python3.8-venv redis-server postgresql
+### Standard Installation
 
-   # Windows
-   # Install Python, Redis, and PostgreSQL manually
-   ```
-
-2. **Clone & Install**:
+1. Clone the repository:
    ```bash
    git clone https://github.com/GuardianVigil/IntelStack.git
    cd IntelStack
+   ```
+
+2. Run the setup script:
+   ```bash
    python setup.py
    ```
+   
+   This will:
+   - Create a virtual environment
+   - Install all required dependencies
+   - Set up the database
+   - Create a superuser account
 
-3. **Start the Platform**:
+3. Start the application:
    ```bash
    python run.py
-   # Access the platform at http://localhost:8000
    ```
 
-## 🎮 Getting Started
-
-1. **Initial Setup**:
-   - Log in to admin panel at `/admin`
-   - Configure API keys in Settings
-   - Set up user accounts and permissions
-
-2. **Basic Operations**:
-   - Start with the Dashboard for overview
-   - Use Quick Scan for rapid threat checks
-   - Configure automated alerts
-   - Set up custom reports
-
-3. **Advanced Features**:
-   - Create custom analysis workflows
-   - Set up automated response rules
-   - Configure integration webhooks
-   - Customize threat scoring
-
-## 🔌 API Integration
-
-```python
-import requests
-
-API_KEY = 'your_api_key'
-BASE_URL = 'http://your-intelstack-instance/api/v1'
-
-# Quick threat check
-response = requests.post(f'{BASE_URL}/analyze', 
-    headers={'Authorization': f'Bearer {API_KEY}'},
-    json={'indicator': 'example.com', 'type': 'domain'}
-)
-```
-
-## 🔐 Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-DEBUG=True
-SECRET_KEY=your-secret-key
-DATABASE_URL=postgresql://user:password@localhost:5432/dbname
-REDIS_URL=redis://localhost:6379/0
-ENCRYPTION_KEY=your-encryption-key
-```
-
-## 🏗️ Architecture
-
-```
-IntelStack/
-├── core/              # Core platform functionality
-├── analyzers/         # Threat analysis modules
-├── integrations/      # Service integrations
-├── api/              # REST API endpoints
-└── ui/               # Web interface
-```
-
-## 📈 Performance Optimization
-
-- Redis caching for API responses
-- Async processing for heavy tasks
-- Rate limiting per API key
-- Automatic cache cleanup
-- Query optimization
-
-## 🛡️ Security Considerations
-
-- API keys use AES-256 encryption
-- Rate limiting prevents abuse
-- CSRF protection enabled
-- Regular security updates
-- Audit logging enabled
-
-## 🔍 Troubleshooting
-
-Common issues and solutions:
-- **Redis Connection**: Check Redis service status
-- **API Timeouts**: Verify rate limits
-- **Slow Analysis**: Check system resources
-- **DB Issues**: Verify PostgreSQL connection
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Create a Pull Request at https://github.com/GuardianVigil/IntelStack/pulls
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Django](https://www.djangoproject.com/)
-- [TailwindCSS](https://tailwindcss.com/)
-- All the integrated security service providers
-
-## 📞 Support
-
-For support:
-- Open an issue at: https://github.com/GuardianVigil/IntelStack/issues
-
-
-## 🐳 Docker Installation
-
-IntelStack is available as a Docker image for easy deployment. You can either pull the pre-built image from Docker Hub or build it yourself.
-
-### Option 1: Pull from Docker Hub
-
-```bash
-# Pull the image
-docker pull guardianvigil/intelstack:latest
-
-# Run the container
-docker run -d -p 8000:8000 \
-  -e SECRET_KEY=your_secret_key \
-  -e DJANGO_SUPERUSER_USERNAME=admin \
-  -e DJANGO_SUPERUSER_EMAIL=admin@example.com \
-  -e DJANGO_SUPERUSER_PASSWORD=your_password \
-  guardianvigil/intelstack:latest
-```
-
-### Option 2: Build Locally
-
-1. Clone the repository:
-```bash
-git clone https://github.com/GuardianVigil/IntelStack.git
-cd IntelStack
-```
-
-2. Build and run using Docker Compose:
-```bash
-cd Docker
-docker-compose up -d --build
-```
+4. Access the application at http://localhost:8000
 
 ### Environment Variables
 
 The following environment variables can be configured:
 
-- `DEBUG`: Set to False in production (default: False)
-- `SECRET_KEY`: Django secret key
-- `DJANGO_SETTINGS_MODULE`: Django settings module (default: vristo.settings)
-- `REDIS_HOST`: Redis host (default: localhost)
-- `REDIS_PORT`: Redis port (default: 6379)
-- `REDIS_DB`: Redis database number (default: 0)
-- `DJANGO_SUPERUSER_USERNAME`: Admin username
-- `DJANGO_SUPERUSER_EMAIL`: Admin email
-- `DJANGO_SUPERUSER_PASSWORD`: Admin password
+```
+DEBUG=True
+SECRET_KEY=your-secret-key
+ALLOWED_HOSTS=localhost,127.0.0.1
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+```
 
-### Volumes
+## 🐳 Docker Deployment
 
-The container uses the following volumes:
-- `/app/storage`: For persistent storage
-- `/app/staticfiles`: For static files
+IntelStack can be easily deployed using Docker:
 
-### Accessing the Application
+1. Make sure Docker and Docker Compose are installed on your system
 
-Once running, access the application at:
-- Web Interface: `http://localhost:8000`
-- Admin Interface: `http://localhost:8000/admin`
+2. Build and start the containers:
+   ```bash
+   docker-compose up -d
+   ```
 
-### Docker Hub Repository
+3. Access the application at http://localhost:8000
 
-The official Docker image is available at:
-[guardianvigil/intelstack](https://hub.docker.com/r/guardianvigil/intelstack)
+The Docker setup includes:
+- Alpine Linux as base image
+- Python 3, Redis, and Supervisor in a single container
+- Proper volume mapping for database and storage
+- Environment variables for customization
+- Supervisor for process management
+
+## � Usage
+
+1. Log in with your credentials at http://localhost:8000
+2. Navigate to the desired analysis module from the sidebar
+3. Submit indicators (IP, domain, URL, hash, email, or file) for analysis
+4. Review the comprehensive results from multiple intelligence sources
+5. Export or share findings as needed
+
+### IP Analysis
+
+1. Navigate to Threat > IP Analysis
+2. Enter an IP address (e.g., 8.8.8.8)
+3. Review the comprehensive threat intelligence from multiple sources
+4. Examine geolocation data, reputation scores, and associated infrastructure
+
+### Domain Reputation
+
+1. Navigate to Threat > Domain Reputation
+2. Enter a domain name (e.g., example.com)
+3. Review WHOIS information, SSL certificates, and reputation data
+4. Examine associated DNS records and infrastructure
+
+### URL Scanning
+
+1. Navigate to Threat > URL Scan
+2. Enter a URL to analyze
+3. Review safety ratings, screenshots, and content analysis
+4. Examine redirect chains and associated infrastructure
+
+### Hash Analysis
+
+1. Navigate to Threat > Hash Analysis
+2. Enter an MD5, SHA-1, or SHA-256 hash
+3. Review detection ratios across antivirus engines
+4. Examine file metadata and malware family information
+
+### Email Investigation
+
+1. Navigate to Threat > Email Investigation
+2. Upload an .eml/.msg file or paste email headers
+3. Review sender reputation and authentication results
+4. Examine attachments and links for malicious content
+
+### Sandbox Analysis
+
+1. Navigate to Threat > Sandbox
+2. Upload a suspicious file for analysis
+3. Review behavioral analysis results
+4. Examine network connections, file system changes, and registry modifications
+
+## ⚠️ Troubleshooting
+
+### Redis Connection Issues
+
+If you encounter Redis connection errors:
+
+1. Ensure Redis is running:
+   ```bash
+   # Linux
+   sudo systemctl status redis
+   
+   # Windows
+   sc query redis
+   ```
+
+2. Verify Redis connection settings in your environment variables
+
+### Database Migration Issues
+
+If you encounter database errors:
+
+1. Reset migrations:
+   ```bash
+   python manage.py migrate --fake-initial
+   ```
+
+2. Apply migrations again:
+   ```bash
+   python manage.py migrate
+   ```
+
+### API Key Configuration
+
+For full functionality, configure API keys for external services:
+
+1. Navigate to Settings > API Configuration
+2. Enter your API keys for the services you use
+3. Test the connection to ensure proper configuration
+
+## 📞 Contact
+
+- Email: intelstack@guardianvigil.io
+- Website: [https://guardianvigil.io/](https://guardianvigil.io/)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
