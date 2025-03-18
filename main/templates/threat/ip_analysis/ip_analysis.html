@@ -324,7 +324,7 @@ document.addEventListener('alpine:init', () => {
             this.activeTab = 'virustotal';  
 
             try {
-                const response = await fetch(`/threat/ip-analysis/analyze/${this.ipAddress}/`);
+                const response = await fetch(`/api/threat/ip-analysis/analyze/${this.ipAddress}/`);
                 if (!response.ok) {
                     throw new Error('Failed to analyze IP');
                 }
