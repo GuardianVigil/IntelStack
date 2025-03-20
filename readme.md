@@ -1,8 +1,4 @@
-# 🛡️ IntelStack - Threat Intelligence & Security Operations Platform
-
-<p align="center">
-  <img src="static/assets/images/logo.png" alt="IntelStack Logo" width="200"/>
-</p>
+# IntelStack - Threat Intelligence & Security Operations Platform
 
 IntelStack is an advanced threat intelligence and security analysis platform by GuardianVigil that empowers security teams with comprehensive threat detection, analysis, and response capabilities.
 
