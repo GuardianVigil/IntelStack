@@ -153,7 +153,7 @@ REDIS_DB=0
 
 ## 🐳 Docker Deployment
 
-IntelStack can be easily deployed using Docker:
+IntelStack can be easily deployed using Docker: https://hub.docker.com/r/guardianvigil/intelstack
 
 1. Make sure Docker and Docker Compose are installed on your system
 
