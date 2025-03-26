@@ -1,8 +1,4 @@
-# 🛡️ IntelStack - Threat Intelligence & Security Operations Platform
-
-<p align="center">
-  <img src="static/assets/images/logo.png" alt="IntelStack Logo" width="200"/>
-</p>
+# IntelStack - Threat Intelligence & Security Operations Platform
 
 IntelStack is an advanced threat intelligence and security analysis platform by GuardianVigil that empowers security teams with comprehensive threat detection, analysis, and response capabilities.
 
@@ -157,7 +153,7 @@ REDIS_DB=0
 
 ## 🐳 Docker Deployment
 
-IntelStack can be easily deployed using Docker:
+IntelStack can be easily deployed using Docker: https://hub.docker.com/r/guardianvigil/intelstack
 
 1. Make sure Docker and Docker Compose are installed on your system
 
